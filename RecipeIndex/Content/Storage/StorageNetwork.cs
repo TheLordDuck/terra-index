@@ -51,10 +51,10 @@ namespace RecipeIndex.Content.Storage
 			return snapshot;
 		}
 
-		// Takes up to one full stack of the item out of the connected chests. Returns null if there is none.
+		// Takes up to one full stack of the item (or only amount, when above 0) out of the connected chests. Returns null if there is none.
 		// Only stacks identical to the first one found (same prefix) are merged.
 		// Like Scan, only call this in single player or on the server; changed slots are synced to clients.
-		public static Item Withdraw(Point terminal, int type)
+		public static Item Withdraw(Point terminal, int type, int amount = 0)
 		{
 			Item taken = null;
 			foreach (int index in FindConnectedChests(terminal)) {
@@ -74,15 +74,16 @@ namespace RecipeIndex.Content.Storage
 						continue;
 					}
 
-					int amount = Math.Min(item.stack, taken.maxStack - taken.stack);
-					taken.stack += amount;
-					item.stack -= amount;
+					int limit = amount > 0 ? Math.Min(amount, taken.maxStack) : taken.maxStack;
+					int moved = Math.Min(item.stack, limit - taken.stack);
+					taken.stack += moved;
+					item.stack -= moved;
 					if (item.stack <= 0)
 						item.TurnToAir();
 					if (Main.netMode == NetmodeID.Server)
 						NetMessage.SendData(MessageID.SyncChestItem, number: index, number2: slot);
 
-					if (taken.stack >= taken.maxStack)
+					if (taken.stack >= limit)
 						return taken;
 				}
 			}

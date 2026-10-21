@@ -7,6 +7,15 @@ Keybinds: {
 UI: {
 	Title: Índice de recetas
 	SearchHint: Buscar... (@mod para filtrar por mod)
+	CategoryAll: Todos los objetos
+	CategoryWeapons: Armas y munición
+	CategoryTools: Herramientas
+	CategoryArmor: Armaduras y ropa
+	CategoryAccessories: Accesorios
+	CategoryPlaceable: Bloques, paredes y muebles
+	CategoryConsumables: Pociones y consumibles
+	CategoryMaterials: Materiales
+	CategoryMisc: Varios
 	NoResults: Ningún objeto coincide con la búsqueda.
 	Hint:
 		'''
@@ -27,6 +36,10 @@ UI: {
 	TerminalTitle: Terminal de almacenamiento
 	ConnectedChests: Cofres conectados: {0}
 	TerminalHint: Clic: sacar   Mayús + clic: iluminar cofre   Clic derecho: receta
+	Available: Guardados: {0}  (hasta {1} de una vez)
+	Max: Máx.
+	Take: Sacar
+	Cancel: Cancelar
 	TerminalEmpty:
 		'''
 		No hay objetos.
@@ -52,7 +65,7 @@ UI: {
 	DroppedBy: Lo suelta {0} ({1})
 	FoundInside: Sale de {0} ({1})
 	AnyEnemy: cualquier enemigo
-	SpawnsIn: "Aparece en: {0}"
+	SpawnsIn: Aparece en: {0}
 	Page: Página {0} / {1}  ({2} objetos)
 	Platinum: "{0} de platino"
 	Gold: "{0} de oro"

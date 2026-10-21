@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RecipeIndex.Common;
 using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
@@ -17,6 +18,7 @@ namespace RecipeIndex.UI
 {
 	// Item grid (every item in the index, chest contents in the terminal), shown one page at a time.
 	// Only the current page is drawn, and item textures are loaded a few per frame, so big modpacks don't freeze the game.
+	// Header: one tab per item category (ItemCategories), with its count in the tooltip.
 	// Footer: |< < [page bar] > >|. The mouse wheel turns pages (Shift: 10 at a time); dragging the bar jumps to a page on release.
 	public class ItemGrid : UIElement
 	{
@@ -25,6 +27,8 @@ namespace RecipeIndex.UI
 		private const int FooterHeight = 28;
 		private const int ButtonWidth = 30;
 		private const int LoadsPerFrame = 16;
+		private const int TabSize = 32;
+		private const int TabHeight = TabSize + 6;
 
 		private static readonly Item Empty = new();
 		// Lowercase item names, so filtering thousands of items on every keystroke stays cheap.
@@ -39,6 +43,9 @@ namespace RecipeIndex.UI
 		private int columns = 1;
 		private int rows = 1;
 		private Vector2 origin;
+		private ItemCategory category = ItemCategory.All;
+		private readonly int[] counts = new int[ItemCategories.Tabs.Length];
+		private readonly Rectangle[] tabs = new Rectangle[ItemCategories.Tabs.Length];
 
 		// Footer layout from the last draw.
 		private Rectangle first, previous, next, last, bar;
@@ -57,7 +64,11 @@ namespace RecipeIndex.UI
 			this.source = source;
 		}
 
-		public static void ClearCache() => lowerNames.Clear();
+		public static void ClearCache()
+		{
+			lowerNames.Clear();
+			ItemCategories.ClearCache();
+		}
 
 		public void SetFilter(string text)
 		{
@@ -66,7 +77,25 @@ namespace RecipeIndex.UI
 			Refresh();
 		}
 
-		public void Refresh() => items = source().Where(item => Matches(item.type)).ToList();
+		public void Refresh()
+		{
+			List<Item> matching = source().Where(item => Matches(item.type)).ToList();
+			Array.Clear(counts);
+			counts[(int)ItemCategory.All] = matching.Count;
+			foreach (Item item in matching)
+				counts[(int)ItemCategories.Of(item.type)]++;
+			items = category == ItemCategory.All ? matching : matching.Where(item => ItemCategories.Of(item.type) == category).ToList();
+		}
+
+		private void SetCategory(ItemCategory value)
+		{
+			if (value == category)
+				return;
+			category = value;
+			page = 0;
+			Refresh();
+			SoundEngine.PlaySound(SoundID.MenuTick);
+		}
 
 		// "@name" filters by mod (e.g. "@calamity", "@terraria"); any other text filters by item name.
 		private bool Matches(int type)
@@ -150,7 +179,10 @@ namespace RecipeIndex.UI
 				return;
 
 			Point mouse = evt.MousePosition.ToPoint();
-			if (first.Contains(mouse))
+			int tab = Array.FindIndex(tabs, area => area.Contains(mouse));
+			if (tab >= 0)
+				SetCategory(ItemCategories.Tabs[tab]);
+			else if (first.Contains(mouse))
 				SetPage(0);
 			else if (previous.Contains(mouse))
 				SetPage(page - 1);
@@ -186,12 +218,13 @@ namespace RecipeIndex.UI
 		protected override void DrawSelf(SpriteBatch spriteBatch)
 		{
 			CalculatedStyle inner = GetInnerDimensions();
-			origin = new Vector2(inner.X, inner.Y);
+			origin = new Vector2(inner.X, inner.Y + TabHeight);
 			columns = Math.Max(1, (int)(inner.Width / Cell));
-			rows = Math.Max(1, (int)((inner.Height - FooterHeight - 4) / Cell));
+			rows = Math.Max(1, (int)((inner.Height - TabHeight - FooterHeight - 4) / Cell));
 			pageCount = Math.Max(1, (items.Count + PageSize - 1) / PageSize);
 			page = Math.Clamp(page, 0, pageCount - 1);
 
+			DrawTabs(spriteBatch, inner);
 			DrawFooter(spriteBatch, inner);
 
 			if (items.Count == 0) {
@@ -208,6 +241,31 @@ namespace RecipeIndex.UI
 				bool ready = TextureAssets.Item[item.type].State != AssetState.NotLoaded || loads-- > 0;
 				int slot = index - start;
 				UIHelpers.DrawItem(spriteBatch, ready ? item : Empty, origin + new Vector2(slot % columns * Cell, slot / columns * Cell), SlotScale);
+			}
+		}
+
+		private void DrawTabs(SpriteBatch spriteBatch, CalculatedStyle inner)
+		{
+			Point mouse = Main.MouseScreen.ToPoint();
+			// Narrow panels shrink the gap between tabs instead of cutting the last ones off.
+			int gap = Math.Clamp(((int)inner.Width - tabs.Length * TabSize) / Math.Max(1, tabs.Length - 1), 0, 4);
+			for (int i = 0; i < tabs.Length; i++) {
+				ItemCategory tab = ItemCategories.Tabs[i];
+				Rectangle area = tabs[i] = new Rectangle((int)inner.X + i * (TabSize + gap), (int)inner.Y, TabSize, TabSize);
+				bool hovered = area.Contains(mouse);
+				Color background = tab == category ? new Color(100, 120, 210) : hovered ? new Color(80, 95, 170) : new Color(55, 65, 130);
+				Utils.DrawInvBG(spriteBatch, area, background * 0.95f);
+
+				Main.GetItemDrawFrame(ItemCategories.Icon(tab), out Texture2D texture, out Rectangle frame);
+				float scale = Math.Min(1f, (TabSize - 10) / (float)Math.Max(frame.Width, frame.Height));
+				// Tabs with nothing in them (for the current search) are dimmed.
+				Color color = counts[i] > 0 ? Color.White : Color.White * 0.35f;
+				spriteBatch.Draw(texture, area.Center.ToVector2(), frame, color, 0f, frame.Size() / 2f, scale, SpriteEffects.None, 0f);
+
+				if (hovered) {
+					Main.LocalPlayer.mouseInterface = true;
+					Main.hoverItemName = $"{ItemCategories.Name(tab)} ({counts[i]})";
+				}
 			}
 		}
 

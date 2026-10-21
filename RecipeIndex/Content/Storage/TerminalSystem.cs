@@ -310,19 +310,19 @@ namespace RecipeIndex.Content.Storage
 				ShowDepositResult(left, moved);
 		}
 
-		// Takes a stack of the item out of the open terminal's network; the server does it in multiplayer.
-		public void RequestWithdraw(int type)
+		// Takes a stack of the item (or only amount, when above 0) out of the open terminal's network; the server does it in multiplayer.
+		public void RequestWithdraw(int type, int amount)
 		{
 			if (Main.netMode == NetmodeID.SinglePlayer)
-				Dispense(Terminal, type, Main.LocalPlayer);
+				Dispense(Terminal, type, amount, Main.LocalPlayer);
 			else
-				TerminalNet.SendWithdraw(Terminal, type);
+				TerminalNet.SendWithdraw(Terminal, type, amount);
 		}
 
 		// Single player or server: removes the item from the chests and drops it out of the door once it is open.
-		public void Dispense(Point terminal, int type, Player player)
+		public void Dispense(Point terminal, int type, int amount, Player player)
 		{
-			Item item = StorageNetwork.Withdraw(terminal, type);
+			Item item = StorageNetwork.Withdraw(terminal, type, amount);
 			if (item == null)
 				return;
 

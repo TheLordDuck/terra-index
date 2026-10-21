@@ -55,6 +55,8 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
   world drops aren't in any database, so they only get a generic hint.
 - Navigation: ingredients and stations are clickable, there is a **Back** button with history, and the mouse
   wheel over the right panel switches recipe.
+- Above the grid, one tab per item category (`Common/ItemCategories.cs`, first matching rule wins: accessory, armor,
+  tool, weapon/ammo, placeable, consumable, material, misc). Used by both the index and the terminal.
 - The item grid is paginated (`UI/ItemGrid.cs`): only the current page is drawn, uncached item textures load at
   most 16 per frame, and lowercase names are cached for the search. Footer: first/previous/page bar/next/last;
   wheel turns pages (Shift: 10), dragging the bar jumps on release.
@@ -73,7 +75,7 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
 - **Right clicking** the terminal opens the panel with the search box already focused.
   - It shows the items from every connected chest, with quantities summed.
   - It refreshes every half second.
-- **Clicking** an item: the panel closes, the server takes up to one stack out of the chests (same prefix only), the
+- **Clicking** an item: the panel closes, the server takes up to one stack (or the amount chosen in `UI/AmountPrompt.cs`, the pop-up shown for stackable items; empty = full stack) out of the chests (same prefix only), the
   garage door rolls up, the item drops out and the door closes again. Every player sees the door.
 - **Shift + click** an item: the panel closes, the chests holding it glow gold for 10 s (light and particles), and a
   chat message says how many chests it is in.
@@ -109,12 +111,14 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
 | `RecipeIndexSystem.cs` | Keybinds, index UI layer, hovered item (`RecipeIndexPlayer` handles the keys) |
 | `Common/RecipeDatabase.cs` | Recipe index by result and by ingredient, station → item, station names |
 | `Common/SourceDatabase.cs` | Where non-craftable items come from: shops, drops, bags/crates |
+| `Common/ItemCategories.cs` | Item category tabs (weapons, tools, armor...) |
 | `UI/UIHelpers.cs` | Localization, text measuring/truncating, drawing item slots, counting inventory |
 | `UI/SearchBox.cs` | Text box; only one is focused at a time (`AnyFocused` blocks the mod's keys) |
 | `UI/ItemGrid.cs` | Grid that only draws what is visible; used by the index and the terminal |
 | `UI/RecipeView.cs` | Recipe panel: pages, Recipes/Uses tabs, history, clickable areas |
 | `UI/BrowserState.cs` | Recipe index panel |
 | `UI/TerminalState.cs` | Terminal panel |
+| `UI/AmountPrompt.cs` | "How many?" pop-up shown when taking a stackable item out of the terminal |
 | `UI/DepositState.cs` | Deposit slots (chest-like) |
 | `Content/Items/TerminalItem.cs` | Terminal item and Steampunker shop entry (`SteampunkerShop`) |
 | `Content/Tiles/TerminalTile.cs` | Terminal tile (4x2 on a wall; right click opens the panel; door area) |

@@ -22,6 +22,8 @@ NEI-style recipe browser and storage terminal for Terraria (tModLoader 1.4.4).
 - Left click an item: recipes. Right click: uses.
 - Inside a recipe you can click ingredients and crafting stations to navigate; **Back** returns.
 - Mouse wheel over the right panel: switch recipe.
+- Tabs above the items split them by type: all, weapons and ammo, tools, armor, accessories, blocks and furniture,
+  potions and consumables, materials, and miscellaneous (hover a tab for its name and count).
 - The item list is split into pages: use the buttons at the bottom, the mouse wheel (Shift: 10 pages at a time),
   or drag the page bar.
 - Esc closes the index.
@@ -38,6 +40,8 @@ NEI-style recipe browser and storage terminal for Terraria (tModLoader 1.4.4).
    wire: the network is walked starting from the terminal, so if the wire doesn't touch it, no chests are found.
 4. **Right click** the terminal and type: the list filters as you type.
 5. **Click** an item: the garage door rolls up and a stack of it drops out (taken from the connected chests).
+   For stackable items a pop-up asks how many first: type a number, use -/+ (Shift: 10) or 1 / 10 / Max, then
+   Enter or **Take out** (empty = as many as fit in one stack). Esc or **Cancel** closes it.
 6. **Shift + click**: the chests holding it glow for 10 seconds, and an arrow on the screen edge points to any
    that are off screen. **Right click**: opens that item's recipe in the index.
 7. **Deposit items** (button at the top of the panel): opens 20 slots under your inventory, like a chest. Drag items

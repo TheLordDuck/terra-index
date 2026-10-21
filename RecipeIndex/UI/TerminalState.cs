@@ -1,14 +1,16 @@
+using System;
 using Microsoft.Xna.Framework;
 using RecipeIndex.Content.Storage;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 
 namespace RecipeIndex.UI
 {
 	// Terminal panel: search box (focused on open) + items from the connected chests.
-	// Left click: takes a stack out through the terminal's door. Shift + left click: highlights the chests holding it.
+	// Left click: asks how many (AmountPrompt), then takes them out through the terminal's door. Shift + left click: highlights the chests holding it.
 	// Right click: opens its recipes in the index.
 	public class TerminalState : UIState
 	{
@@ -17,6 +19,7 @@ namespace RecipeIndex.UI
 		private UIPanel panel;
 		private UIText info;
 		private SearchBox search;
+		private AmountPrompt prompt;
 		private ItemGrid grid;
 		private int refreshTimer;
 		private int seenVersion = -1;
@@ -27,7 +30,7 @@ namespace RecipeIndex.UI
 		{
 			panel = new UIPanel();
 			panel.Width.Set(470, 0);
-			panel.Height.Set(440, 0);
+			panel.Height.Set(480, 0);
 			panel.HAlign = panel.VAlign = 0.5f;
 			Append(panel);
 
@@ -71,6 +74,11 @@ namespace RecipeIndex.UI
 			hint.Top.Set(98, 0);
 			hint.TextColor = Color.LightGray;
 			panel.Append(hint);
+
+			// Added on top of the panel when an item is clicked.
+			prompt = new AmountPrompt();
+			prompt.OnConfirm += Withdraw;
+			prompt.OnClose += ClosePrompt;
 		}
 
 		public override void OnActivate()
@@ -81,7 +89,11 @@ namespace RecipeIndex.UI
 			seenVersion = -1;
 		}
 
-		public override void OnDeactivate() => search.Unfocus();
+		public override void OnDeactivate()
+		{
+			search.Unfocus();
+			ClosePrompt();
+		}
 
 		public override void Update(GameTime gameTime)
 		{
@@ -107,21 +119,46 @@ namespace RecipeIndex.UI
 
 		private void OnItemClicked(int type, bool rightClick)
 		{
-			Terminal.Close();
-
 			if (rightClick) {
+				Terminal.Close();
 				ModContent.GetInstance<RecipeIndexSystem>().ShowItem(type, false);
 				return;
 			}
 
 			if (Main.keyState.PressingShift()) {
+				Terminal.Close();
 				int found = Terminal.Highlight(type);
 				Main.NewText(UIHelpers.T("FoundIn", Lang.GetItemNameValue(type), found), Color.Gold);
 				return;
 			}
 
-			// The panel closes so the door can be seen opening.
-			Terminal.RequestWithdraw(type);
+			// Items that don't stack (weapons, armor...) come out straight away; anything else asks how many first.
+			int stored = Terminal.StoredItems.Find(item => item.type == type)?.stack ?? 0;
+			if (Math.Min(stored, ContentSamples.ItemsByType[type].maxStack) <= 1) {
+				Withdraw(type, 0);
+				return;
+			}
+			if (prompt.Parent == null) {
+				Append(prompt);
+				prompt.Activate();
+				Recalculate();
+			}
+			prompt.Open(type, stored);
+		}
+
+		private void ClosePrompt()
+		{
+			prompt.Unfocus();
+			if (prompt.Parent != null)
+				RemoveChild(prompt);
+		}
+
+		// The panel closes so the door can be seen opening.
+		private void Withdraw(int type, int amount)
+		{
+			ClosePrompt();
+			Terminal.Close();
+			Terminal.RequestWithdraw(type, amount);
 		}
 	}
 }

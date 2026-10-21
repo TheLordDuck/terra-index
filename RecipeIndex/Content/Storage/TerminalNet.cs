@@ -51,12 +51,13 @@ namespace RecipeIndex.Content.Storage
 			packet.Send();
 		}
 
-		public static void SendWithdraw(Point terminal, int type)
+		public static void SendWithdraw(Point terminal, int type, int amount)
 		{
 			ModPacket packet = Mod.GetPacket();
 			packet.Write((byte)MessageType.Withdraw);
 			WritePoint(packet, terminal);
 			packet.Write(type);
+			packet.Write(amount);
 			packet.Send();
 		}
 
@@ -80,7 +81,7 @@ namespace RecipeIndex.Content.Storage
 					HandleContents(reader);
 					break;
 				case MessageType.Withdraw:
-					HandleWithdraw(ReadPoint(reader), reader.ReadInt32(), whoAmI);
+					HandleWithdraw(ReadPoint(reader), reader.ReadInt32(), reader.ReadInt32(), whoAmI);
 					break;
 				case MessageType.DoorOpen:
 					ModContent.GetInstance<TerminalSystem>().StartDoor(ReadPoint(reader));
@@ -215,10 +216,10 @@ namespace RecipeIndex.Content.Storage
 				SendContents(terminal, StorageNetwork.Scan(terminal), whoAmI);
 		}
 
-		private static void HandleWithdraw(Point terminal, int type, int whoAmI)
+		private static void HandleWithdraw(Point terminal, int type, int amount, int whoAmI)
 		{
 			if (Allowed(terminal, whoAmI, lastWithdraw))
-				ModContent.GetInstance<TerminalSystem>().Dispense(terminal, type, Main.player[whoAmI]);
+				ModContent.GetInstance<TerminalSystem>().Dispense(terminal, type, Math.Max(0, amount), Main.player[whoAmI]);
 		}
 
 		private static void SendContents(Point terminal, StorageSnapshot snapshot, int toClient)

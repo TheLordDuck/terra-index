@@ -8,13 +8,14 @@ Press N to open a searchable list of every item in the game, including items fro
 - Click ingredients and stations inside a recipe to keep exploring; use Back to return.
 - Ingredients turn green when you have enough in your inventory, red when you don't.
 - Items that can't be crafted show where to get them: which NPC sells them, which enemies drop them (with a picture and where they live) and which bags or crates contain them.
+- Tabs split the items into weapons, tools, armor, accessories, blocks, potions, materials and more.
 - Type @modname in the search box to filter by mod (for example @terraria or @calamity).
 
 STORAGE TERMINAL
 Buy the Terminal from the Steampunker for 1 platinum and hang it on a background wall.
 - Connect the terminal and your chests with the same red wire.
 - Right click the terminal and start typing: the items in all connected chests are filtered as you type.
-- Click an item to take a stack out: the garage door on the terminal opens and hands it to you.
+- Click an item to take a stack out (for stackable items it asks how many first): the garage door on the terminal opens and hands it to you.
 - Shift + click an item and the chests holding it glow for 10 seconds. Chests off screen get an arrow on the edge of the screen showing the direction and distance.
 - Right click an item in the terminal to open its recipe.
 - Deposit items: put items in the terminal's slots and, when you close them, they go into the connected chests through its door. If the chests are full you get a warning and the items wait in the terminal until there is room.

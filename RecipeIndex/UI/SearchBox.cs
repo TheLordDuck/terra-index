@@ -8,13 +8,14 @@ using Terraria.UI;
 
 namespace RecipeIndex.UI
 {
-	// Text box: click to type, right click to clear, Enter/Esc to stop typing.
+	// Text box: click to type, right click to clear, Enter/Esc to stop typing (OnSubmit / OnCancel).
 	public class SearchBox : UIPanel
 	{
 		// Only one box can be focused at a time; the mod's hotkeys are ignored while typing.
 		private static SearchBox focusedBox;
 
-		private readonly string hint;
+		public string Hint { get; set; }
+		public bool ShowHintWhileTyping { get; set; }
 
 		public static bool AnyFocused => focusedBox != null;
 
@@ -22,10 +23,12 @@ namespace RecipeIndex.UI
 		public bool Focused => focusedBox == this;
 
 		public event Action<string> OnTextChanged;
+		public event Action OnSubmit;
+		public event Action OnCancel;
 
 		public SearchBox(string hint)
 		{
-			this.hint = hint;
+			Hint = hint;
 			SetPadding(6);
 		}
 
@@ -76,14 +79,27 @@ namespace RecipeIndex.UI
 				PlayerInput.WritingText = true;
 				Main.instance.HandleIME();
 				SetText(Main.GetInputText(Text));
-				if (Main.inputTextEnter || Main.inputTextEscape)
+				if (Main.inputTextEnter || Main.inputTextEscape) {
+					bool submitted = Main.inputTextEnter;
 					Unfocus();
+					(submitted ? OnSubmit : OnCancel)?.Invoke();
+				}
 			}
 
 			CalculatedStyle inner = GetInnerDimensions();
-			bool showHint = Text.Length == 0 && !Focused;
-			string shown = showHint ? hint : Text + (Focused && Main.GameUpdateCount / 30 % 2 == 0 ? "|" : "");
-			Utils.DrawBorderString(spriteBatch, shown, new Vector2(inner.X, inner.Y + 2), showHint ? Color.Gray : Color.White, 0.9f);
+			var position = new Vector2(inner.X, inner.Y + 2);
+			string cursor = Focused && Main.GameUpdateCount / 30 % 2 == 0 ? "|" : "";
+			if (Text.Length > 0) {
+				Utils.DrawBorderString(spriteBatch, Text + cursor, position, Color.White, 0.9f);
+			}
+			else if (Focused && !ShowHintWhileTyping) {
+				Utils.DrawBorderString(spriteBatch, cursor, position, Color.White, 0.9f);
+			}
+			else {
+				// The hint stays visible after the cursor when it is also the default value (e.g. the amount box).
+				Utils.DrawBorderString(spriteBatch, cursor, position, Color.White, 0.9f);
+				Utils.DrawBorderString(spriteBatch, Hint, position + new Vector2(Focused ? 6 : 0, 0), Color.Gray, 0.9f);
+			}
 		}
 	}
 }
