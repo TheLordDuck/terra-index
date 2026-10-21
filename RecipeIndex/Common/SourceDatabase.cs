@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using RecipeIndex.UI;
 using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RecipeIndex.Common
@@ -26,7 +28,39 @@ namespace RecipeIndex.Common
 		private static readonly List<ItemSource> Empty = new();
 		private static Dictionary<int, List<ItemSource>> sources;
 
-		public override void Unload() => sources = null;
+		private static readonly Dictionary<int, string> locations = new();
+		private static GameCulture locationsCulture;
+
+		public override void Unload()
+		{
+			sources = null;
+			locations.Clear();
+		}
+
+		// Where an NPC spawns, from its Bestiary entry: biomes, events and time of day ("Underground Jungle, Night").
+		public static string LocationOf(int npc)
+		{
+			if (npc <= 0)
+				return "";
+			if (locationsCulture != Language.ActiveCulture) {
+				locations.Clear();
+				locationsCulture = Language.ActiveCulture;
+			}
+			if (locations.TryGetValue(npc, out string location))
+				return location;
+
+			var names = new List<string>();
+			try {
+				foreach (IBestiaryInfoElement info in Main.BestiaryDB.FindEntryByNPCID(npc).Info) {
+					if (info is FilterProviderInfoElement or ModBiomeBestiaryInfoElement)
+						names.Add(Language.GetTextValue(((IFilterInfoProvider)info).GetDisplayNameKey()));
+				}
+			}
+			catch (Exception) {
+				// A missing or broken Bestiary entry only means no location is shown.
+			}
+			return locations[npc] = Join(names);
+		}
 
 		public static List<ItemSource> SourcesOf(int type)
 		{

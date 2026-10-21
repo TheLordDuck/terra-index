@@ -40,14 +40,20 @@ UI: {
 	DepositNoSpace: Warning: the connected chests are full. {0} item(s) were not sent and stay in the terminal until there is room or you take them out.
 	DepositInUse: Another player is using this terminal's deposit slots.
 	HowToObtain: How to obtain
-	NoSources: "No known source: it is probably found in chests, by fishing,\nor in the world (breaking tiles, shaking trees, etc.)."
+	NoSources:
+		'''
+		No known source: it is probably found in chests, by fishing,
+		or in the world (breaking tiles, shaking trees, etc.).
+		'''
 	MoreAbove: "{0} more above (mouse wheel)"
 	MoreBelow: "{0} more below (mouse wheel)"
-	SoldBy: "Sold by {0}: {1}"
-	SoldByFree: "Sold by {0}"
-	DroppedBy: "Dropped by {0} ({1})"
-	FoundInside: "Inside {0} ({1})"
+	SoldBy: Sold by {0}: {1}
+	SoldByFree: Sold by {0}
+	DroppedBy: Dropped by {0} ({1})
+	FoundInside: Inside {0} ({1})
 	AnyEnemy: any enemy
+	SpawnsIn: "Found in: {0}"
+	Page: Page {0} / {1}  ({2} items)
 	Platinum: "{0} platinum"
 	Gold: "{0} gold"
 	Silver: "{0} silver"

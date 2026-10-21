@@ -50,11 +50,15 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
   - The crafting stations, with their icons.
   - The conditions (near water, etc.).
 - Items that can't be crafted show **How to obtain** instead: NPC shops (with price and conditions), enemy drops
-  (with chance and conditions, including drops shared by every enemy) and bags/crates/presents (clickable).
+  (with the enemy's sprite, chance, conditions and where it spawns from its Bestiary entry, including drops shared by every enemy) and bags/crates/presents (clickable).
   Built lazily by `Common/SourceDatabase.cs` from `NPCShopDatabase` and `Main.ItemDropsDB`. Chest loot, fishing and
   world drops aren't in any database, so they only get a generic hint.
 - Navigation: ingredients and stations are clickable, there is a **Back** button with history, and the mouse
   wheel over the right panel switches recipe.
+- The item grid is paginated (`UI/ItemGrid.cs`): only the current page is drawn, uncached item textures load at
+  most 16 per frame, and lowercase names are cached for the search. Footer: first/previous/page bar/next/last;
+  wheel turns pages (Shift: 10), dragging the bar jumps on release.
+- Esc closes the index (when not typing in the search box).
 - **Keys** (rebindable in Controls):
   - `N`: open or close.
   - `[`: recipes of the hovered item.

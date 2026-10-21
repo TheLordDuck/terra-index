@@ -223,7 +223,7 @@ namespace RecipeIndex.UI
 
 			for (int i = sourceScroll; i < sources.Count; i++) {
 				ItemSource source = sources[i];
-				float height = RowHeight + (source.Conditions.Length > 0 ? 18 : 0);
+				float height = RowHeight + 4 + (Location(source).Length > 0 ? 18 : 0) + (source.Conditions.Length > 0 ? 18 : 0);
 				if (y + height > bottom - 18) {
 					Utils.DrawBorderString(spriteBatch, UIHelpers.T("MoreBelow", sources.Count - i), new Vector2(left, y), Color.Gray, 0.75f);
 					break;
@@ -248,17 +248,32 @@ namespace RecipeIndex.UI
 			};
 
 			// Bags and crates are items: show their icon and make them clickable, like an ingredient.
-			float textX = x + 8;
+			// Shops and drops show the NPC's sprite.
+			float textX = x + 38;
 			if (source.Kind == SourceKind.Container) {
 				UIHelpers.DrawItem(spriteBatch, ContentSamples.ItemsByType[source.Id], new Vector2(x, y), SlotScale);
 				hotspots.Add(new Hotspot(new Rectangle((int)x, (int)y, (int)width, RowHeight - 2), () => Show(source.Id, false), () => Show(source.Id, true)));
-				textX = x + 38;
+			}
+			else if (source.Id > 0) {
+				UIHelpers.DrawNpc(spriteBatch, source.Id, new Vector2(x, y), 32);
+			}
+			else {
+				textX = x + 8;
 			}
 			Utils.DrawBorderString(spriteBatch, UIHelpers.Fit(text, x + width - textX, 0.85f), new Vector2(textX, y + 8), color, 0.85f);
 
+			float lineY = y + RowHeight - 6;
+			string location = Location(source);
+			if (location.Length > 0) {
+				Utils.DrawBorderString(spriteBatch, UIHelpers.Fit(UIHelpers.T("SpawnsIn", location), x + width - textX, 0.72f), new Vector2(textX, lineY), new Color(150, 230, 150), 0.72f);
+				lineY += 18;
+			}
 			if (source.Conditions.Length > 0)
-				Utils.DrawBorderString(spriteBatch, UIHelpers.Fit(source.Conditions, x + width - textX, 0.72f), new Vector2(textX, y + RowHeight - 6), Color.LightGoldenrodYellow, 0.72f);
+				Utils.DrawBorderString(spriteBatch, UIHelpers.Fit(source.Conditions, x + width - textX, 0.72f), new Vector2(textX, lineY), Color.LightGoldenrodYellow, 0.72f);
 		}
+
+		// Only for enemies: where to find them. Town NPCs selling it are easy to find.
+		private static string Location(ItemSource source) => source.Kind == SourceKind.Drop ? SourceDatabase.LocationOf(source.Id) : "";
 
 		// One "icon + 3 x Name" row. Left click: that item's recipes; right click: its uses.
 		private void DrawEntry(SpriteBatch spriteBatch, int type, int stack, RecipeGroup group, float x, float y, float width, bool colorByOwned)

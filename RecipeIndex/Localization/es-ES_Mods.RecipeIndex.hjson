@@ -40,14 +40,20 @@ UI: {
 	DepositNoSpace: Aviso: los cofres conectados están llenos. {0} objeto(s) no se han enviado y se quedan en la terminal hasta que haya sitio o los saques.
 	DepositInUse: Otro jugador está usando las casillas de esta terminal.
 	HowToObtain: Cómo se consigue
-	NoSources: "No hay una fuente conocida: probablemente se encuentra en cofres, pescando\no en el mundo (rompiendo bloques, sacudiendo árboles, etc.)."
+	NoSources:
+		'''
+		No hay una fuente conocida: probablemente se encuentra en cofres, pescando
+		o en el mundo (rompiendo bloques, sacudiendo árboles, etc.).
+		'''
 	MoreAbove: "{0} más arriba (rueda del ratón)"
 	MoreBelow: "{0} más abajo (rueda del ratón)"
-	SoldBy: "Lo vende {0}: {1}"
-	SoldByFree: "Lo vende {0}"
-	DroppedBy: "Lo suelta {0} ({1})"
-	FoundInside: "Sale de {0} ({1})"
+	SoldBy: Lo vende {0}: {1}
+	SoldByFree: Lo vende {0}
+	DroppedBy: Lo suelta {0} ({1})
+	FoundInside: Sale de {0} ({1})
 	AnyEnemy: cualquier enemigo
+	SpawnsIn: "Aparece en: {0}"
+	Page: Página {0} / {1}  ({2} objetos)
 	Platinum: "{0} de platino"
 	Gold: "{0} de oro"
 	Silver: "{0} de plata"

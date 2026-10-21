@@ -43,6 +43,7 @@ namespace RecipeIndex
 		public override void Unload()
 		{
 			ToggleKey = RecipesKey = UsesKey = null;
+			ItemGrid.ClearCache();
 			if (!Main.dedServ)
 				LanguageManager.Instance.OnLanguageChanged -= RebuildPanel;
 		}
@@ -72,6 +73,8 @@ namespace RecipeIndex
 
 		public void Close()
 		{
+			if (ui.CurrentState == null)
+				return;
 			ui.SetState(null);
 			SoundEngine.PlaySound(SoundID.MenuClose);
 		}
@@ -86,8 +89,15 @@ namespace RecipeIndex
 		public override void UpdateUI(GameTime gameTime)
 		{
 			lastGameTime = gameTime;
-			if (ui?.CurrentState != null)
-				ui.Update(gameTime);
+			if (ui?.CurrentState == null)
+				return;
+
+			// Esc closes the panel, like the inventory (unless typing in the search box: then it only stops typing).
+			if (Main.keyState.IsKeyDown(Keys.Escape) && !Main.oldKeyState.IsKeyDown(Keys.Escape) && !SearchBox.AnyFocused) {
+				Close();
+				return;
+			}
+			ui.Update(gameTime);
 		}
 
 		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)

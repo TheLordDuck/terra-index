@@ -7,7 +7,7 @@ Press N to open a searchable list of every item in the game, including items fro
 - Hover any item (inventory, chests, shops) and press [ for its recipes or ] for its uses.
 - Click ingredients and stations inside a recipe to keep exploring; use Back to return.
 - Ingredients turn green when you have enough in your inventory, red when you don't.
-- Items that can't be crafted show where to get them: which NPC sells them, which enemies drop them and which bags or crates contain them.
+- Items that can't be crafted show where to get them: which NPC sells them, which enemies drop them (with a picture and where they live) and which bags or crates contain them.
 - Type @modname in the search box to filter by mod (for example @terraria or @calamity).
 
 STORAGE TERMINAL

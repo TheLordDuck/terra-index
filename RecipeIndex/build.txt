@@ -1,4 +1,4 @@
 displayName = Recipe Index
 author = thelordduck22
-version = 0.1
+version = 0.2
 homepage = https://github.com/TheLordDuck/terraria-mod

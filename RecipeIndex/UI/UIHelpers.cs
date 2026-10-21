@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.UI;
 
@@ -47,6 +48,20 @@ namespace RecipeIndex.UI
 				ItemSlot.MouseHover(ref item, ItemSlot.Context.InventoryItem);
 			}
 			return hovered;
+		}
+
+		// Draws an NPC's first animation frame on a slot background, shrunk to fit a size x size box.
+		public static void DrawNpc(SpriteBatch spriteBatch, int type, Vector2 position, int size)
+		{
+			Utils.DrawInvBG(spriteBatch, new Rectangle((int)position.X, (int)position.Y, size, size), new Color(40, 45, 100) * 0.8f);
+
+			Main.instance.LoadNPC(type);
+			Texture2D texture = TextureAssets.Npc[type].Value;
+			var frame = new Rectangle(0, 0, texture.Width, texture.Height / Math.Max(1, Main.npcFrameCount[type]));
+			float scale = Math.Min(1f, (size - 4) / (float)Math.Max(frame.Width, frame.Height));
+			// Slimes and a few others use a grey sprite tinted by the NPC's color.
+			Color color = ContentSamples.NpcsByNetId.TryGetValue(type, out NPC npc) && npc.color != default ? new Color(npc.color.R, npc.color.G, npc.color.B) : Color.White;
+			spriteBatch.Draw(texture, position + new Vector2(size / 2f), frame, color, 0f, frame.Size() / 2f, scale, SpriteEffects.None, 0f);
 		}
 
 		// For recipe groups, cycles the icon through the group's members every second (like NEI).

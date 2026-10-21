@@ -22,10 +22,13 @@ NEI-style recipe browser and storage terminal for Terraria (tModLoader 1.4.4).
 - Left click an item: recipes. Right click: uses.
 - Inside a recipe you can click ingredients and crafting stations to navigate; **Back** returns.
 - Mouse wheel over the right panel: switch recipe.
+- The item list is split into pages: use the buttons at the bottom, the mouse wheel (Shift: 10 pages at a time),
+  or drag the page bar.
+- Esc closes the index.
 - Search box: type a name, or `@calamity` / `@terraria` to filter by mod. Right click clears it.
 - Ingredients are green if you have enough in your inventory, red if not.
 - Items that can't be crafted show **how to obtain** them: who sells them (and the price), which enemies drop them
-  (and the chance), and which bags or crates contain them.
+  (with their picture, the chance and where they spawn), and which bags or crates contain them.
 
 ## Storage terminal
 
