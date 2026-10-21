@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using RecipeIndex.Content.Tiles;
 using Terraria;
+using Terraria.ID;
 
 namespace RecipeIndex.Content.Storage
 {
@@ -48,7 +51,94 @@ namespace RecipeIndex.Content.Storage
 			return snapshot;
 		}
 
-		// Walks the red wire starting from the terminal's (2x2) tiles and returns the chests it passes through.
+		// Takes up to one full stack of the item out of the connected chests. Returns null if there is none.
+		// Only stacks identical to the first one found (same prefix) are merged.
+		// Like Scan, only call this in single player or on the server; changed slots are synced to clients.
+		public static Item Withdraw(Point terminal, int type)
+		{
+			Item taken = null;
+			foreach (int index in FindConnectedChests(terminal)) {
+				Chest chest = Main.chest[index];
+				if (chest?.item == null)
+					continue;
+
+				for (int slot = 0; slot < chest.item.Length; slot++) {
+					Item item = chest.item[slot];
+					if (item == null || item.IsAir || item.type != type)
+						continue;
+					if (taken == null) {
+						taken = item.Clone();
+						taken.stack = 0;
+					}
+					else if (item.prefix != taken.prefix) {
+						continue;
+					}
+
+					int amount = Math.Min(item.stack, taken.maxStack - taken.stack);
+					taken.stack += amount;
+					item.stack -= amount;
+					if (item.stack <= 0)
+						item.TurnToAir();
+					if (Main.netMode == NetmodeID.Server)
+						NetMessage.SendData(MessageID.SyncChestItem, number: index, number2: slot);
+
+					if (taken.stack >= taken.maxStack)
+						return taken;
+				}
+			}
+			return taken;
+		}
+
+		// Moves the items into the connected chests: first onto matching stacks, then into empty slots.
+		// Whatever doesn't fit stays in the array. Returns true if anything was moved.
+		// Like Scan, only call this in single player or on the server; changed slots are synced to clients.
+		public static bool Deposit(Point terminal, Item[] items)
+		{
+			List<int> chests = FindConnectedChests(terminal);
+			bool moved = false;
+
+			foreach (Item item in items) {
+				if (item == null || item.IsAir)
+					continue;
+
+				for (int pass = 0; pass < 2 && !item.IsAir; pass++) {
+					foreach (int index in chests) {
+						Item[] slots = Main.chest[index]?.item;
+						if (slots == null)
+							continue;
+
+						for (int slot = 0; slot < slots.Length && !item.IsAir; slot++) {
+							Item target = slots[slot];
+							if (pass == 0) {
+								if (target == null || target.IsAir || target.type != item.type || target.prefix != item.prefix || target.stack >= target.maxStack)
+									continue;
+								int amount = Math.Min(item.stack, target.maxStack - target.stack);
+								target.stack += amount;
+								item.stack -= amount;
+								if (item.stack <= 0)
+									item.TurnToAir();
+							}
+							else {
+								if (target != null && !target.IsAir)
+									continue;
+								slots[slot] = item.Clone();
+								item.TurnToAir();
+							}
+
+							moved = true;
+							if (Main.netMode == NetmodeID.Server)
+								NetMessage.SendData(MessageID.SyncChestItem, number: index, number2: slot);
+						}
+						if (item.IsAir)
+							break;
+					}
+				}
+			}
+
+			return moved;
+		}
+
+		// Walks the red wire starting from the terminal's tiles and returns the chests it passes through.
 		// If the wire doesn't touch the terminal there is no network: the terminal must be on the same wire as the chests.
 		public static List<int> FindConnectedChests(Point terminal)
 		{
@@ -56,8 +146,8 @@ namespace RecipeIndex.Content.Storage
 			var visited = new HashSet<Point>();
 			var queue = new Queue<Point>();
 
-			for (int x = 0; x < 2; x++) {
-				for (int y = 0; y < 2; y++) {
+			for (int x = 0; x < TerminalTile.Width; x++) {
+				for (int y = 0; y < TerminalTile.Height; y++) {
 					var start = new Point(terminal.X + x, terminal.Y + y);
 					if (HasRedWire(start) && visited.Add(start))
 						queue.Enqueue(start);
@@ -67,7 +157,7 @@ namespace RecipeIndex.Content.Storage
 			while (queue.Count > 0 && visited.Count < MaxWireTiles) {
 				Point p = queue.Dequeue();
 
-				int chest = Chest.FindChestByGuessing(p.X, p.Y);
+				int chest = ChestAt(p);
 				if (chest >= 0)
 					chests.Add(chest);
 
@@ -79,6 +169,17 @@ namespace RecipeIndex.Content.Storage
 			}
 
 			return new List<int>(chests);
+		}
+
+		// The chest that covers this tile, whichever of its tiles it is. (Chest.FindChestByGuessing only matches
+		// a chest's left column, so wire running over the right half of a chest was missed.)
+		private static int ChestAt(Point p)
+		{
+			Tile tile = Main.tile[p.X, p.Y];
+			if (!tile.HasTile || !Main.tileContainer[tile.TileType])
+				return -1;
+			int width = TileID.Sets.BasicDresser[tile.TileType] ? 3 : 2;
+			return Chest.FindChest(p.X - tile.TileFrameX / 18 % width, p.Y - tile.TileFrameY / 18 % 2);
 		}
 
 		private static bool HasRedWire(Point p) => WorldGen.InWorld(p.X, p.Y, 1) && Main.tile[p.X, p.Y].RedWire;

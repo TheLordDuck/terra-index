@@ -6,12 +6,17 @@ Keybinds: {
 
 UI: {
 	Title: Recipe Index
-	SearchHint: "Search... (@mod to filter by mod)"
+	SearchHint: Search... (@mod to filter by mod)
 	NoResults: No items match your search.
-	Hint: "Left click an item: how to craft it.\nRight click: recipes that use it.\nMouse wheel over this panel: switch recipe."
+	Hint:
+		'''
+		Left click an item: how to craft it.
+		Right click: recipes that use it.
+		Mouse wheel over this panel: switch recipe.
+		'''
 	Back: Back
-	RecipesTab: "Recipes ({0})"
-	UsesTab: "Uses ({0})"
+	RecipesTab: Recipes ({0})
+	UsesTab: Uses ({0})
 	NoRecipes: This item cannot be crafted.
 	NoUses: This item is not used in any recipe.
 	Result: Result
@@ -20,8 +25,33 @@ UI: {
 	ByHand: By hand (no station needed)
 	Conditions: Conditions
 	TerminalTitle: Storage Terminal
-	ConnectedChests: "Connected chests: {0}   (click: highlight chest, right click: recipe)"
-	TerminalEmpty: "No items.\nConnect the terminal and your chests with the same red wire."
+	ConnectedChests: Connected chests: {0}
+	TerminalHint: Click: take out   Shift + click: highlight chest   Right click: recipe
+	TerminalEmpty:
+		'''
+		No items.
+		Connect the terminal and your chests with the same red wire.
+		'''
+	DepositButton: Deposit items
+	DepositTitle: Deposit items into the chests
+	DepositHint: When you close this, the items go into the chests through the terminal's door.
+	Done: Done
+	DepositDone: Items stored in the chests.
+	DepositNoSpace: Warning: the connected chests are full. {0} item(s) were not sent and stay in the terminal until there is room or you take them out.
+	DepositInUse: Another player is using this terminal's deposit slots.
+	HowToObtain: How to obtain
+	NoSources: "No known source: it is probably found in chests, by fishing,\nor in the world (breaking tiles, shaking trees, etc.)."
+	MoreAbove: "{0} more above (mouse wheel)"
+	MoreBelow: "{0} more below (mouse wheel)"
+	SoldBy: "Sold by {0}: {1}"
+	SoldByFree: "Sold by {0}"
+	DroppedBy: "Dropped by {0} ({1})"
+	FoundInside: "Inside {0} ({1})"
+	AnyEnemy: any enemy
+	Platinum: "{0} platinum"
+	Gold: "{0} gold"
+	Silver: "{0} silver"
+	Copper: "{0} copper"
 	FoundIn: "{0}: found in {1} chest(s)."
 	Blocks: "{0} blocks"
 }
@@ -33,6 +63,7 @@ Items: {
 			'''
 			Must be placed on a background wall
 			Connect it to your chests with red wire and right click it to search for items
+			Items you take out come out of its door
 			'''
 	}
 }

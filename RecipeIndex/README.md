@@ -24,21 +24,29 @@ NEI-style recipe browser and storage terminal for Terraria (tModLoader 1.4.4).
 - Mouse wheel over the right panel: switch recipe.
 - Search box: type a name, or `@calamity` / `@terraria` to filter by mod. Right click clears it.
 - Ingredients are green if you have enough in your inventory, red if not.
+- Items that can't be crafted show **how to obtain** them: who sells them (and the price), which enemies drop them
+  (and the chance), and which bags or crates contain them.
 
 ## Storage terminal
 
-1. Buy the **Terminal** from the **Mechanic** (5 silver).
-2. Place it on a **background wall** (like a painting, it is 2x2).
+1. Buy the **Terminal** from the **Steampunker** (1 platinum).
+2. Place it on a **background wall** (like a painting, it is 4 wide and 2 tall: a screen on the left and a garage door on the right).
 3. Run **red wire** over the terminal and over every chest you want to connect. Everything must be on the same
    wire: the network is walked starting from the terminal, so if the wire doesn't touch it, no chests are found.
 4. **Right click** the terminal and type: the list filters as you type.
-5. **Click** an item: the chests holding it glow for 10 seconds, and an arrow on the screen edge points to any
+5. **Click** an item: the garage door rolls up and a stack of it drops out (taken from the connected chests).
+6. **Shift + click**: the chests holding it glow for 10 seconds, and an arrow on the screen edge points to any
    that are off screen. **Right click**: opens that item's recipe in the index.
+7. **Deposit items** (button at the top of the panel): opens 20 slots under your inventory, like a chest. Drag items
+   in, or Shift + click them in your inventory. When you close it, the door opens and the items go into the
+   connected chests (first onto matching stacks, then into empty slots). If the chests are full you get a warning
+   and what didn't fit stays in the terminal: it is retried every 2 seconds, and you can take it back out by
+   opening the slots again. Breaking the terminal drops anything left in it.
 
 Closes with Esc, the X button, or by walking away.
 
 **Multiplayer:** the mod must be installed on the server and on every client (tModLoader syncs it automatically
-on join). The server does the scan, since it is the only one that knows every chest, and while the panel is open
+on join). The server does the scan and the withdrawing, since it is the only one that knows every chest, and while the panel is open
 it refreshes every half second, so you see changes made by other players.
 
 ## Publishing to the Steam Workshop

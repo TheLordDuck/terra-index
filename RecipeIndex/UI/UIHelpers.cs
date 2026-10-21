@@ -13,6 +13,13 @@ namespace RecipeIndex.UI
 	{
 		public static string T(string key, params object[] args) => Language.GetTextValue("Mods.RecipeIndex.UI." + key, args);
 
+		// Initializes a panel. Only call this once the mod is loaded (not in Load), or T() returns the raw keys.
+		public static TState Build<TState>(TState state) where TState : UIState
+		{
+			state.Activate();
+			return state;
+		}
+
 		public static Vector2 Measure(string text, float scale) => FontAssets.MouseText.Value.MeasureString(text) * scale;
 
 		// Truncates the text with "..." so it fits in maxWidth.

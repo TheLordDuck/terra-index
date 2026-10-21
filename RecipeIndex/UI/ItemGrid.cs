@@ -25,6 +25,14 @@ namespace RecipeIndex.UI
 		private int columns = 1;
 		private Vector2 origin;
 
+		// Scrollbar layout from the last draw, used to drag the thumb.
+		private Rectangle track;
+		private int thumbHeight;
+		private int maxScroll;
+		private bool dragging;
+		private float grabOffset;
+		private bool suppressClick;
+
 		public event Action<int, bool> OnItemClicked;
 
 		public int Count => items.Count;
@@ -61,7 +69,43 @@ namespace RecipeIndex.UI
 			base.Update(gameTime);
 			if (IsMouseHovering)
 				PlayerInput.LockVanillaMouseScroll("RecipeIndex/ItemGrid");
+
+			// Checked here rather than in LeftMouseUp so releasing outside the grid also ends the drag.
+			if (dragging) {
+				if (Main.mouseLeft)
+					DragTo(Main.MouseScreen.Y);
+				else
+					dragging = false;
+			}
 		}
+
+		public override void LeftMouseDown(UIMouseEvent evt)
+		{
+			base.LeftMouseDown(evt);
+			suppressClick = false;
+			if (maxScroll <= 0 || !track.Contains(evt.MousePosition.ToPoint()))
+				return;
+
+			int thumbY = ThumbY();
+			// Clicking the track outside the thumb centers the thumb on the mouse, then drags from there.
+			grabOffset = evt.MousePosition.Y >= thumbY && evt.MousePosition.Y < thumbY + thumbHeight
+				? evt.MousePosition.Y - thumbY
+				: thumbHeight / 2f;
+			dragging = true;
+			suppressClick = true;
+			DragTo(evt.MousePosition.Y);
+		}
+
+		private void DragTo(float mouseY)
+		{
+			int range = track.Height - thumbHeight;
+			if (range <= 0)
+				return;
+			float thumbTop = mouseY - grabOffset - track.Y;
+			scroll = Math.Clamp((int)Math.Round(thumbTop * maxScroll / range), 0, maxScroll);
+		}
+
+		private int ThumbY() => track.Y + (track.Height - thumbHeight) * scroll / maxScroll;
 
 		public override void ScrollWheel(UIScrollWheelEvent evt)
 		{
@@ -72,6 +116,8 @@ namespace RecipeIndex.UI
 		public override void LeftClick(UIMouseEvent evt)
 		{
 			base.LeftClick(evt);
+			if (suppressClick)
+				return;
 			int index = IndexAt(evt.MousePosition);
 			if (index >= 0)
 				OnItemClicked?.Invoke(items[index].type, false);
@@ -105,7 +151,7 @@ namespace RecipeIndex.UI
 			columns = Math.Max(1, (int)((inner.Width - ScrollbarWidth) / Cell));
 			int rows = Math.Max(1, (int)(inner.Height / Cell));
 			int totalRows = (items.Count + columns - 1) / columns;
-			int maxScroll = Math.Max(0, totalRows - rows);
+			maxScroll = Math.Max(0, totalRows - rows);
 			scroll = Math.Clamp(scroll, 0, maxScroll);
 
 			if (items.Count == 0) {
@@ -123,11 +169,11 @@ namespace RecipeIndex.UI
 			}
 
 			if (maxScroll > 0) {
-				var track = new Rectangle((int)(inner.X + inner.Width - ScrollbarWidth), (int)inner.Y, ScrollbarWidth, (int)inner.Height);
-				int thumbHeight = Math.Max(20, track.Height * rows / totalRows);
-				int thumbY = track.Y + (track.Height - thumbHeight) * scroll / maxScroll;
+				track = new Rectangle((int)(inner.X + inner.Width - ScrollbarWidth), (int)inner.Y, ScrollbarWidth, (int)inner.Height);
+				thumbHeight = Math.Max(20, track.Height * rows / totalRows);
+				bool hot = dragging || track.Contains(Main.MouseScreen.ToPoint());
 				spriteBatch.Draw(TextureAssets.MagicPixel.Value, track, Color.Black * 0.4f);
-				spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(track.X, thumbY, ScrollbarWidth, thumbHeight), new Color(120, 140, 220));
+				spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(track.X, ThumbY(), ScrollbarWidth, thumbHeight), hot ? new Color(160, 180, 255) : new Color(120, 140, 220));
 			}
 		}
 	}

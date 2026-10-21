@@ -6,12 +6,17 @@ Keybinds: {
 
 UI: {
 	Title: Índice de recetas
-	SearchHint: "Buscar... (@mod para filtrar por mod)"
+	SearchHint: Buscar... (@mod para filtrar por mod)
 	NoResults: Ningún objeto coincide con la búsqueda.
-	Hint: "Clic izquierdo en un objeto: cómo se fabrica.\nClic derecho: en qué recetas se usa.\nRueda del ratón sobre este panel: cambiar de receta."
+	Hint:
+		'''
+		Clic izquierdo en un objeto: cómo se fabrica.
+		Clic derecho: en qué recetas se usa.
+		Rueda del ratón sobre este panel: cambiar de receta.
+		'''
 	Back: Atrás
-	RecipesTab: "Recetas ({0})"
-	UsesTab: "Usos ({0})"
+	RecipesTab: Recetas ({0})
+	UsesTab: Usos ({0})
 	NoRecipes: Este objeto no se puede fabricar.
 	NoUses: Este objeto no se usa en ninguna receta.
 	Result: Resultado
@@ -20,8 +25,33 @@ UI: {
 	ByHand: A mano (no requiere estación)
 	Conditions: Condiciones
 	TerminalTitle: Terminal de almacenamiento
-	ConnectedChests: "Cofres conectados: {0}   (clic: iluminar cofre, clic derecho: ver receta)"
-	TerminalEmpty: "No hay objetos.\nConecta la terminal y los cofres con el mismo cable rojo."
+	ConnectedChests: Cofres conectados: {0}
+	TerminalHint: Clic: sacar   Mayús + clic: iluminar cofre   Clic derecho: receta
+	TerminalEmpty:
+		'''
+		No hay objetos.
+		Conecta la terminal y los cofres con el mismo cable rojo.
+		'''
+	DepositButton: Dejar objetos
+	DepositTitle: Dejar objetos en los cofres
+	DepositHint: Al cerrar, los objetos entran en los cofres por la puerta de la terminal.
+	Done: Listo
+	DepositDone: Objetos guardados en los cofres.
+	DepositNoSpace: Aviso: los cofres conectados están llenos. {0} objeto(s) no se han enviado y se quedan en la terminal hasta que haya sitio o los saques.
+	DepositInUse: Otro jugador está usando las casillas de esta terminal.
+	HowToObtain: Cómo se consigue
+	NoSources: "No hay una fuente conocida: probablemente se encuentra en cofres, pescando\no en el mundo (rompiendo bloques, sacudiendo árboles, etc.)."
+	MoreAbove: "{0} más arriba (rueda del ratón)"
+	MoreBelow: "{0} más abajo (rueda del ratón)"
+	SoldBy: "Lo vende {0}: {1}"
+	SoldByFree: "Lo vende {0}"
+	DroppedBy: "Lo suelta {0} ({1})"
+	FoundInside: "Sale de {0} ({1})"
+	AnyEnemy: cualquier enemigo
+	Platinum: "{0} de platino"
+	Gold: "{0} de oro"
+	Silver: "{0} de plata"
+	Copper: "{0} de cobre"
 	FoundIn: "{0}: encontrado en {1} cofre(s)."
 	Blocks: "{0} bloques"
 }
@@ -33,6 +63,7 @@ Items: {
 			'''
 			Se coloca sobre una pared de fondo
 			Conéctala con cable rojo a tus cofres y haz clic derecho para buscar objetos
+			Los objetos que saques salen por su puerta
 			'''
 	}
 }

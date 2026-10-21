@@ -7,6 +7,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.GameInput;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -22,7 +23,9 @@ namespace RecipeIndex
 		public static int HoveredItem { get; private set; }
 
 		private UserInterface ui;
+		// Built on first use: in Load the translations aren't loaded yet, so the texts would show their keys.
 		private BrowserState state;
+		private BrowserState State => state ??= UIHelpers.Build(new BrowserState());
 		private GameTime lastGameTime;
 
 		public override void Load()
@@ -33,14 +36,22 @@ namespace RecipeIndex
 
 			if (!Main.dedServ) {
 				ui = new UserInterface();
-				state = new BrowserState();
-				state.Activate();
+				LanguageManager.Instance.OnLanguageChanged += RebuildPanel;
 			}
 		}
 
 		public override void Unload()
 		{
 			ToggleKey = RecipesKey = UsesKey = null;
+			if (!Main.dedServ)
+				LanguageManager.Instance.OnLanguageChanged -= RebuildPanel;
+		}
+
+		// Changing the game's language rebuilds the panel (when it is closed) so it picks up the new texts.
+		private void RebuildPanel(LanguageManager language)
+		{
+			if (ui?.CurrentState == null)
+				state = null;
 		}
 
 		public override void OnWorldUnload() => ui?.SetState(null);
@@ -55,7 +66,7 @@ namespace RecipeIndex
 
 		public void Open()
 		{
-			ui.SetState(state);
+			ui.SetState(State);
 			SoundEngine.PlaySound(SoundID.MenuOpen);
 		}
 
@@ -69,7 +80,7 @@ namespace RecipeIndex
 		{
 			if (ui.CurrentState == null)
 				Open();
-			state.Show(type, uses);
+			State.Show(type, uses);
 		}
 
 		public override void UpdateUI(GameTime gameTime)

@@ -6,6 +6,7 @@ using RecipeIndex.Common;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.UI;
 using Terraria.GameContent.UI.Elements;
 using Terraria.GameInput;
 using Terraria.ID;
@@ -29,6 +30,10 @@ namespace RecipeIndex.UI
 		private bool uses;
 		private int page;
 
+		// First row shown in the "how to obtain" list (items that can't be crafted), scrolled with the mouse wheel.
+		private int sourceScroll;
+		private bool showingSources;
+
 		private List<Recipe> Recipes => uses ? RecipeDatabase.UsesOf(item) : RecipeDatabase.RecipesFor(item);
 
 		public void Show(int type, bool showUses)
@@ -40,6 +45,7 @@ namespace RecipeIndex.UI
 			item = type;
 			uses = showUses;
 			page = 0;
+			sourceScroll = 0;
 			SoundEngine.PlaySound(SoundID.MenuTick);
 		}
 
@@ -48,6 +54,7 @@ namespace RecipeIndex.UI
 			if (history.Count == 0)
 				return;
 			(item, uses, page) = history.Pop();
+			sourceScroll = 0;
 			SoundEngine.PlaySound(SoundID.MenuTick);
 		}
 
@@ -77,7 +84,10 @@ namespace RecipeIndex.UI
 		public override void ScrollWheel(UIScrollWheelEvent evt)
 		{
 			base.ScrollWheel(evt);
-			TurnPage(-Math.Sign(evt.ScrollWheelValue));
+			if (showingSources)
+				sourceScroll = Math.Max(0, sourceScroll - Math.Sign(evt.ScrollWheelValue));
+			else
+				TurnPage(-Math.Sign(evt.ScrollWheelValue));
 		}
 
 		public override void LeftClick(UIMouseEvent evt)
@@ -108,6 +118,7 @@ namespace RecipeIndex.UI
 			hotspots.Clear();
 
 			CalculatedStyle inner = GetInnerDimensions();
+			showingSources = false;
 			if (item <= 0) {
 				Utils.DrawBorderString(spriteBatch, UIHelpers.T("Hint"), new Vector2(inner.X, inner.Y), Color.LightGray, 0.85f);
 				return;
@@ -131,6 +142,8 @@ namespace RecipeIndex.UI
 			List<Recipe> list = Recipes;
 			if (list.Count == 0) {
 				Utils.DrawBorderString(spriteBatch, UIHelpers.T(uses ? "NoUses" : "NoRecipes"), new Vector2(inner.X, y + 40), Color.Gray, 0.9f);
+				if (!uses)
+					DrawSources(spriteBatch, inner.X, y + 70, inner.Width, inner.Y + inner.Height);
 				return;
 			}
 			page = Math.Clamp(page, 0, list.Count - 1);
@@ -186,6 +199,65 @@ namespace RecipeIndex.UI
 					y += 22;
 				}
 			}
+		}
+
+		// "How to obtain": shops, enemy drops and bags/crates, for items that can't be crafted.
+		private void DrawSources(SpriteBatch spriteBatch, float left, float y, float width, float bottom)
+		{
+			List<ItemSource> sources = SourceDatabase.SourcesOf(item);
+			Label(spriteBatch, UIHelpers.T("HowToObtain"), left, ref y);
+			if (sources.Count == 0) {
+				foreach (string line in UIHelpers.T("NoSources").Split('\n')) {
+					Utils.DrawBorderString(spriteBatch, UIHelpers.Fit(line, width, 0.8f), new Vector2(left, y), Color.Gray, 0.8f);
+					y += 20;
+				}
+				return;
+			}
+
+			showingSources = true;
+			sourceScroll = Math.Clamp(sourceScroll, 0, sources.Count - 1);
+			if (sourceScroll > 0) {
+				Utils.DrawBorderString(spriteBatch, UIHelpers.T("MoreAbove", sourceScroll), new Vector2(left, y), Color.Gray, 0.75f);
+				y += 18;
+			}
+
+			for (int i = sourceScroll; i < sources.Count; i++) {
+				ItemSource source = sources[i];
+				float height = RowHeight + (source.Conditions.Length > 0 ? 18 : 0);
+				if (y + height > bottom - 18) {
+					Utils.DrawBorderString(spriteBatch, UIHelpers.T("MoreBelow", sources.Count - i), new Vector2(left, y), Color.Gray, 0.75f);
+					break;
+				}
+				DrawSource(spriteBatch, source, left, y, width);
+				y += height;
+			}
+		}
+
+		private void DrawSource(SpriteBatch spriteBatch, ItemSource source, float x, float y, float width)
+		{
+			string name = SourceDatabase.SourceName(source);
+			string text = source.Kind switch {
+				SourceKind.Shop => source.Detail.Length > 0 ? UIHelpers.T("SoldBy", name, source.Detail) : UIHelpers.T("SoldByFree", name),
+				SourceKind.Drop => UIHelpers.T("DroppedBy", name, source.Detail),
+				_ => UIHelpers.T("FoundInside", name, source.Detail),
+			};
+			Color color = source.Kind switch {
+				SourceKind.Shop => new Color(140, 220, 255),
+				SourceKind.Drop => new Color(255, 170, 140),
+				_ => new Color(200, 170, 255),
+			};
+
+			// Bags and crates are items: show their icon and make them clickable, like an ingredient.
+			float textX = x + 8;
+			if (source.Kind == SourceKind.Container) {
+				UIHelpers.DrawItem(spriteBatch, ContentSamples.ItemsByType[source.Id], new Vector2(x, y), SlotScale);
+				hotspots.Add(new Hotspot(new Rectangle((int)x, (int)y, (int)width, RowHeight - 2), () => Show(source.Id, false), () => Show(source.Id, true)));
+				textX = x + 38;
+			}
+			Utils.DrawBorderString(spriteBatch, UIHelpers.Fit(text, x + width - textX, 0.85f), new Vector2(textX, y + 8), color, 0.85f);
+
+			if (source.Conditions.Length > 0)
+				Utils.DrawBorderString(spriteBatch, UIHelpers.Fit(source.Conditions, x + width - textX, 0.72f), new Vector2(textX, y + RowHeight - 6), Color.LightGoldenrodYellow, 0.72f);
 		}
 
 		// One "icon + 3 x Name" row. Left click: that item's recipes; right click: its uses.

@@ -6,8 +6,10 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
 - **Repository:** https://github.com/TheLordDuck/terraria-mod
 - **Platform:** tModLoader 1.4.4 (C#)
 - **Mod folder:** `RecipeIndex/`
-- **Status:** all the code is written but has **never been compiled or tested**. Neither tModLoader nor .NET
-  was installed on this PC. The first pending step is to build it and fix whatever errors come up.
+- **Status:** the code compiles (the .NET 8 SDK and tModLoader are installed, and `RecipeIndex/` is linked into
+  `ModSources` with a junction), but it has **not been tested in game** yet.
+- **UI panels are built on first open** (`UIHelpers.Build`), never in `Load`: translations aren't loaded yet there, so
+  texts would show raw keys like `Mods.RecipeIndex.UI.TerminalTitle`. They are rebuilt when the game language changes.
 - **Convention:** everything in the repo (code, comments, docs, commits) is in **English**, even though the
   user talks to Claude in Spanish. The only exception is the Spanish translation for players
   (`Localization/es-ES_...hjson`).
@@ -24,7 +26,7 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
    - Chests are connected to the terminal with **red wire**.
    - Right click opens a search box that filters **as you type** across the items in every connected chest.
    - Clicking an item **lights up the chest** holding it.
-4. **Change:** instead of crafting it (originally 5 stone), **the Mechanic sells it for 5 silver**.
+4. **Change:** instead of crafting it (originally 5 stone), **the Mechanic sells it for 5 silver**. Later moved to the **Steampunker for 1 platinum**.
 5. **Clarification:** the terminal must be on the **same wire** that connects the chests.
    It already worked that way: the wire walk starts at the terminal.
 6. **Multiplayer support.**
@@ -47,6 +49,10 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
   - Groups like "Any Wood", with the icon cycling through the group's members.
   - The crafting stations, with their icons.
   - The conditions (near water, etc.).
+- Items that can't be crafted show **How to obtain** instead: NPC shops (with price and conditions), enemy drops
+  (with chance and conditions, including drops shared by every enemy) and bags/crates/presents (clickable).
+  Built lazily by `Common/SourceDatabase.cs` from `NPCShopDatabase` and `Main.ItemDropsDB`. Chest loot, fishing and
+  world drops aren't in any database, so they only get a generic hint.
 - Navigation: ingredients and stations are clickable, there is a **Back** button with history, and the mouse
   wheel over the right panel switches recipe.
 - **Keys** (rebindable in Controls):
@@ -55,18 +61,26 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
   - `]`: uses of the hovered item.
 
 ### Storage terminal
-- The **Mechanic** sells it for **5 silver** (it has no recipe).
-- **2x2** tile that can only be placed on a **background wall**, like a painting (`AnchorWall`).
+- The **Steampunker** sells it for **1 platinum** (it has no recipe).
+- **4x2** tile (screen on the left, garage door on the right) that can only be placed on a **background wall**, like a painting (`AnchorWall`).
   If the wall is removed, it drops.
-- The **red wire** is walked starting from the terminal's 4 tiles, collecting the chests it passes through
+- The **red wire** is walked starting from the terminal's 8 tiles, collecting the chests it passes through
   (capped at 50,000 wire tiles).
 - **Right clicking** the terminal opens the panel with the search box already focused.
   - It shows the items from every connected chest, with quantities summed.
   - It refreshes every half second.
-- **Clicking** an item: the panel closes, the chests holding it glow gold for 10 s (light and particles), and a
+- **Clicking** an item: the panel closes, the server takes up to one stack out of the chests (same prefix only), the
+  garage door rolls up, the item drops out and the door closes again. Every player sees the door.
+- **Shift + click** an item: the panel closes, the chests holding it glow gold for 10 s (light and particles), and a
   chat message says how many chests it is in.
 - A **gold arrow** on the screen edge points to each highlighted chest that is off screen, with the distance in blocks.
 - **Right clicking** an item: opens its recipe in the index.
+- **Deposit items** button: 20 chest-like slots below the inventory (`DepositState`, Shift + click from the inventory
+  via `TerminalPlayer`). On close they go into the chests (matching stacks first, then empty slots) and the door opens.
+  Leftovers stay in a `TerminalEntity` (tile entity saved with the world), with a chat warning; they are retried every
+  2 s and can be taken back out. Only one player at a time can have a terminal's slots open (lock on the server).
+- Chests are found from any of their tiles (vanilla `FindChestByGuessing` only matched the left column).
+- When the deposit slots close, each item is drawn flying from the player into the door (other players see it too).
 - Closes with Esc (when not typing), the X button, or by walking more than 10 blocks away.
 
 ### Multiplayer
@@ -90,17 +104,21 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
 | `RecipeIndex.cs` | Mod class; receives network packets (`HandlePacket`) |
 | `RecipeIndexSystem.cs` | Keybinds, index UI layer, hovered item (`RecipeIndexPlayer` handles the keys) |
 | `Common/RecipeDatabase.cs` | Recipe index by result and by ingredient, station → item, station names |
+| `Common/SourceDatabase.cs` | Where non-craftable items come from: shops, drops, bags/crates |
 | `UI/UIHelpers.cs` | Localization, text measuring/truncating, drawing item slots, counting inventory |
 | `UI/SearchBox.cs` | Text box; only one is focused at a time (`AnyFocused` blocks the mod's keys) |
 | `UI/ItemGrid.cs` | Grid that only draws what is visible; used by the index and the terminal |
 | `UI/RecipeView.cs` | Recipe panel: pages, Recipes/Uses tabs, history, clickable areas |
 | `UI/BrowserState.cs` | Recipe index panel |
 | `UI/TerminalState.cs` | Terminal panel |
-| `Content/Items/TerminalItem.cs` | Terminal item and Mechanic shop entry (`MechanicShop`) |
-| `Content/Tiles/TerminalTile.cs` | Terminal tile (2x2 on a wall; right click opens the panel) |
-| `Content/Storage/StorageNetwork.cs` | Red wire walk and chest scan (`StorageSnapshot`) |
+| `UI/DepositState.cs` | Deposit slots (chest-like) |
+| `Content/Items/TerminalItem.cs` | Terminal item and Steampunker shop entry (`SteampunkerShop`) |
+| `Content/Tiles/TerminalTile.cs` | Terminal tile (4x2 on a wall; right click opens the panel; door area) |
+| `Content/Storage/StorageNetwork.cs` | Red wire walk, chest scan (`StorageSnapshot`), withdrawing and depositing |
 | `Content/Storage/TerminalNet.cs` | Client ↔ server packets |
-| `Content/Storage/TerminalSystem.cs` | Open/close, received data, chest highlighting, off-screen arrows |
+| `Content/Storage/TerminalSystem.cs` | Open/close, received data, withdrawing and door animation, chest highlighting, off-screen arrows |
+| `Content/Storage/TerminalEntity.cs` | Pending deposit items per terminal, saved with the world; deposit lock and retries |
+| `Content/Storage/TerminalPlayer.cs` | Shift + click from the inventory into the deposit slots |
 | `Localization/es-ES_...hjson`, `en-US_...hjson` | Spanish and English texts |
 | `README.md` | Installation and usage |
 
@@ -108,8 +126,9 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
 
 | File | Size | Description |
 |---|---|---|
-| `Content/Items/TerminalItem.png` | 24x24 | Terminal in the inventory |
-| `Content/Tiles/TerminalTile.png` | 34x34 | Four 16x16 pieces with 2 px gaps (Terraria's format for 2x2 tiles) |
+| `Content/Items/TerminalItem.png` | 24x12 | Terminal in the inventory |
+| `Content/Tiles/TerminalTile.png` | 70x34 | Eight 16x16 pieces with 2 px gaps (Terraria's format for 4x2 tiles), door closed |
+| `Content/Tiles/TerminalDoor.png` | 22x21 | Garage door, drawn over the opening while it rolls up |
 | `Content/Storage/ChestArrow.png` | 16x16 | Arrow pointing right; rotated in game |
 | `icon.png` | 80x80 | Mod icon (mod list and Workshop) |
 | `icon_small.png` | 30x30 | Small icon in the mod list |
@@ -131,10 +150,8 @@ blue gradient background with rounded corners. To replace them, keep the same si
 
 ## Pending / ideas
 
-- **First build** and fix errors (it has never been compiled).
-- The grids' scrollbar can't be dragged; scrolling only works with the mouse wheel.
+- It now compiles (first build fixed on 2026-10-21) but has not been tested in game yet.
 - Clicking a crafting station shows that item's recipes, not everything crafted at that station.
 - Terminal items are grouped by type; prefixes (modifiers) are not distinguished.
-- Dressers used as storage may only be partly detected.
-- Possible improvements: taking items out directly from the terminal, supporting other wire colors, and
+- Possible improvements: supporting other wire colors, and
   sorting by quantity or by mod.

@@ -5,24 +5,24 @@ using Terraria.ModLoader;
 
 namespace RecipeIndex.Content.Items
 {
-	// No recipe: the Mechanic sells it (see MechanicShop).
+	// No recipe: the Steampunker sells it (see SteampunkerShop).
 	public class TerminalItem : ModItem
 	{
 		public override void SetDefaults()
 		{
 			Item.DefaultToPlaceableTile(ModContent.TileType<TerminalTile>());
 			Item.width = 24;
-			Item.height = 24;
+			Item.height = 12;
 			Item.rare = ItemRarityID.Blue;
-			Item.value = Item.buyPrice(silver: 5);
+			Item.value = Item.buyPrice(platinum: 1);
 		}
 	}
 
-	public class MechanicShop : GlobalNPC
+	public class SteampunkerShop : GlobalNPC
 	{
 		public override void ModifyShop(NPCShop shop)
 		{
-			if (shop.NpcType == NPCID.Mechanic)
+			if (shop.NpcType == NPCID.Steampunker)
 				shop.Add<TerminalItem>();
 		}
 	}

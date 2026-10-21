@@ -8,7 +8,8 @@ using Terraria.UI;
 namespace RecipeIndex.UI
 {
 	// Terminal panel: search box (focused on open) + items from the connected chests.
-	// Left click: highlights the chests holding the item. Right click: opens its recipes in the index.
+	// Left click: takes a stack out through the terminal's door. Shift + left click: highlights the chests holding it.
+	// Right click: opens its recipes in the index.
 	public class TerminalState : UIState
 	{
 		private const int RefreshInterval = 30;
@@ -40,10 +41,18 @@ namespace RecipeIndex.UI
 			close.OnLeftClick += (_, _) => Terminal.Close();
 			panel.Append(close);
 
+			var deposit = new UITextPanel<string>(UIHelpers.T("DepositButton"), 0.8f);
+			deposit.HAlign = 1f;
+			deposit.Left.Set(-40, 0);
+			deposit.Top.Set(-4, 0);
+			deposit.Height.Set(30, 0);
+			deposit.OnLeftClick += (_, _) => Terminal.OpenDeposit();
+			panel.Append(deposit);
+
 			grid = new ItemGrid(() => Terminal.StoredItems);
-			grid.Top.Set(100, 0);
+			grid.Top.Set(122, 0);
 			grid.Width.Set(0, 1f);
-			grid.Height.Set(-100, 1f);
+			grid.Height.Set(-122, 1f);
 			grid.OnItemClicked += OnItemClicked;
 			panel.Append(grid);
 
@@ -57,6 +66,11 @@ namespace RecipeIndex.UI
 			info = new UIText("", 0.85f);
 			info.Top.Set(76, 0);
 			panel.Append(info);
+
+			var hint = new UIText(UIHelpers.T("TerminalHint"), 0.8f);
+			hint.Top.Set(98, 0);
+			hint.TextColor = Color.LightGray;
+			panel.Append(hint);
 		}
 
 		public override void OnActivate()
@@ -100,8 +114,14 @@ namespace RecipeIndex.UI
 				return;
 			}
 
-			int found = Terminal.Highlight(type);
-			Main.NewText(UIHelpers.T("FoundIn", Lang.GetItemNameValue(type), found), Color.Gold);
+			if (Main.keyState.PressingShift()) {
+				int found = Terminal.Highlight(type);
+				Main.NewText(UIHelpers.T("FoundIn", Lang.GetItemNameValue(type), found), Color.Gold);
+				return;
+			}
+
+			// The panel closes so the door can be seen opening.
+			Terminal.RequestWithdraw(type);
 		}
 	}
 }
