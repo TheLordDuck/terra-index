@@ -7,8 +7,8 @@ using Terraria.UI;
 
 namespace RecipeIndex.UI
 {
-	// Panel de la terminal: buscador (ya activo al abrir) + objetos de los cofres conectados.
-	// Clic izquierdo: ilumina los cofres que tienen el objeto. Clic derecho: abre sus recetas en el índice.
+	// Terminal panel: search box (focused on open) + items from the connected chests.
+	// Left click: highlights the chests holding the item. Right click: opens its recipes in the index.
 	public class TerminalState : UIState
 	{
 		private const int RefreshInterval = 30;
@@ -73,8 +73,8 @@ namespace RecipeIndex.UI
 		{
 			base.Update(gameTime);
 
-			// Los cofres pueden cambiar mientras el panel está abierto (también por otros jugadores),
-			// así que se vuelve a pedir el contenido cada medio segundo.
+			// Chests can change while the panel is open (including by other players),
+			// so the contents are requested again every half second.
 			if (--refreshTimer <= 0) {
 				refreshTimer = RefreshInterval;
 				Terminal.RequestRefresh();

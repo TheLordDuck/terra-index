@@ -9,8 +9,8 @@ using Terraria.ModLoader;
 
 namespace RecipeIndex.Content.Storage
 {
-	// Multijugador: los clientes no conocen el contenido de los cofres que no han abierto,
-	// así que piden el escaneo al servidor y este responde con lo que hay en la red y dónde.
+	// Multiplayer: clients don't know the contents of chests they haven't opened,
+	// so they ask the server to scan, and it replies with what is in the network and where.
 	public static class TerminalNet
 	{
 		private enum MessageType : byte
@@ -19,7 +19,7 @@ namespace RecipeIndex.Content.Storage
 			Contents,
 		}
 
-		// Un ModPacket no puede pasar de ~65 KB; las redes grandes se envían en varios trozos.
+		// A ModPacket can't exceed ~65 KB; large networks are sent in several chunks.
 		private const int ChunkBudget = 30000;
 		private const float MaxRequestDistance = 16 * 20;
 		private const int MinTicksBetweenRequests = 10;
@@ -54,7 +54,7 @@ namespace RecipeIndex.Content.Storage
 			if (Main.netMode != NetmodeID.Server)
 				return;
 
-			// Comprobaciones básicas para que un cliente no pueda espiar redes lejanas ni saturar el servidor.
+			// Basic checks so a client can't snoop on distant networks or flood the server.
 			Tile tile = Main.tile[terminal.X, terminal.Y];
 			var center = new Vector2(terminal.X * 16 + 16, terminal.Y * 16 + 16);
 			if (!tile.HasTile || tile.TileType != ModContent.TileType<TerminalTile>() || Main.player[whoAmI].Distance(center) > MaxRequestDistance)

@@ -18,7 +18,7 @@ namespace RecipeIndex
 		public static ModKeybind RecipesKey { get; private set; }
 		public static ModKeybind UsesKey { get; private set; }
 
-		// Objeto bajo el ratón en el último frame (inventario, cofres, nuestra cuadrícula...).
+		// Item under the mouse last frame (inventory, chests, our grid...).
 		public static int HoveredItem { get; private set; }
 
 		private UserInterface ui;
@@ -81,7 +81,7 @@ namespace RecipeIndex
 
 		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
 		{
-			// Antes del texto del ratón para que los tooltips de los objetos se dibujen encima del panel.
+			// Before mouse text so item tooltips are drawn on top of the panel.
 			int index = layers.FindIndex(layer => layer.Name == "Vanilla: Mouse Text");
 			if (index == -1)
 				return;

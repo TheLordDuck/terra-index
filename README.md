@@ -1,9 +1,9 @@
 # terraria-mod
 
-Mod para Terraria (tModLoader 1.4.4) de **thelordduck22**:
+Terraria mod (tModLoader 1.4.4) by **thelordduck22**:
 
-- **Índice de recetas** al estilo NEI de Minecraft: busca cualquier objeto y mira cómo se fabrica y para qué sirve.
-- **Terminal de almacenamiento**: conecta tus cofres con cable rojo, busca objetos desde la terminal y el cofre donde están se ilumina. Funciona en multijugador.
+- **Recipe index**, NEI-style (from Minecraft): search any item and see how it is crafted and what it is used for.
+- **Storage terminal**: connect your chests with red wire, search for items from the terminal, and the chest holding them lights up. Works in multiplayer.
 
-El código del mod está en [`RecipeIndex/`](RecipeIndex/); instrucciones de instalación y uso en [`RecipeIndex/README.md`](RecipeIndex/README.md).
-Contexto completo del desarrollo en [`CONTEXTO.md`](CONTEXTO.md).
+The mod's code is in [`RecipeIndex/`](RecipeIndex/); installation and usage in [`RecipeIndex/README.md`](RecipeIndex/README.md).
+Full development context in [`CONTEXT.md`](CONTEXT.md).

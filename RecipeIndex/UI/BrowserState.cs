@@ -59,7 +59,7 @@ namespace RecipeIndex.UI
 
 		public override void OnActivate()
 		{
-			// La lista de objetos solo existe cuando las recetas ya están cargadas, no al inicializar la UI.
+			// The item list only exists once recipes are loaded, not when the UI is initialized.
 			if (grid.Count == 0)
 				grid.Refresh();
 		}

@@ -11,7 +11,7 @@ using Terraria.UI;
 
 namespace RecipeIndex.UI
 {
-	// Cuadrícula de objetos (todos los del juego en el índice, los de los cofres en la terminal). Solo dibuja las filas visibles, así aguanta miles de objetos sin crear un UIElement por cada uno.
+	// Item grid (every item in the index, chest contents in the terminal). Only visible rows are drawn, so it handles thousands of items without one UIElement per item.
 	public class ItemGrid : UIElement
 	{
 		private const float SlotScale = 0.75f;
@@ -44,7 +44,7 @@ namespace RecipeIndex.UI
 
 		public void Refresh() => items = source().Where(item => Matches(item.type)).ToList();
 
-		// "@nombre" filtra por mod (p. ej. "@calamity", "@terraria"); cualquier otro texto filtra por nombre.
+		// "@name" filters by mod (e.g. "@calamity", "@terraria"); any other text filters by item name.
 		private bool Matches(int type)
 		{
 			if (filter.Length == 0)

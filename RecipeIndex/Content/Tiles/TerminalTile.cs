@@ -9,7 +9,7 @@ using Terraria.ObjectData;
 
 namespace RecipeIndex.Content.Tiles
 {
-	// Terminal de 2x2 que se cuelga en la pared de fondo, como un cuadro.
+	// 2x2 terminal that hangs on a background wall, like a painting.
 	public class TerminalTile : ModTile
 	{
 		public override void SetStaticDefaults()

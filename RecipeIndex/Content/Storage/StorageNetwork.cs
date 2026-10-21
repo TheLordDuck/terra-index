@@ -4,7 +4,7 @@ using Terraria;
 
 namespace RecipeIndex.Content.Storage
 {
-	// Resultado de escanear una red: lo que hay y dónde. Es lo que el servidor envía a los clientes.
+	// Result of scanning a network: what is stored and where. This is what the server sends to clients.
 	public class StorageSnapshot
 	{
 		public int ChestCount;
@@ -14,12 +14,12 @@ namespace RecipeIndex.Content.Storage
 
 	public static class StorageNetwork
 	{
-		// Límite de casillas de cable a recorrer, para que una red enorme no congele el juego.
+		// Cap on wire tiles to walk, so a huge network can't freeze the game.
 		private const int MaxWireTiles = 50000;
 
 		private static readonly Point[] Neighbors = { new(1, 0), new(-1, 0), new(0, 1), new(0, -1) };
 
-		// Solo debe llamarse donde se conocen todos los cofres: en un jugador o en el servidor.
+		// Only call this where every chest is known: in single player or on the server.
 		public static StorageSnapshot Scan(Point terminal)
 		{
 			var snapshot = new StorageSnapshot();
@@ -39,7 +39,7 @@ namespace RecipeIndex.Content.Storage
 					snapshot.Totals[item.type] = snapshot.Totals.GetValueOrDefault(item.type) + item.stack;
 					if (!snapshot.Locations.TryGetValue(item.type, out List<Point> list))
 						snapshot.Locations[item.type] = list = new List<Point>();
-					// Los cofres se recorren de uno en uno, así que basta mirar el último para no repetir.
+					// Chests are walked one at a time, so checking the last entry is enough to avoid duplicates.
 					if (list.Count == 0 || list[^1] != position)
 						list.Add(position);
 				}
@@ -48,8 +48,8 @@ namespace RecipeIndex.Content.Storage
 			return snapshot;
 		}
 
-		// Recorre el cable rojo desde las casillas de la terminal (2x2) y devuelve los cofres por los que pasa.
-		// Si el cable no toca la terminal, no hay red: la terminal tiene que estar en el mismo cable que los cofres.
+		// Walks the red wire starting from the terminal's (2x2) tiles and returns the chests it passes through.
+		// If the wire doesn't touch the terminal there is no network: the terminal must be on the same wire as the chests.
 		public static List<int> FindConnectedChests(Point terminal)
 		{
 			var chests = new HashSet<int>();

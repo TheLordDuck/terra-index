@@ -8,10 +8,10 @@ using Terraria.UI;
 
 namespace RecipeIndex.UI
 {
-	// Caja de texto: clic para escribir, clic derecho para borrar, Enter/Esc para salir.
+	// Text box: click to type, right click to clear, Enter/Esc to stop typing.
 	public class SearchBox : UIPanel
 	{
-		// Solo una caja puede tener el foco a la vez; las teclas del mod se ignoran mientras se escribe.
+		// Only one box can be focused at a time; the mod's hotkeys are ignored while typing.
 		private static SearchBox focusedBox;
 
 		private readonly string hint;

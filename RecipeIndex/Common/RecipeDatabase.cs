@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace RecipeIndex.Common
 {
-	// Índice de todas las recetas (vanilla y de mods), construido una vez que el juego termina de cargarlas.
+	// Index of every recipe (vanilla and modded), built once the game has finished loading them.
 	public class RecipeDatabase : ModSystem
 	{
 		private static readonly List<Recipe> Empty = new();
@@ -31,7 +31,7 @@ namespace RecipeIndex.Common
 
 				Add(byResult, recipe.createItem.type, recipe);
 
-				// Un objeto cuenta como ingrediente si aparece directamente o si pertenece a un grupo aceptado ("Cualquier madera", etc.)
+				// An item counts as an ingredient if it is listed directly or belongs to an accepted group ("Any Wood", etc.)
 				var seen = new HashSet<int>();
 				foreach (Item item in recipe.requiredItem) {
 					if (seen.Add(item.type))
@@ -77,7 +77,7 @@ namespace RecipeIndex.Common
 
 		public static List<Recipe> UsesOf(int type) => byIngredient.TryGetValue(type, out var list) ? list : Empty;
 
-		// Objeto que coloca esta estación de trabajo (para dibujar su icono), o 0 si no hay ninguno.
+		// Item that places this crafting station (used to draw its icon), or 0 if there is none.
 		public static int ItemForTile(int tile) => tileToItem.TryGetValue(tile, out int type) ? type : 0;
 
 		public static string TileName(int tile)
@@ -93,7 +93,7 @@ namespace RecipeIndex.Common
 			return tile < TileID.Count ? TileID.Search.GetName(tile) : TileLoader.GetTile(tile)?.Name ?? tile.ToString();
 		}
 
-		// Grupo de receta ("Cualquier hierro", ...) que acepta este ingrediente, o null.
+		// Recipe group ("Any Iron Bar", ...) that accepts this ingredient, or null.
 		public static RecipeGroup GroupFor(Recipe recipe, int type)
 		{
 			foreach (int groupId in recipe.acceptedGroups) {

@@ -27,17 +27,17 @@ namespace RecipeIndex.Content.Storage
 		private GameTime lastGameTime;
 		private Asset<Texture2D> arrowTexture;
 
-		// Cofres iluminados: esquina superior izquierda del cofre -> ticks restantes.
+		// Highlighted chests: chest top-left corner -> ticks remaining.
 		private readonly Dictionary<Point, int> highlights = new();
 
-		// Último escaneo recibido (del servidor en multijugador, calculado aquí en un jugador).
+		// Latest scan (received from the server in multiplayer, computed locally in single player).
 		private StorageSnapshot snapshot = new();
 
 		public Point Terminal { get; private set; }
 		public int ChestCount => snapshot.ChestCount;
 		public List<Item> StoredItems { get; } = new();
 
-		// Aumenta cada vez que llegan datos nuevos, para que el panel sepa cuándo redibujar la lista.
+		// Bumped whenever new data arrives, so the panel knows when to rebuild its list.
 		public int Version { get; private set; }
 
 		public bool IsOpen => ui?.CurrentState != null;
@@ -81,7 +81,7 @@ namespace RecipeIndex.Content.Storage
 				TerminalNet.SendRequest(Terminal);
 		}
 
-		// Respuesta del servidor; se ignora si mientras tanto se cerró o se cambió de terminal.
+		// Server reply; ignored if the panel was closed or another terminal opened in the meantime.
 		public void ApplyRemote(Point terminal, StorageSnapshot remote)
 		{
 			if (IsOpen && terminal == Terminal)
@@ -97,7 +97,7 @@ namespace RecipeIndex.Content.Storage
 			Version++;
 		}
 
-		// Ilumina los cofres conectados que contienen el objeto. Devuelve cuántos son.
+		// Highlights the connected chests that hold the item. Returns how many there are.
 		public int Highlight(int type)
 		{
 			highlights.Clear();
@@ -114,7 +114,7 @@ namespace RecipeIndex.Content.Storage
 			if (!IsOpen)
 				return;
 
-			// Se cierra como un cofre: al alejarse, si rompen la terminal o con Esc (si no se está escribiendo).
+			// Closes like a chest: when walking away, when the terminal is broken, or on Esc (unless typing).
 			Tile tile = Main.tile[Terminal.X, Terminal.Y];
 			var center = new Vector2(Terminal.X * 16 + 16, Terminal.Y * 16 + 16);
 			bool escape = Main.keyState.IsKeyDown(Keys.Escape) && !Main.oldKeyState.IsKeyDown(Keys.Escape) && !SearchBox.AnyFocused;
@@ -176,13 +176,13 @@ namespace RecipeIndex.Content.Storage
 			}, InterfaceScaleType.UI));
 		}
 
-		// Para cada cofre iluminado fuera de la pantalla, una flecha en el borde que apunta hacia él, con la distancia en bloques.
+		// For each highlighted chest off screen, an arrow on the screen edge pointing at it, with the distance in blocks.
 		private void DrawOffscreenArrows(SpriteBatch spriteBatch)
 		{
 			if (highlights.Count == 0)
 				return;
 
-			// La capa usa la escala de la interfaz, así que se trabaja en píxeles de pantalla y luego se divide por Main.UIScale.
+			// The layer uses UI scale, so work in screen pixels and then divide by Main.UIScale.
 			var screen = new Vector2(Main.screenWidth, Main.screenHeight);
 			Vector2 center = screen / 2f;
 			Texture2D texture = arrowTexture.Value;
@@ -208,7 +208,7 @@ namespace RecipeIndex.Content.Storage
 			}
 		}
 
-		// Los cofres miden 2 casillas de ancho; los aparadores (dressers), 3.
+		// Chests are 2 tiles wide; dressers are 3.
 		private static int ChestWidth(Point chest) => TileID.Sets.BasicDresser[Main.tile[chest.X, chest.Y].TileType] ? 3 : 2;
 
 		private static void DrawBorder(SpriteBatch spriteBatch, Rectangle area, Color color, int thickness)

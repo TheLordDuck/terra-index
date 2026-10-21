@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace RecipeIndex.Content.Items
 {
-	// No tiene receta: la vende la Mecánica (ver MechanicShop).
+	// No recipe: the Mechanic sells it (see MechanicShop).
 	public class TerminalItem : ModItem
 	{
 		public override void SetDefaults()

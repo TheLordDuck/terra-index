@@ -1,1 +1,1 @@
-Explorador de recetas al estilo NEI: busca cualquier objeto y mira cómo se fabrica y para qué sirve.
+NEI-style recipe browser: search any item to see how it is crafted and what it is used for. Includes a storage terminal that finds items across chests connected with red wire.

@@ -13,8 +13,8 @@ using Terraria.UI;
 
 namespace RecipeIndex.UI
 {
-	// Panel derecho: muestra las recetas (o usos) de un objeto, una por página.
-	// Las zonas clicables se registran mientras se dibuja, porque el diseño cambia según la receta.
+	// Right-hand panel: shows the recipes (or uses) of an item, one per page.
+	// Clickable areas are registered while drawing, because the layout depends on the recipe.
 	public class RecipeView : UIPanel
 	{
 		private const float SlotScale = 0.6f;
@@ -113,7 +113,7 @@ namespace RecipeIndex.UI
 				return;
 			}
 
-			// Cabecera: [Atrás] icono + nombre
+			// Header: [Back] icon + name
 			float x = inner.X;
 			if (history.Count > 0)
 				x += Button(spriteBatch, UIHelpers.T("Back"), x, inner.Y + 6, Back) + 8;
@@ -122,7 +122,7 @@ namespace RecipeIndex.UI
 			string name = UIHelpers.Fit(sample.Name, inner.X + inner.Width - x - 50, 1f);
 			Utils.DrawBorderString(spriteBatch, name, new Vector2(x + 50, inner.Y + 10), ItemRarity.GetColor(sample.rare));
 
-			// Pestañas Recetas / Usos y paginador a la derecha
+			// Recipes / Uses tabs, with the pager on the right
 			float y = inner.Y + 50;
 			x = inner.X;
 			x += Button(spriteBatch, UIHelpers.T("RecipesTab", RecipeDatabase.RecipesFor(item).Count), x, y, () => SetMode(false), !uses) + 6;
@@ -188,7 +188,7 @@ namespace RecipeIndex.UI
 			}
 		}
 
-		// Una fila "icono + 3 x Nombre". Clic izquierdo: recetas de ese objeto; derecho: sus usos.
+		// One "icon + 3 x Name" row. Left click: that item's recipes; right click: its uses.
 		private void DrawEntry(SpriteBatch spriteBatch, int type, int stack, RecipeGroup group, float x, float y, float width, bool colorByOwned)
 		{
 			int shown = group != null ? UIHelpers.Cycle(group) : type;

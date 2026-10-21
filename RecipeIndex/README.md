@@ -1,42 +1,42 @@
 # Recipe Index
 
-Explorador de recetas para Terraria (tModLoader 1.4.4), al estilo NEI de Minecraft.
+NEI-style recipe browser and storage terminal for Terraria (tModLoader 1.4.4).
 
-## Instalación (desarrollo)
+## Installation (development)
 
-1. Instala **tModLoader** desde Steam y ábrelo una vez.
-2. Copia (o enlaza) esta carpeta `RecipeIndex` dentro de
-   `Documentos\My Games\Terraria\tModLoader\ModSources\`.
-   Para un enlace en vez de copiar (PowerShell como administrador):
-   `New-Item -ItemType Junction -Path "$HOME\Documents\My Games\Terraria\tModLoader\ModSources\RecipeIndex" -Target "<ruta a esta carpeta>"`
-3. En tModLoader: **Workshop → Develop Mods → RecipeIndex → Build + Reload**.
+1. Install **tModLoader** from Steam and launch it once.
+2. Copy (or link) this `RecipeIndex` folder into
+   `Documents\My Games\Terraria\tModLoader\ModSources\`.
+   To link instead of copying (PowerShell as administrator):
+   `New-Item -ItemType Junction -Path "$HOME\Documents\My Games\Terraria\tModLoader\ModSources\RecipeIndex" -Target "<path to this folder>"`
+3. In tModLoader: **Workshop → Develop Mods → RecipeIndex → Build + Reload**.
 
-## Uso
+## Recipe index
 
-| Tecla (configurable en Controles) | Acción |
+| Key (rebindable in Controls) | Action |
 |---|---|
-| `N` | Abrir/cerrar el índice |
-| `[` con el ratón sobre un objeto | Ver sus recetas |
-| `]` con el ratón sobre un objeto | Ver en qué se usa |
+| `N` | Open/close the index |
+| `[` while hovering an item | Show its recipes |
+| `]` while hovering an item | Show what it is used in |
 
-- Clic izquierdo en un objeto: recetas. Clic derecho: usos.
-- Dentro de una receta puedes hacer clic en ingredientes y estaciones para navegar; **Atrás** vuelve.
-- Rueda del ratón sobre el panel derecho: cambiar de receta.
-- Buscador: escribe un nombre, o `@calamity` / `@terraria` para filtrar por mod. Clic derecho lo borra.
-- Los ingredientes salen en verde si tienes suficientes en el inventario y en rojo si no.
+- Left click an item: recipes. Right click: uses.
+- Inside a recipe you can click ingredients and crafting stations to navigate; **Back** returns.
+- Mouse wheel over the right panel: switch recipe.
+- Search box: type a name, or `@calamity` / `@terraria` to filter by mod. Right click clears it.
+- Ingredients are green if you have enough in your inventory, red if not.
 
-## Terminal de almacenamiento
+## Storage terminal
 
-1. Compra la **Terminal** a la **Mecánica** (5 de plata).
-2. Colócala sobre una **pared de fondo** (como un cuadro, ocupa 2x2).
-3. Pasa **cable rojo** por encima de la terminal y de cada cofre que quieras conectar. Todo tiene que estar en el
-   mismo cable: la red se recorre desde la terminal, así que si el cable no la toca no verá ningún cofre.
-4. Haz **clic derecho** en la terminal y escribe: la lista se filtra mientras escribes.
-5. **Clic** en un objeto: los cofres que lo tienen brillan durante 10 segundos.
-   **Clic derecho**: abre la receta de ese objeto en el índice.
+1. Buy the **Terminal** from the **Mechanic** (5 silver).
+2. Place it on a **background wall** (like a painting, it is 2x2).
+3. Run **red wire** over the terminal and over every chest you want to connect. Everything must be on the same
+   wire: the network is walked starting from the terminal, so if the wire doesn't touch it, no chests are found.
+4. **Right click** the terminal and type: the list filters as you type.
+5. **Click** an item: the chests holding it glow for 10 seconds, and an arrow on the screen edge points to any
+   that are off screen. **Right click**: opens that item's recipe in the index.
 
-Se cierra con Esc, con la X o al alejarte.
+Closes with Esc, the X button, or by walking away.
 
-**Multijugador:** el mod tiene que estar instalado en el servidor y en todos los clientes (tModLoader lo
-sincroniza solo al entrar). El escaneo lo hace el servidor, que es quien conoce todos los cofres, y mientras el
-panel está abierto se actualiza cada medio segundo, así que ves los cambios que hagan otros jugadores.
+**Multiplayer:** the mod must be installed on the server and on every client (tModLoader syncs it automatically
+on join). The server does the scan, since it is the only one that knows every chest, and while the panel is open
+it refreshes every half second, so you see changes made by other players.

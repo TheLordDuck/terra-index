@@ -15,7 +15,7 @@ namespace RecipeIndex.UI
 
 		public static Vector2 Measure(string text, float scale) => FontAssets.MouseText.Value.MeasureString(text) * scale;
 
-		// Recorta el texto con "..." para que quepa en maxWidth.
+		// Truncates the text with "..." so it fits in maxWidth.
 		public static string Fit(string text, float maxWidth, float scale)
 		{
 			if (Measure(text, scale).X <= maxWidth)
@@ -25,7 +25,7 @@ namespace RecipeIndex.UI
 			return text + "...";
 		}
 
-		// Dibuja una ranura con el objeto y muestra su tooltip al pasar el ratón. Devuelve true si está bajo el ratón.
+		// Draws an item slot and shows the item's tooltip on hover. Returns true if the mouse is over it.
 		public static bool DrawItem(SpriteBatch spriteBatch, Item item, Vector2 position, float scale)
 		{
 			float oldScale = Main.inventoryScale;
@@ -42,7 +42,7 @@ namespace RecipeIndex.UI
 			return hovered;
 		}
 
-		// Para grupos de receta, va rotando el icono entre sus miembros cada segundo (como NEI).
+		// For recipe groups, cycles the icon through the group's members every second (like NEI).
 		public static int Cycle(RecipeGroup group)
 		{
 			int count = group.ValidItems.Count;
