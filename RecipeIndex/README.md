@@ -40,3 +40,16 @@ Closes with Esc, the X button, or by walking away.
 **Multiplayer:** the mod must be installed on the server and on every client (tModLoader syncs it automatically
 on join). The server does the scan, since it is the only one that knows every chest, and while the panel is open
 it refreshes every half second, so you see changes made by other players.
+
+## Publishing to the Steam Workshop
+
+1. Build the mod (see Installation) and test it in a world.
+2. In tModLoader: **Workshop → Develop Mods → Publish** on RecipeIndex (logged into Steam).
+3. Pick the visibility: **Public**, **Friends only** or **Private**.
+4. Share the Workshop link; friends click **Subscribe** and enable the mod in **Workshop → Manage Mods**.
+
+The Workshop page uses `description.txt` (description), `icon.png` (icon) and `build.txt`
+(name, author, version, homepage).
+
+**Updating:** bump `version` in `build.txt` (e.g. `0.1` → `0.2`), rebuild, and click **Publish** again.
+Subscribers get the update automatically.

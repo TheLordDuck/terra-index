@@ -1,1 +1,24 @@
-NEI-style recipe browser: search any item to see how it is crafted and what it is used for. Includes a storage terminal that finds items across chests connected with red wire.
+Recipe Index is an NEI-style recipe browser for Terraria, plus a storage terminal that finds items across your chests.
+
+RECIPE INDEX
+Press N to open a searchable list of every item in the game, including items from other mods.
+- Left click an item to see how it is crafted: ingredients, crafting stations and special conditions.
+- Right click an item to see every recipe that uses it.
+- Hover any item (inventory, chests, shops) and press [ for its recipes or ] for its uses.
+- Click ingredients and stations inside a recipe to keep exploring; use Back to return.
+- Ingredients turn green when you have enough in your inventory, red when you don't.
+- Type @modname in the search box to filter by mod (for example @terraria or @calamity).
+
+STORAGE TERMINAL
+Buy the Terminal from the Mechanic for 5 silver and hang it on a background wall.
+- Connect the terminal and your chests with the same red wire.
+- Right click the terminal and start typing: the items in all connected chests are filtered as you type.
+- Click an item and the chests holding it glow for 10 seconds. Chests off screen get an arrow on the edge of the screen showing the direction and distance.
+- Right click an item in the terminal to open its recipe.
+
+MULTIPLAYER
+Fully supported. The server scans the chests and keeps the terminal updated, so you see changes made by other players.
+
+All keys can be rebound in Settings > Controls. Available in English and Spanish.
+
+Source code and bug reports: https://github.com/TheLordDuck/terraria-mod
