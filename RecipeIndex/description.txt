@@ -1,0 +1,1 @@
+Explorador de recetas al estilo NEI: busca cualquier objeto y mira cómo se fabrica y para qué sirve.

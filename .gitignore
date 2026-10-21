@@ -1,0 +1,7 @@
+# Compilación de .NET / tModLoader
+bin/
+obj/
+*.user
+.vs/
+.vscode/
+*.tmod

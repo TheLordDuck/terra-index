@@ -1,0 +1,40 @@
+Keybinds: {
+	ToggleBrowser.DisplayName: Toggle recipe index
+	ShowRecipes.DisplayName: Show recipes of hovered item
+	ShowUses.DisplayName: Show uses of hovered item
+}
+
+UI: {
+	Title: Recipe Index
+	SearchHint: "Search... (@mod to filter by mod)"
+	NoResults: No items match your search.
+	Hint: "Left click an item: how to craft it.\nRight click: recipes that use it.\nMouse wheel over this panel: switch recipe."
+	Back: Back
+	RecipesTab: "Recipes ({0})"
+	UsesTab: "Uses ({0})"
+	NoRecipes: This item cannot be crafted.
+	NoUses: This item is not used in any recipe.
+	Result: Result
+	Ingredients: Ingredients
+	Stations: Crafting station
+	ByHand: By hand (no station needed)
+	Conditions: Conditions
+	TerminalTitle: Storage Terminal
+	ConnectedChests: "Connected chests: {0}   (click: highlight chest, right click: recipe)"
+	TerminalEmpty: "No items.\nConnect the terminal and your chests with the same red wire."
+	FoundIn: "{0}: found in {1} chest(s)."
+	Blocks: "{0} blocks"
+}
+
+Items: {
+	TerminalItem: {
+		DisplayName: Terminal
+		Tooltip:
+			'''
+			Must be placed on a background wall
+			Connect it to your chests with red wire and right click it to search for items
+			'''
+	}
+}
+
+Tiles.TerminalTile.MapEntry: Terminal

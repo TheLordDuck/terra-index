@@ -1,0 +1,40 @@
+Keybinds: {
+	ToggleBrowser.DisplayName: Abrir/cerrar índice de recetas
+	ShowRecipes.DisplayName: Ver recetas del objeto bajo el ratón
+	ShowUses.DisplayName: Ver usos del objeto bajo el ratón
+}
+
+UI: {
+	Title: Índice de recetas
+	SearchHint: "Buscar... (@mod para filtrar por mod)"
+	NoResults: Ningún objeto coincide con la búsqueda.
+	Hint: "Clic izquierdo en un objeto: cómo se fabrica.\nClic derecho: en qué recetas se usa.\nRueda del ratón sobre este panel: cambiar de receta."
+	Back: Atrás
+	RecipesTab: "Recetas ({0})"
+	UsesTab: "Usos ({0})"
+	NoRecipes: Este objeto no se puede fabricar.
+	NoUses: Este objeto no se usa en ninguna receta.
+	Result: Resultado
+	Ingredients: Ingredientes
+	Stations: Estación de trabajo
+	ByHand: A mano (no requiere estación)
+	Conditions: Condiciones
+	TerminalTitle: Terminal de almacenamiento
+	ConnectedChests: "Cofres conectados: {0}   (clic: iluminar cofre, clic derecho: ver receta)"
+	TerminalEmpty: "No hay objetos.\nConecta la terminal y los cofres con el mismo cable rojo."
+	FoundIn: "{0}: encontrado en {1} cofre(s)."
+	Blocks: "{0} bloques"
+}
+
+Items: {
+	TerminalItem: {
+		DisplayName: Terminal
+		Tooltip:
+			'''
+			Se coloca sobre una pared de fondo
+			Conéctala con cable rojo a tus cofres y haz clic derecho para buscar objetos
+			'''
+	}
+}
+
+Tiles.TerminalTile.MapEntry: Terminal
