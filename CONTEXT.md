@@ -1,15 +1,15 @@
-# Project context: "Recipe Index" Terraria mod
+# Project context: "Terra Index" Terraria mod
 
 Summary of the conversation with Claude Code (2026-10-21), to pick the work back up later.
 
 - **Author:** thelordduck22
-- **Repository:** https://github.com/TheLordDuck/terraria-mod
+- **Repository:** https://github.com/TheLordDuck/terra-index
 - **Platform:** tModLoader 1.4.4 (C#)
-- **Mod folder:** `RecipeIndex/`
-- **Status:** the code compiles (the .NET 8 SDK and tModLoader are installed, and `RecipeIndex/` is linked into
+- **Mod folder:** `TerraIndex/` (renamed from `RecipeIndex` on 2026-10-22, before the first Workshop publish; the recipe browser feature keeps the "Recipe Index" name)
+- **Status:** the code compiles (the .NET 8 SDK and tModLoader are installed, and `TerraIndex/` is linked into
   `ModSources` with a junction), but it has **not been tested in game** yet.
 - **UI panels are built on first open** (`UIHelpers.Build`), never in `Load`: translations aren't loaded yet there, so
-  texts would show raw keys like `Mods.RecipeIndex.UI.TerminalTitle`. They are rebuilt when the game language changes.
+  texts would show raw keys like `Mods.TerraIndex.UI.TerminalTitle`. They are rebuilt when the game language changes.
 - **Convention:** everything in the repo (code, comments, docs, commits) is in **English**, even though the
   user talks to Claude in Spanish. The only exception is the Spanish translation for players
   (`Localization/es-ES_...hjson`).
@@ -102,12 +102,12 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
 
 ---
 
-## File layout (`RecipeIndex/`)
+## File layout (`TerraIndex/`)
 
 | File | Purpose |
 |---|---|
-| `build.txt`, `description.txt`, `RecipeIndex.csproj` | Mod metadata and project |
-| `RecipeIndex.cs` | Mod class; receives network packets (`HandlePacket`) |
+| `build.txt`, `description.txt`, `TerraIndex.csproj` | Mod metadata and project |
+| `TerraIndex.cs` | Mod class; receives network packets (`HandlePacket`) |
 | `RecipeIndexSystem.cs` | Keybinds, index UI layer, hovered item (`RecipeIndexPlayer` handles the keys) |
 | `Common/RecipeDatabase.cs` | Recipe index by result and by ingredient, station → item, station names |
 | `Common/SourceDatabase.cs` | Where non-craftable items come from: shops, drops, bags/crates |
@@ -149,8 +149,8 @@ blue gradient background with rounded corners. To replace them, keep the same si
 ## How to build and test
 
 1. Install **tModLoader** from Steam and launch it once.
-2. Copy or link `RecipeIndex/` into `Documents\My Games\Terraria\tModLoader\ModSources\`.
-3. In tModLoader: **Workshop → Develop Mods → RecipeIndex → Build + Reload**.
+2. Copy or link `TerraIndex/` into `Documents\My Games\Terraria\tModLoader\ModSources\`.
+3. In tModLoader: **Workshop → Develop Mods → TerraIndex → Build + Reload**.
 4. For multiplayer: Host & Play with the mod enabled, and have another player use the terminal on chests they
    have never opened.
 
