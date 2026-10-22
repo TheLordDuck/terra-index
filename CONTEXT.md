@@ -1,13 +1,15 @@
 # Project context: "Terra Index" Terraria mod
 
-Summary of the conversation with Claude Code (2026-10-21), to pick the work back up later.
+Summary of the conversations with Claude Code (2026-10-21 and 2026-10-22), to pick the work back up later.
 
 - **Author:** thelordduck22
 - **Repository:** https://github.com/TheLordDuck/terra-index
 - **Platform:** tModLoader 1.4.4 (C#)
 - **Mod folder:** `TerraIndex/` (renamed from `RecipeIndex` on 2026-10-22, before the first Workshop publish; the recipe browser feature keeps the "Recipe Index" name)
-- **Status:** the code compiles (the .NET 8 SDK and tModLoader are installed, and `TerraIndex/` is linked into
-  `ModSources` with a junction), but it has **not been tested in game** yet.
+- **Status:** version 0.3 compiled on the user's home PC (the .NET 8 SDK and tModLoader are installed there, and the
+  mod folder is linked into `ModSources` with a junction). **Version 0.4** (commit `f19669b`, 2026-10-22) was written
+  on a PC without tModLoader: it has **never been compiled or tested in game**. The checklist is in
+  [`TESTING.md`](TESTING.md). The only idea left after that is publishing 1.0 on the Workshop.
 - **UI panels are built on first open** (`UIHelpers.Build`), never in `Load`: translations aren't loaded yet there, so
   texts would show raw keys like `Mods.TerraIndex.UI.TerminalTitle`. They are rebuilt when the game language changes.
 - **Convention:** everything in the repo (code, comments, docs, commits) is in **English**, even though the
@@ -35,6 +37,58 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
 9. The code was **pushed to GitHub** (`main` branch).
 10. **Everything translated to English** (code comments, docs, this file).
 
+Second conversation (2026-10-22):
+
+11. **Rename the mod**, since it is no longer just a recipe browser. "Quality of Life" was considered, but there are
+    already several big QoL mods with that name (Quality of Life Compendium, Vanilla+ QoL, Quality of Life: Recipes,
+    YAQOLM). The user picked **Terra Index**; no existing mod with that name was found. The internal name changed
+    too (`RecipeIndex` → `TerraIndex`: folder, namespace, mod class, assembly, localization files and keys), since
+    the mod wasn't published yet. Keybinds are stored under the internal name, so they must be rebound once.
+12. **Rename the GitHub repository** `terraria-mod` → `terra-index` (GitHub redirects the old URL). The local folder
+    is still called `terraria-mod`.
+13. While pushing, GitHub had 3 commits (v0.2, v0.3) made on the home PC that this PC didn't have: `main` was reset to
+    them and the rename redone on top, so nothing was lost.
+14. Claude proposed a **numbered list of QoL ideas**; the user picked some, discarded others (see "Idea list").
+15. The user asked for a **testing checklist** for when they get home, saved as `TESTING.md`, and for the READMEs
+    and this file to be updated with everything.
+
+---
+
+## Idea list (2026-10-22)
+
+The user refers to features by these numbers, so keep them stable.
+
+| # | Idea | Status |
+|---|---|---|
+| 1 | Craft from the terminal's chests | Done (0.4) |
+| 2 | Blue ingredients when they are in the chests | Done (0.4) |
+| 4 | Crafting tree down to base materials | Done (0.4) |
+| 5 | Crafting goal / shopping list on screen | Done (0.4) |
+| 6 | Terminal sorting (name, amount, rarity, mod) | Done (0.4) |
+| 8 | "Deposit all" button | Done (0.4) |
+| 10 | Portable terminal | Done (0.4) |
+| 13 | Compare items side by side | Done (0.4) |
+| 17 | "Take missing" ingredients out of the chests | Done (0.4) |
+| 18 | Movable, foldable goal panel | Done (0.4) |
+| 27 | Mod settings (ModConfig) | Done (0.4) |
+| 28 | Final sprites | Done: the user accepted the current ones |
+| 30 | Publish 1.0 on the Workshop | **Pending** (after compiling and testing 0.4) |
+
+Discarded by the user, don't propose them again: 3 "what can I craft" tab, 7 terminal favorites, 9 per-chest
+filters, 11 seen/obtained collection %, 12 chest loot and fishing in "how to obtain", 14 stat search, 15 tree/goal
+counting the chests, 16 several goals, 19 other wire colors, 20 view one chest's contents, 21 terminal history,
+22 auto-deposit from the floor, 23 index history/favorites, 24 boss info, 25 tooltip search, 26 unlockable recipes,
+29 multiplayer testing as a task (the user tests by playing with a friend). In general: no more ideas that only
+touch the terminal or only the recipe index.
+
+Decisions taken:
+- Crafting from the chests (1): crafting stations count if they are **near the player or on the terminal's wire**
+  (options A + B); ingredients come **only from the chests**, not the inventory.
+- Crafting tree (4): owned items come from the inventory only; intermediates use their first recipe that doesn't
+  loop back.
+- Goal panel (18): position and folding are saved per character, so the X/Y options were removed from the config.
+- Portable terminal (10): recipe is Terminal + 10 Luminite Bars at the Ancient Manipulator (late game on purpose).
+
 ---
 
 ## Features
@@ -45,7 +99,8 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
 - **Left click** an item: its recipes. **Right click:** the recipes it is used in.
 - Each recipe shows:
   - The result.
-  - The ingredients, green if you have enough in your inventory and red if not.
+  - The ingredients: green if you have enough in your inventory, blue if enough is in the chests of a terminal in
+    reach, red if not.
   - Groups like "Any Wood", with the icon cycling through the group's members.
   - The crafting stations, with their icons.
   - The conditions (near water, etc.).
@@ -99,11 +154,11 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
   - `]`: uses of the hovered item.
 
 ### Storage terminal
-- The **Steampunker** sells it for **1 platinum** (it has no recipe).
+- The **Steampunker** sells it for **1 platinum** by default (`ServerConfig.TerminalPriceGold`; it has no recipe).
 - **4x2** tile (screen on the left, garage door on the right) that can only be placed on a **background wall**, like a painting (`AnchorWall`).
   If the wall is removed, it drops.
-- The **red wire** is walked starting from the terminal's 8 tiles, collecting the chests it passes through
-  (capped at 50,000 wire tiles).
+- The **red wire** is walked starting from the terminal's 8 tiles, collecting the chests and crafting stations it
+  passes through (capped at `ServerConfig.MaxWireTiles`, 50,000 by default).
 - **Right clicking** the terminal opens the panel with the search box already focused.
   - It shows the items from every connected chest, with quantities summed.
   - It refreshes every half second.
@@ -119,7 +174,8 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
   2 s and can be taken back out. Only one player at a time can have a terminal's slots open (lock on the server).
 - Chests are found from any of their tiles (vanilla `FindChestByGuessing` only matched the left column).
 - When the deposit slots close, each item is drawn flying from the player into the door (other players see it too).
-- Closes with Esc (when not typing), the X button, or by walking more than 10 blocks away.
+- Closes with Esc (when not typing), the X button, or by walking away (`ServerConfig.TerminalReach`, 10 blocks by
+  default).
 - **Deposit all** button (`TerminalSystem.QuickDeposit`): the client takes main inventory slots 10-49 (no hotbar,
   coins, ammo or favorites) out of the inventory, syncs those slots and sends the items in a `QuickDeposit` packet.
   The server deposits them and gives back with `QuickSpawnItem` whatever doesn't fit, or everything if the request
@@ -153,8 +209,11 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
   packets of about 30 KB.
 - Server-side checks:
   - There must be a real terminal at that position.
-  - The player must be within 20 blocks.
+  - The player must be within reach + 10 blocks, or carry a portable terminal linked to that terminal
+    (`RemoteTerminalItem.CanReach`).
   - At most one request every 10 ticks per player.
+- Withdrawals, deposits, crafting (`Craft`) and "Take missing" (`TakeItems`) also run on the server; it replies
+  with `DepositResult` / `CraftResult` for the chat messages.
 - Single player uses the same code, computed locally.
 - The mod must be installed on the server and on the clients.
 
@@ -167,16 +226,16 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
 | `build.txt`, `description.txt`, `TerraIndex.csproj` | Mod metadata and project |
 | `TerraIndex.cs` | Mod class; receives network packets (`HandlePacket`) |
 | `RecipeIndexSystem.cs` | Keybinds, index UI layer, hovered item (`RecipeIndexPlayer` handles the keys) |
-| `Common/RecipeDatabase.cs` | Recipe index by result and by ingredient, station → item, station names |
+| `Common/RecipeDatabase.cs` | Recipe index by result and by ingredient, station → item, station names, which tiles are stations and what they count as (`IsStation`, `Provides`), accepted items per ingredient (`AcceptedItems`) |
 | `Common/SourceDatabase.cs` | Where non-craftable items come from: shops, drops, bags/crates |
 | `Common/ItemCategories.cs` | Item category tabs (weapons, tools, armor...) |
 | `Common/CraftingPlan.cs` | Crafting tree of a recipe minus what the player owns; base materials and stations |
 | `Common/Configs.cs` | `ClientConfig` (goal panel, default sort, highlight time, hotbar in Deposit all) and `ServerConfig` (terminal price, reach, max wire tiles, allow portable terminal) |
 | `Common/CraftingGoal.cs` | Crafting goal: `GoalPlayer` (saved per character) and the on-screen list (`GoalSystem`) |
-| `UI/UIHelpers.cs` | Localization, text measuring/truncating, drawing item slots, counting inventory |
+| `UI/UIHelpers.cs` | Localization, text measuring/truncating/wrapping, coin amounts, drawing item slots, counting inventory |
 | `UI/SearchBox.cs` | Text box; only one is focused at a time (`AnyFocused` blocks the mod's keys) |
 | `UI/ItemGrid.cs` | Grid that only draws what is visible; used by the index and the terminal |
-| `UI/RecipeView.cs` | Recipe panel: pages, Recipes/Uses tabs, history, clickable areas |
+| `UI/RecipeView.cs` | Recipe panel: pages, Recipes/Uses/Tree tabs, history, clickable areas, craft and "Take missing" rows, comparison, goal button |
 | `UI/BrowserState.cs` | Recipe index panel |
 | `UI/TerminalState.cs` | Terminal panel |
 | `UI/AmountPrompt.cs` | "How many?" pop-up shown when taking a stackable item out of the terminal |
@@ -184,9 +243,9 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
 | `Content/Items/TerminalItem.cs` | Terminal item and Steampunker shop entry (`SteampunkerShop`) |
 | `Content/Items/RemoteTerminalItem.cs` | Portable terminal: link, remote opening, `CanReach` distance check |
 | `Content/Tiles/TerminalTile.cs` | Terminal tile (4x2 on a wall; right click opens the panel; door area) |
-| `Content/Storage/StorageNetwork.cs` | Red wire walk, chest scan (`StorageSnapshot`), withdrawing and depositing |
+| `Content/Storage/StorageNetwork.cs` | Red wire walk, chest and station scan (`StorageSnapshot`), withdrawing, depositing, taking a recipe's ingredients |
 | `Content/Storage/TerminalNet.cs` | Client ↔ server packets |
-| `Content/Storage/TerminalSystem.cs` | Open/close, received data, withdrawing and door animation, chest highlighting, off-screen arrows |
+| `Content/Storage/TerminalSystem.cs` | Open/close, received data, sorting, withdrawing and door animation, Deposit all, crafting from the chests, Take missing, chest highlighting, off-screen arrows |
 | `Content/Storage/TerminalEntity.cs` | Pending deposit items per terminal, saved with the world; deposit lock and retries |
 | `Content/Storage/TerminalPlayer.cs` | Shift + click from the inventory into the deposit slots |
 | `Localization/es-ES_...hjson`, `en-US_...hjson` | Spanish and English texts |
@@ -218,17 +277,21 @@ blue gradient background with rounded corners. To replace them, keep the same si
 3. In tModLoader: **Workshop → Develop Mods → TerraIndex → Build + Reload**.
 4. For multiplayer: Host & Play with the mod enabled, and have another player use the terminal on chests they
    have never opened.
+5. Go through [`TESTING.md`](TESTING.md), one section per feature.
+
+Coming from the old name: remove the `ModSources\RecipeIndex` link, create `ModSources\TerraIndex`, disable any old
+`RecipeIndex` in the mod list, and rebind the keys.
 
 ---
 
 ## Pending / ideas
 
-- It now compiles (first build fixed on 2026-10-21) but has not been tested in game yet.
-- Clicking a crafting station shows that item's recipes, not everything crafted at that station.
-- Terminal items are grouped by type; prefixes (modifiers) are not distinguished.
-- Possible improvements: supporting other wire colors, and a "recently added" sort (would need the server to
-  track when each item entered the network).
-- Version 0.4 (sorting, Deposit all, portable terminal, crafting tree, crafting goal, settings, item comparison, crafting from the chests, take missing) was written on a PC without
-  tModLoader: not compiled yet.
-- Crafting tree ideas: count items in the terminal's chests as owned, let the player pick the recipe of each
-  intermediate item.
+- **Next step:** compile 0.4 on the home PC and fix the build errors. The tModLoader APIs used without being able
+  to check them are the most likely to fail: `Recipe.RecipeIndex`, `Player.AdjTiles()`, `ModTile.AdjTiles`,
+  `Condition.IsMet()`, `ModNPC`/`GlobalNPC.ModifyActiveShop`, `Lang.GetTooltip`, `Utils.WordwrapString`.
+- Then go through `TESTING.md`, bump `version` to 1.0 and publish (idea 30).
+- Known limits: clicking a crafting station shows that item's recipes, not everything crafted at that station;
+  terminal items are grouped by type (prefixes not distinguished); crafting from the chests doesn't apply the
+  Alchemy Table's ingredient savings or mods' `OnCraft` hooks; the crafting tree always uses each intermediate's
+  first valid recipe.
+- A "recently added" terminal sort was left out: the server would have to track when each item entered the network.
