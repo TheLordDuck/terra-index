@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ReLogic.Content;
+using TerraIndex.Common;
+using TerraIndex.Content.Items;
 using TerraIndex.Content.Tiles;
 using TerraIndex.UI;
 using Terraria;
@@ -18,11 +20,24 @@ using Terraria.UI;
 
 namespace TerraIndex.Content.Storage
 {
+	// Order of the items in the terminal panel. Ties are broken by name.
+	public enum TerminalSort
+	{
+		Name,
+		Amount,
+		Rarity,
+		Mod,
+	}
+
 	public class TerminalSystem : ModSystem
 	{
-		private const int HighlightTicks = 60 * 10;
-		private const float MaxDistance = 16 * 10;
 		private const float ArrowMargin = 40;
+		// How long highlighted chests glow, and how far the player can walk away before the panel closes (both in ServerConfig/ClientConfig).
+		private static int HighlightTicks => 60 * ClientConfig.Instance.HighlightSeconds;
+		private static float MaxDistance => 16 * ServerConfig.Instance.TerminalReach;
+		// Farther than this (a portable terminal), withdrawn items appear next to the player instead of
+		// dropping out of the door, and deposited items don't fly across the screen.
+		private const float DoorReach = 16 * 30;
 
 		// Garage door: rolls up, stays open while the item drops out, then rolls back down.
 		private const int DoorOpenTicks = 14;
@@ -73,7 +88,28 @@ namespace TerraIndex.Content.Storage
 		// Latest scan (received from the server in multiplayer, computed locally in single player).
 		private StorageSnapshot snapshot = new();
 
+		// The terminal opened last. It stays the crafting terminal after the panel closes (see CanCraft).
 		public Point Terminal { get; private set; }
+		public bool HasTerminal { get; private set; }
+		// Opened with a portable terminal: there is no distance limit while the player carries it.
+		public bool Remote { get; private set; }
+
+		// Client: whether the player can still use Terminal. Opened remotely, while carrying the linked portable terminal.
+		// In multiplayer the terminal's tiles may not be loaded on this client, so in remote mode the server checks it exists.
+		public bool InReach {
+			get {
+				if (!HasTerminal)
+					return false;
+				bool exists = (Remote && Main.netMode == NetmodeID.MultiplayerClient) || TerminalTile.IsTerminal(Terminal);
+				bool near = Remote ? RemoteTerminalItem.IsLinkedTo(Main.LocalPlayer, Terminal) : Main.LocalPlayer.Distance(TerminalTile.Center(Terminal)) <= MaxDistance;
+				return exists && near;
+			}
+		}
+
+		// Stations the network's wire touches, expanded with what each counts as (a Hellforge is also a Furnace).
+		private readonly HashSet<int> networkStations = new();
+		private int craftRefreshTimer;
+		public TerminalSort Sort { get; private set; }
 		public int ChestCount => snapshot.ChestCount;
 		public List<Item> StoredItems { get; } = new();
 
@@ -113,19 +149,25 @@ namespace TerraIndex.Content.Storage
 			}
 		}
 
+		public override void OnWorldLoad() => Sort = ClientConfig.Instance.DefaultSort;
+
 		public override void OnWorldUnload()
 		{
 			ui?.SetState(null);
 			DepositItems = null;
+			HasTerminal = false;
+			Apply(new StorageSnapshot());
 			highlights.Clear();
 			doors.Clear();
 			drops.Clear();
 			flyingItems.Clear();
 		}
 
-		public void Open(Point terminal)
+		public void Open(Point terminal, bool remote)
 		{
 			Terminal = terminal;
+			Remote = remote;
+			HasTerminal = true;
 			Apply(new StorageSnapshot());
 			ui.SetState(State);
 			SoundEngine.PlaySound(SoundID.MenuOpen);
@@ -148,20 +190,43 @@ namespace TerraIndex.Content.Storage
 				TerminalNet.SendRequest(Terminal);
 		}
 
-		// Server reply; ignored if the panel was closed or another terminal opened in the meantime.
+		// Server reply; ignored if another terminal was opened in the meantime. Kept after the panel closes, because
+		// the recipe index uses it to craft from the chests.
 		public void ApplyRemote(Point terminal, StorageSnapshot remote)
 		{
-			if (IsOpen && terminal == Terminal)
+			if (HasTerminal && terminal == Terminal)
 				Apply(remote);
 		}
 
 		private void Apply(StorageSnapshot newSnapshot)
 		{
 			snapshot = newSnapshot;
+			networkStations.Clear();
+			foreach (int station in snapshot.Stations)
+				networkStations.UnionWith(RecipeDatabase.Provides(station));
 			StoredItems.Clear();
-			foreach (var (type, stack) in snapshot.Totals.OrderBy(pair => Lang.GetItemNameValue(pair.Key)))
+			foreach (var (type, stack) in snapshot.Totals)
 				StoredItems.Add(new Item(type, stack));
+			StoredItems.Sort(CompareItems);
 			Version++;
+		}
+
+		public void CycleSort()
+		{
+			Sort = (TerminalSort)(((int)Sort + 1) % Enum.GetValues<TerminalSort>().Length);
+			Apply(snapshot);
+		}
+
+		// Amount and rarity go from most to least; mods alphabetically, with vanilla items first.
+		private int CompareItems(Item a, Item b)
+		{
+			int result = Sort switch {
+				TerminalSort.Amount => b.stack.CompareTo(a.stack),
+				TerminalSort.Rarity => b.rare.CompareTo(a.rare),
+				TerminalSort.Mod => string.Compare(a.ModItem?.Mod.DisplayName ?? "", b.ModItem?.Mod.DisplayName ?? "", StringComparison.CurrentCulture),
+				_ => 0,
+			};
+			return result != 0 ? result : string.Compare(a.Name, b.Name, StringComparison.CurrentCulture);
 		}
 
 		// Highlights the connected chests that hold the item. Returns how many there are.
@@ -202,10 +267,10 @@ namespace TerraIndex.Content.Storage
 
 		public void ShowDepositDenied() => Main.NewText(UIHelpers.T("DepositInUse"), Color.Orange);
 
-		public void ShowDepositResult(int left, bool moved)
+		public void ShowDepositResult(int left, bool moved, bool returned)
 		{
 			if (left > 0) {
-				Main.NewText(UIHelpers.T("DepositNoSpace", left), Color.Orange);
+				Main.NewText(UIHelpers.T(returned ? "QuickDepositNoSpace" : "DepositNoSpace", left), Color.Orange);
 				SoundEngine.PlaySound(SoundID.Unlock);
 			}
 			else if (moved) {
@@ -275,10 +340,65 @@ namespace TerraIndex.Content.Storage
 			}
 		}
 
+		// "Deposit all" button: the main inventory (not coins, ammo or favorites, and not the hotbar unless the client config
+		// says so) goes straight into the chests.
+		public void QuickDeposit()
+		{
+			Player player = Main.LocalPlayer;
+			var items = new List<Item>();
+			for (int slot = ClientConfig.Instance.QuickDepositHotbar ? 0 : 10; slot < 50; slot++) {
+				Item item = player.inventory[slot];
+				if (item.IsAir || item.favorited || item.IsACoin)
+					continue;
+				items.Add(item.Clone());
+				item.TurnToAir();
+				if (Main.netMode == NetmodeID.MultiplayerClient)
+					NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: slot);
+			}
+			if (items.Count == 0) {
+				Main.NewText(UIHelpers.T("QuickDepositEmpty"), Color.Orange);
+				return;
+			}
+
+			Close();
+			ShowItemsEntering(Terminal, player.Center, items.Select(item => item.type).ToList());
+			if (Main.netMode == NetmodeID.MultiplayerClient)
+				TerminalNet.SendQuickDeposit(Terminal, items.ToArray());
+			else
+				ReceiveQuickDeposit(Terminal, Main.myPlayer, items.ToArray(), true);
+		}
+
+		// Single player or server: puts the items into the chests. Whatever doesn't fit (or everything, if the
+		// request was refused) is given back to the player.
+		public void ReceiveQuickDeposit(Point terminal, int player, Item[] items, bool allowed)
+		{
+			bool moved = false;
+			if (allowed) {
+				if (Main.netMode == NetmodeID.Server)
+					TerminalNet.SendItemsEntering(terminal, player, items.Select(item => item.type).ToList());
+				moved = StorageNetwork.Deposit(terminal, items);
+				if (moved)
+					OpenDoor(terminal);
+			}
+
+			int left = 0;
+			foreach (Item item in items) {
+				if (item.IsAir)
+					continue;
+				left += item.stack;
+				Main.player[player].QuickSpawnItem(new EntitySource_Misc("TerraIndex/Deposit"), item, item.stack);
+			}
+
+			if (Main.netMode == NetmodeID.Server)
+				TerminalNet.SendDepositResult(player, left, moved, true);
+			else
+				ShowDepositResult(left, moved, true);
+		}
+
 		// Client: the items fly one after another from the player into the door, which opens to take them in.
 		public void ShowItemsEntering(Point terminal, Vector2 from, List<int> types)
 		{
-			if (Main.dedServ || types.Count == 0)
+			if (Main.dedServ || types.Count == 0 || Vector2.Distance(from, DoorCenter(terminal)) > DoorReach)
 				return;
 			int stagger = Math.Clamp(40 / types.Count, 1, 4);
 			for (int i = 0; i < types.Count; i++)
@@ -294,20 +414,25 @@ namespace TerraIndex.Content.Storage
 		public void Flush(TerminalEntity entity, int player)
 		{
 			bool moved = StorageNetwork.Deposit(entity.TopLeft, entity.Items);
-			if (moved) {
-				if (Main.netMode == NetmodeID.Server)
-					TerminalNet.SendDoorOpen(entity.TopLeft);
-				else
-					StartDoor(entity.TopLeft);
-			}
+			if (moved)
+				OpenDoor(entity.TopLeft);
 
 			if (player < 0)
 				return;
 			int left = entity.Items.Where(item => !item.IsAir).Sum(item => item.stack);
 			if (Main.netMode == NetmodeID.Server)
-				TerminalNet.SendDepositResult(player, left, moved);
+				TerminalNet.SendDepositResult(player, left, moved, false);
 			else
-				ShowDepositResult(left, moved);
+				ShowDepositResult(left, moved, false);
+		}
+
+		// Single player or server: the door animation, for every player.
+		private void OpenDoor(Point terminal)
+		{
+			if (Main.netMode == NetmodeID.Server)
+				TerminalNet.SendDoorOpen(terminal);
+			else
+				StartDoor(terminal);
 		}
 
 		// Takes a stack of the item (or only amount, when above 0) out of the open terminal's network; the server does it in multiplayer.
@@ -323,14 +448,169 @@ namespace TerraIndex.Content.Storage
 		public void Dispense(Point terminal, int type, int amount, Player player)
 		{
 			Item item = StorageNetwork.Withdraw(terminal, type, amount);
-			if (item == null)
+			if (item != null)
+				Deliver(terminal, item, player);
+		}
+
+		// Single player or server: hands an item to the player through the terminal's door.
+		private void Deliver(Point terminal, Item item, Player player)
+		{
+			// Used from far away with a portable terminal: the item appears next to the player.
+			if (player.Distance(TerminalTile.Center(terminal)) > DoorReach) {
+				player.QuickSpawnItem(new EntitySource_Misc("TerraIndex/Remote"), item, item.stack);
 				return;
+			}
 
 			drops.Add(new PendingDrop { Terminal = terminal, Item = item, Player = player.whoAmI, Ticks = DoorOpenTicks });
-			if (Main.netMode == NetmodeID.Server)
-				TerminalNet.SendDoorOpen(terminal);
+			OpenDoor(terminal);
+		}
+
+		// ---- Crafting from the chests (recipe index) ----
+		// The client checks stations and conditions, as vanilla crafting does; the server only takes the ingredients
+		// out of the chests (all or nothing), so two players can't spend the same items.
+
+		// Crafts per click are capped so "Max" can't flood the world with dropped items.
+		private const int MaxCraftsStackable = 999;
+		private const int MaxCraftsSingle = 20;
+
+		public bool CanCraft => HasTerminal && InReach;
+
+		// Station near the player (vanilla), or on the network's wire.
+		public bool HasStation(int tile) => Main.LocalPlayer.adjTile[tile] || networkStations.Contains(tile);
+
+		public int StoredCount(int type) => snapshot.Totals.GetValueOrDefault(type);
+
+		// How many of the recipe's ingredient can be found in the chests (any member, for groups).
+		public int StoredCount(Recipe recipe, int ingredient)
+		{
+			RecipeGroup group = RecipeDatabase.GroupFor(recipe, ingredient);
+			return group == null ? StoredCount(ingredient) : group.ValidItems.Sum(type => StoredCount(type));
+		}
+
+		// Client: how many times the recipe can be crafted with what is in the chests (0 if a station or condition is missing).
+		public int MaxCrafts(Recipe recipe)
+		{
+			if (!recipe.requiredTile.All(HasStation) || !recipe.Conditions.All(condition => condition.IsMet()))
+				return 0;
+			int max = recipe.createItem.maxStack > 1 ? MaxCraftsStackable : MaxCraftsSingle;
+			foreach (Item ingredient in recipe.requiredItem)
+				max = Math.Min(max, StoredCount(recipe, ingredient.type) / ingredient.stack);
+			return max;
+		}
+
+		// Called every frame while the recipe index is open, so its counts follow the chests and the nearby stations.
+		public void KeepFreshForCrafting()
+		{
+			if (!CanCraft || --craftRefreshTimer > 0)
+				return;
+			craftRefreshTimer = 30;
+			// Vanilla only updates the nearby stations (and water, lava...) while the inventory is open.
+			Main.LocalPlayer.AdjTiles();
+			// The terminal panel already refreshes the contents itself.
+			if (!IsOpen)
+				RequestRefresh();
+		}
+
+		public void RequestCraft(Recipe recipe, int times)
+		{
+			if (Main.netMode == NetmodeID.MultiplayerClient)
+				TerminalNet.SendCraft(Terminal, recipe.RecipeIndex, times);
 			else
-				StartDoor(terminal);
+				Craft(Terminal, recipe.RecipeIndex, times, Main.LocalPlayer);
+			craftRefreshTimer = 0;
+		}
+
+		// Single player or server.
+		public void Craft(Point terminal, int recipeIndex, int times, Player player)
+		{
+			if (recipeIndex < 0 || recipeIndex >= Recipe.numRecipes || times <= 0)
+				return;
+			Recipe recipe = Main.recipe[recipeIndex];
+			if (recipe == null || recipe.Disabled || recipe.createItem.IsAir)
+				return;
+			times = Math.Min(times, recipe.createItem.maxStack > 1 ? MaxCraftsStackable : MaxCraftsSingle);
+
+			int crafted = 0;
+			if (StorageNetwork.TakeIngredients(StorageNetwork.FindConnectedChests(terminal), recipe, times)) {
+				// Like vanilla crafting: a copy of the result, with a random prefix for weapons and accessories.
+				for (int total = recipe.createItem.stack * times; total > 0;) {
+					Item item = recipe.createItem.Clone();
+					item.stack = Math.Min(total, item.maxStack);
+					item.Prefix(-1);
+					total -= item.stack;
+					crafted += item.stack;
+					Deliver(terminal, item, player);
+				}
+			}
+
+			if (Main.netMode == NetmodeID.Server)
+				TerminalNet.SendCraftResult(player.whoAmI, recipe.createItem.type, crafted);
+			else
+				ShowCraftResult(recipe.createItem.type, crafted);
+		}
+
+		// Client: what has to come out of the chests so the inventory has the ingredients for `times` crafts
+		// (only what the chests actually hold). Owned items are counted once, even if two ingredients accept them.
+		public List<(int Type, int Amount)> MissingIngredients(Recipe recipe, int times)
+		{
+			Dictionary<int, int> owned = CraftingPlan.Inventory(Main.LocalPlayer);
+			var stored = new Dictionary<int, int>(snapshot.Totals);
+			var missing = new List<(int Type, int Amount)>();
+			foreach (Item ingredient in recipe.requiredItem) {
+				int needed = ingredient.stack * times;
+				List<int> accepted = RecipeDatabase.AcceptedItems(recipe, ingredient.type).ToList();
+				foreach (int type in accepted) {
+					int use = Math.Min(owned.GetValueOrDefault(type), needed);
+					owned[type] = owned.GetValueOrDefault(type) - use;
+					needed -= use;
+				}
+				foreach (int type in accepted) {
+					int take = Math.Min(stored.GetValueOrDefault(type), needed);
+					if (take <= 0)
+						continue;
+					stored[type] -= take;
+					needed -= take;
+					missing.Add((type, take));
+				}
+			}
+			return missing;
+		}
+
+		public void RequestTakeItems(List<(int Type, int Amount)> items)
+		{
+			if (items.Count == 0)
+				return;
+			if (Main.netMode == NetmodeID.MultiplayerClient)
+				TerminalNet.SendTakeItems(Terminal, items);
+			else
+				TakeItems(Terminal, items, Main.LocalPlayer);
+			SoundEngine.PlaySound(SoundID.Grab);
+			craftRefreshTimer = 0;
+		}
+
+		// Single player or server: takes each item out of the chests (in stacks) and hands it over through the door.
+		public void TakeItems(Point terminal, List<(int Type, int Amount)> items, Player player)
+		{
+			foreach (var (type, amount) in items) {
+				for (int left = amount; left > 0;) {
+					Item item = StorageNetwork.Withdraw(terminal, type, left);
+					if (item == null || item.IsAir)
+						break;
+					left -= item.stack;
+					Deliver(terminal, item, player);
+				}
+			}
+		}
+
+		public void ShowCraftResult(int type, int amount)
+		{
+			if (amount > 0) {
+				SoundEngine.PlaySound(SoundID.Grab);
+				Main.NewText(UIHelpers.T("Crafted", amount, Lang.GetItemNameValue(type)), Color.LightGreen);
+			}
+			else {
+				Main.NewText(UIHelpers.T("CraftFailed"), Color.Orange);
+			}
 		}
 
 		public void StartDoor(Point terminal)
@@ -383,7 +663,7 @@ namespace TerraIndex.Content.Storage
 
 			// Closes like a chest: when walking away, when the terminal is broken, or on Esc (unless typing).
 			bool escape = Main.keyState.IsKeyDown(Keys.Escape) && !Main.oldKeyState.IsKeyDown(Keys.Escape) && !SearchBox.AnyFocused;
-			if (!TerminalTile.IsTerminal(Terminal) || Main.LocalPlayer.Distance(TerminalTile.Center(Terminal)) > MaxDistance || escape) {
+			if (!InReach || escape) {
 				Close();
 				return;
 			}

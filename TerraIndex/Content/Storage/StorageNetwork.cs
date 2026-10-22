@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using TerraIndex.Common;
 using TerraIndex.Content.Tiles;
 using Terraria;
 using Terraria.ID;
@@ -13,12 +14,14 @@ namespace TerraIndex.Content.Storage
 		public int ChestCount;
 		public readonly Dictionary<int, int> Totals = new();
 		public readonly Dictionary<int, List<Point>> Locations = new();
+		// Crafting station tiles touched by the network's wire (see RecipeDatabase.IsStation).
+		public readonly HashSet<int> Stations = new();
 	}
 
 	public static class StorageNetwork
 	{
 		// Cap on wire tiles to walk, so a huge network can't freeze the game.
-		private const int MaxWireTiles = 50000;
+		private static int MaxWireTiles => ServerConfig.Instance.MaxWireTiles;
 
 		private static readonly Point[] Neighbors = { new(1, 0), new(-1, 0), new(0, 1), new(0, -1) };
 
@@ -26,7 +29,7 @@ namespace TerraIndex.Content.Storage
 		public static StorageSnapshot Scan(Point terminal)
 		{
 			var snapshot = new StorageSnapshot();
-			List<int> chests = FindConnectedChests(terminal);
+			List<int> chests = Walk(terminal, snapshot.Stations);
 			snapshot.ChestCount = chests.Count;
 
 			foreach (int index in chests) {
@@ -139,9 +142,70 @@ namespace TerraIndex.Content.Storage
 			return moved;
 		}
 
+		// Removes the ingredients of `times` crafts of the recipe from the chests: all of them, or nothing if any is short.
+		// Group ingredients ("Any Wood") take the listed item first, then any other member.
+		// Like Scan, only call this in single player or on the server; changed slots are synced to clients.
+		public static bool TakeIngredients(List<int> chests, Recipe recipe, int times)
+		{
+			var available = new Dictionary<int, int>();
+			foreach (int index in chests) {
+				foreach (Item item in Main.chest[index]?.item ?? Array.Empty<Item>()) {
+					if (item != null && !item.IsAir)
+						available[item.type] = available.GetValueOrDefault(item.type) + item.stack;
+				}
+			}
+
+			var taking = new List<(int Type, int Amount)>();
+			foreach (Item ingredient in recipe.requiredItem) {
+				int needed = ingredient.stack * times;
+				foreach (int type in RecipeDatabase.AcceptedItems(recipe, ingredient.type)) {
+					int take = Math.Min(available.GetValueOrDefault(type), needed);
+					if (take <= 0)
+						continue;
+					available[type] -= take;
+					needed -= take;
+					taking.Add((type, take));
+					if (needed == 0)
+						break;
+				}
+				if (needed > 0)
+					return false;
+			}
+
+			foreach (var (type, amount) in taking)
+				Remove(chests, type, amount);
+			return true;
+		}
+
+		private static void Remove(List<int> chests, int type, int amount)
+		{
+			foreach (int index in chests) {
+				Item[] slots = Main.chest[index]?.item;
+				if (slots == null)
+					continue;
+				for (int slot = 0; slot < slots.Length && amount > 0; slot++) {
+					Item item = slots[slot];
+					if (item == null || item.IsAir || item.type != type)
+						continue;
+					int taken = Math.Min(item.stack, amount);
+					item.stack -= taken;
+					amount -= taken;
+					if (item.stack <= 0)
+						item.TurnToAir();
+					if (Main.netMode == NetmodeID.Server)
+						NetMessage.SendData(MessageID.SyncChestItem, number: index, number2: slot);
+				}
+				if (amount <= 0)
+					return;
+			}
+		}
+
 		// Walks the red wire starting from the terminal's tiles and returns the chests it passes through.
 		// If the wire doesn't touch the terminal there is no network: the terminal must be on the same wire as the chests.
-		public static List<int> FindConnectedChests(Point terminal)
+		public static List<int> FindConnectedChests(Point terminal) => Walk(terminal, null);
+
+		// Same walk; when stations isn't null, it also collects the crafting stations the wire passes over.
+		private static List<int> Walk(Point terminal, HashSet<int> stations)
 		{
 			var chests = new HashSet<int>();
 			var visited = new HashSet<Point>();
@@ -161,6 +225,11 @@ namespace TerraIndex.Content.Storage
 				int chest = ChestAt(p);
 				if (chest >= 0)
 					chests.Add(chest);
+				if (stations != null) {
+					Tile tile = Main.tile[p.X, p.Y];
+					if (tile.HasTile && RecipeDatabase.IsStation(tile.TileType))
+						stations.Add(tile.TileType);
+				}
 
 				foreach (Point offset in Neighbors) {
 					var next = new Point(p.X + offset.X, p.Y + offset.Y);

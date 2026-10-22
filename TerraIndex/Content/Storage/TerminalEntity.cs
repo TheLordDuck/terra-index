@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using TerraIndex.Content.Items;
 using TerraIndex.Content.Tiles;
 using Terraria;
 using Terraria.DataStructures;
@@ -18,7 +19,6 @@ namespace TerraIndex.Content.Storage
 
 		// Pending items are retried every 2 seconds, in case room was made in the chests.
 		private const int RetryInterval = 120;
-		private const float MaxUserDistance = 16 * 20;
 
 		public readonly Item[] Items = Enumerable.Range(0, Slots).Select(_ => new Item()).ToArray();
 
@@ -52,7 +52,7 @@ namespace TerraIndex.Content.Storage
 		{
 			if (User >= 0) {
 				Player player = Main.player[User];
-				if (!player.active || player.dead || player.Distance(TerminalTile.Center(TopLeft)) > MaxUserDistance)
+				if (!player.active || player.dead || !RemoteTerminalItem.CanReach(player, TopLeft))
 					User = -1;
 				return;
 			}

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -31,6 +32,27 @@ namespace TerraIndex.UI
 			while (text.Length > 1 && Measure(text + "...", scale).X > maxWidth)
 				text = text[..^1];
 			return text + "...";
+		}
+
+		// Splits the text into lines that fit in maxWidth.
+		public static List<string> Wrap(string text, float maxWidth, float scale)
+		{
+			string[] lines = Utils.WordwrapString(text, FontAssets.MouseText.Value, (int)(maxWidth / scale), 20, out _);
+			return lines.Where(line => !string.IsNullOrEmpty(line)).Select(line => line.Trim()).ToList();
+		}
+
+		// A copper amount as "1 platinum 20 gold", like vanilla prices.
+		public static string Coins(long copper)
+		{
+			var parts = new List<string>();
+			(long amount, string key)[] coins = {
+				(copper / 1000000, "Platinum"), (copper / 10000 % 100, "Gold"), (copper / 100 % 100, "Silver"), (copper % 100, "Copper"),
+			};
+			foreach (var (amount, key) in coins) {
+				if (amount > 0)
+					parts.Add(T(key, amount));
+			}
+			return string.Join(" ", parts);
 		}
 
 		// Draws an item slot and shows the item's tooltip on hover. Returns true if the mouse is over it.

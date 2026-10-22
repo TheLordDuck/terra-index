@@ -159,16 +159,7 @@ namespace TerraIndex.Common
 				return $"{price} {Lang.GetItemNameValue(ItemID.DefenderMedal)}";
 			if (item.shopSpecialCurrency != -1)
 				return "";
-
-			var parts = new List<string>();
-			(long amount, string key)[] coins = {
-				(price / 1000000, "Platinum"), (price / 10000 % 100, "Gold"), (price / 100 % 100, "Silver"), (price % 100, "Copper"),
-			};
-			foreach (var (amount, key) in coins) {
-				if (amount > 0)
-					parts.Add(UIHelpers.T(key, amount));
-			}
-			return string.Join(" ", parts);
+			return UIHelpers.Coins(price);
 		}
 	}
 }

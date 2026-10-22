@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using TerraIndex.Content.Storage;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -9,7 +10,8 @@ using Terraria.UI;
 
 namespace TerraIndex.UI
 {
-	// Terminal panel: search box (focused on open) + items from the connected chests.
+	// Terminal panel: search box (focused on open) + items from the connected chests, in the order picked with the sort button.
+	// Header buttons: "Deposit all" (TerminalSystem.QuickDeposit) and "Deposit items" (the deposit slots).
 	// Left click: asks how many (AmountPrompt), then takes them out through the terminal's door. Shift + left click: highlights the chests holding it.
 	// Right click: opens its recipes in the index.
 	public class TerminalState : UIState
@@ -21,6 +23,7 @@ namespace TerraIndex.UI
 		private SearchBox search;
 		private AmountPrompt prompt;
 		private ItemGrid grid;
+		private UITextPanel<string> sort;
 		private int refreshTimer;
 		private int seenVersion = -1;
 
@@ -29,7 +32,7 @@ namespace TerraIndex.UI
 		public override void OnInitialize()
 		{
 			panel = new UIPanel();
-			panel.Width.Set(470, 0);
+			panel.Width.Set(520, 0);
 			panel.Height.Set(480, 0);
 			panel.HAlign = panel.VAlign = 0.5f;
 			Append(panel);
@@ -51,6 +54,27 @@ namespace TerraIndex.UI
 			deposit.Height.Set(30, 0);
 			deposit.OnLeftClick += (_, _) => Terminal.OpenDeposit();
 			panel.Append(deposit);
+
+			// Placed to the left of "Deposit items"; UITextPanel sets MinWidth from its text.
+			var depositAll = new UITextPanel<string>(UIHelpers.T("QuickDepositButton"), 0.8f);
+			depositAll.HAlign = 1f;
+			depositAll.Left.Set(-40 - deposit.MinWidth.Pixels - 6, 0);
+			depositAll.Top.Set(-4, 0);
+			depositAll.Height.Set(30, 0);
+			depositAll.OnLeftClick += (_, _) => Terminal.QuickDeposit();
+			panel.Append(depositAll);
+
+			sort = new UITextPanel<string>(SortLabel(), 0.8f);
+			sort.HAlign = 1f;
+			sort.Top.Set(66, 0);
+			sort.Height.Set(30, 0);
+			sort.OnLeftClick += (_, _) => {
+				Terminal.CycleSort();
+				sort.SetText(SortLabel());
+				panel.Recalculate();
+				SoundEngine.PlaySound(SoundID.MenuTick);
+			};
+			panel.Append(sort);
 
 			grid = new ItemGrid(() => Terminal.StoredItems);
 			grid.Top.Set(122, 0);
@@ -85,6 +109,8 @@ namespace TerraIndex.UI
 		{
 			search.SetText("");
 			search.Focus();
+			// The sort resets to the config's default on world load.
+			sort.SetText(SortLabel());
 			refreshTimer = RefreshInterval;
 			seenVersion = -1;
 		}
@@ -116,6 +142,8 @@ namespace TerraIndex.UI
 			if (panel.ContainsPoint(Main.MouseScreen))
 				Main.LocalPlayer.mouseInterface = true;
 		}
+
+		private static string SortLabel() => UIHelpers.T("SortBy", UIHelpers.T("Sort" + Terminal.Sort));
 
 		private void OnItemClicked(int type, bool rightClick)
 		{

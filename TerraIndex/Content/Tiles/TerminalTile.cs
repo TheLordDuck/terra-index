@@ -1,7 +1,9 @@
 using Microsoft.Xna.Framework;
 using TerraIndex.Content.Items;
 using TerraIndex.Content.Storage;
+using TerraIndex.UI;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -56,7 +58,8 @@ namespace TerraIndex.Content.Tiles
 			Player player = Main.LocalPlayer;
 			player.noThrow = 2;
 			player.cursorItemIconEnabled = true;
-			player.cursorItemIconID = ModContent.ItemType<TerminalItem>();
+			// Holding a portable terminal, right click links it instead of opening the panel.
+			player.cursorItemIconID = player.HeldItem.ModItem is RemoteTerminalItem ? ModContent.ItemType<RemoteTerminalItem>() : ModContent.ItemType<TerminalItem>();
 		}
 
 		// Items still waiting in the terminal are dropped instead of being lost.
@@ -77,7 +80,18 @@ namespace TerraIndex.Content.Tiles
 
 		public override bool RightClick(int i, int j)
 		{
-			ModContent.GetInstance<TerminalSystem>().Open(TopLeft(i, j));
+			Player player = Main.LocalPlayer;
+			if (player.HeldItem.ModItem is RemoteTerminalItem remote) {
+				remote.LinkTo(TopLeft(i, j));
+				// The server checks the link when the portable terminal is used from far away, so it needs the new one.
+				if (Main.netMode == NetmodeID.MultiplayerClient)
+					NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: player.selectedItem);
+				Main.NewText(UIHelpers.T("RemoteLinked"), Color.LightGreen);
+				SoundEngine.PlaySound(SoundID.Unlock);
+				return true;
+			}
+
+			ModContent.GetInstance<TerminalSystem>().Open(TopLeft(i, j), false);
 			return true;
 		}
 	}

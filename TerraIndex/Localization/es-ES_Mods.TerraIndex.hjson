@@ -33,6 +33,47 @@ UI: {
 	Stations: Estación de trabajo
 	ByHand: A mano (no requiere estación)
 	Conditions: Condiciones
+	TreeTab: Árbol
+	TreeTitle: Árbol de crafteo
+	TreeRecipe: (receta {0} de {1})
+	TreeHave: (tienes {0})
+	TreeMissing: Materiales que faltan
+	TreeComplete: Tienes todos los materiales.
+	TreeStations: Estaciones de trabajo
+	SetGoal: Fijar objetivo
+	RemoveGoal: Quitar objetivo
+	GoalTitle: "Objetivo: {0}"
+	GoalReady: ¡Ya tienes todo para fabricar {0}!
+	GoalReadyShort: ¡Listo para fabricar!
+	GoalMore: "+{0} más"
+	GoalCollapse: Plegar (arrastra el título para mover el panel)
+	GoalExpand: Desplegar (arrastra el título para mover el panel)
+	CompareAdd: + Comparar
+	CompareOpen: Comparar ({0})
+	CompareTitle: Comparación
+	CompareRemoveHint: Clic derecho en un objeto para quitarlo
+	CompareDamage: Daño
+	CompareCrit: Prob. de crítico
+	CompareUseTime: Tiempo de uso (ticks)
+	CompareKnockback: Retroceso
+	CompareMana: Coste de maná
+	CompareVelocity: Velocidad del proyectil
+	ComparePickaxe: Poder de pico
+	CompareAxe: Poder de hacha
+	CompareHammer: Poder de martillo
+	CompareDefense: Defensa
+	CompareValue: Valor de venta
+	CompareEffects: Efectos
+	CraftButton: Fabricar
+	CraftCanMake: Con tus cofres puedes fabricar {0}
+	CraftNoIngredients: No hay ingredientes suficientes en los cofres de la terminal
+	CraftNoStation: Falta una estación de trabajo (cerca o en el cable de la terminal)
+	CraftNoConditions: Aquí no se cumplen las condiciones
+	Crafted: Fabricado {0} x {1} con tus cofres.
+	CraftFailed: Los cofres ya no tienen los ingredientes.
+	TakeMissing: Sacar lo que falta
+	TakeMissingHint: Saca de los cofres lo que le falta a tu inventario para fabricarlo una vez (Mayús: para 10)
+	TakeMissingStatus: En los cofres, te faltan en el inventario: {0}
 	TerminalTitle: Terminal de almacenamiento
 	ConnectedChests: Cofres conectados: {0}
 	TerminalHint: Clic: sacar   Mayús + clic: iluminar cofre   Clic derecho: receta
@@ -52,6 +93,18 @@ UI: {
 	DepositDone: Objetos guardados en los cofres.
 	DepositNoSpace: Aviso: los cofres conectados están llenos. {0} objeto(s) no se han enviado y se quedan en la terminal hasta que haya sitio o los saques.
 	DepositInUse: Otro jugador está usando las casillas de esta terminal.
+	QuickDepositButton: Dejar todo
+	QuickDepositEmpty: No hay nada que dejar (la barra rápida, las monedas, la munición y los favoritos se quedan).
+	QuickDepositNoSpace: Los cofres conectados están llenos: se te han devuelto {0} objeto(s).
+	SortBy: "Orden: {0}"
+	SortName: Nombre
+	SortAmount: Cantidad
+	SortRarity: Rareza
+	SortMod: Mod
+	RemoteLinked: Terminal portátil vinculada a esta terminal.
+	RemoteNotLinked: Sin vincular. Sostenla y haz clic derecho en una terminal para vincularlas.
+	RemoteLinkedTo: Vinculada a una terminal a {0} bloques
+	RemoteDisabled: La terminal portátil está desactivada en este servidor.
 	HowToObtain: Cómo se consigue
 	NoSources:
 		'''
@@ -85,6 +138,73 @@ Items: {
 			Los objetos que saques salen por su puerta
 			'''
 	}
+
+	RemoteTerminalItem: {
+		DisplayName: Terminal portátil
+		Tooltip:
+			'''
+			Sostenla y haz clic derecho en una terminal para vincularlas
+			Úsala para abrir la terminal vinculada desde cualquier lugar
+			Los objetos que saques aparecen a tu lado
+			'''
+	}
 }
 
 Tiles.TerminalTile.MapEntry: Terminal
+
+Configs: {
+	ClientConfig: {
+		DisplayName: Terra Index (tus ajustes)
+		Headers: {
+			Goal: Objetivo de crafteo
+			Terminal: Terminal de almacenamiento
+		}
+		ShowGoalPanel: {
+			Label: Mostrar el panel del objetivo
+			Tooltip: La lista en pantalla con los materiales que te faltan para tu objetivo
+		}
+		GoalPanelRows: {
+			Label: "Panel del objetivo: materiales mostrados"
+			Tooltip: El resto se resume como "+N más"
+		}
+		DefaultSort: {
+			Label: Orden por defecto del terminal
+			Tooltip: Orden de los objetos del terminal al entrar en un mundo
+		}
+		HighlightSeconds: {
+			Label: Duración del resaltado de cofres (segundos)
+			Tooltip: Cuánto tiempo brillan los cofres tras Mayús + clic en un objeto del terminal
+		}
+		QuickDepositHotbar: {
+			Label: Incluir la barra rápida en "Dejar todo"
+			Tooltip: Los favoritos, las monedas y la munición siempre se quedan
+		}
+	}
+
+	ServerConfig: {
+		DisplayName: Terra Index (servidor)
+		TerminalPriceGold: {
+			Label: Precio de la terminal (oro)
+			Tooltip: Lo que cobra el Steampunker por la Terminal. 100 de oro = 1 de platino
+		}
+		TerminalReach: {
+			Label: Alcance de la terminal (bloques)
+			Tooltip: Cuánto pueden alejarse los jugadores de una terminal antes de que se cierre su panel
+		}
+		MaxWireTiles: {
+			Label: Tamaño máximo de la red de cable
+			Tooltip: Casillas de cable rojo que se recorren desde una terminal buscando cofres. Bájalo si las redes enormes causan lag
+		}
+		AllowPortableTerminal: {
+			Label: Permitir la Terminal portátil
+			Tooltip: Si se desactiva, las terminales portátiles no pueden abrir terminales a distancia
+		}
+	}
+
+	TerminalSort: {
+		Name.Label: Nombre
+		Amount.Label: Cantidad
+		Rarity.Label: Rareza
+		Mod.Label: Mod
+	}
+}

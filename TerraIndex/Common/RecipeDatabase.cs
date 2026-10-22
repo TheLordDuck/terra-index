@@ -13,6 +13,17 @@ namespace TerraIndex.Common
 		private static readonly Dictionary<int, List<Recipe>> byResult = new();
 		private static readonly Dictionary<int, List<Recipe>> byIngredient = new();
 		private static readonly Dictionary<int, int> tileToItem = new();
+		// Every tile some recipe asks for.
+		private static readonly HashSet<int> stationTiles = new();
+
+		// Vanilla stations that also count as others (as in Player.AdjTiles). Modded ones use ModTile.AdjTiles.
+		private static readonly Dictionary<int, int[]> vanillaAdjTiles = new() {
+			[TileID.Hellforge] = new[] { TileID.Furnaces },
+			[TileID.AdamantiteForge] = new[] { TileID.Furnaces, TileID.Hellforge },
+			[TileID.MythrilAnvil] = new[] { TileID.Anvils },
+			[TileID.AlchemyTable] = new[] { TileID.Bottles, TileID.Tables },
+			[TileID.BewitchingTable] = new[] { TileID.Tables },
+		};
 
 		public static List<int> AllItems { get; } = new();
 
@@ -30,6 +41,7 @@ namespace TerraIndex.Common
 					continue;
 
 				Add(byResult, recipe.createItem.type, recipe);
+				stationTiles.UnionWith(recipe.requiredTile);
 
 				// An item counts as an ingredient if it is listed directly or belongs to an accepted group ("Any Wood", etc.)
 				var seen = new HashSet<int>();
@@ -63,7 +75,27 @@ namespace TerraIndex.Common
 			byResult.Clear();
 			byIngredient.Clear();
 			tileToItem.Clear();
+			stationTiles.Clear();
 			AllItems.Clear();
+		}
+
+		// Whether this tile is worth reporting as a crafting station found on a terminal's wire.
+		public static bool IsStation(int tile) =>
+			stationTiles.Contains(tile) || vanillaAdjTiles.ContainsKey(tile) || TileLoader.GetTile(tile)?.AdjTiles.Length > 0;
+
+		// The stations a tile counts as: itself, plus e.g. Furnace for a Hellforge.
+		public static IEnumerable<int> Provides(int tile)
+		{
+			yield return tile;
+			if (vanillaAdjTiles.TryGetValue(tile, out int[] adjacent)) {
+				foreach (int other in adjacent)
+					yield return other;
+			}
+			ModTile modTile = TileLoader.GetTile(tile);
+			if (modTile != null) {
+				foreach (int other in modTile.AdjTiles)
+					yield return other;
+			}
 		}
 
 		private static void Add(Dictionary<int, List<Recipe>> map, int key, Recipe recipe)
@@ -91,6 +123,19 @@ namespace TerraIndex.Common
 				return Lang.GetItemNameValue(item);
 
 			return tile < TileID.Count ? TileID.Search.GetName(tile) : TileLoader.GetTile(tile)?.Name ?? tile.ToString();
+		}
+
+		// Items accepted for one of the recipe's ingredients: the listed one first, then the rest of its group, if any.
+		public static IEnumerable<int> AcceptedItems(Recipe recipe, int ingredient)
+		{
+			yield return ingredient;
+			RecipeGroup group = GroupFor(recipe, ingredient);
+			if (group == null)
+				yield break;
+			foreach (int type in group.ValidItems) {
+				if (type != ingredient)
+					yield return type;
+			}
 		}
 
 		// Recipe group ("Any Iron Bar", ...) that accepts this ingredient, or null.

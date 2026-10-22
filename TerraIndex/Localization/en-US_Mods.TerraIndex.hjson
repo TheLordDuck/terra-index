@@ -33,6 +33,47 @@ UI: {
 	Stations: Crafting station
 	ByHand: By hand (no station needed)
 	Conditions: Conditions
+	TreeTab: Tree
+	TreeTitle: Crafting tree
+	TreeRecipe: (recipe {0} of {1})
+	TreeHave: (have {0})
+	TreeMissing: Missing materials
+	TreeComplete: You have every material.
+	TreeStations: Crafting stations
+	SetGoal: Set as goal
+	RemoveGoal: Remove goal
+	GoalTitle: "Goal: {0}"
+	GoalReady: You have everything to craft {0}!
+	GoalReadyShort: Ready to craft!
+	GoalMore: "+{0} more"
+	GoalCollapse: Fold (drag the title to move the panel)
+	GoalExpand: Unfold (drag the title to move the panel)
+	CompareAdd: + Compare
+	CompareOpen: Compare ({0})
+	CompareTitle: Comparison
+	CompareRemoveHint: Right click an item to remove it
+	CompareDamage: Damage
+	CompareCrit: Critical chance
+	CompareUseTime: Use time (ticks)
+	CompareKnockback: Knockback
+	CompareMana: Mana cost
+	CompareVelocity: Projectile speed
+	ComparePickaxe: Pickaxe power
+	CompareAxe: Axe power
+	CompareHammer: Hammer power
+	CompareDefense: Defense
+	CompareValue: Sell value
+	CompareEffects: Effects
+	CraftButton: Craft
+	CraftCanMake: From your chests you can make {0}
+	CraftNoIngredients: Not enough ingredients in the terminal's chests
+	CraftNoStation: Missing crafting station (nearby or on the terminal's wire)
+	CraftNoConditions: Conditions not met here
+	Crafted: Crafted {0} x {1} from your chests.
+	CraftFailed: The chests no longer have the ingredients.
+	TakeMissing: Take missing
+	TakeMissingHint: Takes out of the chests what your inventory lacks for one craft (Shift: for 10)
+	TakeMissingStatus: In the chests, missing from your inventory: {0}
 	TerminalTitle: Storage Terminal
 	ConnectedChests: Connected chests: {0}
 	TerminalHint: Click: take out   Shift + click: highlight chest   Right click: recipe
@@ -52,6 +93,18 @@ UI: {
 	DepositDone: Items stored in the chests.
 	DepositNoSpace: Warning: the connected chests are full. {0} item(s) were not sent and stay in the terminal until there is room or you take them out.
 	DepositInUse: Another player is using this terminal's deposit slots.
+	QuickDepositButton: Deposit all
+	QuickDepositEmpty: Nothing to deposit (the hotbar, coins, ammo and favorited items are kept).
+	QuickDepositNoSpace: The connected chests are full: {0} item(s) were given back to you.
+	SortBy: "Sort: {0}"
+	SortName: Name
+	SortAmount: Amount
+	SortRarity: Rarity
+	SortMod: Mod
+	RemoteLinked: Portable terminal linked to this terminal.
+	RemoteNotLinked: Not linked. Hold it and right click a terminal to link them.
+	RemoteLinkedTo: Linked to a terminal {0} blocks away
+	RemoteDisabled: The portable terminal is disabled on this server.
 	HowToObtain: How to obtain
 	NoSources:
 		'''
@@ -85,6 +138,73 @@ Items: {
 			Items you take out come out of its door
 			'''
 	}
+
+	RemoteTerminalItem: {
+		DisplayName: Portable Terminal
+		Tooltip:
+			'''
+			Hold it and right click a terminal to link them
+			Use it to open the linked terminal from anywhere
+			Items you take out appear next to you
+			'''
+	}
 }
 
 Tiles.TerminalTile.MapEntry: Terminal
+
+Configs: {
+	ClientConfig: {
+		DisplayName: Terra Index (your settings)
+		Headers: {
+			Goal: Crafting goal
+			Terminal: Storage terminal
+		}
+		ShowGoalPanel: {
+			Label: Show the goal panel
+			Tooltip: The on-screen list of materials still missing for your crafting goal
+		}
+		GoalPanelRows: {
+			Label: Goal panel: materials shown
+			Tooltip: The rest are summed up as "+N more"
+		}
+		DefaultSort: {
+			Label: Default terminal sort
+			Tooltip: Order of the terminal's items when you enter a world
+		}
+		HighlightSeconds: {
+			Label: Chest highlight duration (seconds)
+			Tooltip: How long chests glow after Shift + clicking an item in the terminal
+		}
+		QuickDepositHotbar: {
+			Label: Include the hotbar in "Deposit all"
+			Tooltip: Favorited items, coins and ammo are always kept
+		}
+	}
+
+	ServerConfig: {
+		DisplayName: Terra Index (server)
+		TerminalPriceGold: {
+			Label: Terminal price (gold)
+			Tooltip: What the Steampunker charges for the Terminal. 100 gold = 1 platinum
+		}
+		TerminalReach: {
+			Label: Terminal reach (blocks)
+			Tooltip: How far players can walk away from a terminal before its panel closes
+		}
+		MaxWireTiles: {
+			Label: Maximum wire network size
+			Tooltip: Red wire tiles walked from a terminal looking for chests. Lower it if huge networks cause lag
+		}
+		AllowPortableTerminal: {
+			Label: Allow the Portable Terminal
+			Tooltip: When off, portable terminals can't open terminals from far away
+		}
+	}
+
+	TerminalSort: {
+		Name.Label: Name
+		Amount.Label: Amount
+		Rarity.Label: Rarity
+		Mod.Label: Mod
+	}
+}

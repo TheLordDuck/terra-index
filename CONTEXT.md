@@ -61,6 +61,38 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
   most 16 per frame, and lowercase names are cached for the search. Footer: first/previous/page bar/next/last;
   wheel turns pages (Shift: 10), dragging the bar jumps on release.
 - Esc closes the index (when not typing in the search box).
+- **Tree** tab (`RecipeView.DrawTree`): crafting tree of the recipe on the current page, computed by
+  `Common/CraftingPlan.cs`. Owned items come from a shared pool (inventory only), so branches don't count the same
+  stack twice; recipe groups accept any member. Intermediates use their first recipe with no ingredient that loops
+  back: already on the current path, or itself crafted from the item (reversible recipes like Wood <-> Wood Platform,
+  which the path check alone would accept). Items with no such recipe are base materials. Depth capped at 40.
+  Recomputed every 30 ticks while shown. Rows: tree (indented), missing materials added up, crafting stations.
+- **Crafting goal** (`Common/CraftingGoal.cs`): "Set as goal" in the Tree view stores the item and recipe page in
+  `GoalPlayer` (saved with the character as an item tag, so modded goals survive ID changes; dropped if the mod is
+  removed). `GoalSystem` recomputes the plan every 30 ticks, draws the missing materials while the inventory is
+  closed, and says in chat when everything is ready. The panel is dragged by its title and folded with its -/+
+  button; position and folding are saved in `GoalPlayer` and clamped to the screen. Rows and visibility are in
+  `ClientConfig`.
+- **Crafting from the chests** (`RecipeView.DrawCraftRow`, `TerminalSystem` "Crafting" section): while the last
+  used terminal is in reach (`TerminalSystem.CanCraft`; `Terminal`/`HasTerminal` survive closing the panel), the
+  recipe view shows how many crafts the chests allow and Craft / x10 / Max buttons. Stations count if they are in
+  `Main.LocalPlayer.adjTile` (refreshed with `AdjTiles()` every 30 ticks, since vanilla only does it with the
+  inventory open) or on the network's wire: `StorageNetwork.Walk` collects station tiles (`RecipeDatabase.IsStation`)
+  into `StorageSnapshot.Stations`, sent in the first `Contents` chunk, expanded with `RecipeDatabase.Provides`
+  (vanilla Hellforge -> Furnace, Mythril Anvil -> Anvil, Alchemy Table -> Bottle + Table, Bewitching Table -> Table,
+  plus `ModTile.AdjTiles`). Stations and conditions are checked by the client, like vanilla crafting; the server
+  (`TerminalSystem.Craft`, `Craft` packet with `Recipe.RecipeIndex`) only takes the ingredients out of the chests,
+  all or nothing (`StorageNetwork.TakeIngredients`), creates the result (random prefix, like vanilla) and hands it
+  out through the door (`Deliver`), then replies with `CraftResult`. Ingredients come only from the chests.
+  Not done: Alchemy Table ingredient savings and mods' `OnCraft` hooks.
+- **Take missing** (`RecipeView.DrawTakeRow`): `TerminalSystem.MissingIngredients` works out, on the client, what
+  the chests must hand over so the inventory covers 1 craft (Shift: 10), counting owned items once across
+  ingredients and accepting any group member (`RecipeDatabase.AcceptedItems`, listed item first). Sent as a
+  `TakeItems` packet (type, amount pairs, max 30); the server withdraws them in stacks and delivers them through
+  the door like any withdrawal.
+- **Compare** (`RecipeView.CompareRows`): header button adds the current item (max 3, oldest dropped) and opens the
+  comparison: stats table (rows only where some item has a non-zero value; best in green, lower is better for use
+  time and mana) plus each item's tooltip lines wrapped to the panel. Right click an item there to remove it.
 - **Keys** (rebindable in Controls):
   - `N`: open or close.
   - `[`: recipes of the hovered item.
@@ -88,6 +120,32 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
 - Chests are found from any of their tiles (vanilla `FindChestByGuessing` only matched the left column).
 - When the deposit slots close, each item is drawn flying from the player into the door (other players see it too).
 - Closes with Esc (when not typing), the X button, or by walking more than 10 blocks away.
+- **Deposit all** button (`TerminalSystem.QuickDeposit`): the client takes main inventory slots 10-49 (no hotbar,
+  coins, ammo or favorites) out of the inventory, syncs those slots and sends the items in a `QuickDeposit` packet.
+  The server deposits them and gives back with `QuickSpawnItem` whatever doesn't fit, or everything if the request
+  is refused (rate limit, distance), so nothing is lost.
+- **Sort** button: name, amount, rarity, mod (`TerminalSort`, ties by name). Resets to `ClientConfig.DefaultSort`
+  on world load.
+
+### Portable terminal (`Content/Items/RemoteTerminalItem.cs`)
+- Recipe: Terminal + 10 Luminite Bars at the Ancient Manipulator.
+- Right clicking a terminal while holding it stores the terminal's top-left corner and `Main.worldID` in the item
+  (saved with the item, sent with `NetSend`, so the server knows it; links from other worlds are ignored).
+- Using it opens the terminal with `Remote = true`: no distance limit while the player carries a linked portable
+  terminal. The server allows requests when `RemoteTerminalItem.CanReach` (within 20 blocks, or carrying a linked
+  portable terminal); the deposit-slot lock uses the same check.
+- More than 30 blocks from the terminal, withdrawn items appear next to the player (`QuickSpawnItem`) instead of
+  dropping out of the door, and deposited items don't fly across the screen.
+- In multiplayer the client may not have the terminal's tiles loaded, so in remote mode only the server checks
+  that the terminal still exists.
+
+### Settings (`Common/Configs.cs`)
+- `ClientConfig` (per player): goal panel on/off and rows; default terminal sort; chest highlight seconds;
+  whether "Deposit all" includes the hotbar.
+- `ServerConfig` (host, synced): Terminal price in gold (applied in `SteampunkerShop.ModifyActiveShop`, so no reload
+  needed), reach in blocks (the panel closes beyond it; the server allows reach + 10 for lag), max wire tiles
+  walked, and whether portable terminals work (`RemoteTerminalItem.IsLinkedTo` returns false when off).
+- Labels and tooltips: `Configs.*` keys in both localization files; enum values as `Configs.TerminalSort.*.Label`.
 
 ### Multiplayer
 - The client asks the **server** for the contents, since the server is the only one that knows every chest and wire.
@@ -112,6 +170,9 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
 | `Common/RecipeDatabase.cs` | Recipe index by result and by ingredient, station → item, station names |
 | `Common/SourceDatabase.cs` | Where non-craftable items come from: shops, drops, bags/crates |
 | `Common/ItemCategories.cs` | Item category tabs (weapons, tools, armor...) |
+| `Common/CraftingPlan.cs` | Crafting tree of a recipe minus what the player owns; base materials and stations |
+| `Common/Configs.cs` | `ClientConfig` (goal panel, default sort, highlight time, hotbar in Deposit all) and `ServerConfig` (terminal price, reach, max wire tiles, allow portable terminal) |
+| `Common/CraftingGoal.cs` | Crafting goal: `GoalPlayer` (saved per character) and the on-screen list (`GoalSystem`) |
 | `UI/UIHelpers.cs` | Localization, text measuring/truncating, drawing item slots, counting inventory |
 | `UI/SearchBox.cs` | Text box; only one is focused at a time (`AnyFocused` blocks the mod's keys) |
 | `UI/ItemGrid.cs` | Grid that only draws what is visible; used by the index and the terminal |
@@ -121,6 +182,7 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
 | `UI/AmountPrompt.cs` | "How many?" pop-up shown when taking a stackable item out of the terminal |
 | `UI/DepositState.cs` | Deposit slots (chest-like) |
 | `Content/Items/TerminalItem.cs` | Terminal item and Steampunker shop entry (`SteampunkerShop`) |
+| `Content/Items/RemoteTerminalItem.cs` | Portable terminal: link, remote opening, `CanReach` distance check |
 | `Content/Tiles/TerminalTile.cs` | Terminal tile (4x2 on a wall; right click opens the panel; door area) |
 | `Content/Storage/StorageNetwork.cs` | Red wire walk, chest scan (`StorageSnapshot`), withdrawing and depositing |
 | `Content/Storage/TerminalNet.cs` | Client ↔ server packets |
@@ -135,11 +197,14 @@ Summary of the conversation with Claude Code (2026-10-21), to pick the work back
 | File | Size | Description |
 |---|---|---|
 | `Content/Items/TerminalItem.png` | 24x12 | Terminal in the inventory |
+| `Content/Items/RemoteTerminalItem.png` | 20x28 | Portable terminal: handheld with screen, buttons and antenna |
 | `Content/Tiles/TerminalTile.png` | 70x34 | Eight 16x16 pieces with 2 px gaps (Terraria's format for 4x2 tiles), door closed |
 | `Content/Tiles/TerminalDoor.png` | 22x21 | Garage door, drawn over the opening while it rolls up |
 | `Content/Storage/ChestArrow.png` | 16x16 | Arrow pointing right; rotated in game |
 | `icon.png` | 80x80 | Mod icon (mod list and Workshop) |
 | `icon_small.png` | 30x30 | Small icon in the mod list |
+
+The user accepted these sprites as final (2026-10-22).
 
 Style: gray casing with a dark outline, dark blue screen with cyan lines and a green power light; the icons have a
 blue gradient background with rounded corners. To replace them, keep the same sizes and file names.
@@ -161,5 +226,9 @@ blue gradient background with rounded corners. To replace them, keep the same si
 - It now compiles (first build fixed on 2026-10-21) but has not been tested in game yet.
 - Clicking a crafting station shows that item's recipes, not everything crafted at that station.
 - Terminal items are grouped by type; prefixes (modifiers) are not distinguished.
-- Possible improvements: supporting other wire colors, and
-  sorting by quantity or by mod.
+- Possible improvements: supporting other wire colors, and a "recently added" sort (would need the server to
+  track when each item entered the network).
+- Version 0.4 (sorting, Deposit all, portable terminal, crafting tree, crafting goal, settings, item comparison, crafting from the chests, take missing) was written on a PC without
+  tModLoader: not compiled yet.
+- Crafting tree ideas: count items in the terminal's chests as owned, let the player pick the recipe of each
+  intermediate item.
