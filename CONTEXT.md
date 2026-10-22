@@ -217,6 +217,24 @@ Decisions taken:
 - Single player uses the same code, computed locally.
 - The mod must be installed on the server and on the clients.
 
+### Performance (for low-end PCs)
+- Terminal refreshes (every 0.5 s while a panel or the craft row is shown): the server keeps a hash of its last
+  reply to each player (`StorageSnapshot.Hash`, order-independent) and sends nothing when the contents didn't change.
+  Opening a terminal forces a full reply, and the client keeps asking for one until it arrives, so a request
+  dropped by the rate limit can't leave the panel empty.
+- `StorageNetwork.Scan` reuses its wire walk (chests + stations) for 60 ticks per terminal. Withdrawing, depositing
+  and crafting always walk the wire again, so they never act on a stale chest list.
+- Client `TerminalSystem.Apply`: the stored list (and `Version`, which makes the panel rebuild its grid) only
+  changes when the totals do, and one `Item` per type is reused (`itemCache`) instead of running `SetDefaults` for
+  every stored type on every refresh. `InReach` is worked out once per update.
+- Recipe view: the craft / "Take missing" rows are recomputed every 10 ticks or when the recipe or the chests change
+  (not every frame); tree rows are built once per plan; comparison rows (tooltips word-wrapped) only when the
+  compared items, the panel width or the language change.
+- Crafting goal: the plan is recomputed only when the goal or the inventory (hash of type + stack) changes.
+  `CraftingPlan` memoizes its "is this ingredient made from the item" check, cleared when recipes are rebuilt.
+- Already cheap before: the item grids only draw the visible page and load at most 16 textures per frame; names
+  and categories are cached for the search.
+
 ---
 
 ## File layout (`TerraIndex/`)

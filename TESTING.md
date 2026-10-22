@@ -99,6 +99,13 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 - [ ] Chest highlight duration
 - [ ] Hide the goal panel, and change how many materials it lists
 
+## Performance
+
+- [ ] With a big storage (lots of chests and item types), the terminal panel doesn't hitch every half second
+- [ ] Changes made by another player still show up in an open terminal within a second (multiplayer)
+- [ ] Opening a terminal right after closing the recipe index shows its items (not an empty list)
+- [ ] The goal panel still updates when you pick up or use a material
+
 ## 28. Sprites
 
 - [ ] The portable terminal sprite looks right in the inventory and when held

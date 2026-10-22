@@ -12,6 +12,7 @@ using Terraria.GameContent.UI;
 using Terraria.GameContent.UI.Elements;
 using Terraria.GameInput;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -51,6 +52,7 @@ namespace TerraIndex.UI
 		private bool tree;
 		private int treeScroll;
 		private CraftingPlan treePlan;
+		private List<TreeRow> treeRows;
 		private (int Item, int Page) treeKey;
 		private uint treeTime;
 
@@ -78,6 +80,9 @@ namespace TerraIndex.UI
 
 		private readonly List<int> compared = new();
 		private bool compare;
+		// Reading and word-wrapping tooltips every frame is costly: the rows are kept until something changes.
+		private List<CompareRow> compareRows;
+		private (string Items, float Width, GameCulture Culture) compareKey;
 		private int compareScroll;
 
 		private List<Recipe> Recipes => uses ? RecipeDatabase.UsesOf(item) : RecipeDatabase.RecipesFor(item);
@@ -262,7 +267,12 @@ namespace TerraIndex.UI
 				tree = false;
 
 			if (compare) {
-				DrawCompareRows(spriteBatch, CompareRows(inner.Width), inner.X, y + ButtonHeight + 10, inner.Width, inner.Y + inner.Height);
+				var key = (string.Join(",", compared), inner.Width, Language.ActiveCulture);
+				if (compareRows == null || key != compareKey) {
+					compareRows = CompareRows(inner.Width);
+					compareKey = key;
+				}
+				DrawCompareRows(spriteBatch, compareRows, inner.X, y + ButtonHeight + 10, inner.Width, inner.Y + inner.Height);
 				return;
 			}
 			if (tree) {
@@ -296,26 +306,48 @@ namespace TerraIndex.UI
 
 		// Bottom row, only near a storage terminal (or with its linked portable terminal): what the chests allow,
 		// and Craft / x10 / Max buttons.
+		// What the craft and "Take missing" rows show, worked out a few times a second (and when the recipe or the
+		// chests change) instead of every frame: "Take missing" copies the inventory and the whole storage list.
+		private const int CraftRefreshTicks = 10;
+		private Recipe craftRecipe;
+		private uint craftTime;
+		private int craftVersion;
+		private int craftMax;
+		private string craftStatus;
+		private int craftMissing;
+
+		private void UpdateCraftInfo(TerminalSystem terminal, Recipe recipe)
+		{
+			if (recipe == craftRecipe && terminal.Version == craftVersion && Main.GameUpdateCount - craftTime < CraftRefreshTicks)
+				return;
+			craftRecipe = recipe;
+			craftVersion = terminal.Version;
+			craftTime = Main.GameUpdateCount;
+
+			craftMax = terminal.MaxCrafts(recipe);
+			if (!recipe.requiredTile.All(terminal.HasStation))
+				craftStatus = UIHelpers.T("CraftNoStation");
+			else if (!recipe.Conditions.All(condition => condition.IsMet()))
+				craftStatus = UIHelpers.T("CraftNoConditions");
+			else
+				craftStatus = craftMax > 0 ? UIHelpers.T("CraftCanMake", craftMax * recipe.createItem.stack) : UIHelpers.T("CraftNoIngredients");
+			craftMissing = terminal.MissingIngredients(recipe, 1).Sum(entry => entry.Amount);
+		}
+
+		// Bottom row, only near a storage terminal (or with its linked portable terminal): what the chests allow,
+		// and Craft / x10 / Max buttons.
 		private void DrawCraftRow(SpriteBatch spriteBatch, Recipe recipe, CalculatedStyle inner)
 		{
 			TerminalSystem terminal = Terminal;
 			if (!terminal.CanCraft)
 				return;
+			UpdateCraftInfo(terminal, recipe);
 
 			float y = inner.Y + inner.Height - ButtonHeight;
-			int max = terminal.MaxCrafts(recipe);
-			string status;
-			if (!recipe.requiredTile.All(terminal.HasStation))
-				status = UIHelpers.T("CraftNoStation");
-			else if (!recipe.Conditions.All(condition => condition.IsMet()))
-				status = UIHelpers.T("CraftNoConditions");
-			else
-				status = max > 0 ? UIHelpers.T("CraftCanMake", max * recipe.createItem.stack) : UIHelpers.T("CraftNoIngredients");
-
 			float right = inner.X + inner.Width;
-			if (max > 0) {
-				var buttons = new List<(string Text, int Times)> { (UIHelpers.T("Max"), max) };
-				if (max >= 10)
+			if (craftMax > 0) {
+				var buttons = new List<(string Text, int Times)> { (UIHelpers.T("Max"), craftMax) };
+				if (craftMax >= 10)
 					buttons.Add(("x10", 10));
 				buttons.Add((UIHelpers.T("CraftButton"), 1));
 				foreach (var (text, times) in buttons) {
@@ -324,8 +356,8 @@ namespace TerraIndex.UI
 					right -= 6;
 				}
 			}
-			Color color = max > 0 ? InChests : new Color(255, 170, 120);
-			Utils.DrawBorderString(spriteBatch, UIHelpers.Fit(status, right - inner.X - 6, 0.8f), new Vector2(inner.X, y + 6), color, 0.8f);
+			Color color = craftMax > 0 ? InChests : new Color(255, 170, 120);
+			Utils.DrawBorderString(spriteBatch, UIHelpers.Fit(craftStatus, right - inner.X - 6, 0.8f), new Vector2(inner.X, y + 6), color, 0.8f);
 
 			DrawTakeRow(spriteBatch, recipe, inner, y - ButtonHeight - 6);
 		}
@@ -334,18 +366,18 @@ namespace TerraIndex.UI
 		// (Shift: for 10), to craft it the usual way. Only shown when the chests hold some of what is missing.
 		private void DrawTakeRow(SpriteBatch spriteBatch, Recipe recipe, CalculatedStyle inner, float y)
 		{
-			TerminalSystem terminal = Terminal;
-			List<(int Type, int Amount)> missing = terminal.MissingIngredients(recipe, 1);
-			if (missing.Count == 0)
+			if (craftMissing == 0)
 				return;
+			TerminalSystem terminal = Terminal;
 
 			string text = UIHelpers.T("TakeMissing");
 			float x = inner.X + inner.Width - ButtonWidth(text);
+			// The exact list is worked out on click, since the inventory may have changed since the last update.
 			Button(spriteBatch, text, x, y, () => terminal.RequestTakeItems(terminal.MissingIngredients(recipe, Main.keyState.PressingShift() ? 10 : 1)));
 			if (new Rectangle((int)x, (int)y, (int)ButtonWidth(text), ButtonHeight).Contains(Main.MouseScreen.ToPoint()))
 				Main.hoverItemName = UIHelpers.T("TakeMissingHint");
 
-			string status = UIHelpers.T("TakeMissingStatus", missing.Sum(entry => entry.Amount));
+			string status = UIHelpers.T("TakeMissingStatus", craftMissing);
 			Utils.DrawBorderString(spriteBatch, UIHelpers.Fit(status, x - inner.X - 6, 0.8f), new Vector2(inner.X, y + 6), InChests, 0.8f);
 		}
 
@@ -402,6 +434,7 @@ namespace TerraIndex.UI
 
 			if (treePlan == null || treeKey != (item, page) || Main.GameUpdateCount - treeTime >= TreeRefreshTicks) {
 				treePlan = new CraftingPlan(item, recipes[page], CraftingPlan.Inventory(Main.LocalPlayer));
+				treeRows = null;
 				treeKey = (item, page);
 				treeTime = Main.GameUpdateCount;
 			}
@@ -409,7 +442,9 @@ namespace TerraIndex.UI
 			string title = UIHelpers.T("TreeTitle");
 			if (recipes.Count > 1)
 				title += " " + UIHelpers.T("TreeRecipe", page + 1, recipes.Count);
-			DrawTreeRows(spriteBatch, TreeRows(treePlan, title), inner.X, y + ButtonHeight + 10, inner.Width, inner.Y + inner.Height);
+			// The rows' texts are built once per plan, not every frame.
+			treeRows ??= TreeRows(treePlan, title);
+			DrawTreeRows(spriteBatch, treeRows, inner.X, y + ButtonHeight + 10, inner.Width, inner.Y + inner.Height);
 		}
 
 		private static List<TreeRow> TreeRows(CraftingPlan plan, string title)
@@ -418,7 +453,7 @@ namespace TerraIndex.UI
 			AddNode(rows, plan.Root, 0);
 
 			rows.Add(new TreeRow(true, 0, 0, null, UIHelpers.T("TreeMissing"), Color.White));
-			List<PlanMaterial> missing = plan.Materials.FindAll(material => material.Missing > 0);
+			List<PlanMaterial> missing = plan.MissingMaterials;
 			if (missing.Count == 0)
 				rows.Add(new TreeRow(false, 0, 0, null, UIHelpers.T("TreeComplete"), new Color(140, 255, 140)));
 			foreach (PlanMaterial material in missing)

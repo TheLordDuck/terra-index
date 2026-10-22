@@ -77,6 +77,7 @@ namespace TerraIndex.Common
 			tileToItem.Clear();
 			stationTiles.Clear();
 			AllItems.Clear();
+			CraftingPlan.ClearCache();
 		}
 
 		// Whether this tile is worth reporting as a crafting station found on a terminal's wire.

@@ -40,8 +40,16 @@ namespace TerraIndex.Common
 		public PlanNode Root { get; }
 		// Missing ones first, then by name.
 		public List<PlanMaterial> Materials { get; }
+		// Just the materials still missing (kept apart because the goal panel draws them every frame).
+		public List<PlanMaterial> MissingMaterials { get; }
 		public List<int> Stations { get; } = new();
-		public bool Ready => Materials.All(material => material.Missing == 0);
+		public bool Ready => MissingMaterials.Count == 0;
+
+		// LoopsBack answers per (ingredient, item): the same pairs come up again and again in big trees and modpacks,
+		// and each answer means looking through the ingredient's recipes. Recipes don't change after loading.
+		private static readonly Dictionary<(int Ingredient, int Type), bool> madeFromCache = new();
+
+		public static void ClearCache() => madeFromCache.Clear();
 
 		public CraftingPlan(int type, Recipe recipe, Dictionary<int, int> owned)
 		{
@@ -53,6 +61,7 @@ namespace TerraIndex.Common
 			var totals = new Dictionary<(int, RecipeGroup), PlanMaterial>();
 			CollectMaterials(Root, totals);
 			Materials = totals.Values.OrderBy(material => material.Missing == 0).ThenBy(material => material.Name).ToList();
+			MissingMaterials = Materials.FindAll(material => material.Missing > 0);
 		}
 
 		// Items in the player's inventory, by type.
@@ -126,8 +135,16 @@ namespace TerraIndex.Common
 		// crafted further up the tree, or it is made from the item (reversible recipes: Wood <-> Wood Platform,
 		// blocks <-> walls). The last check matters because the path alone would accept Wood from Wood Platforms.
 		private static bool LoopsBack(int ingredient, int type, HashSet<int> path) =>
-			ingredient == type || path.Contains(ingredient)
-			|| RecipeDatabase.RecipesFor(ingredient).Any(recipe => recipe.requiredItem.Any(item => item.type == type));
+			ingredient == type || path.Contains(ingredient) || MadeFrom(ingredient, type);
+
+		private static bool MadeFrom(int ingredient, int type)
+		{
+			if (!madeFromCache.TryGetValue((ingredient, type), out bool madeFrom)) {
+				madeFrom = RecipeDatabase.RecipesFor(ingredient).Any(recipe => recipe.requiredItem.Any(item => item.type == type));
+				madeFromCache[(ingredient, type)] = madeFrom;
+			}
+			return madeFrom;
+		}
 
 		private static void CollectMaterials(PlanNode node, Dictionary<(int, RecipeGroup), PlanMaterial> totals)
 		{

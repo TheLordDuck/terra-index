@@ -87,6 +87,8 @@ namespace TerraIndex.Common
 		private CraftingPlan plan;
 		private int timer;
 		private bool wasReady;
+		// What the current plan was computed from: it is only recomputed when the goal or the inventory changes.
+		private (int Item, int Recipe, int Inventory) planKey;
 
 		// Layout from the last draw, used for the mouse.
 		private Rectangle panelArea;
@@ -120,6 +122,11 @@ namespace TerraIndex.Common
 				return;
 			}
 
+			var key = (goal.ItemType, goal.RecipeIndex, InventoryHash(Main.LocalPlayer));
+			if (plan != null && key == planKey)
+				return;
+			planKey = key;
+
 			plan = new CraftingPlan(goal.ItemType, recipe, CraftingPlan.Inventory(Main.LocalPlayer));
 			if (plan.Ready && !wasReady)
 				Main.NewText(UIHelpers.T("GoalReady", Lang.GetItemNameValue(goal.ItemType)), Color.LightGreen);
@@ -131,6 +138,15 @@ namespace TerraIndex.Common
 		{
 			timer = 0;
 			wasReady = false;
+			plan = null;
+		}
+
+		private static int InventoryHash(Player player)
+		{
+			var hash = new HashCode();
+			foreach (Item item in player.inventory)
+				hash.Add(item.IsAir ? 0 : (item.type, item.stack).GetHashCode());
+			return hash.ToHashCode();
 		}
 
 		private void HandleMouse()
@@ -186,7 +202,7 @@ namespace TerraIndex.Common
 		{
 			GoalPlayer goal = Goal;
 			int maxRows = ClientConfig.Instance.GoalPanelRows;
-			List<PlanMaterial> missing = plan.Materials.FindAll(material => material.Missing > 0);
+			List<PlanMaterial> missing = plan.MissingMaterials;
 			int rows = goal.PanelCollapsed ? 0 : plan.Ready ? 1 : Math.Min(missing.Count, maxRows) + (missing.Count > maxRows ? 1 : 0);
 			int height = TitleHeight + (rows > 0 ? 6 + rows * RowHeight : 0);
 

@@ -50,15 +50,18 @@ namespace TerraIndex.Content.Storage
 		private static readonly uint[] lastQuickDeposit = new uint[Main.maxPlayers];
 		private static readonly uint[] lastCraft = new uint[Main.maxPlayers];
 		private static readonly uint[] lastTake = new uint[Main.maxPlayers];
+		private static readonly int[] lastReplyHash = new int[Main.maxPlayers];
 		// More than any recipe has ingredients.
 		private const int MaxTakeItems = 30;
 		private static StorageSnapshot pending;
 
-		public static void SendRequest(Point terminal)
+		// force: reply even if nothing changed since the last reply to this player.
+		public static void SendRequest(Point terminal, bool force)
 		{
 			ModPacket packet = Mod.GetPacket();
 			packet.Write((byte)MessageType.RequestContents);
 			WritePoint(packet, terminal);
+			packet.Write(force);
 			packet.Send();
 		}
 
@@ -85,9 +88,11 @@ namespace TerraIndex.Content.Storage
 		{
 			var message = (MessageType)reader.ReadByte();
 			switch (message) {
-				case MessageType.RequestContents:
-					HandleRequest(ReadPoint(reader), whoAmI);
+				case MessageType.RequestContents: {
+					Point terminal = ReadPoint(reader);
+					HandleRequest(terminal, reader.ReadBoolean(), whoAmI);
 					break;
+				}
 				case MessageType.Contents:
 					HandleContents(reader);
 					break;
@@ -295,10 +300,18 @@ namespace TerraIndex.Content.Storage
 			return true;
 		}
 
-		private static void HandleRequest(Point terminal, int whoAmI)
+		// Panels refresh twice a second and the contents rarely change, so the server remembers a hash of its last
+		// reply to each player and skips identical ones (unless forced). Big networks are tens of KB per reply.
+		private static void HandleRequest(Point terminal, bool force, int whoAmI)
 		{
-			if (Allowed(terminal, whoAmI, lastRequest))
-				SendContents(terminal, StorageNetwork.Scan(terminal), whoAmI);
+			if (!Allowed(terminal, whoAmI, lastRequest))
+				return;
+			StorageSnapshot snapshot = StorageNetwork.Scan(terminal);
+			int hash = HashCode.Combine(terminal, snapshot.Hash());
+			if (!force && lastReplyHash[whoAmI] == hash)
+				return;
+			lastReplyHash[whoAmI] = hash;
+			SendContents(terminal, snapshot, whoAmI);
 		}
 
 		private static void HandleWithdraw(Point terminal, int type, int amount, int whoAmI)

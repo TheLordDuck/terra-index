@@ -16,6 +16,23 @@ namespace TerraIndex.Content.Storage
 		public readonly Dictionary<int, List<Point>> Locations = new();
 		// Crafting station tiles touched by the network's wire (see RecipeDatabase.IsStation).
 		public readonly HashSet<int> Stations = new();
+
+		// Same contents give the same hash, whatever order the chests were walked in.
+		public int Hash()
+		{
+			int hash = ChestCount;
+			unchecked {
+				foreach (var (type, stack) in Totals)
+					hash += HashCode.Combine(type, stack);
+				foreach (var (type, chests) in Locations) {
+					foreach (Point chest in chests)
+						hash += HashCode.Combine(type, chest) * 31;
+				}
+				foreach (int station in Stations)
+					hash += HashCode.Combine(-1, station) * 17;
+			}
+			return hash;
+		}
 	}
 
 	public static class StorageNetwork
@@ -25,11 +42,24 @@ namespace TerraIndex.Content.Storage
 
 		private static readonly Point[] Neighbors = { new(1, 0), new(-1, 0), new(0, 1), new(0, -1) };
 
+		// Scan's wire walk per terminal, reused for a second: open panels scan twice a second for every player, and the
+		// wire rarely changes. Withdrawing, depositing and crafting always walk the wire again.
+		private const int WalkCacheTicks = 60;
+		private static readonly Dictionary<Point, (uint Tick, List<int> Chests, HashSet<int> Stations)> walkCache = new();
+
+		public static void ClearCache() => walkCache.Clear();
+
 		// Only call this where every chest is known: in single player or on the server.
 		public static StorageSnapshot Scan(Point terminal)
 		{
 			var snapshot = new StorageSnapshot();
-			List<int> chests = Walk(terminal, snapshot.Stations);
+			if (!walkCache.TryGetValue(terminal, out var walk) || Main.GameUpdateCount - walk.Tick >= WalkCacheTicks) {
+				var stations = new HashSet<int>();
+				walk = (Main.GameUpdateCount, Walk(terminal, stations), stations);
+				walkCache[terminal] = walk;
+			}
+			snapshot.Stations.UnionWith(walk.Stations);
+			List<int> chests = walk.Chests;
 			snapshot.ChestCount = chests.Count;
 
 			foreach (int index in chests) {

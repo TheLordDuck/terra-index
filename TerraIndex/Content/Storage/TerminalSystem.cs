@@ -96,18 +96,31 @@ namespace TerraIndex.Content.Storage
 
 		// Client: whether the player can still use Terminal. Opened remotely, while carrying the linked portable terminal.
 		// In multiplayer the terminal's tiles may not be loaded on this client, so in remote mode the server checks it exists.
+		// Worked out once per update: the recipe view asks for every ingredient and station it draws.
 		public bool InReach {
 			get {
-				if (!HasTerminal)
-					return false;
-				bool exists = (Remote && Main.netMode == NetmodeID.MultiplayerClient) || TerminalTile.IsTerminal(Terminal);
-				bool near = Remote ? RemoteTerminalItem.IsLinkedTo(Main.LocalPlayer, Terminal) : Main.LocalPlayer.Distance(TerminalTile.Center(Terminal)) <= MaxDistance;
-				return exists && near;
+				if (inReachTick != Main.GameUpdateCount) {
+					inReachTick = Main.GameUpdateCount;
+					inReach = HasTerminal && ComputeInReach();
+				}
+				return inReach;
 			}
+		}
+
+		private bool inReach;
+		private uint inReachTick = uint.MaxValue;
+
+		private bool ComputeInReach()
+		{
+			bool exists = (Remote && Main.netMode == NetmodeID.MultiplayerClient) || TerminalTile.IsTerminal(Terminal);
+			bool near = Remote ? RemoteTerminalItem.IsLinkedTo(Main.LocalPlayer, Terminal) : Main.LocalPlayer.Distance(TerminalTile.Center(Terminal)) <= MaxDistance;
+			return exists && near;
 		}
 
 		// Stations the network's wire touches, expanded with what each counts as (a Hellforge is also a Furnace).
 		private readonly HashSet<int> networkStations = new();
+		// One Item per stored type, reused between refreshes (see Apply).
+		private readonly Dictionary<int, Item> itemCache = new();
 		private int craftRefreshTimer;
 		public TerminalSort Sort { get; private set; }
 		public int ChestCount => snapshot.ChestCount;
@@ -157,6 +170,8 @@ namespace TerraIndex.Content.Storage
 			DepositItems = null;
 			HasTerminal = false;
 			Apply(new StorageSnapshot());
+			itemCache.Clear();
+			StorageNetwork.ClearCache();
 			highlights.Clear();
 			doors.Clear();
 			drops.Clear();
@@ -168,10 +183,11 @@ namespace TerraIndex.Content.Storage
 			Terminal = terminal;
 			Remote = remote;
 			HasTerminal = true;
+			inReachTick = uint.MaxValue;
 			Apply(new StorageSnapshot());
 			ui.SetState(State);
 			SoundEngine.PlaySound(SoundID.MenuOpen);
-			RequestRefresh();
+			RequestRefresh(true);
 		}
 
 		public void Close()
@@ -182,31 +198,68 @@ namespace TerraIndex.Content.Storage
 			SoundEngine.PlaySound(SoundID.MenuClose);
 		}
 
-		public void RequestRefresh()
+		// The server stays silent when the contents didn't change since its last reply, which saves a lot of traffic.
+		// After opening a terminal (contents cleared) the reply is forced, and keeps being asked for until one arrives,
+		// in case a request is dropped by the server's rate limit.
+		public void RequestRefresh(bool force = false)
 		{
+			if (force)
+				awaitingFullReply = true;
 			if (Main.netMode == NetmodeID.SinglePlayer)
 				Apply(StorageNetwork.Scan(Terminal));
 			else
-				TerminalNet.SendRequest(Terminal);
+				TerminalNet.SendRequest(Terminal, awaitingFullReply);
 		}
+
+		private bool awaitingFullReply;
 
 		// Server reply; ignored if another terminal was opened in the meantime. Kept after the panel closes, because
 		// the recipe index uses it to craft from the chests.
 		public void ApplyRemote(Point terminal, StorageSnapshot remote)
 		{
-			if (HasTerminal && terminal == Terminal)
-				Apply(remote);
+			if (!HasTerminal || terminal != Terminal)
+				return;
+			awaitingFullReply = false;
+			Apply(remote);
 		}
 
+		// The list (and Version, which makes the panel rebuild its grid) only changes when the contents do: refreshes
+		// arrive twice a second and are usually identical. Item instances are reused, since creating one runs SetDefaults.
 		private void Apply(StorageSnapshot newSnapshot)
 		{
+			bool sameItems = newSnapshot.ChestCount == snapshot.ChestCount && SameTotals(newSnapshot.Totals, snapshot.Totals);
+			bool sameStations = newSnapshot.Stations.SetEquals(snapshot.Stations);
 			snapshot = newSnapshot;
-			networkStations.Clear();
-			foreach (int station in snapshot.Stations)
-				networkStations.UnionWith(RecipeDatabase.Provides(station));
+
+			if (!sameStations) {
+				networkStations.Clear();
+				foreach (int station in snapshot.Stations)
+					networkStations.UnionWith(RecipeDatabase.Provides(station));
+			}
+			if (!sameItems)
+				RebuildItems();
+		}
+
+		private static bool SameTotals(Dictionary<int, int> a, Dictionary<int, int> b)
+		{
+			if (a.Count != b.Count)
+				return false;
+			foreach (var (type, stack) in a) {
+				if (!b.TryGetValue(type, out int other) || other != stack)
+					return false;
+			}
+			return true;
+		}
+
+		private void RebuildItems()
+		{
 			StoredItems.Clear();
-			foreach (var (type, stack) in snapshot.Totals)
-				StoredItems.Add(new Item(type, stack));
+			foreach (var (type, stack) in snapshot.Totals) {
+				if (!itemCache.TryGetValue(type, out Item item))
+					itemCache[type] = item = new Item(type);
+				item.stack = stack;
+				StoredItems.Add(item);
+			}
 			StoredItems.Sort(CompareItems);
 			Version++;
 		}
@@ -214,7 +267,7 @@ namespace TerraIndex.Content.Storage
 		public void CycleSort()
 		{
 			Sort = (TerminalSort)(((int)Sort + 1) % Enum.GetValues<TerminalSort>().Length);
-			Apply(snapshot);
+			RebuildItems();
 		}
 
 		// Amount and rarity go from most to least; mods alphabetically, with vanilla items first.
