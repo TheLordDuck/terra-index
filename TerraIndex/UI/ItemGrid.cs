@@ -56,6 +56,8 @@ namespace TerraIndex.UI
 		public event Action<int, bool> OnItemClicked;
 
 		public int Count => items.Count;
+		// Type of the item under the mouse (layout from the last draw), or 0.
+		public int HoveredType => IndexAt(Main.MouseScreen) is int index and >= 0 ? items[index].type : 0;
 		public string EmptyText { get; set; } = UIHelpers.T("NoResults");
 		private int PageSize => columns * rows;
 

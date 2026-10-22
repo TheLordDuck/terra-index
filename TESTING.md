@@ -1,6 +1,6 @@
-# Testing checklist (version 0.4)
+# Testing checklist (version 0.6)
 
-Everything in 0.4 was written on a PC without tModLoader: none of it has been compiled or tested in game yet.
+0.4 compiles since 2026-10-22 (one type error fixed), but none of 0.4, 0.5 or 0.6 has been tested in game yet.
 Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 
 ## 0. Setup
@@ -98,6 +98,28 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 - [ ] The default sort applies when entering a world
 - [ ] Chest highlight duration
 - [ ] Hide the goal panel, and change how many materials it lists
+
+## Taking items out of the terminal
+
+- [ ] Click an item: a full stack (or all there is) comes out of the door, with no pop-up
+- [ ] Right click an item: it appears on the cursor with 1; each right click adds 1
+- [ ] Hold right click: the amount goes up slowly, then faster and faster, and stops at what is stored / one stack
+- [ ] With an amount on the cursor, click any item: exactly that amount comes out
+- [ ] Right click empty space in the panel: the cursor item disappears and the hint goes back to normal
+- [ ] Right click a different item: the selection switches to it, starting at 1
+- [ ] Ctrl + click opens the item's recipe; Shift + click still highlights the chests
+- [ ] Both hint lines fit in the panel (English and Spanish)
+
+## Radio
+
+- [ ] Craft it at an anvil (8 Wood, 3 Iron/Lead Bars, 2 Glass) and place it on the floor: same size as a Piggy Bank
+- [ ] A few seconds after placing it, one of the two clips plays; the next time, the other one
+- [ ] While a clip plays, music notes float out by the antenna (and stop when it ends or is turned off)
+- [ ] The gaps between clips change (sometimes ~10 s, sometimes a minute or two)
+- [ ] Right click: the dial and the light go dark and it stops (also in the middle of a clip); right click again turns it on
+- [ ] Walking away makes it quieter; two radios next to each other don't play at the same time
+- [ ] Breaking it (on or off) drops the radio
+- [ ] Multiplayer: turning it on/off is seen by the other player, and both players hear the same clip at the same time
 
 ## Performance
 

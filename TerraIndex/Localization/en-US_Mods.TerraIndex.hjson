@@ -42,10 +42,10 @@ UI: {
 	TreeStations: Crafting stations
 	SetGoal: Set as goal
 	RemoveGoal: Remove goal
-	GoalTitle: "Goal: {0}"
+	GoalTitle: Goal: {0}
 	GoalReady: You have everything to craft {0}!
 	GoalReadyShort: Ready to craft!
-	GoalMore: "+{0} more"
+	GoalMore: +{0} more
 	GoalCollapse: Fold (drag the title to move the panel)
 	GoalExpand: Unfold (drag the title to move the panel)
 	CompareAdd: + Compare
@@ -76,11 +76,9 @@ UI: {
 	TakeMissingStatus: In the chests, missing from your inventory: {0}
 	TerminalTitle: Storage Terminal
 	ConnectedChests: Connected chests: {0}
-	TerminalHint: Click: take out   Shift + click: highlight chest   Right click: recipe
-	Available: In storage: {0}  (up to {1} at once)
+	TerminalHint: Click: a stack   Hold right click: amount   Shift: chest   Ctrl: recipe
+	TerminalHoldingHint: Click an item: take out {0}   Right click empty space: cancel
 	Max: Max
-	Take: Take out
-	Cancel: Cancel
 	TerminalEmpty:
 		'''
 		No items.
@@ -96,7 +94,7 @@ UI: {
 	QuickDepositButton: Deposit all
 	QuickDepositEmpty: Nothing to deposit (the hotbar, coins, ammo and favorited items are kept).
 	QuickDepositNoSpace: The connected chests are full: {0} item(s) were given back to you.
-	SortBy: "Sort: {0}"
+	SortBy: Sort: {0}
 	SortName: Name
 	SortAmount: Amount
 	SortRarity: Rarity
@@ -148,33 +146,51 @@ Items: {
 			Items you take out appear next to you
 			'''
 	}
+
+	RadioItem: {
+		DisplayName: Radio
+		Tooltip:
+			'''
+			Plays something every now and then
+			Right click it to turn it on or off
+			'''
+	}
 }
 
-Tiles.TerminalTile.MapEntry: Terminal
+Tiles: {
+	TerminalTile.MapEntry: Terminal
+	RadioTile.MapEntry: Radio
+}
 
 Configs: {
 	ClientConfig: {
 		DisplayName: Terra Index (your settings)
+
 		Headers: {
 			Goal: Crafting goal
 			Terminal: Storage terminal
 		}
+
 		ShowGoalPanel: {
 			Label: Show the goal panel
 			Tooltip: The on-screen list of materials still missing for your crafting goal
 		}
+
 		GoalPanelRows: {
 			Label: Goal panel: materials shown
 			Tooltip: The rest are summed up as "+N more"
 		}
+
 		DefaultSort: {
 			Label: Default terminal sort
 			Tooltip: Order of the terminal's items when you enter a world
 		}
+
 		HighlightSeconds: {
 			Label: Chest highlight duration (seconds)
 			Tooltip: How long chests glow after Shift + clicking an item in the terminal
 		}
+
 		QuickDepositHotbar: {
 			Label: Include the hotbar in "Deposit all"
 			Tooltip: Favorited items, coins and ammo are always kept
@@ -183,18 +199,22 @@ Configs: {
 
 	ServerConfig: {
 		DisplayName: Terra Index (server)
+
 		TerminalPriceGold: {
 			Label: Terminal price (gold)
 			Tooltip: What the Steampunker charges for the Terminal. 100 gold = 1 platinum
 		}
+
 		TerminalReach: {
 			Label: Terminal reach (blocks)
 			Tooltip: How far players can walk away from a terminal before its panel closes
 		}
+
 		MaxWireTiles: {
 			Label: Maximum wire network size
 			Tooltip: Red wire tiles walked from a terminal looking for chests. Lower it if huge networks cause lag
 		}
+
 		AllowPortableTerminal: {
 			Label: Allow the Portable Terminal
 			Tooltip: When off, portable terminals can't open terminals from far away
@@ -202,9 +222,26 @@ Configs: {
 	}
 
 	TerminalSort: {
-		Name.Label: Name
-		Amount.Label: Amount
-		Rarity.Label: Rarity
-		Mod.Label: Mod
+		Name: {
+			Label: Name
+			Tooltip: ""
+		}
+
+		Amount: {
+			Label: Amount
+			Tooltip: ""
+		}
+
+		Rarity: {
+			Label: Rarity
+			Tooltip: ""
+		}
+
+		Mod: {
+			Label: Mod
+			Tooltip: ""
+		}
+
+		Tooltip: ""
 	}
 }

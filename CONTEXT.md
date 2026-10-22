@@ -8,8 +8,10 @@ Summary of the conversations with Claude Code (2026-10-21 and 2026-10-22), to pi
 - **Mod folder:** `TerraIndex/` (renamed from `RecipeIndex` on 2026-10-22, before the first Workshop publish; the recipe browser feature keeps the "Recipe Index" name)
 - **Status:** version 0.3 compiled on the user's home PC (the .NET 8 SDK and tModLoader are installed there, and the
   mod folder is linked into `ModSources` with a junction). **Version 0.4** (commit `f19669b`, 2026-10-22) was written
-  on a PC without tModLoader: it has **never been compiled or tested in game**. The checklist is in
-  [`TESTING.md`](TESTING.md). The only idea left after that is publishing 1.0 on the Workshop.
+  on a PC without tModLoader. On 2026-10-22 it was compiled at home (one error: `TileID` arrays are `ushort[]`,
+  fixed in `RecipeDatabase`). **Version 0.5** added picking an amount with right click in the terminal, and
+  **0.6** the radio. None of them has been **tested in game** yet. The checklist is in [`TESTING.md`](TESTING.md). The only idea left after that is
+  publishing 1.0 on the Workshop.
 - **UI panels are built on first open** (`UIHelpers.Build`), never in `Load`: translations aren't loaded yet there, so
   texts would show raw keys like `Mods.TerraIndex.UI.TerminalTitle`. They are rebuilt when the game language changes.
 - **Convention:** everything in the repo (code, comments, docs, commits) is in **English**, even though the
@@ -162,12 +164,16 @@ Decisions taken:
 - **Right clicking** the terminal opens the panel with the search box already focused.
   - It shows the items from every connected chest, with quantities summed.
   - It refreshes every half second.
-- **Clicking** an item: the panel closes, the server takes up to one stack (or the amount chosen in `UI/AmountPrompt.cs`, the pop-up shown for stackable items; empty = full stack) out of the chests (same prefix only), the
+- **Clicking** an item: the panel closes, the server takes up to one stack out of the chests (same prefix only), the
   garage door rolls up, the item drops out and the door closes again. Every player sees the door.
+- **Right clicking** an item picks up an amount, like taking from a vanilla slot: +1 per click, and holding it repeats
+  faster and faster (`TerminalState.UpdateSelection`), capped at what is stored and one stack. It is only a selection
+  on the client, drawn on the cursor; the next click on any item withdraws that amount. Right clicking empty space
+  in the panel drops it. (Replaced the 0.3 "how many?" pop-up, `AmountPrompt`, on 2026-10-22.)
 - **Shift + click** an item: the panel closes, the chests holding it glow gold for 10 s (light and particles), and a
   chat message says how many chests it is in.
 - A **gold arrow** on the screen edge points to each highlighted chest that is off screen, with the distance in blocks.
-- **Right clicking** an item: opens its recipe in the index.
+- **Ctrl + click** an item: opens its recipe in the index.
 - **Deposit items** button: 20 chest-like slots below the inventory (`DepositState`, Shift + click from the inventory
   via `TerminalPlayer`). On close they go into the chests (matching stacks first, then empty slots) and the door opens.
   Leftovers stay in a `TerminalEntity` (tile entity saved with the world), with a chat warning; they are retried every
@@ -235,6 +241,22 @@ Decisions taken:
 - Already cheap before: the item grids only draw the visible page and load at most 16 textures per frame; names
   and categories are cached for the search.
 
+### Radio (0.6, a joke item the user asked for on 2026-10-22)
+
+- 2x1 floor tile like the Piggy Bank, crafted at an anvil (8 Wood, 3 Iron/Lead Bars, 2 Glass).
+- Two clips the user supplied (`Content/Sounds/RadioSiu.mp3`, `RadioLosDos.mp3`, ID3 tags stripped; tModLoader
+  decodes mp3 sounds with MP3Sharp). `RadioSystem` plays them alternately: 3-15 s after a radio appears, then gaps of
+  10-40 s (35%), 40-90 s (45%) or 90-150 s (20%) after each clip. The server (or single player) runs the schedule,
+  so everyone hears the same clip at the same time: it collects each player's nearest radio that is on (within
+  60x40 tiles) and sends them in a `RadioPlay` packet; each client plays the clip once, at the nearest of those.
+  Clip lengths are hard-coded (`ClipTicks`) because a dedicated server doesn't load sounds.
+- Right click toggles on/off: `TileFrameX` +36 (frames 2-3 are the dark dial), sent to the server with the
+  `RadioToggle` packet in `TerminalNet` and synced with a tile square. Turning it off stops a clip that is playing.
+  `GetItemDrops` is overridden because the off frames would otherwise count as a style with no item.
+- While a clip plays, each client spawns the music box's note gores (570-572) by the antenna, about one every
+  20 ticks.
+- Sprites are generated pixel art (red body, speaker grille, dial, knobs, antenna).
+
 ---
 
 ## File layout (`TerraIndex/`)
@@ -256,11 +278,12 @@ Decisions taken:
 | `UI/RecipeView.cs` | Recipe panel: pages, Recipes/Uses/Tree tabs, history, clickable areas, craft and "Take missing" rows, comparison, goal button |
 | `UI/BrowserState.cs` | Recipe index panel |
 | `UI/TerminalState.cs` | Terminal panel |
-| `UI/AmountPrompt.cs` | "How many?" pop-up shown when taking a stackable item out of the terminal |
 | `UI/DepositState.cs` | Deposit slots (chest-like) |
 | `Content/Items/TerminalItem.cs` | Terminal item and Steampunker shop entry (`SteampunkerShop`) |
 | `Content/Items/RemoteTerminalItem.cs` | Portable terminal: link, remote opening, `CanReach` distance check |
 | `Content/Tiles/TerminalTile.cs` | Terminal tile (4x2 on a wall; right click opens the panel; door area) |
+| `Content/Items/RadioItem.cs`, `Content/Tiles/RadioTile.cs` | Radio item (recipe) and tile (on/off frames, toggle) |
+| `Content/Tiles/RadioSystem.cs` | When and where the radio clips play |
 | `Content/Storage/StorageNetwork.cs` | Red wire walk, chest and station scan (`StorageSnapshot`), withdrawing, depositing, taking a recipe's ingredients |
 | `Content/Storage/TerminalNet.cs` | Client ↔ server packets |
 | `Content/Storage/TerminalSystem.cs` | Open/close, received data, sorting, withdrawing and door animation, Deposit all, crafting from the chests, Take missing, chest highlighting, off-screen arrows |
@@ -304,10 +327,7 @@ Coming from the old name: remove the `ModSources\RecipeIndex` link, create `ModS
 
 ## Pending / ideas
 
-- **Next step:** compile 0.4 on the home PC and fix the build errors. The tModLoader APIs used without being able
-  to check them are the most likely to fail: `Recipe.RecipeIndex`, `Player.AdjTiles()`, `ModTile.AdjTiles`,
-  `Condition.IsMet()`, `ModNPC`/`GlobalNPC.ModifyActiveShop`, `Lang.GetTooltip`, `Utils.WordwrapString`.
-- Then go through `TESTING.md`, bump `version` to 1.0 and publish (idea 30).
+- **Next step:** go through `TESTING.md` in game (0.5 compiles). Then bump `version` to 1.0 and publish (idea 30).
 - Known limits: clicking a crafting station shows that item's recipes, not everything crafted at that station;
   terminal items are grouped by type (prefixes not distinguished); crafting from the chests doesn't apply the
   Alchemy Table's ingredient savings or mods' `OnCraft` hooks; the crafting tree always uses each intermediate's

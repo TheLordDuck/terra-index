@@ -88,10 +88,11 @@ index can craft straight from the terminal's chests:
    wire: the network is walked starting from the terminal, so if the wire doesn't touch it, no chests are found.
 4. **Right click** the terminal and type: the list filters as you type.
 5. **Click** an item: the garage door rolls up and a stack of it drops out (taken from the connected chests).
-   For stackable items a pop-up asks how many first: type a number, use -/+ (Shift: 10) or 1 / 10 / Max, then
-   Enter or **Take out** (empty = as many as fit in one stack). Esc or **Cancel** closes it.
+   To take a specific amount, **right click** it like in your inventory: each right click picks up 1 more, and
+   holding it counts up faster and faster. The amount follows the cursor; click any item to take that many out,
+   or right click empty space to cancel.
 6. **Shift + click**: the chests holding it glow for 10 seconds, and an arrow on the screen edge points to any
-   that are off screen. **Right click**: opens that item's recipe in the index.
+   that are off screen. **Ctrl + click**: opens that item's recipe in the index.
 7. **Deposit items** (button at the top of the panel): opens 20 slots under your inventory, like a chest. Drag items
    in, or Shift + click them in your inventory. When you close it, the door opens and the items go into the
    connected chests (first onto matching stacks, then into empty slots). If the chests are full you get a warning
@@ -145,7 +146,17 @@ In **Settings → Mod Configuration → Terra Index**:
 
 ## Changelog
 
-**0.4** (not yet tested in game)
+**0.6**
+- Radio: crafted at an anvil, placed like a Piggy Bank; plays two clips at random moments, the same for every
+  player in multiplayer, with music notes floating out while it plays. Right click: on/off.
+
+**0.5**
+- Terminal: hold right click on an item to pick an amount (like in your inventory), then click to take it out.
+  Replaces the "how many?" pop-up. Ctrl + click opens the recipe.
+- Performance: the terminal and the recipe panels skip work when nothing changed.
+- Fixed the build error in 0.4.
+
+**0.4**
 - Mod renamed from Recipe Index to Terra Index.
 - Crafting from the terminal's chests, with stations near you or on its wire; "Take missing" ingredients;
   blue ingredients when they are in the chests.

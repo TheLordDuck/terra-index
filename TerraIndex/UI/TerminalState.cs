@@ -1,31 +1,45 @@
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using TerraIndex.Content.Storage;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
+using Terraria.UI.Chat;
 
 namespace TerraIndex.UI
 {
 	// Terminal panel: search box (focused on open) + items from the connected chests, in the order picked with the sort button.
 	// Header buttons: "Deposit all" (TerminalSystem.QuickDeposit) and "Deposit items" (the deposit slots).
-	// Left click: asks how many (AmountPrompt), then takes them out through the terminal's door. Shift + left click: highlights the chests holding it.
-	// Right click: opens its recipes in the index.
+	// Left click: takes a full stack out through the terminal's door. Right click (hold to speed up, like picking up
+	// from a vanilla slot): picks some up on the cursor, and the next left click on an item takes that many out instead.
+	// Right clicking empty space drops the selection. Shift + left click: highlights the chests holding it.
+	// Ctrl + left click: opens its recipes in the index.
 	public class TerminalState : UIState
 	{
 		private const int RefreshInterval = 30;
+		private const float HintWidth = 496;
 
 		private UIPanel panel;
 		private UIText info;
+		private UIText hint;
 		private SearchBox search;
-		private AmountPrompt prompt;
 		private ItemGrid grid;
 		private UITextPanel<string> sort;
 		private int refreshTimer;
 		private int seenVersion = -1;
+
+		// Picked up with right click, shown on the cursor.
+		private int selectedType;
+		private int selectedAmount;
+		private bool wasRightDown;
+		private int holdTimer;
+		private int holdRepeats;
+		private readonly Item cursorItem = new();
 
 		private static TerminalSystem Terminal => ModContent.GetInstance<TerminalSystem>();
 
@@ -94,15 +108,10 @@ namespace TerraIndex.UI
 			info.Top.Set(76, 0);
 			panel.Append(info);
 
-			var hint = new UIText(UIHelpers.T("TerminalHint"), 0.8f);
-			hint.Top.Set(98, 0);
+			hint = new UIText("", 0.75f);
+			hint.Top.Set(100, 0);
 			hint.TextColor = Color.LightGray;
 			panel.Append(hint);
-
-			// Added on top of the panel when an item is clicked.
-			prompt = new AmountPrompt();
-			prompt.OnConfirm += Withdraw;
-			prompt.OnClose += ClosePrompt;
 		}
 
 		public override void OnActivate()
@@ -113,12 +122,14 @@ namespace TerraIndex.UI
 			sort.SetText(SortLabel());
 			refreshTimer = RefreshInterval;
 			seenVersion = -1;
+			wasRightDown = Main.mouseRight;
+			ClearSelection();
 		}
 
 		public override void OnDeactivate()
 		{
 			search.Unfocus();
-			ClosePrompt();
+			ClearSelection();
 		}
 
 		public override void Update(GameTime gameTime)
@@ -137,17 +148,107 @@ namespace TerraIndex.UI
 				grid.Refresh();
 				info.SetText(UIHelpers.T("ConnectedChests", Terminal.ChestCount));
 				grid.EmptyText = UIHelpers.T(Terminal.StoredItems.Count == 0 ? "TerminalEmpty" : "NoResults");
+				// Someone else may have taken some out meanwhile.
+				if (selectedType > 0)
+					SetSelection(selectedType, selectedAmount);
 			}
+
+			UpdateSelection();
 
 			if (panel.ContainsPoint(Main.MouseScreen))
 				Main.LocalPlayer.mouseInterface = true;
 		}
 
+		public override void Draw(SpriteBatch spriteBatch)
+		{
+			base.Draw(spriteBatch);
+			if (selectedType <= 0)
+				return;
+
+			// Drawn like vanilla's item on the mouse: icon just below and right of the cursor, with the amount.
+			if (cursorItem.type != selectedType)
+				cursorItem.SetDefaults(selectedType);
+			Vector2 mouse = Main.MouseScreen;
+			ItemSlot.DrawItemIcon(cursorItem, ItemSlot.Context.MouseItem, spriteBatch, mouse + new Vector2(24, 24), 1f, 32f, Color.White);
+			if (selectedAmount > 1) {
+				ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.ItemStack.Value, selectedAmount.ToString(),
+					mouse + new Vector2(10, 28), Color.White, 0f, Vector2.Zero, new Vector2(0.8f));
+			}
+		}
+
 		private static string SortLabel() => UIHelpers.T("SortBy", UIHelpers.T("Sort" + Terminal.Sort));
+
+		private static int Stored(int type) => Terminal.StoredItems.Find(item => item.type == type)?.stack ?? 0;
+
+		// Right click picks up 1, then holding it adds more and more each tick, like taking from a vanilla slot.
+		private void UpdateSelection()
+		{
+			bool down = Main.mouseRight;
+			bool pressed = down && !wasRightDown;
+			wasRightDown = down;
+			if (!down)
+				return;
+
+			int type = grid.HoveredType;
+			if (pressed) {
+				if (type <= 0) {
+					if (panel.ContainsPoint(Main.MouseScreen))
+						ClearSelection();
+					return;
+				}
+				if (Add(type, 1)) {
+					holdTimer = 20;
+					holdRepeats = 0;
+				}
+				return;
+			}
+
+			// Moving off the item pauses it.
+			if (type != selectedType || --holdTimer > 0)
+				return;
+			holdRepeats++;
+			holdTimer = Math.Max(1, 8 - holdRepeats);
+			Add(type, holdRepeats < 30 ? 1 : 1 + (holdRepeats - 30) / 10);
+		}
+
+		// Returns false if nothing more could be picked up.
+		private bool Add(int type, int amount)
+		{
+			int before = type == selectedType ? selectedAmount : 0;
+			SetSelection(type, before + amount);
+			if (selectedAmount == before)
+				return false;
+			SoundEngine.PlaySound(SoundID.MenuTick);
+			return true;
+		}
+
+		// At most what is stored and one stack, since a withdrawal is one stack.
+		private void SetSelection(int type, int amount)
+		{
+			int max = Math.Min(Stored(type), ContentSamples.ItemsByType[type].maxStack);
+			amount = Math.Min(amount, max);
+			if (amount <= 0) {
+				ClearSelection();
+				return;
+			}
+			selectedType = type;
+			selectedAmount = amount;
+			hint.SetText(UIHelpers.Fit(UIHelpers.T("TerminalHoldingHint", amount), HintWidth, 0.75f));
+		}
+
+		private void ClearSelection()
+		{
+			selectedType = selectedAmount = 0;
+			hint?.SetText(UIHelpers.Fit(UIHelpers.T("TerminalHint"), HintWidth, 0.75f));
+		}
 
 		private void OnItemClicked(int type, bool rightClick)
 		{
-			if (rightClick) {
+			// Handled in UpdateSelection, which also sees the button being held.
+			if (rightClick)
+				return;
+
+			if (Main.keyState.PressingControl()) {
 				Terminal.Close();
 				ModContent.GetInstance<RecipeIndexSystem>().ShowItem(type, false);
 				return;
@@ -160,31 +261,16 @@ namespace TerraIndex.UI
 				return;
 			}
 
-			// Items that don't stack (weapons, armor...) come out straight away; anything else asks how many first.
-			int stored = Terminal.StoredItems.Find(item => item.type == type)?.stack ?? 0;
-			if (Math.Min(stored, ContentSamples.ItemsByType[type].maxStack) <= 1) {
+			// With something on the cursor, clicking any item takes that out; otherwise a full stack of the clicked one.
+			if (selectedType > 0)
+				Withdraw(selectedType, selectedAmount);
+			else
 				Withdraw(type, 0);
-				return;
-			}
-			if (prompt.Parent == null) {
-				Append(prompt);
-				prompt.Activate();
-				Recalculate();
-			}
-			prompt.Open(type, stored);
-		}
-
-		private void ClosePrompt()
-		{
-			prompt.Unfocus();
-			if (prompt.Parent != null)
-				RemoveChild(prompt);
 		}
 
 		// The panel closes so the door can be seen opening.
 		private void Withdraw(int type, int amount)
 		{
-			ClosePrompt();
 			Terminal.Close();
 			Terminal.RequestWithdraw(type, amount);
 		}

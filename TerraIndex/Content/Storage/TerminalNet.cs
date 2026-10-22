@@ -34,6 +34,8 @@ namespace TerraIndex.Content.Storage
 			Craft,
 			CraftResult,
 			TakeItems,
+			RadioToggle,
+			RadioPlay,
 		}
 
 		// A ModPacket can't exceed ~65 KB; large networks are sent in several chunks.
@@ -152,6 +154,22 @@ namespace TerraIndex.Content.Storage
 						ModContent.GetInstance<TerminalSystem>().TakeItems(terminal, items, Main.player[whoAmI]);
 					break;
 				}
+				case MessageType.RadioToggle: {
+					Point radio = ReadPoint(reader);
+					// Within reach of the player, like any other tile interaction.
+					if (Main.netMode == NetmodeID.Server && WorldGen.InWorld(radio.X, radio.Y)
+						&& Main.player[whoAmI].Distance(RadioTile.Center(radio)) < 30 * 16)
+						RadioTile.Toggle(radio);
+					break;
+				}
+				case MessageType.RadioPlay: {
+					int clip = reader.ReadByte();
+					var radios = new List<Point>();
+					for (int count = reader.ReadByte(); count > 0; count--)
+						radios.Add(ReadPoint(reader));
+					ModContent.GetInstance<RadioSystem>().Play(clip, radios);
+					break;
+				}
 				case MessageType.ItemsEntering: {
 					Point terminal = ReadPoint(reader);
 					Player player = Main.player[reader.ReadByte()];
@@ -177,6 +195,27 @@ namespace TerraIndex.Content.Storage
 			foreach (int type in types)
 				packet.Write(type);
 			packet.Send(-1, player);
+		}
+
+		// Client -> server: turns a radio on or off (not part of the terminal, but it shares the mod's packets).
+		public static void SendRadioToggle(Point radio)
+		{
+			ModPacket packet = Mod.GetPacket();
+			packet.Write((byte)MessageType.RadioToggle);
+			WritePoint(packet, radio);
+			packet.Send();
+		}
+
+		// Server -> every client: play this clip now, at the nearest of these radios (see RadioSystem).
+		public static void SendRadioPlay(int clip, List<Point> radios)
+		{
+			ModPacket packet = Mod.GetPacket();
+			packet.Write((byte)MessageType.RadioPlay);
+			packet.Write((byte)clip);
+			packet.Write((byte)radios.Count);
+			foreach (Point radio in radios)
+				WritePoint(packet, radio);
+			packet.Send();
 		}
 
 		// Client -> server: asks to open the terminal's deposit slots.

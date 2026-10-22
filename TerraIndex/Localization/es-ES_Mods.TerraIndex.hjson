@@ -42,10 +42,10 @@ UI: {
 	TreeStations: Estaciones de trabajo
 	SetGoal: Fijar objetivo
 	RemoveGoal: Quitar objetivo
-	GoalTitle: "Objetivo: {0}"
+	GoalTitle: Objetivo: {0}
 	GoalReady: ¡Ya tienes todo para fabricar {0}!
 	GoalReadyShort: ¡Listo para fabricar!
-	GoalMore: "+{0} más"
+	GoalMore: +{0} más
 	GoalCollapse: Plegar (arrastra el título para mover el panel)
 	GoalExpand: Desplegar (arrastra el título para mover el panel)
 	CompareAdd: + Comparar
@@ -76,11 +76,9 @@ UI: {
 	TakeMissingStatus: En los cofres, te faltan en el inventario: {0}
 	TerminalTitle: Terminal de almacenamiento
 	ConnectedChests: Cofres conectados: {0}
-	TerminalHint: Clic: sacar   Mayús + clic: iluminar cofre   Clic derecho: receta
-	Available: Guardados: {0}  (hasta {1} de una vez)
+	TerminalHint: Clic: una pila   Mantén clic dcho.: cantidad   Mayús: cofre   Ctrl: receta
+	TerminalHoldingHint: Clic en un objeto: sacar {0}   Clic dcho. en un hueco: cancelar
 	Max: Máx.
-	Take: Sacar
-	Cancel: Cancelar
 	TerminalEmpty:
 		'''
 		No hay objetos.
@@ -96,7 +94,7 @@ UI: {
 	QuickDepositButton: Dejar todo
 	QuickDepositEmpty: No hay nada que dejar (la barra rápida, las monedas, la munición y los favoritos se quedan).
 	QuickDepositNoSpace: Los cofres conectados están llenos: se te han devuelto {0} objeto(s).
-	SortBy: "Orden: {0}"
+	SortBy: Orden: {0}
 	SortName: Nombre
 	SortAmount: Cantidad
 	SortRarity: Rareza
@@ -148,33 +146,51 @@ Items: {
 			Los objetos que saques aparecen a tu lado
 			'''
 	}
+
+	RadioItem: {
+		DisplayName: Radio
+		Tooltip:
+			'''
+			De vez en cuando suena algo
+			Haz clic derecho para encenderla o apagarla
+			'''
+	}
 }
 
-Tiles.TerminalTile.MapEntry: Terminal
+Tiles: {
+	TerminalTile.MapEntry: Terminal
+	RadioTile.MapEntry: Radio
+}
 
 Configs: {
 	ClientConfig: {
 		DisplayName: Terra Index (tus ajustes)
+
 		Headers: {
 			Goal: Objetivo de crafteo
 			Terminal: Terminal de almacenamiento
 		}
+
 		ShowGoalPanel: {
 			Label: Mostrar el panel del objetivo
 			Tooltip: La lista en pantalla con los materiales que te faltan para tu objetivo
 		}
+
 		GoalPanelRows: {
-			Label: "Panel del objetivo: materiales mostrados"
+			Label: Panel del objetivo: materiales mostrados
 			Tooltip: El resto se resume como "+N más"
 		}
+
 		DefaultSort: {
 			Label: Orden por defecto del terminal
 			Tooltip: Orden de los objetos del terminal al entrar en un mundo
 		}
+
 		HighlightSeconds: {
 			Label: Duración del resaltado de cofres (segundos)
 			Tooltip: Cuánto tiempo brillan los cofres tras Mayús + clic en un objeto del terminal
 		}
+
 		QuickDepositHotbar: {
 			Label: Incluir la barra rápida en "Dejar todo"
 			Tooltip: Los favoritos, las monedas y la munición siempre se quedan
@@ -183,18 +199,22 @@ Configs: {
 
 	ServerConfig: {
 		DisplayName: Terra Index (servidor)
+
 		TerminalPriceGold: {
 			Label: Precio de la terminal (oro)
 			Tooltip: Lo que cobra el Steampunker por la Terminal. 100 de oro = 1 de platino
 		}
+
 		TerminalReach: {
 			Label: Alcance de la terminal (bloques)
 			Tooltip: Cuánto pueden alejarse los jugadores de una terminal antes de que se cierre su panel
 		}
+
 		MaxWireTiles: {
 			Label: Tamaño máximo de la red de cable
 			Tooltip: Casillas de cable rojo que se recorren desde una terminal buscando cofres. Bájalo si las redes enormes causan lag
 		}
+
 		AllowPortableTerminal: {
 			Label: Permitir la Terminal portátil
 			Tooltip: Si se desactiva, las terminales portátiles no pueden abrir terminales a distancia
@@ -202,9 +222,26 @@ Configs: {
 	}
 
 	TerminalSort: {
-		Name.Label: Nombre
-		Amount.Label: Cantidad
-		Rarity.Label: Rareza
-		Mod.Label: Mod
+		Name: {
+			Label: Nombre
+			// Tooltip: ""
+		}
+
+		Amount: {
+			Label: Cantidad
+			// Tooltip: ""
+		}
+
+		Rarity: {
+			Label: Rareza
+			// Tooltip: ""
+		}
+
+		Mod: {
+			Label: Mod
+			// Tooltip: ""
+		}
+
+		// Tooltip: ""
 	}
 }

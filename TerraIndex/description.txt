@@ -19,9 +19,9 @@ STORAGE TERMINAL
 Buy the Terminal from the Steampunker for 1 platinum and hang it on a background wall.
 - Connect the terminal and your chests with the same red wire.
 - Right click the terminal and start typing: the items in all connected chests are filtered as you type.
-- Click an item to take a stack out (for stackable items it asks how many first): the garage door on the terminal opens and hands it to you.
+- Click an item to take a stack out, or hold right click on it to pick an exact amount first (like in your inventory) and then click: the garage door on the terminal opens and hands it to you.
 - Shift + click an item and the chests holding it glow for 10 seconds. Chests off screen get an arrow on the edge of the screen showing the direction and distance.
-- Right click an item in the terminal to open its recipe.
+- Ctrl + click an item in the terminal to open its recipe.
 - Deposit items: put items in the terminal's slots and, when you close them, they go into the connected chests through its door. If the chests are full you get a warning and the items wait in the terminal until there is room.
 - Deposit all: sends your whole main inventory into the chests at once (the hotbar, coins, ammo and favorited items stay with you).
 - Sort the list by name, amount, rarity or mod.

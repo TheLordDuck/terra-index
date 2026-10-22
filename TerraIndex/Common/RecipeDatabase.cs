@@ -18,11 +18,11 @@ namespace TerraIndex.Common
 
 		// Vanilla stations that also count as others (as in Player.AdjTiles). Modded ones use ModTile.AdjTiles.
 		private static readonly Dictionary<int, int[]> vanillaAdjTiles = new() {
-			[TileID.Hellforge] = new[] { TileID.Furnaces },
-			[TileID.AdamantiteForge] = new[] { TileID.Furnaces, TileID.Hellforge },
-			[TileID.MythrilAnvil] = new[] { TileID.Anvils },
-			[TileID.AlchemyTable] = new[] { TileID.Bottles, TileID.Tables },
-			[TileID.BewitchingTable] = new[] { TileID.Tables },
+			[TileID.Hellforge] = new int[] { TileID.Furnaces },
+			[TileID.AdamantiteForge] = new int[] { TileID.Furnaces, TileID.Hellforge },
+			[TileID.MythrilAnvil] = new int[] { TileID.Anvils },
+			[TileID.AlchemyTable] = new int[] { TileID.Bottles, TileID.Tables },
+			[TileID.BewitchingTable] = new int[] { TileID.Tables },
 		};
 
 		public static List<int> AllItems { get; } = new();
