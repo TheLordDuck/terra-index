@@ -104,6 +104,8 @@ UI: {
 	TakeMissingStatus: "Dans les coffres, absent de ton inventaire : {0}"
 	TerminalTitle: Terminal de stockage
 	ConnectedChests: "Coffres connectés : {0}"
+	WireStations: "Stations sur le fil :"
+	NoWireStations: "aucune (mets des stations d'artisanat sur le fil rouge)"
 	TerminalHint: "Clic : une pile   Clic droit maintenu : quantité   Maj : coffre   Ctrl : recette"
 	TerminalHoldingHint: "Clic sur un objet : en sortir {0}   Clic droit dans le vide : annuler"
 	Max: Max
@@ -166,6 +168,7 @@ UI: {
 		(sauf la barre d'accès rapide, les pièces, les munitions et les favoris).
 		Déposer : des emplacements qui vont dans les coffres à la fermeture.
 		Le terminal et les coffres doivent être sur le même fil rouge.
+		Les icônes au-dessus des objets : les stations d'artisanat sur le fil ; elles comptent pour fabriquer avec les coffres.
 		'''
 	HelpIndex:
 		'''

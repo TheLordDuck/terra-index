@@ -104,6 +104,8 @@ UI: {
 	TakeMissingStatus: En los cofres, te faltan en el inventario: {0}
 	TerminalTitle: Terminal de almacenamiento
 	ConnectedChests: Cofres conectados: {0}
+	WireStations: "Estaciones en el cable:"
+	NoWireStations: "ninguna (pon estaciones de fabricación en el cable rojo)"
 	TerminalHint: Clic: una pila   Mantén clic dcho.: cantidad   Mayús: cofre   Ctrl: receta
 	TerminalHoldingHint: Clic en un objeto: sacar {0}   Clic dcho. en un hueco: cancelar
 	Max: Máx.
@@ -166,6 +168,7 @@ UI: {
 		(no la barra rápida, las monedas, la munición ni los favoritos).
 		Dejar objetos: casillas que van a los cofres al cerrarlas.
 		El terminal y los cofres deben estar en el mismo cable rojo.
+		Los iconos sobre los objetos: estaciones de fabricación en el cable; cuentan para fabricar desde los cofres.
 		'''
 	HelpIndex:
 		'''

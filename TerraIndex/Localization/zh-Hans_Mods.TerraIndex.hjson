@@ -104,6 +104,8 @@ UI: {
 	TakeMissingStatus: 箱子里有、物品栏里缺：{0}
 	TerminalTitle: 存储终端
 	ConnectedChests: 已连接的箱子：{0}
+	WireStations: "电线上的制作站："
+	NoWireStations: "无（把制作站接到红电线上）"
 	TerminalHint: 点击：一组   按住右键：数量   Shift：箱子   Ctrl：配方
 	TerminalHoldingHint: 点击物品：取出 {0} 个   在空白处右键：取消
 	Max: 最大
@@ -166,6 +168,7 @@ UI: {
 		（快捷栏、钱币、弹药和收藏的物品除外）。
 		存放物品：关闭时会送进箱子的栏位。
 		终端和箱子必须在同一条红电线上。
+		物品上方的图标：电线上的制作站；用箱子制作时它们也算数。
 		'''
 	HelpIndex:
 		'''

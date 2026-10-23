@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TerraIndex.UI;
 using Terraria;
 using Terraria.ID;
+using Terraria.ObjectData;
 
 namespace TerraIndex.Common
 {
@@ -21,7 +22,7 @@ namespace TerraIndex.Common
 	}
 
 	// Sorts every item into one tab, from its sample's stats. The first matching rule wins
-	// (wings are accessories, wood is placeable rather than a material, ammo goes with the weapons).
+	// (wings are accessories, ores and bars are materials, wood is placeable rather than a material, ammo goes with the weapons).
 	public static class ItemCategories
 	{
 		public static readonly ItemCategory[] Tabs = Enum.GetValues<ItemCategory>();
@@ -47,6 +48,8 @@ namespace TerraIndex.Common
 				return ItemCategory.Tools;
 			if (item.damage > 0 && item.createTile < 0)
 				return ItemCategory.Weapons;
+			if (IsOreOrBar(item))
+				return ItemCategory.Materials;
 			if (item.createTile >= 0 || item.createWall >= 0)
 				return ItemCategory.Placeable;
 			if (item.consumable || item.potion || item.healLife > 0 || item.healMana > 0)
@@ -54,6 +57,21 @@ namespace TerraIndex.Common
 			if (item.material)
 				return ItemCategory.Materials;
 			return ItemCategory.Misc;
+		}
+
+		// Ores and bars can be placed, but they are crafting materials first. Vanilla bars all place the MetalBars tile;
+		// a modded bar places its own tile, a single solid-top tile like the vanilla bars.
+		private static bool IsOreOrBar(Item item)
+		{
+			int tile = item.createTile;
+			if (tile < 0 || !item.material)
+				return false;
+			if (tile == TileID.MetalBars || TileID.Sets.Ore[tile])
+				return true;
+			if (tile < TileID.Count || !Main.tileSolidTop[tile] || !Main.tileFrameImportant[tile] || TileID.Sets.Platforms[tile])
+				return false;
+			TileObjectData data = TileObjectData.GetTileData(tile, item.placeStyle);
+			return data != null && data.Width == 1 && data.Height == 1;
 		}
 
 		public static int Icon(ItemCategory category) => category switch {

@@ -28,7 +28,7 @@ list, and rebind the N / [ / ] keys if you had changed them.
 - Inside a recipe you can click ingredients and crafting stations to navigate; **Back** returns.
 - Mouse wheel over the right panel: switch recipe.
 - Tabs above the items split them by type: all, weapons and ammo, tools, armor, accessories, blocks and furniture,
-  potions and consumables, materials, and miscellaneous (hover a tab for its name and count).
+  potions and consumables, materials (ores and bars too), and miscellaneous (hover a tab for its name and count).
 - The item list is split into pages: use the buttons at the bottom, the mouse wheel (Shift: 10 pages at a time),
   or drag the page bar.
 - Esc closes the index.
@@ -109,6 +109,8 @@ chests of a terminal in reach. If a step only lacks its crafting station, the pa
     from the chests without switching panels. Taking items out no longer closes the terminal. While it is there it opens and closes together with the terminal;
     close it with its X to stop that.
 11. **?**: hover it to see all these controls. The index has one too.
+12. Above the items, the **crafting stations on the terminal's wire** (hover one for its name). They count for
+    crafting from the chests, as if they were next to you.
 
 Delivery drones fly the items between the chests and the terminal's door, and the chests spark when items go in or
 out. If you are not standing at the door, the drones bring what you take out straight to you. Reopening the same
@@ -179,6 +181,8 @@ In **Settings → Mod Configuration → Terra Index**:
 ## Changelog
 
 **0.8**
+- The terminal shows the crafting stations on its wire.
+- Ores and bars are in the materials tab, not with the blocks and furniture.
 - Blueprints: pick a design and a material, see a preview where it goes and build it with one click, with
   materials from your inventory (or brought from the terminal's chests). Every room is valid NPC housing.
   Designs: small house, two-floor house, tower, medieval house, castle, pagoda, wizard tower, boss arena.

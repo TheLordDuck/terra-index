@@ -104,6 +104,8 @@ UI: {
 	TakeMissingStatus: In the chests, missing from your inventory: {0}
 	TerminalTitle: Storage Terminal
 	ConnectedChests: Connected chests: {0}
+	WireStations: "Stations on the wire:"
+	NoWireStations: "none (put crafting stations on the red wire)"
 	TerminalHint: Click: a stack   Hold right click: amount   Shift: chest   Ctrl: recipe
 	TerminalHoldingHint: Click an item: take out {0}   Right click empty space: cancel
 	Max: Max
@@ -166,6 +168,7 @@ UI: {
 		(not the hotbar, coins, ammo or favorited items).
 		Deposit items: slots that go into the chests when you close them.
 		The terminal and the chests must be on the same red wire.
+		The icons above the items: crafting stations on the wire; they count for crafting from the chests.
 		'''
 	HelpIndex:
 		'''

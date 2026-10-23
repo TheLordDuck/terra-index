@@ -104,6 +104,8 @@ UI: {
 	TakeMissingStatus: "W skrzyniach, brakuje w ekwipunku: {0}"
 	TerminalTitle: Terminal magazynu
 	ConnectedChests: "Podłączone skrzynie: {0}"
+	WireStations: "Stacje na kablu:"
+	NoWireStations: "brak (poprowadź czerwony kabel do stacji rzemieślniczych)"
 	TerminalHint: "Klik: stos   Przytrzymaj PPM: ilość   Shift: skrzynia   Ctrl: przepis"
 	TerminalHoldingHint: "Klik na przedmiocie: wyjmij {0}   PPM w puste miejsce: anuluj"
 	Max: Maks
@@ -166,6 +168,7 @@ UI: {
 		(poza paskiem szybkiego dostępu, monetami, amunicją i ulubionymi).
 		Odłóż przedmioty: miejsca, które po zamknięciu trafiają do skrzyń.
 		Terminal i skrzynie muszą być na tym samym czerwonym kablu.
+		Ikony nad przedmiotami: stacje rzemieślnicze na kablu; liczą się przy wytwarzaniu ze skrzyń.
 		'''
 	HelpIndex:
 		'''

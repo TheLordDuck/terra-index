@@ -104,6 +104,8 @@ UI: {
 	TakeMissingStatus: "In den Truhen, fehlt in deinem Inventar: {0}"
 	TerminalTitle: Lagerterminal
 	ConnectedChests: "Verbundene Truhen: {0}"
+	WireStations: "Stationen am Draht:"
+	NoWireStations: "keine (lege Handwerksstationen an den roten Draht)"
 	TerminalHint: "Klick: ein Stapel   Rechtsklick halten: Menge   Umschalt: Truhe   Strg: Rezept"
 	TerminalHoldingHint: "Klick auf einen Gegenstand: {0} herausnehmen   Rechtsklick ins Leere: abbrechen"
 	Max: Max
@@ -166,6 +168,7 @@ UI: {
 		(nicht die Schnellleiste, Münzen, Munition oder Favoriten).
 		Einlagern: Plätze, die beim Schließen in die Truhen gehen.
 		Das Terminal und die Truhen müssen am selben roten Draht hängen.
+		Die Symbole über den Gegenständen: Handwerksstationen am Draht; sie zählen beim Herstellen aus den Truhen.
 		'''
 	HelpIndex:
 		'''

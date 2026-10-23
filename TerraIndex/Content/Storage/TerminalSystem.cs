@@ -127,6 +127,8 @@ namespace TerraIndex.Content.Storage
 
 		// Stations the network's wire touches, expanded with what each counts as (a Hellforge is also a Furnace).
 		private readonly HashSet<int> networkStations = new();
+		// The station tiles themselves (not what they count as), by name, for the terminal panel's stations row.
+		public List<int> WireStations { get; } = new();
 		// One Item per stored type, reused between refreshes (see Apply).
 		private readonly Dictionary<int, Item> itemCache = new();
 		private int craftRefreshTimer;
@@ -251,6 +253,8 @@ namespace TerraIndex.Content.Storage
 			snapshot = newSnapshot;
 
 			if (!sameStations) {
+				WireStations.Clear();
+				WireStations.AddRange(snapshot.Stations.OrderBy(RecipeDatabase.TileName));
 				networkStations.Clear();
 				foreach (int station in snapshot.Stations)
 					networkStations.UnionWith(RecipeDatabase.Provides(station));

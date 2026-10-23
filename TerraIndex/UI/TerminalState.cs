@@ -15,6 +15,7 @@ using Terraria.UI.Chat;
 namespace TerraIndex.UI
 {
 	// Terminal panel: search box (focused on open) + items from the connected chests, in the order picked with the sort button.
+	// Above the items, the crafting stations on the wire (StationsRow).
 	// Header buttons: "Deposit all" (TerminalSystem.QuickDeposit) and "Deposit items" (the deposit slots).
 	// Left click: takes a full stack out through the terminal's door. Right click (hold to speed up, like picking up
 	// from a vanilla slot): picks some up on the cursor, and the next left click on an item takes that many out instead.
@@ -57,7 +58,7 @@ namespace TerraIndex.UI
 		{
 			panel = new UIPanel();
 			panel.Width.Set(UIHelpers.TerminalWidth, 0);
-			panel.Height.Set(480, 0);
+			panel.Height.Set(510, 0);
 			panel.HAlign = panel.VAlign = 0.5f;
 			Append(panel);
 
@@ -116,10 +117,16 @@ namespace TerraIndex.UI
 			panel.Append(recipes);
 			PlaceRecipesButton();
 
+			var stations = new StationsRow();
+			stations.Top.Set(122, 0);
+			stations.Width.Set(0, 1f);
+			stations.Height.Set(28, 0);
+			panel.Append(stations);
+
 			grid = new ItemGrid(() => Terminal.StoredItems);
-			grid.Top.Set(122, 0);
+			grid.Top.Set(154, 0);
 			grid.Width.Set(0, 1f);
-			grid.Height.Set(-122, 1f);
+			grid.Height.Set(-154, 1f);
 			grid.OnItemClicked += OnItemClicked;
 			panel.Append(grid);
 

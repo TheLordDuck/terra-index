@@ -104,6 +104,8 @@ UI: {
 	TakeMissingStatus: "Nos baús, faltando no seu inventário: {0}"
 	TerminalTitle: Terminal de armazenamento
 	ConnectedChests: "Baús conectados: {0}"
+	WireStations: "Estações no fio:"
+	NoWireStations: "nenhuma (coloque estações de criação no fio vermelho)"
 	TerminalHint: "Clique: uma pilha   Segurar clique direito: quantidade   Shift: baú   Ctrl: receita"
 	TerminalHoldingHint: "Clique em um item: tirar {0}   Clique direito no vazio: cancelar"
 	Max: Máx
@@ -166,6 +168,7 @@ UI: {
 		(menos a barra de atalhos, moedas, munição e favoritos).
 		Guardar itens: espaços que vão para os baús ao fechar.
 		O terminal e os baús devem estar no mesmo fio vermelho.
+		Os ícones acima dos itens: estações de criação no fio; elas contam para fabricar com os baús.
 		'''
 	HelpIndex:
 		'''

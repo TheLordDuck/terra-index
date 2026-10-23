@@ -146,6 +146,14 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 - [ ] With the portable terminal far away: no drones, items still appear next to you
 - [ ] Multiplayer: the other player sees the drones and sparks too
 
+## Stations on the wire
+
+- [ ] The terminal shows a row "Stations on the wire:" with an icon for each crafting station the red wire touches (anvil, furnace, work bench...); hovering one shows its name
+- [ ] Without stations on the wire it says "none"; adding or removing one updates the row within a second
+- [ ] With many stations the row ends with "+N" instead of going out of the panel
+- [ ] The items grid below still shows its last row and page bar (the panel is a bit taller)
+- [ ] Ores and bars (also from other mods) are in the **Materials** tab, not in the blocks one; wood, bricks and furniture stay in blocks
+
 ## Comfort
 
 - [ ] Standing at the terminal's door, a taken item drops out of the door as before

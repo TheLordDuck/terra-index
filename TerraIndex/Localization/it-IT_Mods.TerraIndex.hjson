@@ -104,6 +104,8 @@ UI: {
 	TakeMissingStatus: "Nelle casse, mancanti nell'inventario: {0}"
 	TerminalTitle: Terminale di deposito
 	ConnectedChests: "Casse collegate: {0}"
+	WireStations: "Stazioni sul filo:"
+	NoWireStations: "nessuna (metti stazioni di creazione sul filo rosso)"
 	TerminalHint: "Clic: una pila   Tieni premuto il destro: quantità   Maiusc: cassa   Ctrl: ricetta"
 	TerminalHoldingHint: "Clic su un oggetto: prendine {0}   Clic destro nel vuoto: annulla"
 	Max: Max
@@ -166,6 +168,7 @@ UI: {
 		(tranne barra rapida, monete, munizioni e preferiti).
 		Deposita: slot che vanno nelle casse quando li chiudi.
 		Il terminale e le casse devono essere sullo stesso filo rosso.
+		Le icone sopra gli oggetti: stazioni di creazione sul filo; contano per creare dalle casse.
 		'''
 	HelpIndex:
 		'''
