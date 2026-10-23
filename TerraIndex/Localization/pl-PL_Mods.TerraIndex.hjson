@@ -1,0 +1,296 @@
+Keybinds: {
+	ToggleBrowser.DisplayName: Otwórz/zamknij indeks przepisów
+	ShowRecipes.DisplayName: Przepisy przedmiotu pod kursorem
+	ShowUses.DisplayName: Zastosowania przedmiotu pod kursorem
+}
+
+UI: {
+	Title: Indeks przepisów
+	SearchHint: Szukaj... (@mod filtruje według moda)
+	CategoryAll: Wszystkie przedmioty
+	CategoryWeapons: Broń i amunicja
+	CategoryTools: Narzędzia
+	CategoryArmor: Zbroje i stroje
+	CategoryAccessories: Akcesoria
+	CategoryPlaceable: Bloki, ściany i meble
+	CategoryConsumables: Mikstury i przedmioty jednorazowe
+	CategoryMaterials: Materiały
+	CategoryMisc: Różne
+	NoResults: Żaden przedmiot nie pasuje do wyszukiwania.
+	Hint:
+		'''
+		LPM na przedmiocie: jak go wytworzyć.
+		PPM: przepisy, które go używają.
+		Kółko myszy nad tym panelem: zmiana przepisu.
+		'''
+	Back: Wstecz
+	RecipesTab: Przepisy ({0})
+	UsesTab: Zastosowania ({0})
+	NoRecipes: Tego przedmiotu nie da się wytworzyć.
+	NoUses: Ten przedmiot nie jest używany w żadnym przepisie.
+	Result: Wynik
+	Ingredients: Składniki
+	Stations: Stacja rzemieślnicza
+	ByHand: Ręcznie (bez stacji)
+	Conditions: Warunki
+	TreeTab: Drzewo
+	TreeTitle: Drzewo wytwarzania
+	TreeRecipe: (przepis {0} z {1})
+	TreeHave: (masz {0})
+	TreeMissing: Brakujące materiały
+	TreeComplete: Masz wszystkie materiały.
+	TreeStations: Stacje rzemieślnicze
+	SetGoal: Ustaw jako cel
+	RemoveGoal: Usuń cel
+	GoalTitle: "Cel: {0}"
+	GoalReady: Masz wszystko, by wytworzyć {0}!
+	GoalReadyShort: Gotowe do wytworzenia!
+	GoalMore: +{0} więcej
+	GoalStep: "Wytwórz {0} x {1}"
+	GoalStepChests: "Wytwórz {0} x {1} (skrzynie)"
+	GoalNeedsStation: "Następny krok wymaga: {0}"
+	GoalCrafted: "Wytworzono {0} x {1}."
+	TakeNeedsTerminal: "Środkowy przycisk myszy wyjmuje przedmioty ze skrzyń ostatnio otwartego terminala, gdy jesteś blisko niego."
+	TakeNotStored: "{0} nie ma w skrzyniach terminala."
+	GoalCollapse: Zwiń (przeciągnij tytuł, by przesunąć panel)
+	GoalExpand: Rozwiń (przeciągnij tytuł, by przesunąć panel)
+	CompareAdd: + Porównaj
+	CompareOpen: Porównaj ({0})
+	CompareTitle: Porównanie
+	CompareRemoveHint: PPM na przedmiocie, by go usunąć
+	CompareDamage: Obrażenia
+	CompareCrit: Szansa na krytyka
+	CompareUseTime: Czas użycia (tiki)
+	CompareKnockback: Odrzut
+	CompareMana: Koszt many
+	CompareVelocity: Prędkość pocisku
+	ComparePickaxe: Moc kilofa
+	CompareAxe: Moc topora
+	CompareHammer: Moc młota
+	CompareDefense: Obrona
+	CompareValue: Wartość sprzedaży
+	CompareEffects: Efekty
+	CraftButton: Wytwórz
+	CraftCanMake: Z twoich skrzyń możesz wytworzyć {0}
+	CraftNoIngredients: Za mało składników w skrzyniach terminala
+	CraftNoStation: Brak stacji rzemieślniczej (w pobliżu lub na kablu terminala)
+	CraftNoConditions: Warunki nie są tu spełnione
+	Crafted: "Wytworzono {0} x {1} z twoich skrzyń."
+	CraftFailed: W skrzyniach nie ma już składników.
+	TakeMissing: Weź brakujące
+	TakeMissingHint: Wyjmuje ze skrzyń to, czego brakuje w ekwipunku na jedno wytworzenie (Shift: na 10)
+	TakeMissingStatus: "W skrzyniach, brakuje w ekwipunku: {0}"
+	TerminalTitle: Terminal magazynu
+	ConnectedChests: "Podłączone skrzynie: {0}"
+	TerminalHint: "Klik: stos   Przytrzymaj PPM: ilość   Shift: skrzynia   Ctrl: przepis"
+	TerminalHoldingHint: "Klik na przedmiocie: wyjmij {0}   PPM w puste miejsce: anuluj"
+	Max: Maks
+	TerminalEmpty:
+		'''
+		Brak przedmiotów.
+		Połącz terminal i skrzynie tym samym czerwonym kablem.
+		'''
+	DepositButton: Odłóż przedmioty
+	DepositTitle: Odłóż przedmioty do skrzyń
+	DepositHint: Po zamknięciu przedmioty trafią do skrzyń przez drzwiczki terminala.
+	Done: Gotowe
+	DepositDone: Przedmioty odłożone do skrzyń.
+	DepositNoSpace: "Uwaga: podłączone skrzynie są pełne. {0} przedmiot(ów) nie wysłano; zostają w terminalu, aż zrobi się miejsce lub je zabierzesz."
+	DepositInUse: Inny gracz używa miejsc depozytu tego terminala.
+	QuickDepositButton: Odłóż wszystko
+	QuickDepositEmpty: Nie ma czego odłożyć (pasek szybkiego dostępu, monety, amunicja i ulubione zostają).
+	QuickDepositNoSpace: "Podłączone skrzynie są pełne: zwrócono ci {0} przedmiot(ów)."
+	SortBy: "Sortuj: {0}"
+	SortName: Nazwa
+	SortAmount: Ilość
+	SortRarity: Rzadkość
+	SortMod: Mod
+	RemoteLinked: Przenośny terminal połączony z tym terminalem.
+	RemoteNotLinked: Niepołączony. Trzymaj go i kliknij PPM na terminal, by je połączyć.
+	RemoteLinkedTo: Połączony z terminalem oddalonym o {0} bloków
+	RemoteDisabled: Przenośny terminal jest wyłączony na tym serwerze.
+	HowToObtain: Jak zdobyć
+	NoSources:
+		'''
+		Brak znanego źródła: prawdopodobnie znajduje się w skrzyniach, na rybach
+		albo w świecie (niszcząc bloki, potrząsając drzewami itp.).
+		'''
+	MoreAbove: "{0} więcej wyżej (kółko myszy)"
+	MoreBelow: "{0} więcej niżej (kółko myszy)"
+	SoldBy: "Sprzedaje: {0}: {1}"
+	SoldByFree: "Sprzedaje: {0}"
+	DroppedBy: "Wypada z: {0} ({1})"
+	FoundInside: "W środku: {0} ({1})"
+	AnyEnemy: dowolnego wroga
+	SpawnsIn: "Występuje: {0}"
+	Page: Strona {0} / {1}  ({2} przedmiotów)
+	Platinum: "{0} plat."
+	Gold: "{0} zł."
+	Silver: "{0} sr."
+	Copper: "{0} mie."
+	FoundIn: "{0}: znaleziono w {1} skrzyni(ach)."
+	Blocks: "{0} bloków"
+	RecipesButton: Przepisy
+	HelpTerminal:
+		'''
+		Pisz w wyszukiwarce, by filtrować przedmioty (@mod filtruje według moda).
+		LPM na przedmiocie: wyjmij stos (wypadnie z drzwiczek).
+		Przytrzymaj PPM na przedmiocie: wybierz ilość, potem wyjmij ją LPM.
+		PPM w puste miejsce: porzuć wybraną ilość.
+		Shift + klik: podświetl skrzynie, w których leży.
+		Ctrl + klik: jego przepisy, w indeksie obok terminala.
+		Przepisy: otwórz lub zamknij indeks przepisów obok terminala.
+		Odłóż wszystko: twój ekwipunek trafia do skrzyń
+		(poza paskiem szybkiego dostępu, monetami, amunicją i ulubionymi).
+		Odłóż przedmioty: miejsca, które po zamknięciu trafiają do skrzyń.
+		Terminal i skrzynie muszą być na tym samym czerwonym kablu.
+		'''
+	HelpIndex:
+		'''
+		LPM na przedmiocie: jak go wytworzyć. PPM: do czego służy.
+		Kółko myszy nad przepisem: następny. Wstecz: poprzedni przedmiot.
+		Składniki: zielony = w ekwipunku, niebieski = w skrzyniach terminala, czerwony = brakuje.
+		Drzewo: wszystko, co potrzebne, aż do materiałów podstawowych; można je ustawić jako cel.
+		Przy terminalu możesz wytwarzać prosto z jego skrzyń albo wyjąć to, czego ci brakuje.
+		Klawisze (Ustawienia > Sterowanie): otwórz indeks, przepisy lub zastosowania przedmiotu pod kursorem.
+		Środkowy przycisk na przedmiocie: wyjmij stos ze skrzyń terminala (blisko ostatnio otwartego).
+		'''
+	TipPlaced: "Terminal postawiony! Połącz go ze skrzyniami czerwonym kablem (kładzie się go: {0}, sprzedaje: {1}), a potem kliknij go PPM."
+	TipOpened: "Wskazówka: najedź na przycisk ?, by zobaczyć sterowanie terminala. „Przepisy” otwiera obok indeks przepisów."
+}
+
+Items: {
+	TerminalItem: {
+		DisplayName: Terminal
+		Tooltip:
+			'''
+			Stawia się go na ścianie w tle
+			Połącz go ze skrzyniami czerwonym kablem i kliknij PPM, by szukać przedmiotów
+			Wyjmowane przedmioty wypadają z jego drzwiczek
+			'''
+	}
+
+	RemoteTerminalItem: {
+		DisplayName: Przenośny terminal
+		Tooltip:
+			'''
+			Trzymaj go i kliknij PPM na terminal, by je połączyć
+			Użyj go, by otworzyć połączony terminal z dowolnego miejsca
+			Wyjmowane przedmioty pojawiają się obok ciebie
+			'''
+	}
+
+	RadioItem: {
+		DisplayName: Radio
+		Tooltip:
+			'''
+			Co jakiś czas coś gra
+			Kliknij PPM, by je włączyć lub wyłączyć
+			'''
+	}
+}
+
+Tiles: {
+	TerminalTile.MapEntry: Terminal
+	RadioTile.MapEntry: Radio
+}
+
+Configs: {
+	ClientConfig: {
+		DisplayName: Terra Index (twoje ustawienia)
+
+		Headers: {
+			Goal: Cel wytwarzania
+			Terminal: Terminal magazynu
+			Effects: Efekty
+		}
+
+		ShowGoalPanel: {
+			Label: Pokazuj panel celu
+			Tooltip: Lista na ekranie z materiałami, których wciąż brakuje do celu
+		}
+
+		GoalPanelRows: {
+			Label: "Panel celu: pokazane materiały"
+			Tooltip: Reszta jest podsumowana jako "+N więcej"
+		}
+
+		DefaultSort: {
+			Label: Domyślne sortowanie terminala
+			Tooltip: Kolejność przedmiotów w terminalu po wejściu do świata
+		}
+
+		HighlightSeconds: {
+			Label: Czas podświetlenia skrzyń (sekundy)
+			Tooltip: Jak długo skrzynie świecą po Shift + kliknięciu przedmiotu w terminalu
+		}
+
+		QuickDepositHotbar: {
+			Label: Uwzględnij pasek szybkiego dostępu w "Odłóż wszystko"
+			Tooltip: Ulubione, monety i amunicja zawsze zostają
+		}
+
+		FocusTerminalSearch: {
+			Label: "Pisz w wyszukiwarce terminala po jego otwarciu"
+			Tooltip: "Podczas pisania klawisze moda (N, [ i ]) nie działają"
+		}
+
+		DeliveryDrones: {
+			Label: Drony kurierskie
+			Tooltip: Małe drony noszą przedmioty między skrzyniami a drzwiczkami terminala (tylko wizualnie)
+		}
+
+		ChestEffects: {
+			Label: Efekty skrzyń
+			Tooltip: Iskry, światło i dźwięk przy skrzyniach, do których trafiają lub z których wychodzą przedmioty
+		}
+	}
+
+	ServerConfig: {
+		DisplayName: Terra Index (serwer)
+
+		TerminalPriceGold: {
+			Label: Cena terminala (złoto)
+			Tooltip: Ile kosztuje terminal w sklepie. 100 złotych = 1 platynowa
+		}
+
+		TerminalReach: {
+			Label: Zasięg terminala (bloki)
+			Tooltip: Jak daleko gracze mogą odejść od terminala, zanim jego panel się zamknie
+		}
+
+		MaxWireTiles: {
+			Label: Maksymalny rozmiar sieci kabli
+			Tooltip: Pola czerwonego kabla przeszukiwane od terminala w poszukiwaniu skrzyń. Zmniejsz, jeśli ogromne sieci powodują lagi
+		}
+
+		AllowPortableTerminal: {
+			Label: Zezwalaj na przenośny terminal
+			Tooltip: Gdy wyłączone, przenośne terminale nie mogą otwierać terminali z daleka
+		}
+	}
+
+	TerminalSort: {
+		Name: {
+			Label: Nazwa
+			Tooltip: ""
+		}
+
+		Amount: {
+			Label: Ilość
+			Tooltip: ""
+		}
+
+		Rarity: {
+			Label: Rzadkość
+			Tooltip: ""
+		}
+
+		Mod: {
+			Label: Mod
+			Tooltip: ""
+		}
+
+		Tooltip: ""
+	}
+}

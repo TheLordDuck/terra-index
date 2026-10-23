@@ -1,6 +1,7 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using TerraIndex.Common;
+using TerraIndex.Content.Storage;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
@@ -15,11 +16,14 @@ namespace TerraIndex.UI
 		private SearchBox search;
 		private ItemGrid grid;
 		private RecipeView view;
+		// Layout applied last: docked next to the terminal panel or centered, and for which screen width.
+		private bool docked;
+		private float layoutWidth;
 
 		public override void OnInitialize()
 		{
 			panel = new UIPanel();
-			panel.Width.Set(860, 0);
+			panel.Width.Set(UIHelpers.IndexWidth, 0);
 			panel.Height.Set(600, 0);
 			panel.HAlign = panel.VAlign = 0.5f;
 			Append(panel);
@@ -33,6 +37,12 @@ namespace TerraIndex.UI
 			close.Top.Set(-4, 0);
 			close.OnLeftClick += (_, _) => ModContent.GetInstance<RecipeIndexSystem>().Close();
 			panel.Append(close);
+
+			var help = new HelpButton("HelpIndex");
+			help.HAlign = 1f;
+			help.Left.Set(-40, 0);
+			help.Top.Set(-4, 0);
+			panel.Append(help);
 
 			grid = new ItemGrid(() => RecipeDatabase.AllItems.Select(type => ContentSamples.ItemsByType[type]));
 			grid.Top.Set(76, 0);
@@ -59,6 +69,7 @@ namespace TerraIndex.UI
 
 		public override void OnActivate()
 		{
+			Layout();
 			// The item list only exists once recipes are loaded, not when the UI is initialized.
 			if (grid.Count == 0)
 				grid.Refresh();
@@ -68,8 +79,33 @@ namespace TerraIndex.UI
 
 		public void Show(int type, bool uses) => view.Show(type, uses);
 
+		// Next to the terminal panel while it is open (see RecipeIndexSystem), so both can be used at once; centered otherwise.
+		private void Layout()
+		{
+			bool dock = ModContent.GetInstance<TerminalSystem>().PanelOpen;
+			float screenWidth = GetDimensions().Width;
+			if (dock == docked && screenWidth == layoutWidth)
+				return;
+			docked = dock;
+			layoutWidth = screenWidth;
+
+			if (dock) {
+				var (left, width, _) = UIHelpers.DockLayout(screenWidth);
+				panel.HAlign = 0f;
+				panel.Left.Set(left, 0);
+				panel.Width.Set(width, 0);
+			}
+			else {
+				panel.HAlign = 0.5f;
+				panel.Left.Set(0, 0);
+				panel.Width.Set(UIHelpers.IndexWidth, 0);
+			}
+			Recalculate();
+		}
+
 		public override void Update(GameTime gameTime)
 		{
+			Layout();
 			base.Update(gameTime);
 			if (panel.ContainsPoint(Main.MouseScreen))
 				Main.LocalPlayer.mouseInterface = true;

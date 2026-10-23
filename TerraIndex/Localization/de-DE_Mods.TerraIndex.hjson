@@ -1,0 +1,296 @@
+Keybinds: {
+	ToggleBrowser.DisplayName: Rezeptindex öffnen/schließen
+	ShowRecipes.DisplayName: Rezepte des Gegenstands unter der Maus zeigen
+	ShowUses.DisplayName: Verwendungen des Gegenstands unter der Maus zeigen
+}
+
+UI: {
+	Title: Rezeptindex
+	SearchHint: Suchen... (@mod filtert nach Mod)
+	CategoryAll: Alle Gegenstände
+	CategoryWeapons: Waffen und Munition
+	CategoryTools: Werkzeuge
+	CategoryArmor: Rüstung und Kosmetik
+	CategoryAccessories: Accessoires
+	CategoryPlaceable: Blöcke, Wände und Möbel
+	CategoryConsumables: Tränke und Verbrauchsgüter
+	CategoryMaterials: Materialien
+	CategoryMisc: Verschiedenes
+	NoResults: Keine Gegenstände passen zur Suche.
+	Hint:
+		'''
+		Linksklick auf einen Gegenstand: wie man ihn herstellt.
+		Rechtsklick: Rezepte, die ihn verwenden.
+		Mausrad über diesem Bereich: Rezept wechseln.
+		'''
+	Back: Zurück
+	RecipesTab: Rezepte ({0})
+	UsesTab: Verwendungen ({0})
+	NoRecipes: Dieser Gegenstand kann nicht hergestellt werden.
+	NoUses: Dieser Gegenstand wird in keinem Rezept verwendet.
+	Result: Ergebnis
+	Ingredients: Zutaten
+	Stations: Handwerksstation
+	ByHand: Von Hand (keine Station nötig)
+	Conditions: Bedingungen
+	TreeTab: Baum
+	TreeTitle: Herstellungsbaum
+	TreeRecipe: (Rezept {0} von {1})
+	TreeHave: (hast {0})
+	TreeMissing: Fehlende Materialien
+	TreeComplete: Du hast alle Materialien.
+	TreeStations: Handwerksstationen
+	SetGoal: Als Ziel setzen
+	RemoveGoal: Ziel entfernen
+	GoalTitle: Ziel: {0}
+	GoalReady: Du hast alles, um {0} herzustellen!
+	GoalReadyShort: Bereit zum Herstellen!
+	GoalMore: +{0} weitere
+	GoalStep: "{0} x {1} herstellen"
+	GoalStepChests: "{0} x {1} herstellen (Truhen)"
+	GoalNeedsStation: "Nächster Schritt braucht: {0}"
+	GoalCrafted: "{0} x {1} hergestellt."
+	TakeNeedsTerminal: "Mittelklick nimmt Gegenstände aus den Truhen des zuletzt geöffneten Terminals, solange du in seiner Nähe bist."
+	TakeNotStored: "{0} ist nicht in den Truhen des Terminals."
+	GoalCollapse: Einklappen (Titel ziehen, um das Fenster zu verschieben)
+	GoalExpand: Ausklappen (Titel ziehen, um das Fenster zu verschieben)
+	CompareAdd: + Vergleichen
+	CompareOpen: Vergleichen ({0})
+	CompareTitle: Vergleich
+	CompareRemoveHint: Rechtsklick auf einen Gegenstand entfernt ihn
+	CompareDamage: Schaden
+	CompareCrit: Kritische Trefferchance
+	CompareUseTime: Benutzungszeit (Ticks)
+	CompareKnockback: Rückstoß
+	CompareMana: Manakosten
+	CompareVelocity: Projektilgeschwindigkeit
+	ComparePickaxe: Spitzhackenstärke
+	CompareAxe: Axtstärke
+	CompareHammer: Hammerstärke
+	CompareDefense: Verteidigung
+	CompareValue: Verkaufswert
+	CompareEffects: Effekte
+	CraftButton: Herstellen
+	CraftCanMake: Aus deinen Truhen kannst du {0} herstellen
+	CraftNoIngredients: Nicht genug Zutaten in den Truhen des Terminals
+	CraftNoStation: Handwerksstation fehlt (in der Nähe oder am Draht des Terminals)
+	CraftNoConditions: Bedingungen hier nicht erfüllt
+	Crafted: "{0} x {1} aus deinen Truhen hergestellt."
+	CraftFailed: Die Truhen haben die Zutaten nicht mehr.
+	TakeMissing: Fehlendes nehmen
+	TakeMissingHint: Nimmt aus den Truhen, was deinem Inventar für eine Herstellung fehlt (Umschalt: für 10)
+	TakeMissingStatus: "In den Truhen, fehlt in deinem Inventar: {0}"
+	TerminalTitle: Lagerterminal
+	ConnectedChests: "Verbundene Truhen: {0}"
+	TerminalHint: "Klick: ein Stapel   Rechtsklick halten: Menge   Umschalt: Truhe   Strg: Rezept"
+	TerminalHoldingHint: "Klick auf einen Gegenstand: {0} herausnehmen   Rechtsklick ins Leere: abbrechen"
+	Max: Max
+	TerminalEmpty:
+		'''
+		Keine Gegenstände.
+		Verbinde das Terminal und deine Truhen mit demselben roten Draht.
+		'''
+	DepositButton: Einlagern
+	DepositTitle: Gegenstände in die Truhen einlagern
+	DepositHint: Beim Schließen gehen die Gegenstände durch die Tür des Terminals in die Truhen.
+	Done: Fertig
+	DepositDone: Gegenstände in den Truhen verstaut.
+	DepositNoSpace: "Achtung: Die verbundenen Truhen sind voll. {0} Gegenstand/Gegenstände wurden nicht gesendet und bleiben im Terminal, bis Platz ist oder du sie herausnimmst."
+	DepositInUse: Ein anderer Spieler benutzt gerade die Einlagerungsplätze dieses Terminals.
+	QuickDepositButton: Alles einlagern
+	QuickDepositEmpty: Nichts einzulagern (Schnellleiste, Münzen, Munition und Favoriten bleiben).
+	QuickDepositNoSpace: "Die verbundenen Truhen sind voll: {0} Gegenstand/Gegenstände wurden dir zurückgegeben."
+	SortBy: "Sortieren: {0}"
+	SortName: Name
+	SortAmount: Menge
+	SortRarity: Seltenheit
+	SortMod: Mod
+	RemoteLinked: Tragbares Terminal mit diesem Terminal verbunden.
+	RemoteNotLinked: Nicht verbunden. Halte es und klicke mit Rechts auf ein Terminal, um sie zu verbinden.
+	RemoteLinkedTo: Verbunden mit einem Terminal, {0} Blöcke entfernt
+	RemoteDisabled: Das tragbare Terminal ist auf diesem Server deaktiviert.
+	HowToObtain: Wie man es bekommt
+	NoSources:
+		'''
+		Keine bekannte Quelle: Es findet sich wahrscheinlich in Truhen, beim Angeln
+		oder in der Welt (Blöcke abbauen, Bäume schütteln usw.).
+		'''
+	MoreAbove: "{0} weitere oben (Mausrad)"
+	MoreBelow: "{0} weitere unten (Mausrad)"
+	SoldBy: "Verkauft von {0}: {1}"
+	SoldByFree: Verkauft von {0}
+	DroppedBy: Fallen gelassen von {0} ({1})
+	FoundInside: In {0} ({1})
+	AnyEnemy: jedem Gegner
+	SpawnsIn: "Zu finden in: {0}"
+	Page: Seite {0} / {1}  ({2} Gegenstände)
+	Platinum: "{0} Platin"
+	Gold: "{0} Gold"
+	Silver: "{0} Silber"
+	Copper: "{0} Kupfer"
+	FoundIn: "{0}: in {1} Truhe(n) gefunden."
+	Blocks: "{0} Blöcke"
+	RecipesButton: Rezepte
+	HelpTerminal:
+		'''
+		Tippe ins Suchfeld, um die Gegenstände zu filtern (@mod filtert nach Mod).
+		Linksklick auf einen Gegenstand: einen Stapel herausnehmen (kommt aus der Tür).
+		Rechtsklick auf einen Gegenstand halten: Menge wählen, dann mit Linksklick herausnehmen.
+		Rechtsklick ins Leere: die gewählte Menge verwerfen.
+		Umschalt + Klick: die Truhen aufleuchten lassen, die ihn enthalten.
+		Strg + Klick: seine Rezepte, im Index neben dem Terminal.
+		Rezepte: den Rezeptindex neben dem Terminal öffnen oder schließen.
+		Alles einlagern: dein Inventar geht in die Truhen
+		(nicht die Schnellleiste, Münzen, Munition oder Favoriten).
+		Einlagern: Plätze, die beim Schließen in die Truhen gehen.
+		Das Terminal und die Truhen müssen am selben roten Draht hängen.
+		'''
+	HelpIndex:
+		'''
+		Linksklick auf einen Gegenstand: wie man ihn herstellt. Rechtsklick: wofür er verwendet wird.
+		Mausrad über einem Rezept: das nächste. Zurück: der vorherige Gegenstand.
+		Zutaten: grün = im Inventar, blau = in den Truhen eines Terminals, rot = fehlt.
+		Baum: alles Nötige bis zu den Grundmaterialien; er kann als Ziel gesetzt werden.
+		In der Nähe eines Terminals kannst du direkt aus seinen Truhen herstellen oder nehmen, was dir fehlt.
+		Tasten (Einstellungen > Steuerung): Index öffnen, Rezepte oder Verwendungen des Gegenstands unter der Maus.
+		Mittelklick auf einen Gegenstand: einen Stapel aus den Truhen eines Terminals nehmen (in der Nähe des zuletzt geöffneten).
+		'''
+	TipPlaced: "Terminal platziert! Verbinde es mit rotem Draht mit deinen Truhen (verlegt mit: {0}, verkauft von: {1}) und klicke es dann mit Rechts an."
+	TipOpened: "Tipp: Fahre mit der Maus über den ?-Knopf, um die Steuerung des Terminals zu sehen. \"Rezepte\" öffnet den Rezeptindex daneben."
+}
+
+Items: {
+	TerminalItem: {
+		DisplayName: Terminal
+		Tooltip:
+			'''
+			Muss an einer Hintergrundwand platziert werden
+			Verbinde es mit rotem Draht mit deinen Truhen und klicke es mit Rechts an, um Gegenstände zu suchen
+			Herausgenommene Gegenstände kommen aus seiner Tür
+			'''
+	}
+
+	RemoteTerminalItem: {
+		DisplayName: Tragbares Terminal
+		Tooltip:
+			'''
+			Halte es und klicke mit Rechts auf ein Terminal, um sie zu verbinden
+			Benutze es, um das verbundene Terminal von überall zu öffnen
+			Herausgenommene Gegenstände erscheinen neben dir
+			'''
+	}
+
+	RadioItem: {
+		DisplayName: Radio
+		Tooltip:
+			'''
+			Spielt ab und zu etwas
+			Rechtsklick schaltet es ein oder aus
+			'''
+	}
+}
+
+Tiles: {
+	TerminalTile.MapEntry: Terminal
+	RadioTile.MapEntry: Radio
+}
+
+Configs: {
+	ClientConfig: {
+		DisplayName: Terra Index (deine Einstellungen)
+
+		Headers: {
+			Goal: Herstellungsziel
+			Terminal: Lagerterminal
+			Effects: Effekte
+		}
+
+		ShowGoalPanel: {
+			Label: Zielfenster anzeigen
+			Tooltip: Die Liste auf dem Bildschirm mit den Materialien, die dir für dein Ziel noch fehlen
+		}
+
+		GoalPanelRows: {
+			Label: "Zielfenster: angezeigte Materialien"
+			Tooltip: Der Rest wird als "+N weitere" zusammengefasst
+		}
+
+		DefaultSort: {
+			Label: Standardsortierung des Terminals
+			Tooltip: Reihenfolge der Gegenstände im Terminal beim Betreten einer Welt
+		}
+
+		HighlightSeconds: {
+			Label: Dauer der Truhenmarkierung (Sekunden)
+			Tooltip: Wie lange Truhen leuchten, nachdem du im Terminal Umschalt + Klick auf einen Gegenstand gemacht hast
+		}
+
+		QuickDepositHotbar: {
+			Label: Schnellleiste bei "Alles einlagern" einbeziehen
+			Tooltip: Favoriten, Münzen und Munition bleiben immer
+		}
+
+		FocusTerminalSearch: {
+			Label: "Beim Öffnen des Terminals ins Suchfeld tippen"
+			Tooltip: "Während du tippst, funktionieren die Tasten des Mods (N, [ und ]) nicht"
+		}
+
+		DeliveryDrones: {
+			Label: Lieferdrohnen
+			Tooltip: Kleine Drohnen tragen die Gegenstände zwischen den Truhen und der Tür des Terminals (nur optisch)
+		}
+
+		ChestEffects: {
+			Label: Truheneffekte
+			Tooltip: Funken, Licht und ein Geräusch an den Truhen, in die Gegenstände hinein- oder aus denen sie herausgehen
+		}
+	}
+
+	ServerConfig: {
+		DisplayName: Terra Index (Server)
+
+		TerminalPriceGold: {
+			Label: Preis des Terminals (Gold)
+			Tooltip: Was das Terminal im Laden kostet. 100 Gold = 1 Platin
+		}
+
+		TerminalReach: {
+			Label: Reichweite des Terminals (Blöcke)
+			Tooltip: Wie weit sich Spieler von einem Terminal entfernen können, bevor sich sein Fenster schließt
+		}
+
+		MaxWireTiles: {
+			Label: Maximale Größe des Drahtnetzes
+			Tooltip: Rote Drahtfelder, die von einem Terminal aus nach Truhen abgesucht werden. Verringere den Wert, wenn riesige Netze Lag verursachen
+		}
+
+		AllowPortableTerminal: {
+			Label: Tragbares Terminal erlauben
+			Tooltip: Wenn aus, können tragbare Terminals keine Terminals aus der Ferne öffnen
+		}
+	}
+
+	TerminalSort: {
+		Name: {
+			Label: Name
+			Tooltip: ""
+		}
+
+		Amount: {
+			Label: Menge
+			Tooltip: ""
+		}
+
+		Rarity: {
+			Label: Seltenheit
+			Tooltip: ""
+		}
+
+		Mod: {
+			Label: Mod
+			Tooltip: ""
+		}
+
+		Tooltip: ""
+	}
+}

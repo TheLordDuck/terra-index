@@ -35,8 +35,24 @@ namespace TerraIndex.Content.Storage
 		}
 	}
 
+	// An item type that went into or out of a chest, shown by the delivery drones and chest effects (see NetworkEffects).
+	public readonly record struct ChestMove(Point Chest, int Type, bool Entering);
+
 	public static class StorageNetwork
 	{
+		// Moves made by Withdraw, Deposit and TakeIngredients since TerminalSystem last showed them. One per chest,
+		// item type and direction, capped so a huge deposit doesn't send hundreds.
+		public const int MaxMoves = 16;
+		public static readonly List<ChestMove> Moves = new();
+
+		private static void Record(int index, int type, bool entering)
+		{
+			Chest chest = Main.chest[index];
+			var move = new ChestMove(new Point(chest.x, chest.y), type, entering);
+			if (Moves.Count < MaxMoves && !Moves.Contains(move))
+				Moves.Add(move);
+		}
+
 		// Cap on wire tiles to walk, so a huge network can't freeze the game.
 		private static int MaxWireTiles => ServerConfig.Instance.MaxWireTiles;
 
@@ -113,6 +129,7 @@ namespace TerraIndex.Content.Storage
 					item.stack -= moved;
 					if (item.stack <= 0)
 						item.TurnToAir();
+					Record(index, type, false);
 					if (Main.netMode == NetmodeID.Server)
 						NetMessage.SendData(MessageID.SyncChestItem, number: index, number2: slot);
 
@@ -134,6 +151,7 @@ namespace TerraIndex.Content.Storage
 			foreach (Item item in items) {
 				if (item == null || item.IsAir)
 					continue;
+				int type = item.type;
 
 				for (int pass = 0; pass < 2 && !item.IsAir; pass++) {
 					foreach (int index in chests) {
@@ -160,6 +178,7 @@ namespace TerraIndex.Content.Storage
 							}
 
 							moved = true;
+							Record(index, type, true);
 							if (Main.netMode == NetmodeID.Server)
 								NetMessage.SendData(MessageID.SyncChestItem, number: index, number2: slot);
 						}
@@ -222,6 +241,7 @@ namespace TerraIndex.Content.Storage
 					amount -= taken;
 					if (item.stack <= 0)
 						item.TurnToAir();
+					Record(index, type, false);
 					if (Main.netMode == NetmodeID.Server)
 						NetMessage.SendData(MessageID.SyncChestItem, number: index, number2: slot);
 				}

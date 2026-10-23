@@ -10,7 +10,9 @@ Summary of the conversations with Claude Code (2026-10-21 and 2026-10-22), to pi
   mod folder is linked into `ModSources` with a junction). **Version 0.4** (commit `f19669b`, 2026-10-22) was written
   on a PC without tModLoader. On 2026-10-22 it was compiled at home (one error: `TileID` arrays are `ushort[]`,
   fixed in `RecipeDatabase`). **Version 0.5** added picking an amount with right click in the terminal, and
-  **0.6** the radio. None of them has been **tested in game** yet. The checklist is in [`TESTING.md`](TESTING.md). The only idea left after that is
+  **0.6** the radio. **0.7** (2026-10-23, written on the PC without tModLoader, not compiled yet) docks the recipe
+  index next to the terminal, adds delivery drones, chest effects, 7 more languages and in-game help. None of them
+  has been **tested in game** yet. The checklist is in [`TESTING.md`](TESTING.md). The only idea left after that is
   publishing 1.0 on the Workshop.
 - **UI panels are built on first open** (`UIHelpers.Build`), never in `Load`: translations aren't loaded yet there, so
   texts would show raw keys like `Mods.TerraIndex.UI.TerminalTitle`. They are rebuilt when the game language changes.
@@ -54,6 +56,21 @@ Second conversation (2026-10-22):
 15. The user asked for a **testing checklist** for when they get home, saved as `TESTING.md`, and for the READMEs
     and this file to be updated with everything.
 
+Third conversation (2026-10-23):
+
+16. Claude proposed **ideas 31-42**. The user picked 38 (delivery drones), 39 (chest effects), 40 (more languages)
+    and 41 (in-game guide).
+17. Instead of idea 35 (a Craft button in the goal panel), the user asked to **see the recipes while the terminal is
+    open**, so they don't have to switch between the two panels: trying it, that felt awkward and confusing. Done as
+    the recipe index docking next to the terminal panel (see "Index next to the terminal").
+18. Claude explained how it would have done 35; the user chose the **"next step" button** in the goal panel (crafts
+    one step of the tree at a time) and asked Claude to keep in mind that opening and closing the index and the
+    terminal was tedious. So the terminal no longer closes when taking items out or using "Deposit all".
+19. Asked what else would make it more comfortable, Claude listed 5 things; the user picked all but one (an early,
+    short-range portable terminal): drones bring items to a player who isn't at the door, an option to not type in
+    the terminal's search on open, the search remembered for 30 s, and middle click in the index to take a stack out
+    of the chests (idea 36). See "Comfort" below.
+
 ---
 
 ## Idea list (2026-10-22)
@@ -74,7 +91,19 @@ The user refers to features by these numbers, so keep them stable.
 | 18 | Movable, foldable goal panel | Done (0.4) |
 | 27 | Mod settings (ModConfig) | Done (0.4) |
 | 28 | Final sprites | Done: the user accepted the current ones |
-| 30 | Publish 1.0 on the Workshop | **Pending** (after compiling and testing 0.4) |
+| 30 | Publish 1.0 on the Workshop | **Pending** (after compiling and testing 0.7) |
+| 31 | Pay with the coins in the chests (shops, reforging, Nurse) | Proposed |
+| 32 | Refill blocks, torches and ammo from the chests while building | Proposed |
+| 33 | Kits / loadouts taken out of and put back into the chests | Proposed |
+| 34 | Journey mode research from the chests | Proposed |
+| 35 | Craft button in the goal panel | Done (0.7) as a "next step" button, plus the index next to the terminal |
+| 36 | Middle click in the index takes a stack out of the chests | Done (0.7) |
+| 37 | Alchemy Table savings and `OnCraft` hooks when crafting from the chests | Proposed |
+| 38 | Delivery drones | Done (0.7) |
+| 39 | Chest effects (sparks, light, sound) | Done (0.7) |
+| 40 | More languages | Done (0.7): German, French, Brazilian Portuguese, Russian, Italian, Polish, Simplified Chinese |
+| 41 | In-game guide | Done (0.7): "?" buttons and first-time tips |
+| 42 | Compatibility with Calamity, Magic Storage, Recipe Browser | Proposed |
 
 Discarded by the user, don't propose them again: 3 "what can I craft" tab, 7 terminal favorites, 9 per-chest
 filters, 11 seen/obtained collection %, 12 chest loot and fishing in "how to obtain", 14 stat search, 15 tree/goal
@@ -203,7 +232,7 @@ Decisions taken:
 
 ### Settings (`Common/Configs.cs`)
 - `ClientConfig` (per player): goal panel on/off and rows; default terminal sort; chest highlight seconds;
-  whether "Deposit all" includes the hotbar.
+  whether "Deposit all" includes the hotbar; delivery drones and chest effects on/off.
 - `ServerConfig` (host, synced): Terminal price in gold (applied in `SteampunkerShop.ModifyActiveShop`, so no reload
   needed), reach in blocks (the panel closes beyond it; the server allows reach + 10 for lag), max wire tiles
   walked, and whether portable terminals work (`RemoteTerminalItem.IsLinkedTo` returns false when off).
@@ -240,6 +269,84 @@ Decisions taken:
   `CraftingPlan` memoizes its "is this ingredient made from the item" check, cleared when recipes are rebuilt.
 - Already cheap before: the item grids only draw the visible page and load at most 16 textures per frame; names
   and categories are cached for the search.
+
+### Index next to the terminal (0.7, instead of idea 35)
+
+- Opening the recipe index while the terminal panel is open (its **Recipes** button, Ctrl + click on an item, or
+  the keys) puts both panels side by side: the index on the left, the terminal on the right, centered together
+  (`UIHelpers.DockLayout`). On screens narrower than about 1400 UI pixels the index gets narrower (down to 680),
+  so the recipe side shrinks instead of covering the terminal. Each state works out its own position every update
+  (`BrowserState.Layout` docks while `TerminalSystem.PanelOpen`; `TerminalState.Layout` while
+  `RecipeIndexSystem.IsOpen`) and only recalculates when that or the screen width changes.
+- Once docked, the index opens and closes with the terminal (`RecipeIndexSystem.OpenWithTerminal` /
+  `CloseWithTerminal`, called from `TerminalSystem.Open`, `Close` and `ShowDeposit`). Closing the index by hand
+  while the terminal is open turns that off until it is docked again; opening the terminal again brings it back.
+- Esc while docked is handled by the terminal only, which closes both.
+- The user found opening and closing panels tedious, so the terminal now stays open when taking items out (Ctrl +
+  click, a click, or a picked amount) and on "Deposit all". Only Shift + click (highlight chests), Esc, X and
+  walking away close it. After a withdrawal the contents are asked for again 2 ticks later.
+
+### Comfort (0.7)
+
+- **Delivery to the player:** a withdrawn item (click, picked amount, "Take missing", middle click) only drops out of
+  the door when the player is within 3 tiles of it (`DoorPickupReach`). Farther away, since the panel now stays
+  open up to the terminal's reach, the drones fly from the chests to the player (following them) and the item is
+  spawned on the player when they arrive (`PendingDrop.ToPlayer`, same 28 ticks; the door stays shut). The
+  `ChestMoves` packet carries that player (255 = the door). Crafted results still use the door; no drone carries them.
+  Beyond `DoorReach` (portable terminal), items still appear next to the player at once.
+- **Search focus on open** is optional (`ClientConfig.FocusTerminalSearch`, on by default), because while typing
+  the mod's keys don't work.
+- **Remembered search:** reopening the same terminal within 30 s keeps the search text, category tab and page
+  (`TerminalState.OnActivate` only clears it otherwise).
+- **Middle click in the index** (idea 36): on any item drawn in it (grid or recipe), takes a stack (at most what is
+  stored) out of the chests of the terminal in reach, through `RequestTakeItems`. It uses the item hovered last frame
+  (`RecipeIndexSystem.HoveredItem`) while the mouse is over a panel, so it works for every slot without new hotspots.
+  Messages when no terminal is in reach or the item isn't stored.
+- Discarded for now: an early, short-range portable terminal.
+
+### Goal "next step" button (0.7, idea 35 as the user chose it)
+
+- Above the goal panel's list, a green button crafts the next step towards the goal: "Craft 3 x Iron Bar", then
+  "Craft 1 x Iron Broadsword". `GoalSystem.FindStep` walks the plan's tree children first and takes the first
+  crafted node that can be made now: its ingredients are in the inventory (every child is a base material fully
+  owned) and its station is nearby (`adjTile`, or the wire of a terminal in reach), or else the chests of a terminal
+  in reach have them (`TerminalSystem.MaxCrafts`, then `RequestCraft`). It makes the node's `Crafts`.
+- From the inventory, `GoalSystem.TakeFromInventory` removes the ingredients (all or nothing, any group member,
+  synced with `SyncEquipment`) and the result is spawned on the player with a random prefix, like the terminal's
+  crafting. No Alchemy Table savings or `OnCraft` hooks (idea 37).
+- If no step can be made but one has its ingredients and lacks only its station, the row says which station.
+- Every refresh (30 ticks, while a goal is set) calls `AdjTiles()` (vanilla only does it with the inventory open)
+  and refreshes the terminal's contents when in reach. After a click the button is greyed out for 45 ticks so a
+  double click doesn't craft twice.
+
+### Delivery drones and chest effects (0.7, ideas 38 and 39)
+
+- `StorageNetwork` records every chest an item type went into or out of (`Moves`, one `ChestMove` per chest, type
+  and direction, at most 16). After each withdrawal, deposit (including the automatic retries), craft and "Take
+  missing", `TerminalSystem.ShowMoves` hands them to `NetworkEffects` (single player) or sends a `ChestMoves`
+  packet to every client (server).
+- `NetworkEffects` (client only, just for show): taken out, the chest sparks (electric dust bursting out, a cyan
+  light for 20 ticks and a high `Grab` sound, once per chest) and a drone flies the item to the door in 24 ticks.
+  Put in, after the items fly from the player into the door (`FlyTicks`), drones carry them to the chests, which
+  spark (dust falling in, a lower sound) when they arrive. No drone for chests more than 60 tiles from the door, and
+  nothing at all more than 120 tiles from the player.
+- To let the drone arrive first, a withdrawn item now drops 28 ticks after leaving the chests instead of 14
+  (`DeliveryTicks`), and the door starts rolling up 14 ticks before. This is on the server, so it doesn't depend on
+  the client's settings: with drones off the item simply comes out about a quarter of a second later.
+- Drone sprite: `Content/Storage/DeliveryDrone.png`, 20x28, two 14 px frames (rotors spinning), facing right and
+  flipped when flying left. The carried item hangs from its claw. Both effects can be turned off in `ClientConfig`.
+
+### Languages and in-game help (0.7, ideas 40 and 41)
+
+- Localization files for every language tModLoader supports: `de-DE`, `fr-FR`, `pt-BR`, `ru-RU`, `it-IT`, `pl-PL`,
+  `zh-Hans` (written by Claude, not reviewed by native speakers). They avoid naming vanilla NPCs and items in the
+  text; the tip after placing a terminal gets the Red Wrench's and the Mechanic's names from the game
+  (`Lang.GetItemNameValue`, `Lang.GetNPCNameValue`), so they always match.
+- `UI/HelpButton.cs`: a "?" button whose hover tooltip lists the panel's controls (`HelpTerminal`, `HelpIndex`).
+  The terminal's is left of "Deposit all"; the index's is left of its X.
+- First-time tips in chat, saved per character in `TerminalPlayer` (`SeenPlaceTip`, `SeenOpenTip`): after placing
+  the first terminal (`TerminalTile.PlaceInWorld`), how to connect it; after opening one, where the help and the
+  Recipes button are.
 
 ### Radio (0.6, a joke item the user asked for on 2026-10-22)
 
@@ -279,6 +386,7 @@ Decisions taken:
 | `UI/BrowserState.cs` | Recipe index panel |
 | `UI/TerminalState.cs` | Terminal panel |
 | `UI/DepositState.cs` | Deposit slots (chest-like) |
+| `UI/HelpButton.cs` | "?" button showing a panel's controls as a tooltip |
 | `Content/Items/TerminalItem.cs` | Terminal item and Steampunker shop entry (`SteampunkerShop`) |
 | `Content/Items/RemoteTerminalItem.cs` | Portable terminal: link, remote opening, `CanReach` distance check |
 | `Content/Tiles/TerminalTile.cs` | Terminal tile (4x2 on a wall; right click opens the panel; door area) |
@@ -288,8 +396,9 @@ Decisions taken:
 | `Content/Storage/TerminalNet.cs` | Client ↔ server packets |
 | `Content/Storage/TerminalSystem.cs` | Open/close, received data, sorting, withdrawing and door animation, Deposit all, crafting from the chests, Take missing, chest highlighting, off-screen arrows |
 | `Content/Storage/TerminalEntity.cs` | Pending deposit items per terminal, saved with the world; deposit lock and retries |
-| `Content/Storage/TerminalPlayer.cs` | Shift + click from the inventory into the deposit slots |
-| `Localization/es-ES_...hjson`, `en-US_...hjson` | Spanish and English texts |
+| `Content/Storage/NetworkEffects.cs` | Delivery drones and chest sparks (client only) |
+| `Content/Storage/TerminalPlayer.cs` | Shift + click from the inventory into the deposit slots; first-time tips seen |
+| `Localization/*_Mods.TerraIndex.hjson` | Texts: English, Spanish, German, French, Brazilian Portuguese, Russian, Italian, Polish, Simplified Chinese |
 | `README.md` | Installation and usage |
 
 ### Sprites (generated by script, pixel art)
@@ -301,6 +410,7 @@ Decisions taken:
 | `Content/Tiles/TerminalTile.png` | 70x34 | Eight 16x16 pieces with 2 px gaps (Terraria's format for 4x2 tiles), door closed |
 | `Content/Tiles/TerminalDoor.png` | 22x21 | Garage door, drawn over the opening while it rolls up |
 | `Content/Storage/ChestArrow.png` | 16x16 | Arrow pointing right; rotated in game |
+| `Content/Storage/DeliveryDrone.png` | 20x28 | Delivery drone, two 14 px frames (0.7, same palette as the terminal) |
 | `icon.png` | 80x80 | Mod icon (mod list and Workshop) |
 | `icon_small.png` | 30x30 | Small icon in the mod list |
 
@@ -327,7 +437,9 @@ Coming from the old name: remove the `ModSources\RecipeIndex` link, create `ModS
 
 ## Pending / ideas
 
-- **Next step:** go through `TESTING.md` in game (0.5 compiles). Then bump `version` to 1.0 and publish (idea 30).
+- **Next step:** build 0.7 at home (it was written without a compiler) and go through `TESTING.md` in game. Then
+  bump `version` to 1.0 and publish (idea 30).
+- Translations other than English and Spanish were written by Claude; a native speaker could polish them.
 - Known limits: clicking a crafting station shows that item's recipes, not everything crafted at that station;
   terminal items are grouped by type (prefixes not distinguished); crafting from the chests doesn't apply the
   Alchemy Table's ingredient savings or mods' `OnCraft` hooks; the crafting tree always uses each intermediate's

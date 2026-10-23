@@ -46,6 +46,12 @@ UI: {
 	GoalReady: You have everything to craft {0}!
 	GoalReadyShort: Ready to craft!
 	GoalMore: +{0} more
+	GoalStep: "Craft {0} x {1}"
+	GoalStepChests: "Craft {0} x {1} (chests)"
+	GoalNeedsStation: "Next step needs: {0}"
+	GoalCrafted: "Crafted {0} x {1}."
+	TakeNeedsTerminal: "Middle click takes items out of the chests of the last terminal you opened, while you are near it."
+	TakeNotStored: "{0} isn't in the terminal's chests."
 	GoalCollapse: Fold (drag the title to move the panel)
 	GoalExpand: Unfold (drag the title to move the panel)
 	CompareAdd: + Compare
@@ -124,6 +130,33 @@ UI: {
 	Copper: "{0} copper"
 	FoundIn: "{0}: found in {1} chest(s)."
 	Blocks: "{0} blocks"
+	RecipesButton: Recipes
+	HelpTerminal:
+		'''
+		Type in the search box to filter the items (@mod filters by mod).
+		Left click an item: take out a stack (it comes out of the door).
+		Hold right click on an item: pick an amount, then left click to take it out.
+		Right click empty space: drop the picked amount.
+		Shift + click: light up the chests holding it.
+		Ctrl + click: its recipes, in the index next to the terminal.
+		Recipes: open or close the recipe index next to the terminal.
+		Deposit all: your inventory goes into the chests
+		(not the hotbar, coins, ammo or favorited items).
+		Deposit items: slots that go into the chests when you close them.
+		The terminal and the chests must be on the same red wire.
+		'''
+	HelpIndex:
+		'''
+		Left click an item: how to craft it. Right click: what it is used in.
+		Mouse wheel over a recipe: the next one. Back: the previous item.
+		Ingredients: green = in your inventory, blue = in a terminal's chests, red = missing.
+		Tree: everything needed down to the base materials; it can be set as your goal.
+		Near a terminal you can craft straight from its chests, or take out what you lack.
+		Keys (Settings > Controls): open the index, recipes or uses of the item under the mouse.
+		Middle click an item: take a stack out of a terminal's chests (near the last one you opened).
+		'''
+	TipPlaced: Terminal placed! Connect it to your chests with red wire (placed with the {0}, sold by the {1}), then right click it.
+	TipOpened: "Tip: hover over the ? button to see the terminal's controls. \"Recipes\" opens the recipe index next to it."
 }
 
 Items: {
@@ -169,6 +202,7 @@ Configs: {
 		Headers: {
 			Goal: Crafting goal
 			Terminal: Storage terminal
+			Effects: Effects
 		}
 
 		ShowGoalPanel: {
@@ -194,6 +228,21 @@ Configs: {
 		QuickDepositHotbar: {
 			Label: Include the hotbar in "Deposit all"
 			Tooltip: Favorited items, coins and ammo are always kept
+		}
+
+		FocusTerminalSearch: {
+			Label: "Type in the terminal's search box when it opens"
+			Tooltip: "While typing, the mod's keys (N, [ and ]) don't work"
+		}
+
+		DeliveryDrones: {
+			Label: Delivery drones
+			Tooltip: Little drones carry the items between the chests and the terminal's door (just for show)
+		}
+
+		ChestEffects: {
+			Label: Chest effects
+			Tooltip: Sparks, light and a sound on the chests items go into or come out of
 		}
 	}
 

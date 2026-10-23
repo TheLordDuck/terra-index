@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TerraIndex.Content.Storage;
 using TerraIndex.UI;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Default;
@@ -76,6 +79,8 @@ namespace TerraIndex.Common
 
 	// Recomputes the goal's plan twice a second and draws what is still missing (hidden while the inventory is open,
 	// since it would sit under it). The panel is dragged by its title and folded with the button on its right.
+	// Above the list, a button crafts the next step towards the goal (see FindStep), so it is made one step at a time:
+	// first the bars, then the sword.
 	public class GoalSystem : ModSystem
 	{
 		private const int RefreshInterval = 30;
@@ -83,6 +88,9 @@ namespace TerraIndex.Common
 		private const int TitleHeight = 38;
 		private const int RowHeight = 24;
 		private const int ToggleSize = 18;
+		// After a click the button waits a moment, so a double click doesn't craft twice before the plan catches up
+		// (items crafted from the chests take a while to come out of the terminal).
+		private const int StepCooldownTicks = 45;
 
 		private CraftingPlan plan;
 		private int timer;
@@ -93,16 +101,26 @@ namespace TerraIndex.Common
 		// Layout from the last draw, used for the mouse.
 		private Rectangle panelArea;
 		private Rectangle toggleArea;
+		private Rectangle stepArea;
 		private bool dragging;
 		private Vector2 dragOffset;
 
+		// Next step towards the goal, worked out on every refresh. When none can be made but one only lacks its crafting
+		// station, that station is shown instead (-1 = none).
+		private PlanNode step;
+		private bool stepFromChests;
+		private int missingStation = -1;
+		private int stepCooldown;
+
 		private static GoalPlayer Goal => Main.LocalPlayer.GetModPlayer<GoalPlayer>();
+		private static TerminalSystem Terminal => ModContent.GetInstance<TerminalSystem>();
 
 		private bool Visible => plan != null && ClientConfig.Instance.ShowGoalPanel && !Main.playerInventory && !Main.LocalPlayer.dead;
 
 		public override void OnWorldUnload()
 		{
 			plan = null;
+			step = null;
 			dragging = false;
 		}
 
@@ -111,6 +129,8 @@ namespace TerraIndex.Common
 			if (Main.gameMenu)
 				return;
 			HandleMouse();
+			if (stepCooldown > 0)
+				stepCooldown--;
 			if (--timer > 0)
 				return;
 			timer = RefreshInterval;
@@ -119,18 +139,134 @@ namespace TerraIndex.Common
 			Recipe recipe = goal.Recipe;
 			if (recipe == null) {
 				plan = null;
+				step = null;
 				return;
 			}
 
 			var key = (goal.ItemType, goal.RecipeIndex, InventoryHash(Main.LocalPlayer));
-			if (plan != null && key == planKey)
-				return;
-			planKey = key;
+			if (plan == null || key != planKey) {
+				planKey = key;
+				plan = new CraftingPlan(goal.ItemType, recipe, CraftingPlan.Inventory(Main.LocalPlayer));
+				if (plan.Ready && !wasReady)
+					Main.NewText(UIHelpers.T("GoalReady", Lang.GetItemNameValue(goal.ItemType)), Color.LightGreen);
+				wasReady = plan.Ready;
+			}
 
-			plan = new CraftingPlan(goal.ItemType, recipe, CraftingPlan.Inventory(Main.LocalPlayer));
-			if (plan.Ready && !wasReady)
-				Main.NewText(UIHelpers.T("GoalReady", Lang.GetItemNameValue(goal.ItemType)), Color.LightGreen);
-			wasReady = plan.Ready;
+			// The stations nearby and the chests can change without the inventory changing. Vanilla only updates the
+			// nearby stations while the inventory is open, and the terminal's contents only while one of its panels is.
+			Main.LocalPlayer.AdjTiles();
+			if (Terminal.CanCraft && !Terminal.IsOpen)
+				Terminal.RequestRefresh();
+			FindStep();
+		}
+
+		// The deepest step of the tree that can be made now (children before the item they make): from the inventory,
+		// with its crafting station nearby (or on the wire of a terminal in reach), or else from that terminal's chests.
+		private void FindStep()
+		{
+			step = null;
+			missingStation = -1;
+			FindStep(plan.Root);
+		}
+
+		private bool FindStep(PlanNode node)
+		{
+			if (node.Recipe == null)
+				return false;
+			foreach (PlanNode child in node.Children) {
+				if (FindStep(child))
+					return true;
+			}
+
+			Recipe recipe = node.Recipe;
+			bool inInventory = node.Children.All(child => child.Recipe == null && child.Owned >= child.Needed);
+			if (inInventory) {
+				int station = recipe.requiredTile.FirstOrDefault(tile => !HasStation(tile), -1);
+				if (station < 0 && recipe.Conditions.All(condition => condition.IsMet())) {
+					step = node;
+					stepFromChests = false;
+					return true;
+				}
+				if (station >= 0 && missingStation < 0)
+					missingStation = station;
+			}
+			if (Terminal.CanCraft && Terminal.MaxCrafts(recipe) >= node.Crafts) {
+				step = node;
+				stepFromChests = true;
+				return true;
+			}
+			return false;
+		}
+
+		// The terminal's wire only counts while the terminal is in reach.
+		private static bool HasStation(int tile) => Terminal.CanCraft ? Terminal.HasStation(tile) : Main.LocalPlayer.adjTile[tile];
+
+		private void CraftStep()
+		{
+			if (step == null || stepCooldown > 0)
+				return;
+			stepCooldown = StepCooldownTicks;
+			Recipe recipe = step.Recipe;
+			int times = step.Crafts;
+			if (stepFromChests) {
+				Terminal.RequestCraft(recipe, times);
+				return;
+			}
+
+			// FindStep saw the ingredients, but the inventory may have changed since.
+			Player player = Main.LocalPlayer;
+			if (!TakeFromInventory(player, recipe, times))
+				return;
+			// Like vanilla crafting: a copy of the result, with a random prefix for weapons and accessories.
+			for (int total = recipe.createItem.stack * times; total > 0;) {
+				Item item = recipe.createItem.Clone();
+				item.stack = Math.Min(total, item.maxStack);
+				item.Prefix(-1);
+				total -= item.stack;
+				player.QuickSpawnItem(new EntitySource_Misc("TerraIndex/Goal"), item, item.stack);
+			}
+			SoundEngine.PlaySound(SoundID.Grab);
+			Main.NewText(UIHelpers.T("GoalCrafted", recipe.createItem.stack * times, Lang.GetItemNameValue(recipe.createItem.type)), Color.LightGreen);
+			timer = 0;
+		}
+
+		// Takes the ingredients of `times` crafts out of the inventory, any member counting for groups: all or nothing.
+		private static bool TakeFromInventory(Player player, Recipe recipe, int times)
+		{
+			Dictionary<int, int> owned = CraftingPlan.Inventory(player);
+			var taking = new List<(int Type, int Amount)>();
+			foreach (Item ingredient in recipe.requiredItem) {
+				int needed = ingredient.stack * times;
+				foreach (int type in RecipeDatabase.AcceptedItems(recipe, ingredient.type)) {
+					int take = Math.Min(owned.GetValueOrDefault(type), needed);
+					if (take <= 0)
+						continue;
+					owned[type] -= take;
+					needed -= take;
+					taking.Add((type, take));
+					if (needed == 0)
+						break;
+				}
+				if (needed > 0)
+					return false;
+			}
+
+			foreach (var (type, amount) in taking) {
+				int left = amount;
+				for (int slot = 0; slot < player.inventory.Length && left > 0; slot++) {
+					Item item = player.inventory[slot];
+					if (item.IsAir || item.type != type)
+						continue;
+					int taken = Math.Min(item.stack, left);
+					item.stack -= taken;
+					left -= taken;
+					if (item.stack <= 0)
+						item.TurnToAir();
+					if (Main.netMode == NetmodeID.MultiplayerClient)
+						NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: slot);
+				}
+			}
+			return true;
 		}
 
 		// Called when the goal changes, so the panel updates straight away.
@@ -174,7 +310,10 @@ namespace TerraIndex.Common
 				return;
 			Main.mouseLeftRelease = false;
 
-			if (toggleArea.Contains(mouse)) {
+			if (stepArea.Contains(mouse)) {
+				CraftStep();
+			}
+			else if (toggleArea.Contains(mouse)) {
 				Goal.PanelCollapsed = !Goal.PanelCollapsed;
 				SoundEngine.PlaySound(SoundID.MenuTick);
 			}
@@ -204,6 +343,9 @@ namespace TerraIndex.Common
 			int maxRows = ClientConfig.Instance.GoalPanelRows;
 			List<PlanMaterial> missing = plan.MissingMaterials;
 			int rows = goal.PanelCollapsed ? 0 : plan.Ready ? 1 : Math.Min(missing.Count, maxRows) + (missing.Count > maxRows ? 1 : 0);
+			bool stepRow = !goal.PanelCollapsed && (step != null || missingStation >= 0);
+			if (stepRow)
+				rows++;
 			int height = TitleHeight + (rows > 0 ? 6 + rows * RowHeight : 0);
 
 			// Kept on screen, also after a resolution or UI scale change.
@@ -232,9 +374,14 @@ namespace TerraIndex.Common
 			if (toggleHovered)
 				Main.hoverItemName = UIHelpers.T(goal.PanelCollapsed ? "GoalExpand" : "GoalCollapse");
 
+			stepArea = Rectangle.Empty;
 			if (rows == 0)
 				return;
 			y = panelArea.Y + TitleHeight + 2;
+			if (stepRow) {
+				DrawStep(spriteBatch, x, y);
+				y += RowHeight;
+			}
 			if (plan.Ready) {
 				Utils.DrawBorderString(spriteBatch, UIHelpers.T("GoalReadyShort"), new Vector2(x, y + 2), new Color(140, 255, 140), 0.8f);
 				return;
@@ -250,6 +397,29 @@ namespace TerraIndex.Common
 			}
 			if (missing.Count > maxRows)
 				Utils.DrawBorderString(spriteBatch, UIHelpers.T("GoalMore", missing.Count - maxRows), new Vector2(x, y + 2), Color.LightGray, 0.75f);
+		}
+
+		// "Craft 3 x Iron Bar" button, or what station the next step needs.
+		private void DrawStep(SpriteBatch spriteBatch, float x, float y)
+		{
+			float maxWidth = Width - 16;
+			if (step == null) {
+				string needs = UIHelpers.Fit(UIHelpers.T("GoalNeedsStation", RecipeDatabase.TileName(missingStation)), maxWidth, 0.75f);
+				Utils.DrawBorderString(spriteBatch, needs, new Vector2(x, y + 4), Color.Orange, 0.75f);
+				return;
+			}
+
+			stepArea = new Rectangle((int)x, (int)y, (int)maxWidth, RowHeight - 2);
+			bool hovered = stepCooldown == 0 && stepArea.Contains(Main.MouseScreen.ToPoint());
+			Color background = stepCooldown > 0 ? new Color(45, 50, 90) : hovered ? new Color(70, 140, 90) : new Color(50, 110, 70);
+			Utils.DrawInvBG(spriteBatch, stepArea, background * 0.95f);
+
+			Recipe recipe = step.Recipe;
+			UIHelpers.DrawItem(spriteBatch, ContentSamples.ItemsByType[recipe.createItem.type], new Vector2(x + 2, y), 0.42f);
+			string key = stepFromChests ? "GoalStepChests" : "GoalStep";
+			string text = UIHelpers.T(key, recipe.createItem.stack * step.Crafts, Lang.GetItemNameValue(recipe.createItem.type));
+			Color color = stepCooldown > 0 ? Color.Gray : Color.White;
+			Utils.DrawBorderString(spriteBatch, UIHelpers.Fit(text, maxWidth - 34, 0.75f), new Vector2(x + 30, y + 4), color, 0.75f);
 		}
 	}
 }

@@ -3,14 +3,34 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using Terraria.UI;
 
 namespace TerraIndex.Content.Storage
 {
 	// Shift + click in the inventory while the deposit slots are open moves the item there, like with a chest.
+	// Also remembers, per character, which first-time tips were already shown in chat.
 	public class TerminalPlayer : ModPlayer
 	{
 		private static TerminalSystem Terminal => ModContent.GetInstance<TerminalSystem>();
+
+		// Placing the first terminal (TerminalTile.PlaceInWorld) and opening one (TerminalSystem.Open).
+		public bool SeenPlaceTip;
+		public bool SeenOpenTip;
+
+		public override void SaveData(TagCompound tag)
+		{
+			if (SeenPlaceTip)
+				tag["seenPlaceTip"] = true;
+			if (SeenOpenTip)
+				tag["seenOpenTip"] = true;
+		}
+
+		public override void LoadData(TagCompound tag)
+		{
+			SeenPlaceTip = tag.GetBool("seenPlaceTip");
+			SeenOpenTip = tag.GetBool("seenOpenTip");
+		}
 
 		private bool CanQuickDeposit(Item[] inventory, int context, int slot) =>
 			Terminal.DepositOpen && Terminal.DepositItems != null && context == ItemSlot.Context.InventoryItem

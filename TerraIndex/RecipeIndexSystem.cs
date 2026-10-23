@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using TerraIndex.Content.Storage;
 using TerraIndex.UI;
 using Terraria;
 using Terraria.Audio;
@@ -27,6 +29,14 @@ namespace TerraIndex
 		private BrowserState state;
 		private BrowserState State => state ??= UIHelpers.Build(new BrowserState());
 		private GameTime lastGameTime;
+
+		// Opened while the terminal panel is open, the index sits next to it (BrowserState.Layout) and then opens and
+		// closes along with it. Closing the index by hand while the terminal is open stops that, until it is opened
+		// next to the terminal again.
+		private bool withTerminal;
+		private static TerminalSystem Terminal => ModContent.GetInstance<TerminalSystem>();
+
+		public bool IsOpen => ui?.CurrentState != null;
 
 		public override void Load()
 		{
@@ -67,6 +77,8 @@ namespace TerraIndex
 
 		public void Open()
 		{
+			if (Terminal.PanelOpen)
+				withTerminal = true;
 			ui.SetState(State);
 			SoundEngine.PlaySound(SoundID.MenuOpen);
 		}
@@ -75,8 +87,26 @@ namespace TerraIndex
 		{
 			if (ui.CurrentState == null)
 				return;
+			if (Terminal.PanelOpen)
+				withTerminal = false;
 			ui.SetState(null);
 			SoundEngine.PlaySound(SoundID.MenuClose);
+		}
+
+		// The terminal panel opened. If the index is already open it docks next to it, and closes with it from now on.
+		public void OpenWithTerminal()
+		{
+			if (IsOpen)
+				withTerminal = true;
+			else if (withTerminal)
+				ui.SetState(State);
+		}
+
+		// The terminal panel is closing (or switching to its deposit slots): a docked index goes with it.
+		public void CloseWithTerminal()
+		{
+			if (IsOpen && Terminal.PanelOpen)
+				ui.SetState(null);
 		}
 
 		public void ShowItem(int type, bool uses)
@@ -93,11 +123,33 @@ namespace TerraIndex
 				return;
 
 			// Esc closes the panel, like the inventory (unless typing in the search box: then it only stops typing).
-			if (Main.keyState.IsKeyDown(Keys.Escape) && !Main.oldKeyState.IsKeyDown(Keys.Escape) && !SearchBox.AnyFocused) {
+			// Next to the terminal, the terminal handles it and closes both.
+			if (Main.keyState.IsKeyDown(Keys.Escape) && !Main.oldKeyState.IsKeyDown(Keys.Escape) && !SearchBox.AnyFocused && !Terminal.PanelOpen) {
 				Close();
 				return;
 			}
 			ui.Update(gameTime);
+			TakeHoveredWithMiddleClick();
+		}
+
+		// Middle click on any item in the index (the grid, or an ingredient in a recipe) takes a stack of it out of the
+		// chests of the terminal in reach, the same one the index crafts from.
+		private void TakeHoveredWithMiddleClick()
+		{
+			if (!Main.mouseMiddle || !Main.mouseMiddleRelease || HoveredItem <= 0 || !Main.LocalPlayer.mouseInterface)
+				return;
+			Main.mouseMiddleRelease = false;
+
+			if (!Terminal.CanCraft) {
+				Main.NewText(UIHelpers.T("TakeNeedsTerminal"), Color.Orange);
+				return;
+			}
+			int amount = Math.Min(Terminal.StoredCount(HoveredItem), ContentSamples.ItemsByType[HoveredItem].maxStack);
+			if (amount <= 0) {
+				Main.NewText(UIHelpers.T("TakeNotStored", Lang.GetItemNameValue(HoveredItem)), Color.Orange);
+				return;
+			}
+			Terminal.RequestTakeItems(new List<(int Type, int Amount)> { (HoveredItem, amount) });
 		}
 
 		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)

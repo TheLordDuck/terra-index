@@ -1,0 +1,296 @@
+Keybinds: {
+	ToggleBrowser.DisplayName: Apri/chiudi l'indice delle ricette
+	ShowRecipes.DisplayName: Ricette dell'oggetto sotto il mouse
+	ShowUses.DisplayName: Usi dell'oggetto sotto il mouse
+}
+
+UI: {
+	Title: Indice delle ricette
+	SearchHint: Cerca... (@mod per filtrare per mod)
+	CategoryAll: Tutti gli oggetti
+	CategoryWeapons: Armi e munizioni
+	CategoryTools: Strumenti
+	CategoryArmor: Armature e abiti
+	CategoryAccessories: Accessori
+	CategoryPlaceable: Blocchi, muri e mobili
+	CategoryConsumables: Pozioni e consumabili
+	CategoryMaterials: Materiali
+	CategoryMisc: Varie
+	NoResults: Nessun oggetto corrisponde alla ricerca.
+	Hint:
+		'''
+		Clic sinistro su un oggetto: come crearlo.
+		Clic destro: le ricette che lo usano.
+		Rotellina su questo pannello: cambia ricetta.
+		'''
+	Back: Indietro
+	RecipesTab: Ricette ({0})
+	UsesTab: Usi ({0})
+	NoRecipes: Questo oggetto non può essere creato.
+	NoUses: Questo oggetto non è usato in nessuna ricetta.
+	Result: Risultato
+	Ingredients: Ingredienti
+	Stations: Stazione di creazione
+	ByHand: A mano (nessuna stazione necessaria)
+	Conditions: Condizioni
+	TreeTab: Albero
+	TreeTitle: Albero di creazione
+	TreeRecipe: (ricetta {0} di {1})
+	TreeHave: (ne hai {0})
+	TreeMissing: Materiali mancanti
+	TreeComplete: Hai tutti i materiali.
+	TreeStations: Stazioni di creazione
+	SetGoal: Imposta come obiettivo
+	RemoveGoal: Rimuovi obiettivo
+	GoalTitle: "Obiettivo: {0}"
+	GoalReady: Hai tutto per creare {0}!
+	GoalReadyShort: Pronto da creare!
+	GoalMore: altri +{0}
+	GoalStep: "Crea {0} x {1}"
+	GoalStepChests: "Crea {0} x {1} (casse)"
+	GoalNeedsStation: "Il prossimo passo richiede: {0}"
+	GoalCrafted: "Creati {0} x {1}."
+	TakeNeedsTerminal: "Il clic centrale prende oggetti dalle casse dell'ultimo terminale aperto, finché gli sei vicino."
+	TakeNotStored: "{0} non è nelle casse del terminale."
+	GoalCollapse: Comprimi (trascina il titolo per spostare il pannello)
+	GoalExpand: Espandi (trascina il titolo per spostare il pannello)
+	CompareAdd: + Confronta
+	CompareOpen: Confronta ({0})
+	CompareTitle: Confronto
+	CompareRemoveHint: Clic destro su un oggetto per rimuoverlo
+	CompareDamage: Danno
+	CompareCrit: Probabilità di critico
+	CompareUseTime: Tempo d'uso (tick)
+	CompareKnockback: Contraccolpo
+	CompareMana: Costo in mana
+	CompareVelocity: Velocità del proiettile
+	ComparePickaxe: Potenza piccone
+	CompareAxe: Potenza ascia
+	CompareHammer: Potenza martello
+	CompareDefense: Difesa
+	CompareValue: Valore di vendita
+	CompareEffects: Effetti
+	CraftButton: Crea
+	CraftCanMake: Con le tue casse puoi crearne {0}
+	CraftNoIngredients: Ingredienti insufficienti nelle casse del terminale
+	CraftNoStation: Manca la stazione di creazione (vicina o sul filo del terminale)
+	CraftNoConditions: Condizioni non soddisfatte qui
+	Crafted: "Creati {0} x {1} dalle tue casse."
+	CraftFailed: Le casse non hanno più gli ingredienti.
+	TakeMissing: Prendi i mancanti
+	TakeMissingHint: Prende dalle casse ciò che manca al tuo inventario per una creazione (Maiusc: per 10)
+	TakeMissingStatus: "Nelle casse, mancanti nell'inventario: {0}"
+	TerminalTitle: Terminale di deposito
+	ConnectedChests: "Casse collegate: {0}"
+	TerminalHint: "Clic: una pila   Tieni premuto il destro: quantità   Maiusc: cassa   Ctrl: ricetta"
+	TerminalHoldingHint: "Clic su un oggetto: prendine {0}   Clic destro nel vuoto: annulla"
+	Max: Max
+	TerminalEmpty:
+		'''
+		Nessun oggetto.
+		Collega il terminale e le casse con lo stesso filo rosso.
+		'''
+	DepositButton: Deposita
+	DepositTitle: Deposita oggetti nelle casse
+	DepositHint: Alla chiusura, gli oggetti vanno nelle casse attraverso la porta del terminale.
+	Done: Fatto
+	DepositDone: Oggetti riposti nelle casse.
+	DepositNoSpace: "Attenzione: le casse collegate sono piene. {0} oggetto/i non sono stati inviati e restano nel terminale finché non c'è spazio o non li riprendi."
+	DepositInUse: Un altro giocatore sta usando gli slot di deposito di questo terminale.
+	QuickDepositButton: Deposita tutto
+	QuickDepositEmpty: Niente da depositare (barra rapida, monete, munizioni e preferiti restano).
+	QuickDepositNoSpace: "Le casse collegate sono piene: {0} oggetto/i ti sono stati restituiti."
+	SortBy: "Ordine: {0}"
+	SortName: Nome
+	SortAmount: Quantità
+	SortRarity: Rarità
+	SortMod: Mod
+	RemoteLinked: Terminale portatile collegato a questo terminale.
+	RemoteNotLinked: Non collegato. Tienilo in mano e fai clic destro su un terminale per collegarli.
+	RemoteLinkedTo: Collegato a un terminale a {0} blocchi
+	RemoteDisabled: Il terminale portatile è disattivato su questo server.
+	HowToObtain: Come ottenerlo
+	NoSources:
+		'''
+		Nessuna fonte nota: probabilmente si trova nelle casse, pescando
+		o nel mondo (rompendo blocchi, scuotendo alberi, ecc.).
+		'''
+	MoreAbove: "altri {0} sopra (rotellina)"
+	MoreBelow: "altri {0} sotto (rotellina)"
+	SoldBy: "Venduto da {0}: {1}"
+	SoldByFree: Venduto da {0}
+	DroppedBy: Rilasciato da {0} ({1})
+	FoundInside: Dentro {0} ({1})
+	AnyEnemy: qualsiasi nemico
+	SpawnsIn: "Si trova in: {0}"
+	Page: Pagina {0} / {1}  ({2} oggetti)
+	Platinum: "{0} di platino"
+	Gold: "{0} d'oro"
+	Silver: "{0} d'argento"
+	Copper: "{0} di rame"
+	FoundIn: "{0}: trovato in {1} cassa/e."
+	Blocks: "{0} blocchi"
+	RecipesButton: Ricette
+	HelpTerminal:
+		'''
+		Scrivi nella ricerca per filtrare gli oggetti (@mod filtra per mod).
+		Clic sinistro su un oggetto: prendine una pila (esce dalla porta).
+		Tieni premuto il destro su un oggetto: scegli una quantità, poi prendila con il sinistro.
+		Clic destro nel vuoto: annulla la quantità scelta.
+		Maiusc + clic: illumina le casse che lo contengono.
+		Ctrl + clic: le sue ricette, nell'indice accanto al terminale.
+		Ricette: apri o chiudi l'indice delle ricette accanto al terminale.
+		Deposita tutto: il tuo inventario va nelle casse
+		(tranne barra rapida, monete, munizioni e preferiti).
+		Deposita: slot che vanno nelle casse quando li chiudi.
+		Il terminale e le casse devono essere sullo stesso filo rosso.
+		'''
+	HelpIndex:
+		'''
+		Clic sinistro su un oggetto: come crearlo. Clic destro: a cosa serve.
+		Rotellina su una ricetta: la successiva. Indietro: l'oggetto precedente.
+		Ingredienti: verde = nell'inventario, blu = nelle casse di un terminale, rosso = mancante.
+		Albero: tutto il necessario fino ai materiali di base; può diventare il tuo obiettivo.
+		Vicino a un terminale puoi creare direttamente dalle sue casse o prendere ciò che ti manca.
+		Tasti (Impostazioni > Controlli): apri l'indice, ricette o usi dell'oggetto sotto il mouse.
+		Clic centrale su un oggetto: prendine una pila dalle casse di un terminale (vicino all'ultimo aperto).
+		'''
+	TipPlaced: "Terminale piazzato! Collegalo alle tue casse con filo rosso (si posa con: {0}, venduto da: {1}), poi fai clic destro su di esso."
+	TipOpened: "Suggerimento: passa il mouse sul pulsante ? per vedere i comandi del terminale. \"Ricette\" apre l'indice delle ricette accanto."
+}
+
+Items: {
+	TerminalItem: {
+		DisplayName: Terminale
+		Tooltip:
+			'''
+			Va piazzato su un muro di sfondo
+			Collegalo alle tue casse con filo rosso e fai clic destro per cercare oggetti
+			Gli oggetti che prendi escono dalla sua porta
+			'''
+	}
+
+	RemoteTerminalItem: {
+		DisplayName: Terminale portatile
+		Tooltip:
+			'''
+			Tienilo in mano e fai clic destro su un terminale per collegarli
+			Usalo per aprire il terminale collegato da ovunque
+			Gli oggetti che prendi appaiono accanto a te
+			'''
+	}
+
+	RadioItem: {
+		DisplayName: Radio
+		Tooltip:
+			'''
+			Ogni tanto suona qualcosa
+			Clic destro per accenderla o spegnerla
+			'''
+	}
+}
+
+Tiles: {
+	TerminalTile.MapEntry: Terminale
+	RadioTile.MapEntry: Radio
+}
+
+Configs: {
+	ClientConfig: {
+		DisplayName: Terra Index (le tue impostazioni)
+
+		Headers: {
+			Goal: Obiettivo di creazione
+			Terminal: Terminale di deposito
+			Effects: Effetti
+		}
+
+		ShowGoalPanel: {
+			Label: Mostra il pannello dell'obiettivo
+			Tooltip: L'elenco a schermo dei materiali che ancora mancano per il tuo obiettivo
+		}
+
+		GoalPanelRows: {
+			Label: "Pannello dell'obiettivo: materiali mostrati"
+			Tooltip: Il resto viene riassunto come "altri +N"
+		}
+
+		DefaultSort: {
+			Label: Ordine predefinito del terminale
+			Tooltip: Ordine degli oggetti del terminale quando entri in un mondo
+		}
+
+		HighlightSeconds: {
+			Label: Durata dell'evidenziazione delle casse (secondi)
+			Tooltip: Per quanto brillano le casse dopo Maiusc + clic su un oggetto del terminale
+		}
+
+		QuickDepositHotbar: {
+			Label: Includi la barra rapida in "Deposita tutto"
+			Tooltip: Preferiti, monete e munizioni restano sempre
+		}
+
+		FocusTerminalSearch: {
+			Label: "Scrivi nella ricerca del terminale all'apertura"
+			Tooltip: "Mentre scrivi, i tasti della mod (N, [ e ]) non funzionano"
+		}
+
+		DeliveryDrones: {
+			Label: Droni corrieri
+			Tooltip: Piccoli droni portano gli oggetti tra le casse e la porta del terminale (solo estetico)
+		}
+
+		ChestEffects: {
+			Label: Effetti sulle casse
+			Tooltip: Scintille, luce e un suono sulle casse in cui entrano o da cui escono gli oggetti
+		}
+	}
+
+	ServerConfig: {
+		DisplayName: Terra Index (server)
+
+		TerminalPriceGold: {
+			Label: Prezzo del terminale (oro)
+			Tooltip: Quanto costa il terminale nel negozio. 100 d'oro = 1 di platino
+		}
+
+		TerminalReach: {
+			Label: Portata del terminale (blocchi)
+			Tooltip: Quanto i giocatori possono allontanarsi da un terminale prima che il pannello si chiuda
+		}
+
+		MaxWireTiles: {
+			Label: Dimensione massima della rete di fili
+			Tooltip: Caselle di filo rosso percorse da un terminale in cerca di casse. Abbassala se reti enormi causano lag
+		}
+
+		AllowPortableTerminal: {
+			Label: Consenti il terminale portatile
+			Tooltip: Se disattivato, i terminali portatili non possono aprire terminali a distanza
+		}
+	}
+
+	TerminalSort: {
+		Name: {
+			Label: Nome
+			Tooltip: ""
+		}
+
+		Amount: {
+			Label: Quantità
+			Tooltip: ""
+		}
+
+		Rarity: {
+			Label: Rarità
+			Tooltip: ""
+		}
+
+		Mod: {
+			Label: Mod
+			Tooltip: ""
+		}
+
+		Tooltip: ""
+	}
+}

@@ -62,6 +62,16 @@ namespace TerraIndex.Content.Tiles
 			player.cursorItemIconID = player.HeldItem.ModItem is RemoteTerminalItem ? ModContent.ItemType<RemoteTerminalItem>() : ModContent.ItemType<TerminalItem>();
 		}
 
+		// Runs for the player who placed it: the first time, a tip on how to connect it.
+		public override void PlaceInWorld(int i, int j, Item item)
+		{
+			TerminalPlayer tips = Main.LocalPlayer.GetModPlayer<TerminalPlayer>();
+			if (tips.SeenPlaceTip)
+				return;
+			tips.SeenPlaceTip = true;
+			Main.NewText(UIHelpers.T("TipPlaced", Lang.GetItemNameValue(ItemID.Wrench), Lang.GetNPCNameValue(NPCID.Mechanic)), Color.LightSkyBlue);
+		}
+
 		// Items still waiting in the terminal are dropped instead of being lost.
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{

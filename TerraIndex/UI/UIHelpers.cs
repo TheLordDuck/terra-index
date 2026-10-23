@@ -22,6 +22,20 @@ namespace TerraIndex.UI
 			return state;
 		}
 
+		// The recipe index docked next to the terminal panel: the index on the left, both centered together. On narrow
+		// screens the index gets narrower (its recipe side shrinks) rather than covering the terminal.
+		public const float IndexWidth = 860;
+		public const float TerminalWidth = 520;
+		private const float MinDockedIndexWidth = 680;
+		private const float DockGap = 12;
+
+		public static (float IndexLeft, float IndexWidth, float TerminalLeft) DockLayout(float screenWidth)
+		{
+			float indexWidth = Math.Clamp(screenWidth - TerminalWidth - DockGap - 32, MinDockedIndexWidth, IndexWidth);
+			float left = Math.Max(0, (screenWidth - indexWidth - DockGap - TerminalWidth) / 2);
+			return (left, indexWidth, left + indexWidth + DockGap);
+		}
+
 		public static Vector2 Measure(string text, float scale) => FontAssets.MouseText.Value.MeasureString(text) * scale;
 
 		// Truncates the text with "..." so it fits in maxWidth.

@@ -1,0 +1,296 @@
+Keybinds: {
+	ToggleBrowser.DisplayName: 打开/关闭配方索引
+	ShowRecipes.DisplayName: 查看鼠标下物品的配方
+	ShowUses.DisplayName: 查看鼠标下物品的用途
+}
+
+UI: {
+	Title: 配方索引
+	SearchHint: 搜索...（@模组名 按模组筛选）
+	CategoryAll: 全部物品
+	CategoryWeapons: 武器和弹药
+	CategoryTools: 工具
+	CategoryArmor: 盔甲和时装
+	CategoryAccessories: 饰品
+	CategoryPlaceable: 方块、墙和家具
+	CategoryConsumables: 药水和消耗品
+	CategoryMaterials: 材料
+	CategoryMisc: 杂项
+	NoResults: 没有符合搜索的物品。
+	Hint:
+		'''
+		左键点击物品：查看如何制作。
+		右键：查看使用它的配方。
+		在此面板上滚动鼠标滚轮：切换配方。
+		'''
+	Back: 返回
+	RecipesTab: 配方（{0}）
+	UsesTab: 用途（{0}）
+	NoRecipes: 此物品无法制作。
+	NoUses: 此物品不用于任何配方。
+	Result: 产物
+	Ingredients: 材料
+	Stations: 制作站
+	ByHand: 徒手（无需制作站）
+	Conditions: 条件
+	TreeTab: 树
+	TreeTitle: 制作树
+	TreeRecipe: （第 {0} / {1} 个配方）
+	TreeHave: （已有 {0}）
+	TreeMissing: 缺少的材料
+	TreeComplete: 你拥有所有材料。
+	TreeStations: 制作站
+	SetGoal: 设为目标
+	RemoveGoal: 移除目标
+	GoalTitle: 目标：{0}
+	GoalReady: 你已备齐制作 {0} 的所有材料！
+	GoalReadyShort: 可以制作了！
+	GoalMore: 还有 {0} 项
+	GoalStep: "制作 {0} x {1}"
+	GoalStepChests: "制作 {0} x {1}（箱子）"
+	GoalNeedsStation: "下一步需要：{0}"
+	GoalCrafted: "已制作 {0} x {1}。"
+	TakeNeedsTerminal: "鼠标中键会从你最后打开的终端的箱子中取出物品，前提是你在它附近。"
+	TakeNotStored: "{0} 不在终端的箱子里。"
+	GoalCollapse: 折叠（拖动标题可移动面板）
+	GoalExpand: 展开（拖动标题可移动面板）
+	CompareAdd: + 比较
+	CompareOpen: 比较（{0}）
+	CompareTitle: 比较
+	CompareRemoveHint: 右键点击物品可将其移除
+	CompareDamage: 伤害
+	CompareCrit: 暴击率
+	CompareUseTime: 使用时间（帧）
+	CompareKnockback: 击退
+	CompareMana: 魔力消耗
+	CompareVelocity: 射弹速度
+	ComparePickaxe: 镐力
+	CompareAxe: 斧力
+	CompareHammer: 锤力
+	CompareDefense: 防御
+	CompareValue: 售价
+	CompareEffects: 效果
+	CraftButton: 制作
+	CraftCanMake: 用你的箱子可以制作 {0} 次
+	CraftNoIngredients: 终端的箱子里材料不足
+	CraftNoStation: 缺少制作站（在附近或终端的电线上）
+	CraftNoConditions: 此处不满足条件
+	Crafted: 已用你的箱子制作 {0} x {1}。
+	CraftFailed: 箱子里已经没有这些材料了。
+	TakeMissing: 取出缺少的
+	TakeMissingHint: 从箱子中取出物品栏制作一次所缺的材料（Shift：制作 10 次）
+	TakeMissingStatus: 箱子里有、物品栏里缺：{0}
+	TerminalTitle: 存储终端
+	ConnectedChests: 已连接的箱子：{0}
+	TerminalHint: 点击：一组   按住右键：数量   Shift：箱子   Ctrl：配方
+	TerminalHoldingHint: 点击物品：取出 {0} 个   在空白处右键：取消
+	Max: 最大
+	TerminalEmpty:
+		'''
+		没有物品。
+		用同一条红电线连接终端和你的箱子。
+		'''
+	DepositButton: 存放物品
+	DepositTitle: 将物品存入箱子
+	DepositHint: 关闭后，物品会通过终端的门进入箱子。
+	Done: 完成
+	DepositDone: 物品已存入箱子。
+	DepositNoSpace: 注意：已连接的箱子已满。有 {0} 个物品未送出，会留在终端里，直到有空间或你把它们取出。
+	DepositInUse: 另一名玩家正在使用此终端的存放栏位。
+	QuickDepositButton: 全部存放
+	QuickDepositEmpty: 没有可存放的物品（快捷栏、钱币、弹药和收藏的物品会保留）。
+	QuickDepositNoSpace: 已连接的箱子已满：{0} 个物品已退还给你。
+	SortBy: 排序：{0}
+	SortName: 名称
+	SortAmount: 数量
+	SortRarity: 稀有度
+	SortMod: 模组
+	RemoteLinked: 便携终端已连接到此终端。
+	RemoteNotLinked: 未连接。手持它并右键点击终端即可连接。
+	RemoteLinkedTo: 已连接到 {0} 格外的终端
+	RemoteDisabled: 此服务器禁用了便携终端。
+	HowToObtain: 获取方式
+	NoSources:
+		'''
+		没有已知来源：它可能在箱子里、钓鱼获得，
+		或在世界中获得（破坏方块、摇树等）。
+		'''
+	MoreAbove: 上方还有 {0} 项（鼠标滚轮）
+	MoreBelow: 下方还有 {0} 项（鼠标滚轮）
+	SoldBy: "{0} 出售：{1}"
+	SoldByFree: "{0} 出售"
+	DroppedBy: "{0} 掉落（{1}）"
+	FoundInside: 开启 {0} 获得（{1}）
+	AnyEnemy: 任意敌人
+	SpawnsIn: 出没于：{0}
+	Page: 第 {0} / {1} 页（{2} 个物品）
+	Platinum: "{0} 铂金"
+	Gold: "{0} 金"
+	Silver: "{0} 银"
+	Copper: "{0} 铜"
+	FoundIn: "{0}：在 {1} 个箱子中找到。"
+	Blocks: "{0} 格"
+	RecipesButton: 配方
+	HelpTerminal:
+		'''
+		在搜索框中输入以筛选物品（@模组名 按模组筛选）。
+		左键点击物品：取出一组（从门里掉出来）。
+		在物品上按住右键：选择数量，再左键点击取出。
+		在空白处右键：放弃选择的数量。
+		Shift + 点击：点亮存放它的箱子。
+		Ctrl + 点击：在终端旁边的索引中查看它的配方。
+		配方：在终端旁边打开或关闭配方索引。
+		全部存放：你的物品栏进入箱子
+		（快捷栏、钱币、弹药和收藏的物品除外）。
+		存放物品：关闭时会送进箱子的栏位。
+		终端和箱子必须在同一条红电线上。
+		'''
+	HelpIndex:
+		'''
+		左键点击物品：如何制作。右键：它的用途。
+		在配方上滚动鼠标滚轮：下一个配方。返回：上一个物品。
+		材料颜色：绿色 = 在物品栏中，蓝色 = 在终端的箱子中，红色 = 缺少。
+		树：列出直到基础材料的所有所需物品；可以设为目标。
+		在终端附近，可以直接用它的箱子制作，或取出你缺少的材料。
+		按键（设置 > 控制）：打开索引、查看鼠标下物品的配方或用途。
+		中键点击物品：从终端的箱子中取出一组（需在最后打开的终端附近）。
+		'''
+	TipPlaced: 终端已放置！用红电线把它连接到你的箱子（铺设工具：{0}，出售者：{1}），然后右键点击它。
+	TipOpened: 提示：把鼠标移到 ? 按钮上可以查看终端的操作说明。“配方”按钮会在旁边打开配方索引。
+}
+
+Items: {
+	TerminalItem: {
+		DisplayName: 终端
+		Tooltip:
+			'''
+			必须放置在背景墙上
+			用红电线把它连接到你的箱子，然后右键点击它来搜索物品
+			取出的物品会从它的门里出来
+			'''
+	}
+
+	RemoteTerminalItem: {
+		DisplayName: 便携终端
+		Tooltip:
+			'''
+			手持它并右键点击终端即可连接
+			使用它可在任何地方打开已连接的终端
+			取出的物品会出现在你身边
+			'''
+	}
+
+	RadioItem: {
+		DisplayName: 收音机
+		Tooltip:
+			'''
+			时不时会播放点什么
+			右键点击可开关
+			'''
+	}
+}
+
+Tiles: {
+	TerminalTile.MapEntry: 终端
+	RadioTile.MapEntry: 收音机
+}
+
+Configs: {
+	ClientConfig: {
+		DisplayName: Terra Index（个人设置）
+
+		Headers: {
+			Goal: 制作目标
+			Terminal: 存储终端
+			Effects: 特效
+		}
+
+		ShowGoalPanel: {
+			Label: 显示目标面板
+			Tooltip: 屏幕上列出你的制作目标仍缺少的材料
+		}
+
+		GoalPanelRows: {
+			Label: 目标面板：显示的材料数
+			Tooltip: 其余的会汇总为“还有 N 项”
+		}
+
+		DefaultSort: {
+			Label: 终端默认排序
+			Tooltip: 进入世界时终端物品的排列顺序
+		}
+
+		HighlightSeconds: {
+			Label: 箱子高亮时长（秒）
+			Tooltip: 在终端中 Shift + 点击物品后箱子发光的时间
+		}
+
+		QuickDepositHotbar: {
+			Label: “全部存放”包含快捷栏
+			Tooltip: 收藏的物品、钱币和弹药总是会保留
+		}
+
+		FocusTerminalSearch: {
+			Label: "打开终端时直接在搜索框中输入"
+			Tooltip: "输入时，模组的按键（N、[ 和 ]）不起作用"
+		}
+
+		DeliveryDrones: {
+			Label: 送货无人机
+			Tooltip: 小无人机在箱子和终端的门之间搬运物品（仅视觉效果）
+		}
+
+		ChestEffects: {
+			Label: 箱子特效
+			Tooltip: 物品进出箱子时，箱子上会出现火花、光亮和音效
+		}
+	}
+
+	ServerConfig: {
+		DisplayName: Terra Index（服务器）
+
+		TerminalPriceGold: {
+			Label: 终端价格（金币）
+			Tooltip: 终端在商店中的售价。100 金币 = 1 铂金币
+		}
+
+		TerminalReach: {
+			Label: 终端范围（格）
+			Tooltip: 玩家离开终端多远后面板会关闭
+		}
+
+		MaxWireTiles: {
+			Label: 电线网络最大规模
+			Tooltip: 从终端出发寻找箱子时遍历的红电线格数。如果巨大的网络造成卡顿，请调低
+		}
+
+		AllowPortableTerminal: {
+			Label: 允许便携终端
+			Tooltip: 关闭后，便携终端无法远程打开终端
+		}
+	}
+
+	TerminalSort: {
+		Name: {
+			Label: 名称
+			Tooltip: ""
+		}
+
+		Amount: {
+			Label: 数量
+			Tooltip: ""
+		}
+
+		Rarity: {
+			Label: 稀有度
+			Tooltip: ""
+		}
+
+		Mod: {
+			Label: 模组
+			Tooltip: ""
+		}
+
+		Tooltip: ""
+	}
+}

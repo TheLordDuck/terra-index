@@ -46,6 +46,12 @@ UI: {
 	GoalReady: ¡Ya tienes todo para fabricar {0}!
 	GoalReadyShort: ¡Listo para fabricar!
 	GoalMore: +{0} más
+	GoalStep: "Fabricar {0} x {1}"
+	GoalStepChests: "Fabricar {0} x {1} (cofres)"
+	GoalNeedsStation: "El siguiente paso necesita: {0}"
+	GoalCrafted: "Fabricado: {0} x {1}."
+	TakeNeedsTerminal: "El clic central saca objetos de los cofres del último terminal que abriste, mientras estés cerca de él."
+	TakeNotStored: "{0} no está en los cofres del terminal."
 	GoalCollapse: Plegar (arrastra el título para mover el panel)
 	GoalExpand: Desplegar (arrastra el título para mover el panel)
 	CompareAdd: + Comparar
@@ -124,6 +130,33 @@ UI: {
 	Copper: "{0} de cobre"
 	FoundIn: "{0}: encontrado en {1} cofre(s)."
 	Blocks: "{0} bloques"
+	RecipesButton: Recetas
+	HelpTerminal:
+		'''
+		Escribe en el buscador para filtrar los objetos (@mod filtra por mod).
+		Clic izquierdo en un objeto: saca una pila (sale por la puerta).
+		Mantén clic derecho en un objeto: elige una cantidad y luego sácala con clic izquierdo.
+		Clic derecho en un hueco vacío: suelta la cantidad elegida.
+		Mayús + clic: ilumina los cofres que lo tienen.
+		Ctrl + clic: sus recetas, en el índice junto al terminal.
+		Recetas: abre o cierra el índice de recetas junto al terminal.
+		Dejar todo: tu inventario va a los cofres
+		(no la barra rápida, las monedas, la munición ni los favoritos).
+		Dejar objetos: casillas que van a los cofres al cerrarlas.
+		El terminal y los cofres deben estar en el mismo cable rojo.
+		'''
+	HelpIndex:
+		'''
+		Clic izquierdo en un objeto: cómo se fabrica. Clic derecho: en qué se usa.
+		Rueda del ratón sobre una receta: la siguiente. Atrás: el objeto anterior.
+		Ingredientes: verde = en tu inventario, azul = en los cofres de un terminal, rojo = te falta.
+		Árbol: todo lo necesario hasta los materiales básicos; se puede fijar como objetivo.
+		Cerca de un terminal puedes fabricar directamente desde sus cofres, o sacar lo que te falta.
+		Teclas (Ajustes > Controles): abrir el índice, ver recetas o usos del objeto bajo el ratón.
+		Clic central en un objeto: saca una pila de los cofres de un terminal (cerca del último que abriste).
+		'''
+	TipPlaced: ¡Terminal colocado! Conéctalo a tus cofres con cable rojo (se pone con: {0}, lo vende: {1}) y haz clic derecho en él.
+	TipOpened: "Consejo: pasa el ratón por el botón ? para ver los controles del terminal. \"Recetas\" abre el índice de recetas a su lado."
 }
 
 Items: {
@@ -169,6 +202,7 @@ Configs: {
 		Headers: {
 			Goal: Objetivo de crafteo
 			Terminal: Terminal de almacenamiento
+			Effects: Efectos
 		}
 
 		ShowGoalPanel: {
@@ -194,6 +228,21 @@ Configs: {
 		QuickDepositHotbar: {
 			Label: Incluir la barra rápida en "Dejar todo"
 			Tooltip: Los favoritos, las monedas y la munición siempre se quedan
+		}
+
+		FocusTerminalSearch: {
+			Label: "Escribir en el buscador del terminal al abrirlo"
+			Tooltip: "Mientras escribes, las teclas del mod (N, [ y ]) no funcionan"
+		}
+
+		DeliveryDrones: {
+			Label: Drones repartidores
+			Tooltip: Pequeños drones llevan los objetos entre los cofres y la puerta del terminal (solo visual)
+		}
+
+		ChestEffects: {
+			Label: Efectos en los cofres
+			Tooltip: Chispas, luz y un sonido en los cofres de los que salen o a los que entran objetos
 		}
 	}
 

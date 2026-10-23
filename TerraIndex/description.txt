@@ -11,7 +11,7 @@ Press N to open a searchable list of every item in the game, including items fro
 - Tabs split the items into weapons, tools, armor, accessories, blocks, potions, materials and more.
 - Type @modname in the search box to filter by mod (for example @terraria or @calamity).
 - Crafting tree: see everything needed to craft an item, down to the base materials, minus what you already have.
-- Set any item as your goal and a small on-screen list (movable and foldable) shows the materials you are still missing as you gather them.
+- Set any item as your goal and a small on-screen list (movable and foldable) shows the materials you are still missing as you gather them, with a button that crafts the next step (first the bars, then the sword).
 - Craft straight from your chests near a storage terminal (or anywhere with the Portable Terminal). Crafting stations count if they are near you or connected to the terminal's red wire. Or take out just the ingredients your inventory is missing with one click.
 - Compare up to 3 weapons, tools, armor or accessories side by side, with the best stats highlighted.
 
@@ -21,7 +21,9 @@ Buy the Terminal from the Steampunker for 1 platinum and hang it on a background
 - Right click the terminal and start typing: the items in all connected chests are filtered as you type.
 - Click an item to take a stack out, or hold right click on it to pick an exact amount first (like in your inventory) and then click: the garage door on the terminal opens and hands it to you.
 - Shift + click an item and the chests holding it glow for 10 seconds. Chests off screen get an arrow on the edge of the screen showing the direction and distance.
-- Ctrl + click an item in the terminal to open its recipe.
+- Ctrl + click an item in the terminal, or press its Recipes button, to open the recipe index right next to it and use both at once.
+- Little delivery drones carry the items between your chests and the terminal, and the chests spark as items go in and out (both can be turned off).
+- Hover the ? button for every control.
 - Deposit items: put items in the terminal's slots and, when you close them, they go into the connected chests through its door. If the chests are full you get a warning and the items wait in the terminal until there is room.
 - Deposit all: sends your whole main inventory into the chests at once (the hotbar, coins, ammo and favorited items stay with you).
 - Sort the list by name, amount, rarity or mod.
@@ -33,6 +35,6 @@ MULTIPLAYER
 Fully supported. The server scans the chests and keeps the terminal updated, so you see changes made by other players.
 
 Settings (Mod Configuration): goal panel, default sort, highlight time, terminal price and reach, and more.
-All keys can be rebound in Settings > Controls. Available in English and Spanish.
+All keys can be rebound in Settings > Controls. Available in English, Spanish, German, French, Brazilian Portuguese, Russian, Italian, Polish and Simplified Chinese.
 
 Source code and bug reports: https://github.com/TheLordDuck/terra-index

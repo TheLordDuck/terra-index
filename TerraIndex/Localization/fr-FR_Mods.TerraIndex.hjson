@@ -1,0 +1,296 @@
+Keybinds: {
+	ToggleBrowser.DisplayName: Ouvrir/fermer l'index des recettes
+	ShowRecipes.DisplayName: Recettes de l'objet sous la souris
+	ShowUses.DisplayName: Utilisations de l'objet sous la souris
+}
+
+UI: {
+	Title: Index des recettes
+	SearchHint: Rechercher... (@mod pour filtrer par mod)
+	CategoryAll: Tous les objets
+	CategoryWeapons: Armes et munitions
+	CategoryTools: Outils
+	CategoryArmor: Armures et tenues
+	CategoryAccessories: Accessoires
+	CategoryPlaceable: Blocs, murs et meubles
+	CategoryConsumables: Potions et consommables
+	CategoryMaterials: Matériaux
+	CategoryMisc: Divers
+	NoResults: Aucun objet ne correspond à la recherche.
+	Hint:
+		'''
+		Clic gauche sur un objet : comment le fabriquer.
+		Clic droit : les recettes qui l'utilisent.
+		Molette sur ce panneau : changer de recette.
+		'''
+	Back: Retour
+	RecipesTab: Recettes ({0})
+	UsesTab: Utilisations ({0})
+	NoRecipes: Cet objet ne peut pas être fabriqué.
+	NoUses: Cet objet n'est utilisé dans aucune recette.
+	Result: Résultat
+	Ingredients: Ingrédients
+	Stations: Station d'artisanat
+	ByHand: À la main (aucune station requise)
+	Conditions: Conditions
+	TreeTab: Arbre
+	TreeTitle: Arbre de fabrication
+	TreeRecipe: (recette {0} sur {1})
+	TreeHave: (tu en as {0})
+	TreeMissing: Matériaux manquants
+	TreeComplete: Tu as tous les matériaux.
+	TreeStations: Stations d'artisanat
+	SetGoal: Définir comme objectif
+	RemoveGoal: Retirer l'objectif
+	GoalTitle: "Objectif : {0}"
+	GoalReady: Tu as tout pour fabriquer {0} !
+	GoalReadyShort: Prêt à fabriquer !
+	GoalMore: +{0} de plus
+	GoalStep: "Fabriquer {0} x {1}"
+	GoalStepChests: "Fabriquer {0} x {1} (coffres)"
+	GoalNeedsStation: "L'étape suivante demande : {0}"
+	GoalCrafted: "{0} x {1} fabriqué(s)."
+	TakeNeedsTerminal: "Le clic molette sort des objets des coffres du dernier terminal ouvert, tant que tu es près de lui."
+	TakeNotStored: "{0} n'est pas dans les coffres du terminal."
+	GoalCollapse: Replier (fais glisser le titre pour déplacer le panneau)
+	GoalExpand: Déplier (fais glisser le titre pour déplacer le panneau)
+	CompareAdd: + Comparer
+	CompareOpen: Comparer ({0})
+	CompareTitle: Comparaison
+	CompareRemoveHint: Clic droit sur un objet pour le retirer
+	CompareDamage: Dégâts
+	CompareCrit: Chances de coup critique
+	CompareUseTime: Temps d'utilisation (ticks)
+	CompareKnockback: Recul
+	CompareMana: Coût en mana
+	CompareVelocity: Vitesse du projectile
+	ComparePickaxe: Puissance de pioche
+	CompareAxe: Puissance de hache
+	CompareHammer: Puissance de marteau
+	CompareDefense: Défense
+	CompareValue: Valeur de vente
+	CompareEffects: Effets
+	CraftButton: Fabriquer
+	CraftCanMake: Avec tes coffres tu peux en fabriquer {0}
+	CraftNoIngredients: Pas assez d'ingrédients dans les coffres du terminal
+	CraftNoStation: Station d'artisanat manquante (à proximité ou sur le fil du terminal)
+	CraftNoConditions: Conditions non remplies ici
+	Crafted: "{0} x {1} fabriqué(s) avec tes coffres."
+	CraftFailed: Les coffres n'ont plus les ingrédients.
+	TakeMissing: Prendre le manquant
+	TakeMissingHint: Sort des coffres ce qui manque à ton inventaire pour une fabrication (Maj : pour 10)
+	TakeMissingStatus: "Dans les coffres, absent de ton inventaire : {0}"
+	TerminalTitle: Terminal de stockage
+	ConnectedChests: "Coffres connectés : {0}"
+	TerminalHint: "Clic : une pile   Clic droit maintenu : quantité   Maj : coffre   Ctrl : recette"
+	TerminalHoldingHint: "Clic sur un objet : en sortir {0}   Clic droit dans le vide : annuler"
+	Max: Max
+	TerminalEmpty:
+		'''
+		Aucun objet.
+		Relie le terminal et tes coffres avec le même fil rouge.
+		'''
+	DepositButton: Déposer
+	DepositTitle: Déposer des objets dans les coffres
+	DepositHint: À la fermeture, les objets vont dans les coffres par la porte du terminal.
+	Done: Terminé
+	DepositDone: Objets rangés dans les coffres.
+	DepositNoSpace: "Attention : les coffres connectés sont pleins. {0} objet(s) n'ont pas été envoyés et restent dans le terminal jusqu'à ce qu'il y ait de la place ou que tu les reprennes."
+	DepositInUse: Un autre joueur utilise les emplacements de dépôt de ce terminal.
+	QuickDepositButton: Tout déposer
+	QuickDepositEmpty: Rien à déposer (la barre d'accès rapide, les pièces, les munitions et les favoris sont gardés).
+	QuickDepositNoSpace: "Les coffres connectés sont pleins : {0} objet(s) t'ont été rendus."
+	SortBy: "Tri : {0}"
+	SortName: Nom
+	SortAmount: Quantité
+	SortRarity: Rareté
+	SortMod: Mod
+	RemoteLinked: Terminal portable lié à ce terminal.
+	RemoteNotLinked: Non lié. Tiens-le et fais un clic droit sur un terminal pour les lier.
+	RemoteLinkedTo: Lié à un terminal à {0} blocs
+	RemoteDisabled: Le terminal portable est désactivé sur ce serveur.
+	HowToObtain: Comment l'obtenir
+	NoSources:
+		'''
+		Aucune source connue : il se trouve probablement dans des coffres, en pêchant
+		ou dans le monde (en cassant des blocs, en secouant des arbres, etc.).
+		'''
+	MoreAbove: "{0} de plus au-dessus (molette)"
+	MoreBelow: "{0} de plus en dessous (molette)"
+	SoldBy: "Vendu par {0} : {1}"
+	SoldByFree: Vendu par {0}
+	DroppedBy: Lâché par {0} ({1})
+	FoundInside: Dans {0} ({1})
+	AnyEnemy: n'importe quel ennemi
+	SpawnsIn: "Se trouve dans : {0}"
+	Page: Page {0} / {1}  ({2} objets)
+	Platinum: "{0} platine"
+	Gold: "{0} or"
+	Silver: "{0} argent"
+	Copper: "{0} cuivre"
+	FoundIn: "{0} : trouvé dans {1} coffre(s)."
+	Blocks: "{0} blocs"
+	RecipesButton: Recettes
+	HelpTerminal:
+		'''
+		Écris dans la recherche pour filtrer les objets (@mod filtre par mod).
+		Clic gauche sur un objet : en sortir une pile (elle sort par la porte).
+		Clic droit maintenu sur un objet : choisir une quantité, puis clic gauche pour la sortir.
+		Clic droit dans le vide : abandonner la quantité choisie.
+		Maj + clic : illuminer les coffres qui le contiennent.
+		Ctrl + clic : ses recettes, dans l'index à côté du terminal.
+		Recettes : ouvrir ou fermer l'index des recettes à côté du terminal.
+		Tout déposer : ton inventaire va dans les coffres
+		(sauf la barre d'accès rapide, les pièces, les munitions et les favoris).
+		Déposer : des emplacements qui vont dans les coffres à la fermeture.
+		Le terminal et les coffres doivent être sur le même fil rouge.
+		'''
+	HelpIndex:
+		'''
+		Clic gauche sur un objet : comment le fabriquer. Clic droit : à quoi il sert.
+		Molette sur une recette : la suivante. Retour : l'objet précédent.
+		Ingrédients : vert = dans ton inventaire, bleu = dans les coffres d'un terminal, rouge = manquant.
+		Arbre : tout le nécessaire jusqu'aux matériaux de base ; il peut devenir ton objectif.
+		Près d'un terminal, tu peux fabriquer directement avec ses coffres ou sortir ce qui te manque.
+		Touches (Paramètres > Commandes) : ouvrir l'index, les recettes ou les utilisations de l'objet sous la souris.
+		Clic molette sur un objet : sortir une pile des coffres d'un terminal (près du dernier ouvert).
+		'''
+	TipPlaced: "Terminal posé ! Relie-le à tes coffres avec du fil rouge (posé avec : {0}, vendu par : {1}), puis fais un clic droit dessus."
+	TipOpened: "Astuce : survole le bouton ? pour voir les commandes du terminal. « Recettes » ouvre l'index des recettes à côté."
+}
+
+Items: {
+	TerminalItem: {
+		DisplayName: Terminal
+		Tooltip:
+			'''
+			Doit être posé sur un mur de fond
+			Relie-le à tes coffres avec du fil rouge et fais un clic droit dessus pour chercher des objets
+			Les objets que tu sors sortent par sa porte
+			'''
+	}
+
+	RemoteTerminalItem: {
+		DisplayName: Terminal portable
+		Tooltip:
+			'''
+			Tiens-le et fais un clic droit sur un terminal pour les lier
+			Utilise-le pour ouvrir le terminal lié de n'importe où
+			Les objets que tu sors apparaissent à côté de toi
+			'''
+	}
+
+	RadioItem: {
+		DisplayName: Radio
+		Tooltip:
+			'''
+			Joue quelque chose de temps en temps
+			Clic droit pour l'allumer ou l'éteindre
+			'''
+	}
+}
+
+Tiles: {
+	TerminalTile.MapEntry: Terminal
+	RadioTile.MapEntry: Radio
+}
+
+Configs: {
+	ClientConfig: {
+		DisplayName: Terra Index (tes réglages)
+
+		Headers: {
+			Goal: Objectif de fabrication
+			Terminal: Terminal de stockage
+			Effects: Effets
+		}
+
+		ShowGoalPanel: {
+			Label: Afficher le panneau d'objectif
+			Tooltip: La liste à l'écran des matériaux qui te manquent encore pour ton objectif
+		}
+
+		GoalPanelRows: {
+			Label: "Panneau d'objectif : matériaux affichés"
+			Tooltip: Le reste est résumé en "+N de plus"
+		}
+
+		DefaultSort: {
+			Label: Tri par défaut du terminal
+			Tooltip: Ordre des objets du terminal quand tu entres dans un monde
+		}
+
+		HighlightSeconds: {
+			Label: Durée de l'illumination des coffres (secondes)
+			Tooltip: Combien de temps les coffres brillent après un Maj + clic sur un objet du terminal
+		}
+
+		QuickDepositHotbar: {
+			Label: Inclure la barre d'accès rapide dans "Tout déposer"
+			Tooltip: Les favoris, les pièces et les munitions sont toujours gardés
+		}
+
+		FocusTerminalSearch: {
+			Label: "Écrire dans la recherche du terminal à l'ouverture"
+			Tooltip: "Pendant la saisie, les touches du mod (N, [ et ]) ne marchent pas"
+		}
+
+		DeliveryDrones: {
+			Label: Drones de livraison
+			Tooltip: De petits drones portent les objets entre les coffres et la porte du terminal (purement visuel)
+		}
+
+		ChestEffects: {
+			Label: Effets sur les coffres
+			Tooltip: Étincelles, lumière et un son sur les coffres où les objets entrent ou d'où ils sortent
+		}
+	}
+
+	ServerConfig: {
+		DisplayName: Terra Index (serveur)
+
+		TerminalPriceGold: {
+			Label: Prix du terminal (or)
+			Tooltip: Ce que coûte le terminal en boutique. 100 or = 1 platine
+		}
+
+		TerminalReach: {
+			Label: Portée du terminal (blocs)
+			Tooltip: Jusqu'où les joueurs peuvent s'éloigner d'un terminal avant que son panneau se ferme
+		}
+
+		MaxWireTiles: {
+			Label: Taille maximale du réseau de fils
+			Tooltip: Cases de fil rouge parcourues depuis un terminal pour trouver des coffres. Baisse-la si d'énormes réseaux causent du lag
+		}
+
+		AllowPortableTerminal: {
+			Label: Autoriser le terminal portable
+			Tooltip: Désactivé, les terminaux portables ne peuvent pas ouvrir de terminaux à distance
+		}
+	}
+
+	TerminalSort: {
+		Name: {
+			Label: Nom
+			Tooltip: ""
+		}
+
+		Amount: {
+			Label: Quantité
+			Tooltip: ""
+		}
+
+		Rarity: {
+			Label: Rareté
+			Tooltip: ""
+		}
+
+		Mod: {
+			Label: Mod
+			Tooltip: ""
+		}
+
+		Tooltip: ""
+	}
+}

@@ -30,6 +30,16 @@ namespace TerraIndex.Common
 
 		[DefaultValue(false)]
 		public bool QuickDepositHotbar;
+
+		[DefaultValue(true)]
+		public bool FocusTerminalSearch;
+
+		[Header("Effects")]
+		[DefaultValue(true)]
+		public bool DeliveryDrones;
+
+		[DefaultValue(true)]
+		public bool ChestEffects;
 	}
 
 	// Gameplay settings chosen by the host and synced to every player.

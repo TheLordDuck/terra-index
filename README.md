@@ -12,7 +12,9 @@ Terraria mod (tModLoader 1.4.4) by **thelordduck22** that ties recipes and stora
 - **Crafting from your chests**: craft straight from the terminal's chests, with crafting stations near you or on
   its wire, or take out only the ingredients you are missing.
 - **Portable terminal**: open your terminal from anywhere in the world.
-- Settings for each player and for the server, English and Spanish, and full multiplayer support.
+- **Both at once**: the recipe index opens next to the terminal, and delivery drones carry the items between the
+  chests and the terminal.
+- Settings for each player and for the server, 9 languages, and full multiplayer support.
 
 The mod's code is in [`TerraIndex/`](TerraIndex/); installation and usage in [`TerraIndex/README.md`](TerraIndex/README.md).
 Full development context in [`CONTEXT.md`](CONTEXT.md); testing checklist for the current version in

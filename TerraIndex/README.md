@@ -80,6 +80,10 @@ index can craft straight from the terminal's chests:
 - Intermediate items use their first recipe that doesn't loop back (for example Wood is never "crafted" from Wood
   Platforms); items with no such recipe count as base materials.
 
+The goal panel also has a button for the **next step**: it crafts whatever can be made now on the way to the goal
+("Craft 3 x Iron Bar", then "Craft 1 x Iron Broadsword"), from your inventory with the station nearby, or from the
+chests of a terminal in reach. If a step only lacks its crafting station, the panel says which one.
+
 ## Storage terminal
 
 1. Buy the **Terminal** from the **Steampunker** (1 platinum by default; the host can change it in the settings).
@@ -92,7 +96,7 @@ index can craft straight from the terminal's chests:
    holding it counts up faster and faster. The amount follows the cursor; click any item to take that many out,
    or right click empty space to cancel.
 6. **Shift + click**: the chests holding it glow for 10 seconds, and an arrow on the screen edge points to any
-   that are off screen. **Ctrl + click**: opens that item's recipe in the index.
+   that are off screen. **Ctrl + click**: shows that item's recipes in the index, next to the terminal.
 7. **Deposit items** (button at the top of the panel): opens 20 slots under your inventory, like a chest. Drag items
    in, or Shift + click them in your inventory. When you close it, the door opens and the items go into the
    connected chests (first onto matching stacks, then into empty slots). If the chests are full you get a warning
@@ -101,6 +105,15 @@ index can craft straight from the terminal's chests:
 8. **Deposit all** (next to Deposit items): sends your whole main inventory straight into the chests. The hotbar,
    coins, ammo and favorited items stay with you; anything that doesn't fit is given back.
 9. **Sort** (button above the list): cycles between name, amount, rarity and mod.
+10. **Recipes** (next to Sort): opens the recipe index next to the terminal, so you can browse recipes and craft
+    from the chests without switching panels. Taking items out no longer closes the terminal. While it is there it opens and closes together with the terminal;
+    close it with its X to stop that.
+11. **?**: hover it to see all these controls. The index has one too.
+
+Delivery drones fly the items between the chests and the terminal's door, and the chests spark when items go in or
+out. If you are not standing at the door, the drones bring what you take out straight to you. Reopening the same
+terminal within 30 seconds keeps your search. In the recipe index, **middle click** any item to take a stack of it out
+of the chests of the terminal you are near.
 
 Closes with Esc, the X button, or by walking away.
 
@@ -136,6 +149,9 @@ In **Settings → Mod Configuration → Terra Index**:
 | Default terminal sort when entering a world | Name |
 | Chest highlight duration | 10 s |
 | Include the hotbar in "Deposit all" | Off |
+| Type in the terminal's search box when it opens | On |
+| Delivery drones | On |
+| Chest effects (sparks, light, sound) | On |
 
 | Server settings (the host's, synced to everyone) | Default |
 |---|---|
@@ -145,6 +161,17 @@ In **Settings → Mod Configuration → Terra Index**:
 | Allow the Portable Terminal | On |
 
 ## Changelog
+
+**0.7**
+- The recipe index opens next to the terminal (Recipes button or Ctrl + click), and both can be used at once.
+  The terminal stays open when taking items out and on "Deposit all"; away from its door, drones bring the items to you.
+- Middle click an item in the recipe index to take a stack out of the chests. The terminal remembers your search for
+  30 s, and typing in it on open can be turned off.
+- Goal panel: a button crafts the next step towards the goal (first the bars, then the sword), from your inventory
+  or from a terminal's chests.
+- Delivery drones carry items between the chests and the terminal's door; chests spark when items go in or out.
+- German, French, Brazilian Portuguese, Russian, Italian, Polish and Simplified Chinese.
+- "?" buttons with the controls of the terminal and the index; tips the first time you place and open a terminal.
 
 **0.6**
 - Radio: crafted at an anvil, placed like a Piggy Bank; plays two clips at random moments, the same for every

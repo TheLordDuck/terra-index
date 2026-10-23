@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TerraIndex.Common;
 using TerraIndex.Content.Storage;
 using Terraria;
 using Terraria.Audio;
@@ -18,10 +19,12 @@ namespace TerraIndex.UI
 	// Left click: takes a full stack out through the terminal's door. Right click (hold to speed up, like picking up
 	// from a vanilla slot): picks some up on the cursor, and the next left click on an item takes that many out instead.
 	// Right clicking empty space drops the selection. Shift + left click: highlights the chests holding it.
-	// Ctrl + left click: opens its recipes in the index.
+	// Ctrl + left click: shows its recipes in the index, which opens next to the panel (also with the "Recipes" button).
 	public class TerminalState : UIState
 	{
 		private const int RefreshInterval = 30;
+		// Reopening the same terminal within this time keeps the search, the category tab and the page.
+		private const int RememberTicks = 60 * 30;
 		private const float HintWidth = 496;
 
 		private UIPanel panel;
@@ -30,8 +33,14 @@ namespace TerraIndex.UI
 		private SearchBox search;
 		private ItemGrid grid;
 		private UITextPanel<string> sort;
+		private UITextPanel<string> recipes;
 		private int refreshTimer;
 		private int seenVersion = -1;
+		// Layout applied last: next to the recipe index or centered, and for which screen width.
+		private bool docked;
+		private float layoutWidth;
+		private Point closedTerminal;
+		private uint closedAt;
 
 		// Picked up with right click, shown on the cursor.
 		private int selectedType;
@@ -42,11 +51,12 @@ namespace TerraIndex.UI
 		private readonly Item cursorItem = new();
 
 		private static TerminalSystem Terminal => ModContent.GetInstance<TerminalSystem>();
+		private static RecipeIndexSystem Index => ModContent.GetInstance<RecipeIndexSystem>();
 
 		public override void OnInitialize()
 		{
 			panel = new UIPanel();
-			panel.Width.Set(520, 0);
+			panel.Width.Set(UIHelpers.TerminalWidth, 0);
 			panel.Height.Set(480, 0);
 			panel.HAlign = panel.VAlign = 0.5f;
 			Append(panel);
@@ -78,6 +88,12 @@ namespace TerraIndex.UI
 			depositAll.OnLeftClick += (_, _) => Terminal.QuickDeposit();
 			panel.Append(depositAll);
 
+			var help = new HelpButton("HelpTerminal");
+			help.HAlign = 1f;
+			help.Left.Set(depositAll.Left.Pixels - depositAll.MinWidth.Pixels - 6, 0);
+			help.Top.Set(-4, 0);
+			panel.Append(help);
+
 			sort = new UITextPanel<string>(SortLabel(), 0.8f);
 			sort.HAlign = 1f;
 			sort.Top.Set(66, 0);
@@ -85,10 +101,20 @@ namespace TerraIndex.UI
 			sort.OnLeftClick += (_, _) => {
 				Terminal.CycleSort();
 				sort.SetText(SortLabel());
+				PlaceRecipesButton();
 				panel.Recalculate();
 				SoundEngine.PlaySound(SoundID.MenuTick);
 			};
 			panel.Append(sort);
+
+			// To the left of the sort button, which changes width with its text (see PlaceRecipesButton).
+			recipes = new UITextPanel<string>(UIHelpers.T("RecipesButton"), 0.8f);
+			recipes.HAlign = 1f;
+			recipes.Top.Set(66, 0);
+			recipes.Height.Set(30, 0);
+			recipes.OnLeftClick += (_, _) => Index.Toggle();
+			panel.Append(recipes);
+			PlaceRecipesButton();
 
 			grid = new ItemGrid(() => Terminal.StoredItems);
 			grid.Top.Set(122, 0);
@@ -116,10 +142,15 @@ namespace TerraIndex.UI
 
 		public override void OnActivate()
 		{
-			search.SetText("");
-			search.Focus();
+			if (Terminal.Terminal != closedTerminal || Main.GameUpdateCount - closedAt > RememberTicks)
+				search.SetText("");
+			// Optional (ClientConfig): while typing, the mod's keys (N, [, ]) don't work.
+			if (ClientConfig.Instance.FocusTerminalSearch)
+				search.Focus();
 			// The sort resets to the config's default on world load.
 			sort.SetText(SortLabel());
+			PlaceRecipesButton();
+			Layout();
 			refreshTimer = RefreshInterval;
 			seenVersion = -1;
 			wasRightDown = Main.mouseRight;
@@ -128,12 +159,32 @@ namespace TerraIndex.UI
 
 		public override void OnDeactivate()
 		{
+			closedTerminal = Terminal.Terminal;
+			closedAt = Main.GameUpdateCount;
 			search.Unfocus();
 			ClearSelection();
 		}
 
+		private void PlaceRecipesButton() => recipes.Left.Set(-sort.MinWidth.Pixels - 6, 0);
+
+		// Next to the recipe index while it is open (see RecipeIndexSystem), so both can be used at once; centered otherwise.
+		private void Layout()
+		{
+			bool dock = Index.IsOpen;
+			float screenWidth = GetDimensions().Width;
+			if (dock == docked && screenWidth == layoutWidth)
+				return;
+			docked = dock;
+			layoutWidth = screenWidth;
+
+			panel.HAlign = dock ? 0f : 0.5f;
+			panel.Left.Set(dock ? UIHelpers.DockLayout(screenWidth).TerminalLeft : 0, 0);
+			Recalculate();
+		}
+
 		public override void Update(GameTime gameTime)
 		{
+			Layout();
 			base.Update(gameTime);
 
 			// Chests can change while the panel is open (including by other players),
@@ -249,8 +300,7 @@ namespace TerraIndex.UI
 				return;
 
 			if (Main.keyState.PressingControl()) {
-				Terminal.Close();
-				ModContent.GetInstance<RecipeIndexSystem>().ShowItem(type, false);
+				Index.ShowItem(type, false);
 				return;
 			}
 
@@ -268,11 +318,14 @@ namespace TerraIndex.UI
 				Withdraw(type, 0);
 		}
 
-		// The panel closes so the door can be seen opening.
+		// The panel (and the index next to it) stays open, so several things can be taken out in a row: the item drops
+		// out of the door when standing at it, otherwise a drone brings it (see TerminalSystem.Deliver).
 		private void Withdraw(int type, int amount)
 		{
-			Terminal.Close();
 			Terminal.RequestWithdraw(type, amount);
+			ClearSelection();
+			// Shows the new amounts as soon as possible, instead of at the next half-second refresh.
+			refreshTimer = 2;
 		}
 	}
 }

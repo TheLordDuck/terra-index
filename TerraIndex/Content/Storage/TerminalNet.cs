@@ -36,6 +36,7 @@ namespace TerraIndex.Content.Storage
 			TakeItems,
 			RadioToggle,
 			RadioPlay,
+			ChestMoves,
 		}
 
 		// A ModPacket can't exceed ~65 KB; large networks are sent in several chunks.
@@ -170,6 +171,15 @@ namespace TerraIndex.Content.Storage
 					ModContent.GetInstance<RadioSystem>().Play(clip, radios);
 					break;
 				}
+				case MessageType.ChestMoves: {
+					Point terminal = ReadPoint(reader);
+					int toPlayer = reader.ReadByte();
+					var moves = new List<ChestMove>();
+					for (int count = Math.Min((int)reader.ReadByte(), StorageNetwork.MaxMoves); count > 0; count--)
+						moves.Add(new ChestMove(ReadPoint(reader), reader.ReadInt32(), reader.ReadBoolean()));
+					ModContent.GetInstance<NetworkEffects>().Show(terminal, moves, toPlayer == byte.MaxValue ? -1 : toPlayer);
+					break;
+				}
 				case MessageType.ItemsEntering: {
 					Point terminal = ReadPoint(reader);
 					Player player = Main.player[reader.ReadByte()];
@@ -195,6 +205,23 @@ namespace TerraIndex.Content.Storage
 			foreach (int type in types)
 				packet.Write(type);
 			packet.Send(-1, player);
+		}
+
+		// Server -> every client: what went into or out of which chests, for the drones and chest effects.
+		// toPlayer: who the drones bring the items taken out to, or -1 for the terminal's door.
+		public static void SendChestMoves(Point terminal, List<ChestMove> moves, int toPlayer)
+		{
+			ModPacket packet = Mod.GetPacket();
+			packet.Write((byte)MessageType.ChestMoves);
+			WritePoint(packet, terminal);
+			packet.Write((byte)(toPlayer < 0 ? byte.MaxValue : toPlayer));
+			packet.Write((byte)moves.Count);
+			foreach (ChestMove move in moves) {
+				WritePoint(packet, move.Chest);
+				packet.Write(move.Type);
+				packet.Write(move.Entering);
+			}
+			packet.Send();
 		}
 
 		// Client -> server: turns a radio on or off (not part of the terminal, but it shares the mod's packets).

@@ -1,4 +1,4 @@
 displayName = Terra Index
 author = thelordduck22
-version = 0.6
+version = 0.7
 homepage = https://github.com/TheLordDuck/terra-index

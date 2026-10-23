@@ -38,11 +38,17 @@ namespace TerraIndex.Content.Storage
 		// Farther than this (a portable terminal), withdrawn items appear next to the player instead of
 		// dropping out of the door, and deposited items don't fly across the screen.
 		private const float DoorReach = 16 * 30;
+		// Within this distance of the door, withdrawn items drop out of it. Farther away (the panel stays open up to
+		// TerminalReach), a drone brings them to the player instead, so they don't end up on the floor by the door.
+		private const float DoorPickupReach = 16 * 3;
 
 		// Garage door: rolls up, stays open while the item drops out, then rolls back down.
 		private const int DoorOpenTicks = 14;
 		private const int DoorHoldTicks = 50;
 		private const int DoorCloseTicks = 14;
+		// A withdrawn item drops this long after leaving the chests: the delivery drones fly it to the door meanwhile
+		// (NetworkEffects), and the door starts rolling up DoorOpenTicks before.
+		private const int DeliveryTicks = NetworkEffects.FlightTicks + 4;
 
 		private UserInterface ui;
 		// Panels are built on first use: in Load the translations aren't loaded yet, so the texts would show their keys.
@@ -65,7 +71,7 @@ namespace TerraIndex.Content.Storage
 		private readonly List<PendingDrop> drops = new();
 
 		// Deposited items flying from the player into the terminal's door. Client only, just for show.
-		private const int FlyTicks = 26;
+		public const int FlyTicks = 26;
 		private readonly List<FlyingItem> flyingItems = new();
 
 		private class FlyingItem
@@ -83,6 +89,8 @@ namespace TerraIndex.Content.Storage
 			public Item Item;
 			public int Player;
 			public int Ticks;
+			// Given to the player (brought by a drone) instead of dropping out of the door.
+			public bool ToPlayer;
 		}
 
 		// Latest scan (received from the server in multiplayer, computed locally in single player).
@@ -131,6 +139,9 @@ namespace TerraIndex.Content.Storage
 
 		// True while either panel is open: the terminal's search or its deposit slots.
 		public bool IsOpen => ui?.CurrentState != null;
+		// Only the search panel, which the recipe index docks next to.
+		public bool PanelOpen => state != null && ui.CurrentState == state;
+		private static RecipeIndexSystem Index => ModContent.GetInstance<RecipeIndexSystem>();
 		public bool DepositOpen => depositState != null && ui.CurrentState == depositState;
 
 		// Contents of the deposit slots being edited. In single player this is the terminal entity's own array;
@@ -186,14 +197,22 @@ namespace TerraIndex.Content.Storage
 			inReachTick = uint.MaxValue;
 			Apply(new StorageSnapshot());
 			ui.SetState(State);
+			Index.OpenWithTerminal();
 			SoundEngine.PlaySound(SoundID.MenuOpen);
 			RequestRefresh(true);
+
+			TerminalPlayer tips = Main.LocalPlayer.GetModPlayer<TerminalPlayer>();
+			if (!tips.SeenOpenTip) {
+				tips.SeenOpenTip = true;
+				Main.NewText(UIHelpers.T("TipOpened"), Color.LightSkyBlue);
+			}
 		}
 
 		public void Close()
 		{
 			if (DepositOpen)
 				FinishDeposit();
+			Index.CloseWithTerminal();
 			ui.SetState(null);
 			SoundEngine.PlaySound(SoundID.MenuClose);
 		}
@@ -312,6 +331,8 @@ namespace TerraIndex.Content.Storage
 			Terminal = terminal;
 			DepositItems = items;
 			sentDepositHash = DepositHash(items);
+			// The inventory takes the index's place.
+			Index.CloseWithTerminal();
 			ui.SetState(Deposit);
 			// The player's inventory opens next to the slots, like with a chest.
 			Main.playerInventory = true;
@@ -413,7 +434,6 @@ namespace TerraIndex.Content.Storage
 				return;
 			}
 
-			Close();
 			ShowItemsEntering(Terminal, player.Center, items.Select(item => item.type).ToList());
 			if (Main.netMode == NetmodeID.MultiplayerClient)
 				TerminalNet.SendQuickDeposit(Terminal, items.ToArray());
@@ -432,6 +452,7 @@ namespace TerraIndex.Content.Storage
 				moved = StorageNetwork.Deposit(terminal, items);
 				if (moved)
 					OpenDoor(terminal);
+				ShowMoves(terminal);
 			}
 
 			int left = 0;
@@ -459,7 +480,7 @@ namespace TerraIndex.Content.Storage
 			StartDoor(terminal);
 		}
 
-		private static Vector2 DoorCenter(Point terminal) =>
+		public static Vector2 DoorCenter(Point terminal) =>
 			new(terminal.X * 16 + TerminalTile.DoorArea.Center.X, terminal.Y * 16 + TerminalTile.DoorArea.Center.Y);
 
 		// Single player or server: tries to move the terminal's pending items into its chests.
@@ -469,6 +490,7 @@ namespace TerraIndex.Content.Storage
 			bool moved = StorageNetwork.Deposit(entity.TopLeft, entity.Items);
 			if (moved)
 				OpenDoor(entity.TopLeft);
+			ShowMoves(entity.TopLeft);
 
 			if (player < 0)
 				return;
@@ -478,6 +500,22 @@ namespace TerraIndex.Content.Storage
 			else
 				ShowDepositResult(left, moved, false);
 		}
+
+		// Single player or server: the drones and chest effects for what the last operation moved, for every player.
+		// receiver: who gets the items taken out, so the drones fly to them when they aren't at the door (see Deliver).
+		private static void ShowMoves(Point terminal, Player receiver = null)
+		{
+			if (StorageNetwork.Moves.Count == 0)
+				return;
+			int toPlayer = receiver != null && !AtDoor(receiver, terminal) ? receiver.whoAmI : -1;
+			if (Main.netMode == NetmodeID.Server)
+				TerminalNet.SendChestMoves(terminal, StorageNetwork.Moves, toPlayer);
+			else
+				ModContent.GetInstance<NetworkEffects>().Show(terminal, StorageNetwork.Moves, toPlayer);
+			StorageNetwork.Moves.Clear();
+		}
+
+		private static bool AtDoor(Player player, Point terminal) => player.Distance(DoorCenter(terminal)) <= DoorPickupReach;
 
 		// Single player or server: the door animation, for every player.
 		private void OpenDoor(Point terminal)
@@ -503,6 +541,7 @@ namespace TerraIndex.Content.Storage
 			Item item = StorageNetwork.Withdraw(terminal, type, amount);
 			if (item != null)
 				Deliver(terminal, item, player);
+			ShowMoves(terminal, player);
 		}
 
 		// Single player or server: hands an item to the player through the terminal's door.
@@ -514,8 +553,7 @@ namespace TerraIndex.Content.Storage
 				return;
 			}
 
-			drops.Add(new PendingDrop { Terminal = terminal, Item = item, Player = player.whoAmI, Ticks = DoorOpenTicks });
-			OpenDoor(terminal);
+			drops.Add(new PendingDrop { Terminal = terminal, Item = item, Player = player.whoAmI, Ticks = DeliveryTicks, ToPlayer = !AtDoor(player, terminal) });
 		}
 
 		// ---- Crafting from the chests (recipe index) ----
@@ -595,6 +633,7 @@ namespace TerraIndex.Content.Storage
 					Deliver(terminal, item, player);
 				}
 			}
+			ShowMoves(terminal);
 
 			if (Main.netMode == NetmodeID.Server)
 				TerminalNet.SendCraftResult(player.whoAmI, recipe.createItem.type, crafted);
@@ -653,6 +692,7 @@ namespace TerraIndex.Content.Storage
 					Deliver(terminal, item, player);
 				}
 			}
+			ShowMoves(terminal, player);
 		}
 
 		public void ShowCraftResult(int type, int amount)
@@ -742,8 +782,15 @@ namespace TerraIndex.Content.Storage
 		public override void PostUpdateEverything()
 		{
 			for (int i = drops.Count - 1; i >= 0; i--) {
-				if (--drops[i].Ticks <= 0) {
-					DropItem(drops[i]);
+				PendingDrop drop = drops[i];
+				if (--drop.Ticks == DoorOpenTicks && !drop.ToPlayer)
+					OpenDoor(drop.Terminal);
+				if (drop.Ticks <= 0) {
+					// The drone has arrived (or, if the player left, the item still isn't lost: it appears by them).
+					if (drop.ToPlayer)
+						Main.player[drop.Player].QuickSpawnItem(new EntitySource_Misc("TerraIndex/Drone"), drop.Item, drop.Item.stack);
+					else
+						DropItem(drop);
 					drops.RemoveAt(i);
 				}
 			}

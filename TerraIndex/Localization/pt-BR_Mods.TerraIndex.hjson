@@ -1,0 +1,296 @@
+Keybinds: {
+	ToggleBrowser.DisplayName: Abrir/fechar o índice de receitas
+	ShowRecipes.DisplayName: Ver receitas do item sob o mouse
+	ShowUses.DisplayName: Ver usos do item sob o mouse
+}
+
+UI: {
+	Title: Índice de receitas
+	SearchHint: Pesquisar... (@mod para filtrar por mod)
+	CategoryAll: Todos os itens
+	CategoryWeapons: Armas e munição
+	CategoryTools: Ferramentas
+	CategoryArmor: Armaduras e roupas
+	CategoryAccessories: Acessórios
+	CategoryPlaceable: Blocos, paredes e móveis
+	CategoryConsumables: Poções e consumíveis
+	CategoryMaterials: Materiais
+	CategoryMisc: Diversos
+	NoResults: Nenhum item corresponde à pesquisa.
+	Hint:
+		'''
+		Clique esquerdo em um item: como fabricá-lo.
+		Clique direito: receitas que o usam.
+		Roda do mouse sobre este painel: trocar de receita.
+		'''
+	Back: Voltar
+	RecipesTab: Receitas ({0})
+	UsesTab: Usos ({0})
+	NoRecipes: Este item não pode ser fabricado.
+	NoUses: Este item não é usado em nenhuma receita.
+	Result: Resultado
+	Ingredients: Ingredientes
+	Stations: Estação de criação
+	ByHand: À mão (nenhuma estação necessária)
+	Conditions: Condições
+	TreeTab: Árvore
+	TreeTitle: Árvore de fabricação
+	TreeRecipe: (receita {0} de {1})
+	TreeHave: (tem {0})
+	TreeMissing: Materiais em falta
+	TreeComplete: Você tem todos os materiais.
+	TreeStations: Estações de criação
+	SetGoal: Definir como objetivo
+	RemoveGoal: Remover objetivo
+	GoalTitle: "Objetivo: {0}"
+	GoalReady: Você tem tudo para fabricar {0}!
+	GoalReadyShort: Pronto para fabricar!
+	GoalMore: +{0} a mais
+	GoalStep: "Fabricar {0} x {1}"
+	GoalStepChests: "Fabricar {0} x {1} (baús)"
+	GoalNeedsStation: "O próximo passo precisa de: {0}"
+	GoalCrafted: "Fabricado: {0} x {1}."
+	TakeNeedsTerminal: "O clique do meio tira itens dos baús do último terminal que você abriu, enquanto estiver perto dele."
+	TakeNotStored: "{0} não está nos baús do terminal."
+	GoalCollapse: Recolher (arraste o título para mover o painel)
+	GoalExpand: Expandir (arraste o título para mover o painel)
+	CompareAdd: + Comparar
+	CompareOpen: Comparar ({0})
+	CompareTitle: Comparação
+	CompareRemoveHint: Clique direito em um item para removê-lo
+	CompareDamage: Dano
+	CompareCrit: Chance de crítico
+	CompareUseTime: Tempo de uso (ticks)
+	CompareKnockback: Repulsão
+	CompareMana: Custo de mana
+	CompareVelocity: Velocidade do projétil
+	ComparePickaxe: Poder de picareta
+	CompareAxe: Poder de machado
+	CompareHammer: Poder de martelo
+	CompareDefense: Defesa
+	CompareValue: Valor de venda
+	CompareEffects: Efeitos
+	CraftButton: Fabricar
+	CraftCanMake: Com seus baús você pode fazer {0}
+	CraftNoIngredients: Não há ingredientes suficientes nos baús do terminal
+	CraftNoStation: Falta a estação de criação (por perto ou no fio do terminal)
+	CraftNoConditions: Condições não atendidas aqui
+	Crafted: "{0} x {1} fabricado(s) com seus baús."
+	CraftFailed: Os baús não têm mais os ingredientes.
+	TakeMissing: Pegar o que falta
+	TakeMissingHint: Tira dos baús o que falta no seu inventário para uma fabricação (Shift: para 10)
+	TakeMissingStatus: "Nos baús, faltando no seu inventário: {0}"
+	TerminalTitle: Terminal de armazenamento
+	ConnectedChests: "Baús conectados: {0}"
+	TerminalHint: "Clique: uma pilha   Segurar clique direito: quantidade   Shift: baú   Ctrl: receita"
+	TerminalHoldingHint: "Clique em um item: tirar {0}   Clique direito no vazio: cancelar"
+	Max: Máx
+	TerminalEmpty:
+		'''
+		Nenhum item.
+		Conecte o terminal e seus baús com o mesmo fio vermelho.
+		'''
+	DepositButton: Guardar itens
+	DepositTitle: Guardar itens nos baús
+	DepositHint: Ao fechar, os itens vão para os baús pela porta do terminal.
+	Done: Pronto
+	DepositDone: Itens guardados nos baús.
+	DepositNoSpace: "Atenção: os baús conectados estão cheios. {0} item(ns) não foram enviados e ficam no terminal até haver espaço ou você tirá-los."
+	DepositInUse: Outro jogador está usando os espaços de depósito deste terminal.
+	QuickDepositButton: Guardar tudo
+	QuickDepositEmpty: Nada para guardar (a barra de atalhos, moedas, munição e favoritos ficam com você).
+	QuickDepositNoSpace: "Os baús conectados estão cheios: {0} item(ns) foram devolvidos a você."
+	SortBy: "Ordem: {0}"
+	SortName: Nome
+	SortAmount: Quantidade
+	SortRarity: Raridade
+	SortMod: Mod
+	RemoteLinked: Terminal portátil vinculado a este terminal.
+	RemoteNotLinked: Não vinculado. Segure-o e clique com o botão direito em um terminal para vinculá-los.
+	RemoteLinkedTo: Vinculado a um terminal a {0} blocos
+	RemoteDisabled: O terminal portátil está desativado neste servidor.
+	HowToObtain: Como conseguir
+	NoSources:
+		'''
+		Nenhuma fonte conhecida: provavelmente é encontrado em baús, pescando
+		ou no mundo (quebrando blocos, sacudindo árvores, etc.).
+		'''
+	MoreAbove: "{0} a mais acima (roda do mouse)"
+	MoreBelow: "{0} a mais abaixo (roda do mouse)"
+	SoldBy: "Vendido por {0}: {1}"
+	SoldByFree: Vendido por {0}
+	DroppedBy: Derrubado por {0} ({1})
+	FoundInside: Dentro de {0} ({1})
+	AnyEnemy: qualquer inimigo
+	SpawnsIn: "Encontrado em: {0}"
+	Page: Página {0} / {1}  ({2} itens)
+	Platinum: "{0} de platina"
+	Gold: "{0} de ouro"
+	Silver: "{0} de prata"
+	Copper: "{0} de cobre"
+	FoundIn: "{0}: encontrado em {1} baú(s)."
+	Blocks: "{0} blocos"
+	RecipesButton: Receitas
+	HelpTerminal:
+		'''
+		Digite na pesquisa para filtrar os itens (@mod filtra por mod).
+		Clique esquerdo em um item: tirar uma pilha (sai pela porta).
+		Segure o clique direito em um item: escolha uma quantidade e tire-a com clique esquerdo.
+		Clique direito no vazio: descartar a quantidade escolhida.
+		Shift + clique: iluminar os baús que o têm.
+		Ctrl + clique: suas receitas, no índice ao lado do terminal.
+		Receitas: abrir ou fechar o índice de receitas ao lado do terminal.
+		Guardar tudo: seu inventário vai para os baús
+		(menos a barra de atalhos, moedas, munição e favoritos).
+		Guardar itens: espaços que vão para os baús ao fechar.
+		O terminal e os baús devem estar no mesmo fio vermelho.
+		'''
+	HelpIndex:
+		'''
+		Clique esquerdo em um item: como fabricá-lo. Clique direito: para que serve.
+		Roda do mouse sobre uma receita: a próxima. Voltar: o item anterior.
+		Ingredientes: verde = no seu inventário, azul = nos baús de um terminal, vermelho = falta.
+		Árvore: tudo o que é preciso até os materiais básicos; pode virar seu objetivo.
+		Perto de um terminal você pode fabricar direto dos baús, ou tirar o que falta.
+		Teclas (Configurações > Controles): abrir o índice, receitas ou usos do item sob o mouse.
+		Clique do meio em um item: tirar uma pilha dos baús de um terminal (perto do último que você abriu).
+		'''
+	TipPlaced: "Terminal colocado! Conecte-o aos seus baús com fio vermelho (colocado com: {0}, vendido por: {1}) e clique nele com o botão direito."
+	TipOpened: "Dica: passe o mouse sobre o botão ? para ver os controles do terminal. \"Receitas\" abre o índice de receitas ao lado."
+}
+
+Items: {
+	TerminalItem: {
+		DisplayName: Terminal
+		Tooltip:
+			'''
+			Deve ser colocado em uma parede de fundo
+			Conecte-o aos seus baús com fio vermelho e clique nele com o botão direito para buscar itens
+			Os itens que você tira saem pela porta dele
+			'''
+	}
+
+	RemoteTerminalItem: {
+		DisplayName: Terminal portátil
+		Tooltip:
+			'''
+			Segure-o e clique com o botão direito em um terminal para vinculá-los
+			Use-o para abrir o terminal vinculado de qualquer lugar
+			Os itens que você tira aparecem ao seu lado
+			'''
+	}
+
+	RadioItem: {
+		DisplayName: Rádio
+		Tooltip:
+			'''
+			Toca alguma coisa de vez em quando
+			Clique com o botão direito para ligar ou desligar
+			'''
+	}
+}
+
+Tiles: {
+	TerminalTile.MapEntry: Terminal
+	RadioTile.MapEntry: Rádio
+}
+
+Configs: {
+	ClientConfig: {
+		DisplayName: Terra Index (suas configurações)
+
+		Headers: {
+			Goal: Objetivo de fabricação
+			Terminal: Terminal de armazenamento
+			Effects: Efeitos
+		}
+
+		ShowGoalPanel: {
+			Label: Mostrar o painel do objetivo
+			Tooltip: A lista na tela com os materiais que ainda faltam para o seu objetivo
+		}
+
+		GoalPanelRows: {
+			Label: "Painel do objetivo: materiais mostrados"
+			Tooltip: O resto é resumido como "+N a mais"
+		}
+
+		DefaultSort: {
+			Label: Ordem padrão do terminal
+			Tooltip: Ordem dos itens do terminal ao entrar em um mundo
+		}
+
+		HighlightSeconds: {
+			Label: Duração do destaque dos baús (segundos)
+			Tooltip: Por quanto tempo os baús brilham após Shift + clique em um item do terminal
+		}
+
+		QuickDepositHotbar: {
+			Label: Incluir a barra de atalhos em "Guardar tudo"
+			Tooltip: Favoritos, moedas e munição sempre ficam
+		}
+
+		FocusTerminalSearch: {
+			Label: "Digitar na pesquisa do terminal ao abri-lo"
+			Tooltip: "Enquanto você digita, as teclas do mod (N, [ e ]) não funcionam"
+		}
+
+		DeliveryDrones: {
+			Label: Drones de entrega
+			Tooltip: Pequenos drones levam os itens entre os baús e a porta do terminal (apenas visual)
+		}
+
+		ChestEffects: {
+			Label: Efeitos nos baús
+			Tooltip: Faíscas, luz e um som nos baús onde os itens entram ou de onde saem
+		}
+	}
+
+	ServerConfig: {
+		DisplayName: Terra Index (servidor)
+
+		TerminalPriceGold: {
+			Label: Preço do terminal (ouro)
+			Tooltip: Quanto o terminal custa na loja. 100 de ouro = 1 de platina
+		}
+
+		TerminalReach: {
+			Label: Alcance do terminal (blocos)
+			Tooltip: Até onde os jogadores podem se afastar de um terminal antes que o painel feche
+		}
+
+		MaxWireTiles: {
+			Label: Tamanho máximo da rede de fios
+			Tooltip: Blocos de fio vermelho percorridos a partir de um terminal procurando baús. Diminua se redes enormes causarem lag
+		}
+
+		AllowPortableTerminal: {
+			Label: Permitir o terminal portátil
+			Tooltip: Desativado, os terminais portáteis não podem abrir terminais de longe
+		}
+	}
+
+	TerminalSort: {
+		Name: {
+			Label: Nome
+			Tooltip: ""
+		}
+
+		Amount: {
+			Label: Quantidade
+			Tooltip: ""
+		}
+
+		Rarity: {
+			Label: Raridade
+			Tooltip: ""
+		}
+
+		Mod: {
+			Label: Mod
+			Tooltip: ""
+		}
+
+		Tooltip: ""
+	}
+}
