@@ -22,20 +22,21 @@ DOCS = os.path.join(ROOT, 'docs', 'blueprints')
 CS = os.path.join(ROOT, 'TerraIndex', 'Content', 'Building', 'BlueprintDesigns.cs')
 
 # What each character places. Keep in sync with Blueprints.TileBrushes / WallBrushes in the mod.
-SOLID = set('#SRdYU') | set('/\\()[]')
+SOLID = set('#SRdYUEve') | set('/\\()[]<>')
 PLATFORM = '-'
-TILE_CHARS = SOLID | {' ', '.', '+', '-', '|'} | set(FURNITURE)
-WALL_CHARS = set(' wsgkq')
-STANDING = set('CTWBKOF')
+TILE_CHARS = SOLID | {' ', '.', '+', '-', '|', 'r'} | set(FURNITURE)
+WALL_CHARS = set(' wsgkqpxvaz')
+STANDING = set('CTWBKOFfZPGQVHt')
 HANGING = set('Llyn')
-ON_TABLE = set('cb')
-LIGHTS = set('Llyci')
-CHAIRS = set('C')
+ON_TABLE = set('cbhou')
+LIGHTS = set('Llycif')
+CHAIRS = set('CQt')
 TABLES = set('TW')
 
 NAMES = {
     'SmallHouse': 'Small house', 'TwoFloors': 'Two-floor house', 'Tower': 'Tower', 'Arena': 'Boss arena',
     'Medieval': 'Medieval house', 'Castle': 'Castle', 'Pagoda': 'Pagoda', 'WizardTower': 'Wizard tower',
+    'Workshop': "Craftsman's house", 'TreeVillage': 'Tree village',
 }
 
 
@@ -91,6 +92,8 @@ def check(d):
                 errors.append(f'door at {x},{y} needs blocks above and below')
             if c in STANDING and not all(solid(x + dx, y + h) for dx in range(w)):
                 errors.append(f'{c} at {x},{y} needs blocks under it')
+            if c == 'j' and not (solid(x, y - 1) or t[y - 1][x] == 'j'):
+                errors.append(f'chain at {x},{y} needs a block or a chain above it')
             if c in HANGING and not all(solid(x + dx, y - 1) for dx in range(w)):
                 errors.append(f'{c} at {x},{y} needs blocks above it')
             if c in ON_TABLE:
@@ -164,9 +167,14 @@ COLORS = {
     'R': ((170, 62, 48), (120, 40, 32)),      # red brick
     'Y': ((190, 50, 40), (130, 30, 25)),      # red dynasty shingles
     'U': ((60, 80, 170), (40, 52, 120)),      # blue roof
+    'E': ((150, 150, 150), (105, 105, 110)),  # stone slab
+    'v': ((140, 95, 55), (95, 60, 32)),       # living wood
+    'e': ((70, 150, 60), (45, 105, 40)),      # leaves
 }
-SLOPES = {'/': ('R', 'dr'), '\\': ('R', 'dl'), '(': ('Y', 'dr'), ')': ('Y', 'dl'), '[': ('U', 'dr'), ']': ('U', 'dl')}
-WALLS = {'w': (110, 78, 50), 's': (82, 82, 92), 'g': (170, 210, 235), 'k': (225, 215, 195), 'q': (70, 90, 150)}
+SLOPES = {'/': ('R', 'dr'), '\\': ('R', 'dl'), '(': ('Y', 'dr'), ')': ('Y', 'dl'), '[': ('U', 'dr'), ']': ('U', 'dl'),
+          '<': ('E', 'ul'), '>': ('E', 'ur')}
+WALLS = {'w': (110, 78, 50), 's': (82, 82, 92), 'g': (170, 210, 235), 'k': (225, 215, 195), 'q': (70, 90, 150),
+         'p': (140, 100, 60), 'x': (100, 100, 104), 'v': (105, 72, 42), 'a': (50, 110, 45), 'z': (165, 120, 70)}
 WOOD = (150, 100, 55)
 WOOD_DARK = (88, 56, 30)
 
@@ -203,12 +211,15 @@ def draw(d, scale=1):
             elif c in SLOPES:
                 material, kind = SLOPES[c]
                 light, dark = COLORS[material]
-                points = [(x0, y1), (x1, y1), (x1, y0)] if kind == 'dr' else [(x0, y1), (x1, y1), (x0, y0)]
+                points = {'dr': [(x0, y1), (x1, y1), (x1, y0)], 'dl': [(x0, y1), (x1, y1), (x0, y0)],
+                          'ul': [(x0, y0), (x1, y0), (x0, y1)], 'ur': [(x0, y0), (x1, y0), (x1, y1)]}[kind]
                 g.polygon(points, fill=light, outline=dark)
             elif c == '-':
                 g.rectangle([x0, y0, x1, y0 + 3], fill=(190, 140, 85), outline=WOOD_DARK)
             elif c == '|':
                 g.rectangle([x0 + 3, y0, x1 - 3, y1], fill=(120, 80, 45))
+            elif c == 'r':
+                g.line([x0 + C // 2, y0, x0 + C // 2, y1], fill=(60, 130, 50), width=2)
     for y in range(H):
         for x in range(W):
             c = d.tiles[y][x]
@@ -216,6 +227,19 @@ def draw(d, scale=1):
                 draw_piece(g, c, *box(x, y, *FURNITURE[c]))
     if scale != 1:
         img = img.resize((img.width * scale, img.height * scale), Image.NEAREST)
+    # Labels (which station goes in each bay), drawn after scaling so the text stays sharp.
+    g = ImageDraw.Draw(img)
+    for x, y, text in getattr(d, 'labels', []):
+        px, py = (x + pad) * C * scale, (y + pad) * C * scale
+        g.rectangle([px, py, px + 3 * C * scale - 1, py + 4 * C * scale - 1], outline=(255, 230, 120))
+        words, lines = text.split(), ['']
+        for word in words:
+            if len(lines[-1]) + len(word) + 1 > 10 and lines[-1]:
+                lines.append(word)
+            else:
+                lines[-1] = (lines[-1] + ' ' + word).strip()
+        for i, line in enumerate(lines):
+            g.text((px + 3, py + 3 + i * 11), line, fill=(255, 245, 200), stroke_width=1, stroke_fill=(40, 30, 20))
     return img
 
 
@@ -269,6 +293,37 @@ def draw_piece(g, c, x0, y0, x1, y1):
         g.ellipse([x0 + 4, y0, x1 - 4, y0 + 4], fill=(255, 200, 60))
     elif c == 'b':
         g.rectangle([x0 + 3, y0 + 4, x1 - 3, y1], fill=(150, 210, 230), outline=(80, 130, 160))
+    elif c == 'f':
+        g.rectangle([x0 + 2, y1 - 4, x1 - 2, y1], fill=(110, 80, 60))
+        g.polygon([(x0 + 6, y1 - 4), (x0 + w // 2, y0 + 2), (x1 - 6, y1 - 4)], fill=(255, 150, 40))
+    elif c == 'Z':
+        g.rectangle([x0 + 1, y0 + 1, x1 - 1, y1], fill=(160, 115, 60), outline=WOOD_DARK)
+        g.line([x0 + 1, y0 + 1, x1 - 1, y1], fill=WOOD_DARK)
+    elif c == 'P':
+        g.rectangle([x0, y0 + 2, x1, y1 - 3], fill=(60, 40, 30), outline=(30, 20, 15))
+        g.rectangle([x0 + 2, y0 + h // 2, x1 - 2, y0 + h // 2 + 3], fill=(240, 240, 230))
+        g.rectangle([x0 + 2, y1 - 3, x0 + 4, y1], fill=(60, 40, 30))
+        g.rectangle([x1 - 4, y1 - 3, x1 - 2, y1], fill=(60, 40, 30))
+    elif c == 'G':
+        g.rectangle([x0 + 1, y0 + h // 3, x1 - 1, y1], fill=WOOD, outline=WOOD_DARK)
+        g.rectangle([x0 + 4, y0 + h // 3 + 2, x1 - 4, y0 + h // 3 + 5], fill=(120, 170, 220))
+    elif c == 'Q':
+        g.rectangle([x0 + 2, y0, x1 - 2, y1 - h // 3], fill=(200, 160, 60), outline=(130, 95, 30))
+        g.rectangle([x0, y1 - h // 3, x1, y1], fill=(170, 40, 50), outline=(110, 25, 30))
+    elif c == 'V':
+        g.rectangle([x0, y0 + 2, x1, y1 - 2], fill=(150, 60, 60), outline=(90, 35, 35))
+        g.rectangle([x0 + 2, y0 + h // 2, x1 - 2, y1 - 2], fill=(180, 80, 80))
+    elif c == 'H':
+        g.rectangle([x0, y0 + h // 3, x1, y1], fill=(235, 235, 240), outline=(150, 150, 160))
+        g.rectangle([x0 + 3, y0 + h // 3 + 2, x1 - 3, y0 + h // 3 + 5], fill=(120, 170, 220))
+    elif c == 't':
+        g.rectangle([x0 + 2, y0 + 2, x1 - 2, y0 + h // 2], fill=(235, 235, 240), outline=(150, 150, 160))
+        g.rectangle([x0 + 1, y0 + h // 2, x1 - 1, y1], fill=(235, 235, 240), outline=(150, 150, 160))
+    elif c == 'j':
+        g.line([x0 + w // 2, y0, x0 + w // 2, y1], fill=(90, 90, 95), width=2)
+    elif c in 'hou':
+        color = {'h': (160, 50, 50), 'o': (190, 150, 100), 'u': (210, 200, 180)}[c]
+        g.rectangle([x0 + 3, y0 + 5, x1 - 3, y1], fill=color, outline=(60, 40, 30))
     elif c == 'i':
         g.rectangle([x0 + 5, y0 + 4, x1 - 5, y1 - 1], fill=(120, 80, 40))
         g.ellipse([x0 + 3, y0, x1 - 3, y0 + 5], fill=(255, 200, 60))

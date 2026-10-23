@@ -58,7 +58,7 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 
 ## 8. Deposit all
 
-- [ ] **Deposit all** puts the inventory into the chests, with items flying into the door
+- [ ] **Deposit all** puts the inventory into the chests, with the items flying into the door
 - [ ] The hotbar, coins, ammo and favorited items stay
 - [ ] With full chests: what doesn't fit is given back, with a warning
 - [ ] Empty inventory: "Nothing to deposit" message
@@ -136,15 +136,18 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 - [ ] Folded, the button is hidden; the panel is still hidden with the inventory open
 - [ ] Multiplayer: the other player sees your inventory change and the crafted item
 
-## 38 and 39. Delivery drones and chest effects
+## 39. Chest effects
 
-- [ ] Taking an item out: the chest sparks, a drone flies from it to the door carrying the item, the door opens as it arrives and the item drops
-- [ ] Deposit all / Deposit items: the items fly into the door, then drones carry them to the chests, which spark when they arrive
-- [ ] Crafting from the chests: drones bring the ingredients from their chests to the door
-- [ ] The drone faces the way it flies, its rotors spin, and it can be seen in the dark
-- [ ] Turning off "Delivery drones" or "Chest effects" in the settings removes each one
-- [ ] With the portable terminal far away: no drones, items still appear next to you
-- [ ] Multiplayer: the other player sees the drones and sparks too
+- [ ] Taking an item out: the chest sparks, the terminal's door opens and the item drops out of it
+- [ ] Deposit all / Deposit items: the items fly into the door and stop there; nothing travels to the chests and they don't spark
+- [ ] Crafting from the chests: the chests the ingredients came from spark
+- [ ] Turning off "Chest effects" in the settings removes the sparks
+- [ ] Multiplayer: the other player sees the sparks too
+
+## Free space
+
+- [ ] The terminal panel says the connected chests, free slots out of all of them and how full they are (e.g. "12 chests · 120/400 free · 70% full"), left of the Recipes and Sort buttons without overlapping them (also after changing the sort, and in every language); white below 70%, yellow from 70%, red from 90%
+- [ ] Depositing or taking items updates it within half a second, also on a multiplayer client
 
 ## Stations on the wire
 
@@ -156,36 +159,37 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 
 ## Comfort
 
-- [ ] Standing at the terminal's door, a taken item drops out of the door as before
-- [ ] A few blocks away (panel still open), the drone flies from the chest to you and the item goes into your inventory; the door doesn't open
-- [ ] Walking while the drone flies: it follows you
-- [ ] Inventory full: the item lands at your feet, not lost
-- [ ] "Take missing" and middle click also bring the items to you
-- [ ] With the portable terminal far away, items still appear next to you at once
+- [ ] Using the terminal itself, at its door or a few blocks away: the door opens and throws the item in an arc that lands on you
+- [ ] Through the portable terminal (far away, and also standing next to the terminal), a glowing drone comes down from the sky, hovers above you, lets the item go (sparks and a click) and flies off; you can pick the item up right away
+- [ ] Same under a low ceiling: the item appears on you instead of inside the blocks
+- [ ] Through the portable terminal (far or near), Deposit all / Deposit items: the door stays shut and a drone comes down, your items fly up into its claw one by one, and it flies off with them; the items are in the chests
+- [ ] Multiplayer: the other player sees the drone, and can't take the item
+- [ ] "Take missing" and middle click also drop the items out of the door
 - [ ] Turning off "Type in the terminal's search box when it opens": N, [ and ] work right after opening the terminal
 - [ ] Search "wood", close the terminal, reopen it within 30 s: the search, tab and page are still there; after 30 s, or at another terminal, it is empty
 - [ ] Index open near the terminal: middle click an item in the grid and an ingredient in a recipe takes a stack out
 - [ ] Middle click with no terminal in reach, or on an item that isn't stored: a message explains why
-- [ ] Multiplayer: the other player sees the drone flying to you
+- [ ] Multiplayer: another player standing at the door can't pick up the item you asked for; after 10 s on the ground anyone can
 
 ## Blueprints (0.8)
 
 - [ ] Craft the Blueprint (10 wood at a work bench); its tooltip explains it
 - [ ] Right click: the catalog opens with 4 houses; the material list starts with Wood and includes other woods and glass (and modded woods if you have any)
-- [ ] Changing house or material updates the small preview and the cost
-- [ ] Cost colors: green when you have it; blue when the rest is in the terminal's chests; red when missing
-- [ ] Take missing (near a terminal) brings the missing materials, and the lines turn green
+- [ ] Changing house or material updates the small preview; the catalog says building is free
 - [ ] Place closes the catalog; holding the item shows the see-through house standing on the tile under the mouse
 - [ ] Over dirt or stone the cells turn red with a message; over grass and plants it stays green
-- [ ] Left click builds it: walls, blocks, platforms, door, chairs, tables and torches all in place; smoke and a sound; the materials leave your inventory
-- [ ] Missing materials: a message lists them and nothing is built
+- [ ] Left click builds it: walls, blocks, platforms, door, chairs, tables and torches all in place; smoke and a sound; nothing leaves your inventory, even with it empty
 - [ ] Every room of the small house, the two-floor house and the tower is valid housing (housing query / an NPC moves in)
 - [ ] Boss arena: three rows of platforms you can jump between
-- [ ] Building over existing background walls keeps them and costs fewer walls
+- [ ] Building over existing background walls keeps them
 - [ ] With another material (e.g. Boreal Wood or Glass) everything uses that material
-- [ ] Multiplayer: the other player sees the house; building where something is in the way gives the materials back
+- [ ] Multiplayer: the other player sees the house; building where something is in the way says it couldn't
 - [ ] Medieval house, castle, pagoda and wizard tower look like `docs/blueprints/` (roof slopes the right way round: if they are mirrored, swap the slopes in `Blueprints.TileBrushes`)
-- [ ] Their fixed materials show up in the cost (gray brick, red brick, glass walls, shingles...) and whatever isn't in this game is simply left out
+- [ ] Their fixed materials (gray brick, red brick, glass walls, shingles...) are placed, and whatever isn't in this game is simply left out
+- [ ] Craftsman's house (79x31) fits between the two trees of the base and looks like `docs/blueprints/8 - Craftsman's house.png`: three red gables of different sizes (check the slopes face the right way), forge open on the left, kitchen, stone hall with arches and pillars, trophy room with a throne, library, two bedrooms (fireplace in the second), music lounge, inventions workshop, loft, bathroom, chimney on the right roof
+- [ ] Each station goes in its labelled bay (Furnace, Hellforge, anvils, Cooking Pot, Keg, Tinkerer's Workshop, Loom, Sawmill, Heavy Work Bench, Autohammer, Imbuing Station, Solidifier, Adamantite Forge, Crystal Ball, Alchemy Table, Bewitching Table, Dye Vat, Sky Mill, Ancient Manipulator, Blend-O-Matic, Honey Dispenser, Ice Machine, Lihzahrd Furnace, Glass Kiln, Bone Welder, Steampunk Boiler), and relics in the trophy room
+- [ ] The nine rooms (not the forge or bathroom) are valid housing; the shaft (kitchen -> library -> inventions -> loft) and second bedroom -> bathroom platforms can be jumped through; the doors open
+- [ ] Tree village (109x60) built above the mansion on the same column: a lodge of stepped stories under a red gable, no trees, 30 rooms all valid housing, doors open (not blocked by furniture), the platform shaft climbs every story, the vine rope on each side reaches every walkway and each walkway leads to a story's door, fences show on the balconies and walkways
 - [ ] Furniture the wood you picked doesn't have (e.g. a clock) uses plain wood's or a vanilla one; lights never go missing
 - [ ] Every NPC room of the big ones is valid housing (medieval 5, castle 11, pagoda 3, wizard tower 4)
 - [ ] The catalog fits on screen with the castle selected (cost in two columns)

@@ -13,8 +13,7 @@ Terraria mod (tModLoader 1.4.4) by **thelordduck22** that ties recipes and stora
   its wire, or take out only the ingredients you are missing.
 - **Portable terminal**: open your terminal from anywhere in the world.
 - **Blueprints**: pick a ready-made house and its material, see where it goes, and build it with one click.
-- **Both at once**: the recipe index opens next to the terminal, and delivery drones carry the items between the
-  chests and the terminal.
+- **Both at once**: the recipe index opens next to the terminal, and both can be used together.
 - Settings for each player and for the server, 9 languages, and full multiplayer support.
 
 The mod's code is in [`TerraIndex/`](TerraIndex/); installation and usage in [`TerraIndex/README.md`](TerraIndex/README.md).

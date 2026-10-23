@@ -124,46 +124,17 @@ namespace TerraIndex.Content.Building
 				return;
 			}
 
-			Player player = Main.LocalPlayer;
-			List<CostLine> cost = Blueprints.Cost(blueprint.Items(material, origin), CraftingPlan.Inventory(player));
-			var taken = new List<(int Type, int Amount)>();
-			int[] missing = Blueprints.Allocate(cost, CraftingPlan.Inventory(player), taken);
-			if (missing.Any(amount => amount > 0)) {
-				string list = string.Join(", ", cost.Select((line, i) => (line, i)).Where(entry => missing[entry.i] > 0)
-					.Select(entry => $"{missing[entry.i]} {entry.line.Name}"));
-				Main.NewText(UIHelpers.T("BuildMissing", list), Color.Orange);
-				return;
-			}
-
-			foreach (var (type, amount) in taken)
-				RemoveFromInventory(player, type, amount);
-
+			// Building is free: the blueprint itself (10 wood) is all it costs.
 			if (Main.netMode == NetmodeID.MultiplayerClient) {
-				TerminalNet.SendBuild(Selected, material.Block, origin, taken);
+				TerminalNet.SendBuild(Selected, material.Block, origin);
 				return;
 			}
 			Blueprints.Place(blueprint, material, origin);
 			ShowBuildResult(true, Selected, origin);
 		}
 
-		private static void RemoveFromInventory(Player player, int type, int amount)
-		{
-			for (int slot = 0; slot < player.inventory.Length && amount > 0; slot++) {
-				Item item = player.inventory[slot];
-				if (item.IsAir || item.type != type)
-					continue;
-				int taken = Math.Min(item.stack, amount);
-				item.stack -= taken;
-				amount -= taken;
-				if (item.stack <= 0)
-					item.TurnToAir();
-				if (Main.netMode == NetmodeID.MultiplayerClient)
-					NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: slot);
-			}
-		}
-
-		// Server: the client already took the materials (used); they are given back if it can't be built.
-		public void ReceiveBuild(int player, int blueprintIndex, int block, Point origin, List<(int Type, int Amount)> used)
+		// Server: builds it if the place is still clear and the player close enough.
+		public void ReceiveBuild(int player, int blueprintIndex, int block, Point origin)
 		{
 			Player builder = Main.player[player];
 			BuildMaterial material = Blueprints.Find(block);
@@ -179,12 +150,6 @@ namespace TerraIndex.Content.Building
 				}
 			}
 
-			if (!ok) {
-				foreach (var (type, amount) in used) {
-					if (type > 0 && type < ItemLoader.ItemCount && amount > 0)
-						builder.QuickSpawnItem(new EntitySource_Misc("TerraIndex/Blueprint"), type, amount);
-				}
-			}
 			TerminalNet.SendBuildResult(player, ok, blueprintIndex, origin);
 		}
 

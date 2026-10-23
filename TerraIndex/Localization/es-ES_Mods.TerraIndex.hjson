@@ -46,34 +46,33 @@ UI: {
 	GoalReady: ¡Ya tienes todo para fabricar {0}!
 	GoalReadyShort: ¡Listo para fabricar!
 	GoalMore: +{0} más
-	GoalStep: "Fabricar {0} x {1}"
-	GoalStepChests: "Fabricar {0} x {1} (cofres)"
-	GoalNeedsStation: "El siguiente paso necesita: {0}"
-	GoalCrafted: "Fabricado: {0} x {1}."
-	TakeNeedsTerminal: "El clic central saca objetos de los cofres del último terminal que abriste, mientras estés cerca de él."
+	GoalStep: Fabricar {0} x {1}
+	GoalStepChests: Fabricar {0} x {1} (cofres)
+	GoalNeedsStation: El siguiente paso necesita: {0}
+	GoalCrafted: Fabricado: {0} x {1}.
+	TakeNeedsTerminal: El clic central saca objetos de los cofres del último terminal que abriste, mientras estés cerca de él.
 	TakeNotStored: "{0} no está en los cofres del terminal."
-	BlueprintTitle: "Planos"
-	BlueprintSmallHouse: "Casa pequeña"
-	BlueprintTwoFloors: "Casa de dos plantas"
-	BlueprintTower: "Torre"
-	BlueprintArena: "Arena de jefes"
-	BlueprintMedieval: "Casa medieval"
-	BlueprintCastle: "Castillo"
-	BlueprintPagoda: "Pagoda"
-	BlueprintWizardTower: "Torre de mago"
-	BlueprintMaterial: "Material:"
-	BlueprintPickMaterial: "Elige un material."
-	BlueprintNoMaterials: "No se encontró ningún material."
-	BlueprintCost: "Materiales (de tu inventario):"
-	BlueprintHave: "{0}: {1}/{2}"
-	BlueprintInChests: "(+{0} en los cofres)"
-	BlueprintPlace: "Colocar"
-	BlueprintHint: "Con el plano en la mano: clic izquierdo construye la casa donde está la vista previa, clic derecho abre este catálogo. Cada habitación es una vivienda válida para un PNJ."
-	BlueprintPreviewHint: "Clic izquierdo: construir aquí   Clic derecho: planos"
-	BuildBlocked: "Hay algo en medio (casillas rojas): despéjalo primero."
-	BuildMissing: "Faltan materiales: {0}"
-	BuildDone: "Construido: {0}."
-	BuildFailed: "No se pudo construir ahí; se te han devuelto los materiales."
+	BlueprintTitle: Planos
+	BlueprintSmallHouse: Casa pequeña
+	BlueprintTwoFloors: Casa de dos plantas
+	BlueprintTower: Torre
+	BlueprintArena: Arena de jefes
+	BlueprintMedieval: Casa medieval
+	BlueprintCastle: Castillo
+	BlueprintPagoda: Pagoda
+	BlueprintWizardTower: Torre de mago
+	BlueprintWorkshop: Casa del artesano
+	BlueprintTreeVillage: Aldea del árbol
+	BlueprintMaterial: Material:
+	BlueprintPickMaterial: Elige un material.
+	BlueprintNoMaterials: No se encontró ningún material.
+	BlueprintFree: Gratis: construir no gasta materiales.
+	BlueprintPlace: Colocar
+	BlueprintHint: Con el plano en la mano: clic izquierdo construye la casa donde está la vista previa, clic derecho abre este catálogo. Cada habitación es una vivienda válida para un PNJ.
+	BlueprintPreviewHint: Clic izquierdo: construir aquí   Clic derecho: planos
+	BuildBlocked: Hay algo en medio (casillas rojas): despéjalo primero.
+	BuildDone: Construido: {0}.
+	BuildFailed: No se pudo construir ahí.
 	GoalCollapse: Plegar (arrastra el título para mover el panel)
 	GoalExpand: Desplegar (arrastra el título para mover el panel)
 	CompareAdd: + Comparar
@@ -103,9 +102,9 @@ UI: {
 	TakeMissingHint: Saca de los cofres lo que le falta a tu inventario para fabricarlo una vez (Mayús: para 10)
 	TakeMissingStatus: En los cofres, te faltan en el inventario: {0}
 	TerminalTitle: Terminal de almacenamiento
-	ConnectedChests: Cofres conectados: {0}
-	WireStations: "Estaciones en el cable:"
-	NoWireStations: "ninguna (pon estaciones de fabricación en el cable rojo)"
+	ConnectedChests: "{0} cofres · {1}/{2} libres · {3}% lleno"
+	WireStations: Estaciones en el cable:
+	NoWireStations: ninguna (pon estaciones de fabricación en el cable rojo)
 	TerminalHint: Clic: una pila   Mantén clic dcho.: cantidad   Mayús: cofre   Ctrl: receta
 	TerminalHoldingHint: Clic en un objeto: sacar {0}   Clic dcho. en un hueco: cancelar
 	Max: Máx.
@@ -181,7 +180,7 @@ UI: {
 		Clic central en un objeto: saca una pila de los cofres de un terminal (cerca del último que abriste).
 		'''
 	TipPlaced: ¡Terminal colocado! Conéctalo a tus cofres con cable rojo (se pone con: {0}, lo vende: {1}) y haz clic derecho en él.
-	TipOpened: "Consejo: pasa el ratón por el botón ? para ver los controles del terminal. \"Recetas\" abre el índice de recetas a su lado."
+	TipOpened: Consejo: pasa el ratón por el botón ? para ver los controles del terminal. "Recetas" abre el índice de recetas a su lado.
 }
 
 Items: {
@@ -206,7 +205,7 @@ Items: {
 	}
 
 	BlueprintItem: {
-		DisplayName: "Plano"
+		DisplayName: Plano
 		Tooltip:
 			'''
 			Clic derecho para elegir una casa y su material
@@ -266,13 +265,8 @@ Configs: {
 		}
 
 		FocusTerminalSearch: {
-			Label: "Escribir en el buscador del terminal al abrirlo"
-			Tooltip: "Mientras escribes, las teclas del mod (N, [ y ]) no funcionan"
-		}
-
-		DeliveryDrones: {
-			Label: Drones repartidores
-			Tooltip: Pequeños drones llevan los objetos entre los cofres y la puerta del terminal (solo visual)
+			Label: Escribir en el buscador del terminal al abrirlo
+			Tooltip: Mientras escribes, las teclas del mod (N, [ y ]) no funcionan
 		}
 
 		ChestEffects: {

@@ -42,38 +42,37 @@ UI: {
 	TreeStations: Stations d'artisanat
 	SetGoal: Définir comme objectif
 	RemoveGoal: Retirer l'objectif
-	GoalTitle: "Objectif : {0}"
+	GoalTitle: Objectif : {0}
 	GoalReady: Tu as tout pour fabriquer {0} !
 	GoalReadyShort: Prêt à fabriquer !
 	GoalMore: +{0} de plus
-	GoalStep: "Fabriquer {0} x {1}"
-	GoalStepChests: "Fabriquer {0} x {1} (coffres)"
-	GoalNeedsStation: "L'étape suivante demande : {0}"
+	GoalStep: Fabriquer {0} x {1}
+	GoalStepChests: Fabriquer {0} x {1} (coffres)
+	GoalNeedsStation: L'étape suivante demande : {0}
 	GoalCrafted: "{0} x {1} fabriqué(s)."
-	TakeNeedsTerminal: "Le clic molette sort des objets des coffres du dernier terminal ouvert, tant que tu es près de lui."
+	TakeNeedsTerminal: Le clic molette sort des objets des coffres du dernier terminal ouvert, tant que tu es près de lui.
 	TakeNotStored: "{0} n'est pas dans les coffres du terminal."
-	BlueprintTitle: "Plans"
-	BlueprintSmallHouse: "Petite maison"
-	BlueprintTwoFloors: "Maison à deux étages"
-	BlueprintTower: "Tour"
-	BlueprintArena: "Arène de boss"
-	BlueprintMedieval: "Maison médiévale"
-	BlueprintCastle: "Château"
-	BlueprintPagoda: "Pagode"
-	BlueprintWizardTower: "Tour de mage"
-	BlueprintMaterial: "Matériau :"
-	BlueprintPickMaterial: "Choisis un matériau."
-	BlueprintNoMaterials: "Aucun matériau trouvé."
-	BlueprintCost: "Matériaux (pris dans ton inventaire) :"
-	BlueprintHave: "{0} : {1}/{2}"
-	BlueprintInChests: "(+{0} dans les coffres)"
-	BlueprintPlace: "Placer"
-	BlueprintHint: "Plan en main : clic gauche construit la maison là où est l'aperçu, clic droit ouvre ce catalogue. Chaque pièce est un logement valide pour un PNJ."
-	BlueprintPreviewHint: "Clic gauche : construire ici   Clic droit : plans"
-	BuildBlocked: "Quelque chose gêne (cases rouges) : dégage-le d'abord."
-	BuildMissing: "Matériaux manquants : {0}"
-	BuildDone: "Construit : {0} !"
-	BuildFailed: "Impossible de construire ici ; tes matériaux t'ont été rendus."
+	BlueprintTitle: Plans
+	BlueprintSmallHouse: Petite maison
+	BlueprintTwoFloors: Maison à deux étages
+	BlueprintTower: Tour
+	BlueprintArena: Arène de boss
+	BlueprintMedieval: Maison médiévale
+	BlueprintCastle: Château
+	BlueprintPagoda: Pagode
+	BlueprintWizardTower: Tour de mage
+	BlueprintWorkshop: Maison de l'artisan
+	BlueprintTreeVillage: Village des arbres
+	BlueprintMaterial: Matériau :
+	BlueprintPickMaterial: Choisis un matériau.
+	BlueprintNoMaterials: Aucun matériau trouvé.
+	BlueprintFree: Gratuit : construire ne consomme aucun matériau.
+	BlueprintPlace: Placer
+	BlueprintHint: Plan en main : clic gauche construit la maison là où est l'aperçu, clic droit ouvre ce catalogue. Chaque pièce est un logement valide pour un PNJ.
+	BlueprintPreviewHint: Clic gauche : construire ici   Clic droit : plans
+	BuildBlocked: Quelque chose gêne (cases rouges) : dégage-le d'abord.
+	BuildDone: Construit : {0} !
+	BuildFailed: Impossible de construire ici.
 	GoalCollapse: Replier (fais glisser le titre pour déplacer le panneau)
 	GoalExpand: Déplier (fais glisser le titre pour déplacer le panneau)
 	CompareAdd: + Comparer
@@ -101,13 +100,13 @@ UI: {
 	CraftFailed: Les coffres n'ont plus les ingrédients.
 	TakeMissing: Prendre le manquant
 	TakeMissingHint: Sort des coffres ce qui manque à ton inventaire pour une fabrication (Maj : pour 10)
-	TakeMissingStatus: "Dans les coffres, absent de ton inventaire : {0}"
+	TakeMissingStatus: Dans les coffres, absent de ton inventaire : {0}
 	TerminalTitle: Terminal de stockage
-	ConnectedChests: "Coffres connectés : {0}"
-	WireStations: "Stations sur le fil :"
-	NoWireStations: "aucune (mets des stations d'artisanat sur le fil rouge)"
-	TerminalHint: "Clic : une pile   Clic droit maintenu : quantité   Maj : coffre   Ctrl : recette"
-	TerminalHoldingHint: "Clic sur un objet : en sortir {0}   Clic droit dans le vide : annuler"
+	ConnectedChests: "{0} coffres · {1}/{2} libres · {3} % plein"
+	WireStations: Stations sur le fil :
+	NoWireStations: aucune (mets des stations d'artisanat sur le fil rouge)
+	TerminalHint: Clic : une pile   Clic droit maintenu : quantité   Maj : coffre   Ctrl : recette
+	TerminalHoldingHint: Clic sur un objet : en sortir {0}   Clic droit dans le vide : annuler
 	Max: Max
 	TerminalEmpty:
 		'''
@@ -119,12 +118,12 @@ UI: {
 	DepositHint: À la fermeture, les objets vont dans les coffres par la porte du terminal.
 	Done: Terminé
 	DepositDone: Objets rangés dans les coffres.
-	DepositNoSpace: "Attention : les coffres connectés sont pleins. {0} objet(s) n'ont pas été envoyés et restent dans le terminal jusqu'à ce qu'il y ait de la place ou que tu les reprennes."
+	DepositNoSpace: Attention : les coffres connectés sont pleins. {0} objet(s) n'ont pas été envoyés et restent dans le terminal jusqu'à ce qu'il y ait de la place ou que tu les reprennes.
 	DepositInUse: Un autre joueur utilise les emplacements de dépôt de ce terminal.
 	QuickDepositButton: Tout déposer
 	QuickDepositEmpty: Rien à déposer (la barre d'accès rapide, les pièces, les munitions et les favoris sont gardés).
-	QuickDepositNoSpace: "Les coffres connectés sont pleins : {0} objet(s) t'ont été rendus."
-	SortBy: "Tri : {0}"
+	QuickDepositNoSpace: Les coffres connectés sont pleins : {0} objet(s) t'ont été rendus.
+	SortBy: Tri : {0}
 	SortName: Nom
 	SortAmount: Quantité
 	SortRarity: Rareté
@@ -141,12 +140,12 @@ UI: {
 		'''
 	MoreAbove: "{0} de plus au-dessus (molette)"
 	MoreBelow: "{0} de plus en dessous (molette)"
-	SoldBy: "Vendu par {0} : {1}"
+	SoldBy: Vendu par {0} : {1}
 	SoldByFree: Vendu par {0}
 	DroppedBy: Lâché par {0} ({1})
 	FoundInside: Dans {0} ({1})
 	AnyEnemy: n'importe quel ennemi
-	SpawnsIn: "Se trouve dans : {0}"
+	SpawnsIn: Se trouve dans : {0}
 	Page: Page {0} / {1}  ({2} objets)
 	Platinum: "{0} platine"
 	Gold: "{0} or"
@@ -180,8 +179,8 @@ UI: {
 		Touches (Paramètres > Commandes) : ouvrir l'index, les recettes ou les utilisations de l'objet sous la souris.
 		Clic molette sur un objet : sortir une pile des coffres d'un terminal (près du dernier ouvert).
 		'''
-	TipPlaced: "Terminal posé ! Relie-le à tes coffres avec du fil rouge (posé avec : {0}, vendu par : {1}), puis fais un clic droit dessus."
-	TipOpened: "Astuce : survole le bouton ? pour voir les commandes du terminal. « Recettes » ouvre l'index des recettes à côté."
+	TipPlaced: Terminal posé ! Relie-le à tes coffres avec du fil rouge (posé avec : {0}, vendu par : {1}), puis fais un clic droit dessus.
+	TipOpened: Astuce : survole le bouton ? pour voir les commandes du terminal. « Recettes » ouvre l'index des recettes à côté.
 }
 
 Items: {
@@ -206,7 +205,7 @@ Items: {
 	}
 
 	BlueprintItem: {
-		DisplayName: "Plan"
+		DisplayName: Plan
 		Tooltip:
 			'''
 			Clic droit pour choisir une maison et son matériau
@@ -246,7 +245,7 @@ Configs: {
 		}
 
 		GoalPanelRows: {
-			Label: "Panneau d'objectif : matériaux affichés"
+			Label: Panneau d'objectif : matériaux affichés
 			Tooltip: Le reste est résumé en "+N de plus"
 		}
 
@@ -266,13 +265,8 @@ Configs: {
 		}
 
 		FocusTerminalSearch: {
-			Label: "Écrire dans la recherche du terminal à l'ouverture"
-			Tooltip: "Pendant la saisie, les touches du mod (N, [ et ]) ne marchent pas"
-		}
-
-		DeliveryDrones: {
-			Label: Drones de livraison
-			Tooltip: De petits drones portent les objets entre les coffres et la porte du terminal (purement visuel)
+			Label: Écrire dans la recherche du terminal à l'ouverture
+			Tooltip: Pendant la saisie, les touches du mod (N, [ et ]) ne marchent pas
 		}
 
 		ChestEffects: {

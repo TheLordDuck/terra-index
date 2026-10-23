@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using TerraIndex.Common;
 using TerraIndex.Content.Storage;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 

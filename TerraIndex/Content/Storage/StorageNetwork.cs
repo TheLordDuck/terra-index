@@ -12,6 +12,9 @@ namespace TerraIndex.Content.Storage
 	public class StorageSnapshot
 	{
 		public int ChestCount;
+		// Item slots in the connected chests, and how many of them hold something.
+		public int Slots;
+		public int UsedSlots;
 		public readonly Dictionary<int, int> Totals = new();
 		public readonly Dictionary<int, List<Point>> Locations = new();
 		// Crafting station tiles touched by the network's wire (see RecipeDatabase.IsStation).
@@ -20,7 +23,7 @@ namespace TerraIndex.Content.Storage
 		// Same contents give the same hash, whatever order the chests were walked in.
 		public int Hash()
 		{
-			int hash = ChestCount;
+			int hash = HashCode.Combine(ChestCount, Slots, UsedSlots);
 			unchecked {
 				foreach (var (type, stack) in Totals)
 					hash += HashCode.Combine(type, stack);
@@ -35,8 +38,8 @@ namespace TerraIndex.Content.Storage
 		}
 	}
 
-	// An item type that went into or out of a chest, shown by the delivery drones and chest effects (see NetworkEffects).
-	public readonly record struct ChestMove(Point Chest, int Type, bool Entering);
+	// An item type taken out of a chest, shown by the chest effects (see NetworkEffects).
+	public readonly record struct ChestMove(Point Chest, int Type);
 
 	public static class StorageNetwork
 	{
@@ -45,10 +48,10 @@ namespace TerraIndex.Content.Storage
 		public const int MaxMoves = 16;
 		public static readonly List<ChestMove> Moves = new();
 
-		private static void Record(int index, int type, bool entering)
+		private static void Record(int index, int type)
 		{
 			Chest chest = Main.chest[index];
-			var move = new ChestMove(new Point(chest.x, chest.y), type, entering);
+			var move = new ChestMove(new Point(chest.x, chest.y), type);
 			if (Moves.Count < MaxMoves && !Moves.Contains(move))
 				Moves.Add(move);
 		}
@@ -84,10 +87,12 @@ namespace TerraIndex.Content.Storage
 					continue;
 
 				var position = new Point(chest.x, chest.y);
+				snapshot.Slots += chest.item.Length;
 				foreach (Item item in chest.item) {
 					if (item == null || item.IsAir)
 						continue;
 
+					snapshot.UsedSlots++;
 					snapshot.Totals[item.type] = snapshot.Totals.GetValueOrDefault(item.type) + item.stack;
 					if (!snapshot.Locations.TryGetValue(item.type, out List<Point> list))
 						snapshot.Locations[item.type] = list = new List<Point>();
@@ -129,7 +134,7 @@ namespace TerraIndex.Content.Storage
 					item.stack -= moved;
 					if (item.stack <= 0)
 						item.TurnToAir();
-					Record(index, type, false);
+					Record(index, type);
 					if (Main.netMode == NetmodeID.Server)
 						NetMessage.SendData(MessageID.SyncChestItem, number: index, number2: slot);
 
@@ -178,7 +183,6 @@ namespace TerraIndex.Content.Storage
 							}
 
 							moved = true;
-							Record(index, type, true);
 							if (Main.netMode == NetmodeID.Server)
 								NetMessage.SendData(MessageID.SyncChestItem, number: index, number2: slot);
 						}
@@ -241,7 +245,7 @@ namespace TerraIndex.Content.Storage
 					amount -= taken;
 					if (item.stack <= 0)
 						item.TurnToAir();
-					Record(index, type, false);
+					Record(index, type);
 					if (Main.netMode == NetmodeID.Server)
 						NetMessage.SendData(MessageID.SyncChestItem, number: index, number2: slot);
 				}

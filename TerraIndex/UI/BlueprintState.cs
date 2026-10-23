@@ -15,7 +15,7 @@ using Terraria.UI;
 
 namespace TerraIndex.UI
 {
-	// Blueprint catalog (see BuildSystem): which house, which material, a small preview and what it costs.
+	// Blueprint catalog (see BuildSystem): which house, which material and a small preview. Building is free.
 	public class BlueprintState : UIState
 	{
 		private UIPanel panel;
@@ -54,12 +54,10 @@ namespace TerraIndex.UI
 	}
 
 	// Drawn by hand, like the recipe view: clickable areas are registered while drawing.
-	// Cost colors as in the recipe index: green = in the inventory, blue = the rest is in a terminal's chests, red = missing.
 	public class BlueprintView : UIElement
 	{
 		private const int Slot = 34;
 		private const float PreviewHeight = 160;
-		private const int LineHeight = 24;
 
 		private readonly List<(Rectangle Area, Action Click)> hotspots = new();
 
@@ -144,47 +142,11 @@ namespace TerraIndex.UI
 			BuildSystem.DrawBlueprint(spriteBatch, chosen, material, topLeft, cell, 1f);
 			y += PreviewHeight + 8;
 
-			// What it costs, and what the chests can add.
-			Utils.DrawBorderString(spriteBatch, UIHelpers.T("BlueprintCost"), new Vector2(left, y), new Color(255, 220, 120), 0.85f);
-			y += 26;
-			Dictionary<int, int> inventory = CraftingPlan.Inventory(Main.LocalPlayer);
-			List<CostLine> lines = Blueprints.Cost(chosen.Items(material), inventory);
-			int[] missing = Blueprints.Allocate(lines, inventory);
-			var stored = new Dictionary<int, int>();
-			if (Terminal.CanCraft) {
-				foreach (Item item in Terminal.StoredItems)
-					stored[item.type] = item.stack;
-			}
-			var take = new List<(int Type, int Amount)>();
-			int[] stillMissing = Blueprints.Allocate(lines.Select((line, i) => line with { Amount = missing[i] }).ToList(), stored, take);
-
-			// Two columns: the big designs take many different materials.
-			float columnWidth = inner.Width / 2f;
-			for (int i = 0; i < lines.Count; i++) {
-				CostLine line = lines[i];
-				int shown = line.Group != null ? UIHelpers.Cycle(line.Group) : line.Type;
-				float lineX = left + i % 2 * columnWidth;
-				UIHelpers.DrawItem(spriteBatch, ContentSamples.ItemsByType[shown], new Vector2(lineX, y), 0.42f);
-				string text = UIHelpers.T("BlueprintHave", line.Name, line.Amount - missing[i], line.Amount);
-				int fromChests = missing[i] - stillMissing[i];
-				if (fromChests > 0)
-					text += "  " + UIHelpers.T("BlueprintInChests", fromChests);
-				Color color = missing[i] == 0 ? new Color(140, 255, 140) : stillMissing[i] == 0 ? new Color(120, 180, 255) : new Color(255, 120, 120);
-				Utils.DrawBorderString(spriteBatch, UIHelpers.Fit(text, columnWidth - 34, 0.8f), new Vector2(lineX + 28, y + 3), color, 0.8f);
-				if (i % 2 == 1 || i == lines.Count - 1)
-					y += LineHeight;
-			}
-			y += 8;
+			Utils.DrawBorderString(spriteBatch, UIHelpers.T("BlueprintFree"), new Vector2(left, y), new Color(140, 255, 140), 0.85f);
+			y += 30;
 
 			// Buttons.
 			x = left;
-			if (take.Count > 0) {
-				string label = UIHelpers.T("TakeMissing");
-				var area = new Rectangle((int)x, (int)y, (int)UIHelpers.Measure(label, 0.85f).X + 20, 30);
-				Button(spriteBatch, area, label, true, false);
-				hotspots.Add((area, () => Terminal.RequestTakeItems(take)));
-				x += area.Width + 8;
-			}
 			string place = UIHelpers.T("BlueprintPlace");
 			var placeArea = new Rectangle((int)x, (int)y, (int)UIHelpers.Measure(place, 0.85f).X + 20, 30);
 			Button(spriteBatch, placeArea, place, true, false);

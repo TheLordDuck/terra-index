@@ -36,9 +36,6 @@ namespace TerraIndex.Common
 
 		[Header("Effects")]
 		[DefaultValue(true)]
-		public bool DeliveryDrones;
-
-		[DefaultValue(true)]
 		public bool ChestEffects;
 	}
 

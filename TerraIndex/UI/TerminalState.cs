@@ -27,6 +27,7 @@ namespace TerraIndex.UI
 		// Reopening the same terminal within this time keeps the search, the category tab and the page.
 		private const int RememberTicks = 60 * 30;
 		private const float HintWidth = 496;
+		private const float InfoScale = 0.8f;
 
 		private UIPanel panel;
 		private UIText info;
@@ -104,6 +105,8 @@ namespace TerraIndex.UI
 				sort.SetText(SortLabel());
 				PlaceRecipesButton();
 				panel.Recalculate();
+				// The info line fits next to it, so it's measured again.
+				seenVersion = -1;
 				SoundEngine.PlaySound(SoundID.MenuTick);
 			};
 			panel.Append(sort);
@@ -137,7 +140,7 @@ namespace TerraIndex.UI
 			search.OnTextChanged += grid.SetFilter;
 			panel.Append(search);
 
-			info = new UIText("", 0.85f);
+			info = new UIText("", InfoScale);
 			info.Top.Set(76, 0);
 			panel.Append(info);
 
@@ -204,7 +207,13 @@ namespace TerraIndex.UI
 			if (seenVersion != Terminal.Version) {
 				seenVersion = Terminal.Version;
 				grid.Refresh();
-				info.SetText(UIHelpers.T("ConnectedChests", Terminal.ChestCount));
+				// Chests, free slots and how full they are, the fuller the redder.
+				int slots = Terminal.Slots;
+				int full = slots > 0 ? (int)Math.Round(100.0 * Terminal.UsedSlots / slots) : 0;
+				// Only as wide as the room left of the recipes and sort buttons on the same row.
+				float room = panel.GetInnerDimensions().Width - sort.MinWidth.Pixels - recipes.MinWidth.Pixels - 18;
+				info.SetText(UIHelpers.Fit(UIHelpers.T("ConnectedChests", Terminal.ChestCount, slots - Terminal.UsedSlots, slots, full), room, InfoScale));
+				info.TextColor = full >= 90 ? new Color(255, 120, 110) : full >= 70 ? new Color(255, 215, 110) : Color.White;
 				grid.EmptyText = UIHelpers.T(Terminal.StoredItems.Count == 0 ? "TerminalEmpty" : "NoResults");
 				// Someone else may have taken some out meanwhile.
 				if (selectedType > 0)
@@ -326,7 +335,7 @@ namespace TerraIndex.UI
 		}
 
 		// The panel (and the index next to it) stays open, so several things can be taken out in a row: the item drops
-		// out of the door when standing at it, otherwise a drone brings it (see TerminalSystem.Deliver).
+		// out of the door, or at the player's feet with a portable terminal far away (see TerminalSystem.Deliver).
 		private void Withdraw(int type, int amount)
 		{
 			Terminal.RequestWithdraw(type, amount);

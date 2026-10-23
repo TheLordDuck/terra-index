@@ -42,38 +42,37 @@ UI: {
 	TreeStations: Stacje rzemieślnicze
 	SetGoal: Ustaw jako cel
 	RemoveGoal: Usuń cel
-	GoalTitle: "Cel: {0}"
+	GoalTitle: Cel: {0}
 	GoalReady: Masz wszystko, by wytworzyć {0}!
 	GoalReadyShort: Gotowe do wytworzenia!
 	GoalMore: +{0} więcej
-	GoalStep: "Wytwórz {0} x {1}"
-	GoalStepChests: "Wytwórz {0} x {1} (skrzynie)"
-	GoalNeedsStation: "Następny krok wymaga: {0}"
-	GoalCrafted: "Wytworzono {0} x {1}."
-	TakeNeedsTerminal: "Środkowy przycisk myszy wyjmuje przedmioty ze skrzyń ostatnio otwartego terminala, gdy jesteś blisko niego."
+	GoalStep: Wytwórz {0} x {1}
+	GoalStepChests: Wytwórz {0} x {1} (skrzynie)
+	GoalNeedsStation: Następny krok wymaga: {0}
+	GoalCrafted: Wytworzono {0} x {1}.
+	TakeNeedsTerminal: Środkowy przycisk myszy wyjmuje przedmioty ze skrzyń ostatnio otwartego terminala, gdy jesteś blisko niego.
 	TakeNotStored: "{0} nie ma w skrzyniach terminala."
-	BlueprintTitle: "Plany"
-	BlueprintSmallHouse: "Mały dom"
-	BlueprintTwoFloors: "Dom piętrowy"
-	BlueprintTower: "Wieża"
-	BlueprintArena: "Arena na bossy"
-	BlueprintMedieval: "Dom średniowieczny"
-	BlueprintCastle: "Zamek"
-	BlueprintPagoda: "Pagoda"
-	BlueprintWizardTower: "Wieża maga"
-	BlueprintMaterial: "Materiał:"
-	BlueprintPickMaterial: "Wybierz materiał."
-	BlueprintNoMaterials: "Nie znaleziono materiałów."
-	BlueprintCost: "Materiały (z ekwipunku):"
-	BlueprintHave: "{0}: {1}/{2}"
-	BlueprintInChests: "(+{0} w skrzyniach)"
-	BlueprintPlace: "Postaw"
-	BlueprintHint: "Trzymając plan: LPM buduje dom tam, gdzie jest podgląd, PPM otwiera ten katalog. Każdy pokój jest poprawnym mieszkaniem dla NPC."
-	BlueprintPreviewHint: "LPM: buduj tutaj   PPM: plany"
-	BuildBlocked: "Coś przeszkadza (czerwone pola): najpierw to usuń."
-	BuildMissing: "Brakuje materiałów: {0}"
-	BuildDone: "Zbudowano: {0}!"
-	BuildFailed: "Nie dało się tu zbudować; materiały zostały zwrócone."
+	BlueprintTitle: Plany
+	BlueprintSmallHouse: Mały dom
+	BlueprintTwoFloors: Dom piętrowy
+	BlueprintTower: Wieża
+	BlueprintArena: Arena na bossy
+	BlueprintMedieval: Dom średniowieczny
+	BlueprintCastle: Zamek
+	BlueprintPagoda: Pagoda
+	BlueprintWizardTower: Wieża maga
+	BlueprintWorkshop: Dom rzemieślnika
+	BlueprintTreeVillage: Wioska na drzewach
+	BlueprintMaterial: Materiał:
+	BlueprintPickMaterial: Wybierz materiał.
+	BlueprintNoMaterials: Nie znaleziono materiałów.
+	BlueprintFree: Za darmo: budowanie nie zużywa materiałów.
+	BlueprintPlace: Postaw
+	BlueprintHint: Trzymając plan: LPM buduje dom tam, gdzie jest podgląd, PPM otwiera ten katalog. Każdy pokój jest poprawnym mieszkaniem dla NPC.
+	BlueprintPreviewHint: LPM: buduj tutaj   PPM: plany
+	BuildBlocked: Coś przeszkadza (czerwone pola): najpierw to usuń.
+	BuildDone: Zbudowano: {0}!
+	BuildFailed: Nie udało się tu zbudować.
 	GoalCollapse: Zwiń (przeciągnij tytuł, by przesunąć panel)
 	GoalExpand: Rozwiń (przeciągnij tytuł, by przesunąć panel)
 	CompareAdd: + Porównaj
@@ -97,17 +96,17 @@ UI: {
 	CraftNoIngredients: Za mało składników w skrzyniach terminala
 	CraftNoStation: Brak stacji rzemieślniczej (w pobliżu lub na kablu terminala)
 	CraftNoConditions: Warunki nie są tu spełnione
-	Crafted: "Wytworzono {0} x {1} z twoich skrzyń."
+	Crafted: Wytworzono {0} x {1} z twoich skrzyń.
 	CraftFailed: W skrzyniach nie ma już składników.
 	TakeMissing: Weź brakujące
 	TakeMissingHint: Wyjmuje ze skrzyń to, czego brakuje w ekwipunku na jedno wytworzenie (Shift: na 10)
-	TakeMissingStatus: "W skrzyniach, brakuje w ekwipunku: {0}"
+	TakeMissingStatus: W skrzyniach, brakuje w ekwipunku: {0}
 	TerminalTitle: Terminal magazynu
-	ConnectedChests: "Podłączone skrzynie: {0}"
-	WireStations: "Stacje na kablu:"
-	NoWireStations: "brak (poprowadź czerwony kabel do stacji rzemieślniczych)"
-	TerminalHint: "Klik: stos   Przytrzymaj PPM: ilość   Shift: skrzynia   Ctrl: przepis"
-	TerminalHoldingHint: "Klik na przedmiocie: wyjmij {0}   PPM w puste miejsce: anuluj"
+	ConnectedChests: "{0} skrzyń · {1}/{2} wolne · {3}% pełne"
+	WireStations: Stacje na kablu:
+	NoWireStations: brak (poprowadź czerwony kabel do stacji rzemieślniczych)
+	TerminalHint: Klik: stos   Przytrzymaj PPM: ilość   Shift: skrzynia   Ctrl: przepis
+	TerminalHoldingHint: Klik na przedmiocie: wyjmij {0}   PPM w puste miejsce: anuluj
 	Max: Maks
 	TerminalEmpty:
 		'''
@@ -119,12 +118,12 @@ UI: {
 	DepositHint: Po zamknięciu przedmioty trafią do skrzyń przez drzwiczki terminala.
 	Done: Gotowe
 	DepositDone: Przedmioty odłożone do skrzyń.
-	DepositNoSpace: "Uwaga: podłączone skrzynie są pełne. {0} przedmiot(ów) nie wysłano; zostają w terminalu, aż zrobi się miejsce lub je zabierzesz."
+	DepositNoSpace: Uwaga: podłączone skrzynie są pełne. {0} przedmiot(ów) nie wysłano; zostają w terminalu, aż zrobi się miejsce lub je zabierzesz.
 	DepositInUse: Inny gracz używa miejsc depozytu tego terminala.
 	QuickDepositButton: Odłóż wszystko
 	QuickDepositEmpty: Nie ma czego odłożyć (pasek szybkiego dostępu, monety, amunicja i ulubione zostają).
-	QuickDepositNoSpace: "Podłączone skrzynie są pełne: zwrócono ci {0} przedmiot(ów)."
-	SortBy: "Sortuj: {0}"
+	QuickDepositNoSpace: Podłączone skrzynie są pełne: zwrócono ci {0} przedmiot(ów).
+	SortBy: Sortuj: {0}
 	SortName: Nazwa
 	SortAmount: Ilość
 	SortRarity: Rzadkość
@@ -141,12 +140,12 @@ UI: {
 		'''
 	MoreAbove: "{0} więcej wyżej (kółko myszy)"
 	MoreBelow: "{0} więcej niżej (kółko myszy)"
-	SoldBy: "Sprzedaje: {0}: {1}"
-	SoldByFree: "Sprzedaje: {0}"
-	DroppedBy: "Wypada z: {0} ({1})"
-	FoundInside: "W środku: {0} ({1})"
+	SoldBy: Sprzedaje: {0}: {1}
+	SoldByFree: Sprzedaje: {0}
+	DroppedBy: Wypada z: {0} ({1})
+	FoundInside: W środku: {0} ({1})
 	AnyEnemy: dowolnego wroga
-	SpawnsIn: "Występuje: {0}"
+	SpawnsIn: Występuje: {0}
 	Page: Strona {0} / {1}  ({2} przedmiotów)
 	Platinum: "{0} plat."
 	Gold: "{0} zł."
@@ -180,8 +179,8 @@ UI: {
 		Klawisze (Ustawienia > Sterowanie): otwórz indeks, przepisy lub zastosowania przedmiotu pod kursorem.
 		Środkowy przycisk na przedmiocie: wyjmij stos ze skrzyń terminala (blisko ostatnio otwartego).
 		'''
-	TipPlaced: "Terminal postawiony! Połącz go ze skrzyniami czerwonym kablem (kładzie się go: {0}, sprzedaje: {1}), a potem kliknij go PPM."
-	TipOpened: "Wskazówka: najedź na przycisk ?, by zobaczyć sterowanie terminala. „Przepisy” otwiera obok indeks przepisów."
+	TipPlaced: Terminal postawiony! Połącz go ze skrzyniami czerwonym kablem (kładzie się go: {0}, sprzedaje: {1}), a potem kliknij go PPM.
+	TipOpened: Wskazówka: najedź na przycisk ?, by zobaczyć sterowanie terminala. „Przepisy” otwiera obok indeks przepisów.
 }
 
 Items: {
@@ -206,7 +205,7 @@ Items: {
 	}
 
 	BlueprintItem: {
-		DisplayName: "Plan budowy"
+		DisplayName: Plan budowy
 		Tooltip:
 			'''
 			PPM, by wybrać dom i materiał
@@ -246,7 +245,7 @@ Configs: {
 		}
 
 		GoalPanelRows: {
-			Label: "Panel celu: pokazane materiały"
+			Label: Panel celu: pokazane materiały
 			Tooltip: Reszta jest podsumowana jako "+N więcej"
 		}
 
@@ -266,13 +265,8 @@ Configs: {
 		}
 
 		FocusTerminalSearch: {
-			Label: "Pisz w wyszukiwarce terminala po jego otwarciu"
-			Tooltip: "Podczas pisania klawisze moda (N, [ i ]) nie działają"
-		}
-
-		DeliveryDrones: {
-			Label: Drony kurierskie
-			Tooltip: Małe drony noszą przedmioty między skrzyniami a drzwiczkami terminala (tylko wizualnie)
+			Label: Pisz w wyszukiwarce terminala po jego otwarciu
+			Tooltip: Podczas pisania klawisze moda (N, [ i ]) nie działają
 		}
 
 		ChestEffects: {

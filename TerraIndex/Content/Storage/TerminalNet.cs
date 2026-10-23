@@ -30,7 +30,6 @@ namespace TerraIndex.Content.Storage
 			DepositUpdate,
 			DepositClose,
 			DepositResult,
-			ItemsEntering,
 			QuickDeposit,
 			Craft,
 			CraftResult,
@@ -38,6 +37,8 @@ namespace TerraIndex.Content.Storage
 			RadioToggle,
 			RadioPlay,
 			ChestMoves,
+			ItemsEntering,
+			Drone,
 			Build,
 			BuildResult,
 		}
@@ -45,8 +46,6 @@ namespace TerraIndex.Content.Storage
 		// A ModPacket can't exceed ~65 KB; large networks are sent in several chunks.
 		private const int ChunkBudget = 30000;
 		private const int MinTicksBetweenRequests = 10;
-		// More than any blueprint's cost has lines.
-		private const int MaxBuildItems = 60;
 		// Main inventory slots, the most a quick deposit can send.
 		private const int MaxQuickDepositItems = 40;
 
@@ -64,12 +63,15 @@ namespace TerraIndex.Content.Storage
 		private static StorageSnapshot pending;
 
 		// force: reply even if nothing changed since the last reply to this player.
-		public static void SendRequest(Point terminal, bool force)
+		// remote: the terminal is being used through a portable terminal (the panel asks twice a second, so the server
+		// always knows; see TerminalSystem.ByRemote).
+		public static void SendRequest(Point terminal, bool force, bool remote)
 		{
 			ModPacket packet = Mod.GetPacket();
 			packet.Write((byte)MessageType.RequestContents);
 			WritePoint(packet, terminal);
 			packet.Write(force);
+			packet.Write(remote);
 			packet.Send();
 		}
 
@@ -98,7 +100,11 @@ namespace TerraIndex.Content.Storage
 			switch (message) {
 				case MessageType.RequestContents: {
 					Point terminal = ReadPoint(reader);
-					HandleRequest(terminal, reader.ReadBoolean(), whoAmI);
+					bool force = reader.ReadBoolean();
+					bool remote = reader.ReadBoolean();
+					if (Main.netMode == NetmodeID.Server)
+						TerminalSystem.SetRemote(whoAmI, remote && RemoteTerminalItem.IsLinkedTo(Main.player[whoAmI], terminal));
+					HandleRequest(terminal, force, whoAmI);
 					break;
 				}
 				case MessageType.Contents:
@@ -177,23 +183,33 @@ namespace TerraIndex.Content.Storage
 					break;
 				}
 				case MessageType.ChestMoves: {
-					Point terminal = ReadPoint(reader);
-					int toPlayer = reader.ReadByte();
 					var moves = new List<ChestMove>();
 					for (int count = Math.Min((int)reader.ReadByte(), StorageNetwork.MaxMoves); count > 0; count--)
-						moves.Add(new ChestMove(ReadPoint(reader), reader.ReadInt32(), reader.ReadBoolean()));
-					ModContent.GetInstance<NetworkEffects>().Show(terminal, moves, toPlayer == byte.MaxValue ? -1 : toPlayer);
+						moves.Add(new ChestMove(ReadPoint(reader), reader.ReadInt32()));
+					ModContent.GetInstance<NetworkEffects>().Show(moves);
+					break;
+				}
+				case MessageType.Drone: {
+					int player = reader.ReadByte();
+					ModContent.GetInstance<NetworkEffects>().ShowDrone(player, reader.ReadInt32());
+					break;
+				}
+				case MessageType.ItemsEntering: {
+					Point terminal = ReadPoint(reader);
+					Player player = Main.player[reader.ReadByte()];
+					bool remote = reader.ReadBoolean();
+					var types = new List<int>();
+					for (int count = reader.ReadByte(); count > 0; count--)
+						types.Add(reader.ReadInt32());
+					ModContent.GetInstance<TerminalSystem>().ShowItemsEntering(terminal, player, types, remote);
 					break;
 				}
 				case MessageType.Build: {
 					int blueprint = reader.ReadByte();
 					int block = reader.ReadInt32();
 					Point origin = ReadPoint(reader);
-					var used = new List<(int Type, int Amount)>();
-					for (int count = Math.Min((int)reader.ReadByte(), MaxBuildItems); count > 0; count--)
-						used.Add((reader.ReadInt32(), reader.ReadInt32()));
 					if (Main.netMode == NetmodeID.Server)
-						ModContent.GetInstance<BuildSystem>().ReceiveBuild(whoAmI, blueprint, block, origin, used);
+						ModContent.GetInstance<BuildSystem>().ReceiveBuild(whoAmI, blueprint, block, origin);
 					break;
 				}
 				case MessageType.BuildResult: {
@@ -202,20 +218,21 @@ namespace TerraIndex.Content.Storage
 					ModContent.GetInstance<BuildSystem>().ShowBuildResult(ok, blueprint, ReadPoint(reader));
 					break;
 				}
-				case MessageType.ItemsEntering: {
-					Point terminal = ReadPoint(reader);
-					Player player = Main.player[reader.ReadByte()];
-					var types = new List<int>();
-					for (int count = reader.ReadByte(); count > 0; count--)
-						types.Add(reader.ReadInt32());
-					ModContent.GetInstance<TerminalSystem>().ShowItemsEntering(terminal, player.Center, types);
-					break;
-				}
 			}
 		}
 
-		// Server -> every client except the depositing player (who already shows it): items flying into the door.
-		public static void SendItemsEntering(Point terminal, int player, List<int> types)
+		// Server -> every client: a drone bringing an item of this type to this player (portable terminal).
+		public static void SendDrone(int player, int type)
+		{
+			ModPacket packet = Mod.GetPacket();
+			packet.Write((byte)MessageType.Drone);
+			packet.Write((byte)player);
+			packet.Write(type);
+			packet.Send();
+		}
+
+		// Server -> every client except the depositing player (who already shows it): items flying into the door (or a drone).
+		public static void SendItemsEntering(Point terminal, int player, List<int> types, bool remote)
 		{
 			if (types.Count == 0)
 				return;
@@ -223,43 +240,35 @@ namespace TerraIndex.Content.Storage
 			packet.Write((byte)MessageType.ItemsEntering);
 			WritePoint(packet, terminal);
 			packet.Write((byte)player);
+			packet.Write(remote);
 			packet.Write((byte)types.Count);
 			foreach (int type in types)
 				packet.Write(type);
 			packet.Send(-1, player);
 		}
 
-		// Server -> every client: what went into or out of which chests, for the drones and chest effects.
-		// toPlayer: who the drones bring the items taken out to, or -1 for the terminal's door.
-		public static void SendChestMoves(Point terminal, List<ChestMove> moves, int toPlayer)
+		// Server -> every client: what was taken out of which chests, for the chest effects.
+		public static void SendChestMoves(List<ChestMove> moves)
 		{
 			ModPacket packet = Mod.GetPacket();
 			packet.Write((byte)MessageType.ChestMoves);
-			WritePoint(packet, terminal);
-			packet.Write((byte)(toPlayer < 0 ? byte.MaxValue : toPlayer));
 			packet.Write((byte)moves.Count);
 			foreach (ChestMove move in moves) {
 				WritePoint(packet, move.Chest);
 				packet.Write(move.Type);
-				packet.Write(move.Entering);
 			}
 			packet.Send();
 		}
 
 		// Client -> server: build this blueprint here. used: the materials the client already took out of its inventory,
 		// given back if the server can't build it (blueprints aren't part of the terminal, but share the mod's packets).
-		public static void SendBuild(int blueprint, int block, Point origin, List<(int Type, int Amount)> used)
+		public static void SendBuild(int blueprint, int block, Point origin)
 		{
 			ModPacket packet = Mod.GetPacket();
 			packet.Write((byte)MessageType.Build);
 			packet.Write((byte)blueprint);
 			packet.Write(block);
 			WritePoint(packet, origin);
-			packet.Write((byte)Math.Min(used.Count, MaxBuildItems));
-			foreach (var (type, amount) in used.Take(MaxBuildItems)) {
-				packet.Write(type);
-				packet.Write(amount);
-			}
 			packet.Send();
 		}
 
@@ -459,6 +468,8 @@ namespace TerraIndex.Content.Storage
 				packet.Write(first);
 				packet.Write(next == entries.Count);
 				packet.Write(snapshot.ChestCount);
+				packet.Write(snapshot.Slots);
+				packet.Write(snapshot.UsedSlots);
 				// The crafting stations on the wire go only in the first chunk.
 				if (first) {
 					packet.Write((short)snapshot.Stations.Count);
@@ -487,6 +498,8 @@ namespace TerraIndex.Content.Storage
 			bool first = reader.ReadBoolean();
 			bool last = reader.ReadBoolean();
 			int chestCount = reader.ReadInt32();
+			int slots = reader.ReadInt32();
+			int usedSlots = reader.ReadInt32();
 			var stations = new List<int>();
 			if (first) {
 				for (int i = reader.ReadInt16(); i > 0; i--)
@@ -495,7 +508,7 @@ namespace TerraIndex.Content.Storage
 			int count = reader.ReadInt32();
 
 			if (first || pending == null) {
-				pending = new StorageSnapshot { ChestCount = chestCount };
+				pending = new StorageSnapshot { ChestCount = chestCount, Slots = slots, UsedSlots = usedSlots };
 				pending.Stations.UnionWith(stations);
 			}
 

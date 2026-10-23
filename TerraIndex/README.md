@@ -112,8 +112,8 @@ chests of a terminal in reach. If a step only lacks its crafting station, the pa
 12. Above the items, the **crafting stations on the terminal's wire** (hover one for its name). They count for
     crafting from the chests, as if they were next to you.
 
-Delivery drones fly the items between the chests and the terminal's door, and the chests spark when items go in or
-out. If you are not standing at the door, the drones bring what you take out straight to you. Reopening the same
+What you take out drops out of the terminal's door (only you can pick it up for 10 seconds), and the chests it came
+from spark. With a portable terminal far away, it appears at your feet instead. Reopening the same
 terminal within 30 seconds keeps your search. In the recipe index, **middle click** any item to take a stack of it out
 of the chests of the terminal you are near.
 
@@ -137,16 +137,16 @@ The host can turn portable terminals off in the server settings.
 Craft a **Blueprint** (10 of any wood at a work bench) to build ready-made houses:
 
 1. Hold it and **right click**: pick a design and its material (every wood, glass and more, including woods from
-   other mods): small house, two-floor house, tower, **medieval house**, **castle**, **pagoda**, **wizard tower** or
-   boss arena. The big ones mix fixed materials (gray brick, red brick or shingle roofs, glass windows, banners,
+   other mods): small house, two-floor house, tower, **medieval house**, **castle**, **pagoda**, **wizard tower**,
+   **craftsman's house** (a forge yard, kitchen, workshop hall, library, bedroom and attic with a place for every
+   crafting station), **tree village** (a big lodge with 30 NPC rooms between two big trees, to go above the
+   craftsman's house) or boss arena. The big ones mix fixed materials (gray brick, red brick or shingle roofs, glass windows, banners,
    fireplaces) with the wood you pick for the frame and the furniture. Pictures of all of them are in
-   [`docs/blueprints/`](../docs/blueprints/). The catalog shows what it costs and what you
-   have: green in your inventory, blue in the chests of a terminal you are near (**Take missing** brings it), red
-   missing. **Place** closes the catalog.
+   [`docs/blueprints/`](../docs/blueprints/). **Place** closes the catalog.
 2. Move the mouse: a see-through preview shows where it goes, standing on the tile under the mouse. Red tiles mean
    something is in the way (grass and plants are cleared on their own).
-3. **Left click** to build it. The materials come from your inventory; no crafting station is needed, and walls
-   already there are kept and not charged. Every room is valid housing for an NPC.
+3. **Left click** to build it. It's free: the Blueprint itself is all it costs. Walls already there are kept. Every
+   room is valid housing for an NPC.
 
 ## Multiplayer
 
@@ -168,7 +168,6 @@ In **Settings → Mod Configuration → Terra Index**:
 | Chest highlight duration | 10 s |
 | Include the hotbar in "Deposit all" | Off |
 | Type in the terminal's search box when it opens | On |
-| Delivery drones | On |
 | Chest effects (sparks, light, sound) | On |
 
 | Server settings (the host's, synced to everyone) | Default |
@@ -183,18 +182,18 @@ In **Settings → Mod Configuration → Terra Index**:
 **0.8**
 - The terminal shows the crafting stations on its wire.
 - Ores and bars are in the materials tab, not with the blocks and furniture.
-- Blueprints: pick a design and a material, see a preview where it goes and build it with one click, with
-  materials from your inventory (or brought from the terminal's chests). Every room is valid NPC housing.
+- Blueprints: pick a design and a material, see a preview where it goes and build it with one click, for free.
+  Every room is valid NPC housing. The craftsman's house has a themed room and a place for every crafting station.
   Designs: small house, two-floor house, tower, medieval house, castle, pagoda, wizard tower, boss arena.
 
 **0.7**
 - The recipe index opens next to the terminal (Recipes button or Ctrl + click), and both can be used at once.
-  The terminal stays open when taking items out and on "Deposit all"; away from its door, drones bring the items to you.
+  The terminal stays open when taking items out and on "Deposit all".
 - Middle click an item in the recipe index to take a stack out of the chests. The terminal remembers your search for
   30 s, and typing in it on open can be turned off.
 - Goal panel: a button crafts the next step towards the goal (first the bars, then the sword), from your inventory
   or from a terminal's chests.
-- Delivery drones carry items between the chests and the terminal's door; chests spark when items go in or out.
+- Chests spark when items are taken out of them.
 - German, French, Brazilian Portuguese, Russian, Italian, Polish and Simplified Chinese.
 - "?" buttons with the controls of the terminal and the index; tips the first time you place and open a terminal.
 

@@ -46,34 +46,33 @@ UI: {
 	GoalReady: 你已备齐制作 {0} 的所有材料！
 	GoalReadyShort: 可以制作了！
 	GoalMore: 还有 {0} 项
-	GoalStep: "制作 {0} x {1}"
-	GoalStepChests: "制作 {0} x {1}（箱子）"
-	GoalNeedsStation: "下一步需要：{0}"
-	GoalCrafted: "已制作 {0} x {1}。"
-	TakeNeedsTerminal: "鼠标中键会从你最后打开的终端的箱子中取出物品，前提是你在它附近。"
+	GoalStep: 制作 {0} x {1}
+	GoalStepChests: 制作 {0} x {1}（箱子）
+	GoalNeedsStation: 下一步需要：{0}
+	GoalCrafted: 已制作 {0} x {1}。
+	TakeNeedsTerminal: 鼠标中键会从你最后打开的终端的箱子中取出物品，前提是你在它附近。
 	TakeNotStored: "{0} 不在终端的箱子里。"
-	BlueprintTitle: "蓝图"
-	BlueprintSmallHouse: "小房子"
-	BlueprintTwoFloors: "两层房屋"
-	BlueprintTower: "塔楼"
-	BlueprintArena: "Boss 竞技场"
-	BlueprintMedieval: "中世纪房屋"
-	BlueprintCastle: "城堡"
-	BlueprintPagoda: "宝塔"
-	BlueprintWizardTower: "法师塔"
-	BlueprintMaterial: "材料："
-	BlueprintPickMaterial: "请选择一种材料。"
-	BlueprintNoMaterials: "没有找到材料。"
-	BlueprintCost: "材料（从物品栏中扣除）："
-	BlueprintHave: "{0}：{1}/{2}"
-	BlueprintInChests: "（箱子里 +{0}）"
-	BlueprintPlace: "放置"
-	BlueprintHint: "手持蓝图：左键在预览位置建造房屋，右键打开此目录。每个房间都是有效的 NPC 住房。"
-	BlueprintPreviewHint: "左键：在此建造   右键：蓝图"
-	BuildBlocked: "有东西挡住了（红色格子）：请先清除。"
-	BuildMissing: "缺少材料：{0}"
+	BlueprintTitle: 蓝图
+	BlueprintSmallHouse: 小房子
+	BlueprintTwoFloors: 两层房屋
+	BlueprintTower: 塔楼
+	BlueprintArena: Boss 竞技场
+	BlueprintMedieval: 中世纪房屋
+	BlueprintCastle: 城堡
+	BlueprintPagoda: 宝塔
+	BlueprintWizardTower: 法师塔
+	BlueprintWorkshop: 工匠之家
+	BlueprintTreeVillage: 树屋村
+	BlueprintMaterial: 材料：
+	BlueprintPickMaterial: 请选择一种材料。
+	BlueprintNoMaterials: 没有找到材料。
+	BlueprintFree: 免费：建造不消耗材料。
+	BlueprintPlace: 放置
+	BlueprintHint: 手持蓝图：左键在预览位置建造房屋，右键打开此目录。每个房间都是有效的 NPC 住房。
+	BlueprintPreviewHint: 左键：在此建造   右键：蓝图
+	BuildBlocked: 有东西挡住了（红色格子）：请先清除。
 	BuildDone: "{0} 已建成！"
-	BuildFailed: "无法在此建造；材料已退还给你。"
+	BuildFailed: 无法在此处建造。
 	GoalCollapse: 折叠（拖动标题可移动面板）
 	GoalExpand: 展开（拖动标题可移动面板）
 	CompareAdd: + 比较
@@ -103,9 +102,9 @@ UI: {
 	TakeMissingHint: 从箱子中取出物品栏制作一次所缺的材料（Shift：制作 10 次）
 	TakeMissingStatus: 箱子里有、物品栏里缺：{0}
 	TerminalTitle: 存储终端
-	ConnectedChests: 已连接的箱子：{0}
-	WireStations: "电线上的制作站："
-	NoWireStations: "无（把制作站接到红电线上）"
+	ConnectedChests: "{0} 个箱子 · 空位 {1}/{2} · 已满 {3}%"
+	WireStations: 电线上的制作站：
+	NoWireStations: 无（把制作站接到红电线上）
 	TerminalHint: 点击：一组   按住右键：数量   Shift：箱子   Ctrl：配方
 	TerminalHoldingHint: 点击物品：取出 {0} 个   在空白处右键：取消
 	Max: 最大
@@ -206,7 +205,7 @@ Items: {
 	}
 
 	BlueprintItem: {
-		DisplayName: "蓝图"
+		DisplayName: 蓝图
 		Tooltip:
 			'''
 			右键选择房屋和材料
@@ -266,13 +265,8 @@ Configs: {
 		}
 
 		FocusTerminalSearch: {
-			Label: "打开终端时直接在搜索框中输入"
-			Tooltip: "输入时，模组的按键（N、[ 和 ]）不起作用"
-		}
-
-		DeliveryDrones: {
-			Label: 送货无人机
-			Tooltip: 小无人机在箱子和终端的门之间搬运物品（仅视觉效果）
+			Label: 打开终端时直接在搜索框中输入
+			Tooltip: 输入时，模组的按键（N、[ 和 ]）不起作用
 		}
 
 		ChestEffects: {

@@ -34,6 +34,8 @@ namespace TerraIndex.Content.Building
 		Full,
 		SlopeDownLeft,
 		SlopeDownRight,
+		SlopeUpLeft,
+		SlopeUpRight,
 	}
 
 	// What a blueprint character places: one of the chosen material's pieces, or a fixed item (the first of Items
@@ -98,26 +100,10 @@ namespace TerraIndex.Content.Building
 		public char TileAt(int x, int y) => tiles[y][x];
 		public char WallAt(int x, int y) => walls[y][x];
 
-		// Items it takes with this material, each piece of furniture once. With an origin, background walls already
-		// there aren't counted (they are kept).
-		public Dictionary<int, int> Items(BuildMaterial material, Point? origin = null)
-		{
-			var items = new Dictionary<int, int>();
-			for (int y = 0; y < Height; y++) {
-				for (int x = 0; x < Width; x++) {
-					if (Blueprints.TileBrushes.TryGetValue(TileAt(x, y), out Brush tile) && tile.Item(material) is int tileItem and > 0)
-						items[tileItem] = items.GetValueOrDefault(tileItem) + 1;
-					if (Blueprints.WallBrushes.TryGetValue(WallAt(x, y), out Brush wall) && wall.Item(material) is int wallItem and > 0
-						&& (origin == null || Main.tile[origin.Value.X + x, origin.Value.Y + y].WallType == 0))
-						items[wallItem] = items.GetValueOrDefault(wallItem) + 1;
-				}
-			}
-			return items;
-		}
 	}
 
-	// A piece of a material's set: the item placed, and the recipe that makes it (null for the block itself).
-	public record Piece(int Item, Recipe Recipe);
+	// A piece of a material's set: the item placed.
+	public record Piece(int Item);
 
 	// A material a house can be built of: a block plus the wall, platform, door, chair and table made from it (found
 	// in the recipes, so modded woods and bricks work too), and whatever other furniture vanilla makes from it.
@@ -129,7 +115,7 @@ namespace TerraIndex.Content.Building
 		public BuildMaterial(int block)
 		{
 			Block = block;
-			Pieces[PieceKind.Block] = new Piece(block, null);
+			Pieces[PieceKind.Block] = new Piece(block);
 		}
 
 		public string Name => Lang.GetItemNameValue(Block);
@@ -140,23 +126,6 @@ namespace TerraIndex.Content.Building
 			if (Pieces.TryGetValue(kind, out Piece piece))
 				return piece.Item;
 			return Blueprints.Wood != null && Blueprints.Wood != this && Blueprints.Wood.Pieces.TryGetValue(kind, out piece) ? piece.Item : 0;
-		}
-	}
-
-	// A material a build takes; any member of Group counts when it isn't null ("Any Wood").
-	public record CostLine(int Type, RecipeGroup Group, int Amount)
-	{
-		public string Name => Group?.GetText() ?? Lang.GetItemNameValue(Type);
-
-		public IEnumerable<int> Accepted()
-		{
-			yield return Type;
-			if (Group == null)
-				yield break;
-			foreach (int type in Group.ValidItems) {
-				if (type != Type)
-					yield return type;
-			}
 		}
 	}
 
@@ -196,6 +165,27 @@ namespace TerraIndex.Content.Building
 			['U'] = Brush.Fixed("BlueDynastyShingles", "ObsidianBrick"),
 			['['] = Brush.Sloped(BrushShape.SlopeDownRight, "BlueDynastyShingles", "ObsidianBrick"),
 			[']'] = Brush.Sloped(BrushShape.SlopeDownLeft, "BlueDynastyShingles", "ObsidianBrick"),
+			// Stone slab, and its slopes with the solid corner on top (arches).
+			['E'] = Brush.Fixed("StoneSlab", "GrayBrick"),
+			['<'] = Brush.Sloped(BrushShape.SlopeUpLeft, "StoneSlab", "GrayBrick"),
+			['>'] = Brush.Sloped(BrushShape.SlopeUpRight, "StoneSlab", "GrayBrick"),
+			// Decorations.
+			['f'] = Brush.Fixed("Campfire"),
+			['Z'] = Brush.Fixed("WoodenCrate"),
+			['P'] = Brush.Fixed("Piano"),
+			['G'] = Brush.Fixed("WoodenSink"),
+			['j'] = Brush.Fixed("Chain"),
+			['h'] = Brush.Fixed("Book"),
+			['o'] = Brush.Fixed("Bowl"),
+			['u'] = Brush.Fixed("Mug"),
+			['Q'] = Brush.Fixed("Throne"),
+			['V'] = Brush.Fixed("Sofa"),
+			['H'] = Brush.Fixed("Bathtub"),
+			['t'] = Brush.Fixed("Toilet"),
+			// Trees: the wands place living wood and leaves (building is free, so no wood or acorns are taken).
+			['v'] = Brush.Fixed("LivingWoodWand", "Wood"),
+			['e'] = Brush.Fixed("LeafWand"),
+			['r'] = Brush.Fixed("VineRope", "Rope"),
 		};
 
 		public static readonly Dictionary<char, Brush> WallBrushes = new() {
@@ -204,6 +194,11 @@ namespace TerraIndex.Content.Building
 			['g'] = Brush.Fixed("GlassWall"),
 			['k'] = Brush.Fixed(PieceKind.Wall, "WhiteDynastyWall"),
 			['q'] = Brush.Fixed(PieceKind.Wall, "BlueDynastyWall"),
+			['p'] = Brush.Fixed(PieceKind.Wall, "PlankedWall"),
+			['x'] = Brush.Fixed("StoneSlabWall", "GrayBrickWall"),
+			['v'] = Brush.Fixed("LivingWoodWall", "WoodWall"),
+			['a'] = Brush.Fixed("LivingLeafWall"),
+			['z'] = Brush.Fixed("WoodenFence"),
 		};
 
 		private static readonly PieceKind[] Required = { PieceKind.Wall, PieceKind.Platform, PieceKind.Door, PieceKind.Chair, PieceKind.Table };
@@ -212,15 +207,11 @@ namespace TerraIndex.Content.Building
 		public static List<BuildMaterial> Materials { get; } = new();
 		public static BuildMaterial Wood { get; private set; }
 
-		// The recipe each item is paid with when the player doesn't have it (null: needed as it is).
-		private static readonly Dictionary<int, Recipe> recipes = new();
-
 		public override void PostSetupRecipes() => FindMaterials();
 
 		public override void Unload()
 		{
 			Materials.Clear();
-			recipes.Clear();
 			Wood = null;
 		}
 
@@ -229,7 +220,6 @@ namespace TerraIndex.Content.Building
 		private static void FindMaterials()
 		{
 			Materials.Clear();
-			recipes.Clear();
 			var byBlock = new Dictionary<int, BuildMaterial>();
 			for (int i = 0; i < Recipe.numRecipes; i++) {
 				Recipe recipe = Main.recipe[i];
@@ -243,15 +233,12 @@ namespace TerraIndex.Content.Building
 				int block = blocks[0].type;
 				if (!byBlock.TryGetValue(block, out BuildMaterial material))
 					byBlock[block] = material = new BuildMaterial(block);
-				material.Pieces.TryAdd(kind, new Piece(recipe.createItem.type, recipe));
+				material.Pieces.TryAdd(kind, new Piece(recipe.createItem.type));
 			}
 
 			foreach (BuildMaterial material in byBlock.Values) {
-				if (!Required.All(material.Pieces.ContainsKey))
-					continue;
-				Materials.Add(material);
-				foreach (Piece piece in material.Pieces.Values)
-					recipes.TryAdd(piece.Item, piece.Recipe);
+				if (Required.All(material.Pieces.ContainsKey))
+					Materials.Add(material);
 			}
 			Materials.Sort((a, b) => a.Block == ItemID.Wood ? -1 : b.Block == ItemID.Wood ? 1 : string.Compare(a.Name, b.Name, StringComparison.CurrentCulture));
 			Wood = Find(ItemID.Wood);
@@ -311,76 +298,6 @@ namespace TerraIndex.Content.Building
 			return null;
 		}
 
-		// A material's pieces use the recipe they were found with; anything else its first recipe that isn't made
-		// back from it (Wood can be made from Wood Platforms, which are made from Wood).
-		private static Recipe RecipeFor(int item)
-		{
-			if (recipes.TryGetValue(item, out Recipe recipe))
-				return recipe;
-			recipe = RecipeDatabase.RecipesFor(item).FirstOrDefault(candidate => !candidate.requiredItem.Any(ingredient =>
-				ingredient.type == item || RecipeDatabase.RecipesFor(ingredient.type).Any(back => back.requiredItem.Any(part => part.type == item))));
-			recipes[item] = recipe;
-			return recipe;
-		}
-
-		// What building it takes: items already in the inventory are used as they are, the rest are paid with the
-		// ingredients of their recipe (no crafting station needed). Lines for the same item are added up.
-		public static List<CostLine> Cost(Dictionary<int, int> items, Dictionary<int, int> inventory)
-		{
-			var pool = new Dictionary<int, int>(inventory);
-			var totals = new Dictionary<(int, RecipeGroup), int>();
-			void Add(int type, RecipeGroup group, int amount) => totals[(type, group)] = totals.GetValueOrDefault((type, group)) + amount;
-
-			foreach (var (item, count) in items) {
-				int use = Math.Min(pool.GetValueOrDefault(item), count);
-				if (use > 0) {
-					pool[item] -= use;
-					Add(item, null, use);
-				}
-				int missing = count - use;
-				if (missing == 0)
-					continue;
-				Recipe recipe = RecipeFor(item);
-				if (recipe == null) {
-					Add(item, null, missing);
-					continue;
-				}
-				int crafts = (missing + recipe.createItem.stack - 1) / recipe.createItem.stack;
-				foreach (Item ingredient in recipe.requiredItem)
-					Add(ingredient.type, RecipeDatabase.GroupFor(recipe, ingredient.type), ingredient.stack * crafts);
-			}
-			return totals.Select(entry => new CostLine(entry.Key.Item1, entry.Key.Item2, entry.Value))
-				.OrderByDescending(line => line.Amount).ToList();
-		}
-
-		// Shares what is owned between the lines: exact items first, then group lines with what is left.
-		// Returns how much each line is still missing; taken (if not null) gets the items used.
-		public static int[] Allocate(List<CostLine> lines, Dictionary<int, int> owned, List<(int Type, int Amount)> taken = null)
-		{
-			var pool = new Dictionary<int, int>(owned);
-			int[] missing = new int[lines.Count];
-			foreach (bool groups in new[] { false, true }) {
-				for (int i = 0; i < lines.Count; i++) {
-					CostLine line = lines[i];
-					if ((line.Group != null) != groups)
-						continue;
-					int needed = line.Amount;
-					foreach (int type in line.Accepted()) {
-						int take = Math.Min(pool.GetValueOrDefault(type), needed);
-						if (take <= 0)
-							continue;
-						pool[type] -= take;
-						needed -= take;
-						taken?.Add((type, take));
-						if (needed == 0)
-							break;
-					}
-					missing[i] = needed;
-				}
-			}
-			return missing;
-		}
-
 		// Top-left corner of the blueprint when its bottom row sits on this tile, centered on it.
 		public static Point Origin(Blueprint blueprint, Point tile) => new(tile.X - blueprint.Width / 2, tile.Y - blueprint.Height + 1);
 
@@ -390,7 +307,8 @@ namespace TerraIndex.Content.Building
 			return tile >= 0 && Main.tileSolid[tile] && !Main.tileSolidTop[tile];
 		}
 
-		// Cells where something is in the way: any tile but grass and plants (cleared when building), or a player
+		// Cells where something is in the way: any tile but grass and plants (cleared when building) or the very block
+		// that goes there (so a village's trunks can grow out of living wood trees already there), or a player
 		// standing where a solid block goes. Empty: it can be built.
 		public static List<Point> Blocked(Blueprint blueprint, BuildMaterial material, Point origin)
 		{
@@ -413,8 +331,9 @@ namespace TerraIndex.Content.Building
 						continue;
 					}
 					Tile tile = Main.tile[i, j];
-					bool inTheWay = tile.HasTile && !Main.tileCut[tile.TileType];
-					if (!inTheWay && TileBrushes.TryGetValue(cell, out Brush brush) && brush.Item(material) is int item and > 0 && IsSolid(item))
+					int item = TileBrushes.TryGetValue(cell, out Brush brush) ? brush.Item(material) : 0;
+					bool inTheWay = tile.HasTile && !Main.tileCut[tile.TileType] && !(item > 0 && IsSolid(item) && ContentSamples.ItemsByType[item].createTile == tile.TileType);
+					if (!inTheWay && item > 0 && IsSolid(item))
 						inTheWay = players.Exists(hitbox => hitbox.Intersects(new Rectangle(i * 16, j * 16, 16, 16)));
 					if (inTheWay)
 						blocked.Add(new Point(i, j));
@@ -468,8 +387,14 @@ namespace TerraIndex.Content.Building
 					continue;
 				WorldGen.PlaceTile(i, j, item.createTile, mute: true, style: item.placeStyle);
 				Tile tile = Main.tile[i, j];
-				if (brush.Shape != BrushShape.Full && tile.HasTile)
-					tile.Slope = brush.Shape == BrushShape.SlopeDownLeft ? SlopeType.SlopeDownLeft : SlopeType.SlopeDownRight;
+				if (brush.Shape != BrushShape.Full && tile.HasTile) {
+					tile.Slope = brush.Shape switch {
+						BrushShape.SlopeDownLeft => SlopeType.SlopeDownLeft,
+						BrushShape.SlopeDownRight => SlopeType.SlopeDownRight,
+						BrushShape.SlopeUpLeft => SlopeType.SlopeUpLeft,
+						_ => SlopeType.SlopeUpRight,
+					};
+				}
 			}
 
 			foreach (bool small in new[] { false, true }) {

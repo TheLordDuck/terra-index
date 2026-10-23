@@ -110,7 +110,7 @@ The user refers to features by these numbers, so keep them stable.
 | 35 | Craft button in the goal panel | Done (0.7) as a "next step" button, plus the index next to the terminal |
 | 36 | Middle click in the index takes a stack out of the chests | Done (0.7) |
 | 37 | Alchemy Table savings and `OnCraft` hooks when crafting from the chests | Proposed |
-| 38 | Delivery drones | Done (0.7) |
+| 38 | Delivery drones | Removed (2026-10-23, buggy) |
 | 39 | Chest effects (sparks, light, sound) | Done (0.7) |
 | 40 | More languages | Done (0.7): German, French, Brazilian Portuguese, Russian, Italian, Polish, Simplified Chinese |
 | 41 | In-game guide | Done (0.7): "?" buttons and first-time tips |
@@ -220,6 +220,7 @@ Decisions taken:
   2 s and can be taken back out. Only one player at a time can have a terminal's slots open (lock on the server).
 - Chests are found from any of their tiles (vanilla `FindChestByGuessing` only matched the left column).
 - When the deposit slots close, each item is drawn flying from the player into the door (other players see it too).
+  Nothing is shown going on from the door to the chests (2026-10-23, the user's request).
 - Closes with Esc (when not typing), the X button, or by walking away (`ServerConfig.TerminalReach`, 10 blocks by
   default).
 - **Deposit all** button (`TerminalSystem.QuickDeposit`): the client takes main inventory slots 10-49 (no hotbar,
@@ -236,14 +237,13 @@ Decisions taken:
 - Using it opens the terminal with `Remote = true`: no distance limit while the player carries a linked portable
   terminal. The server allows requests when `RemoteTerminalItem.CanReach` (within 20 blocks, or carrying a linked
   portable terminal); the deposit-slot lock uses the same check.
-- More than 30 blocks from the terminal, withdrawn items appear next to the player (`QuickSpawnItem`) instead of
-  dropping out of the door, and deposited items don't fly across the screen.
+- More than 30 blocks from the terminal's door (portable terminal), withdrawn items appear at the player's feet.
 - In multiplayer the client may not have the terminal's tiles loaded, so in remote mode only the server checks
   that the terminal still exists.
 
 ### Settings (`Common/Configs.cs`)
 - `ClientConfig` (per player): goal panel on/off and rows; default terminal sort; chest highlight seconds;
-  whether "Deposit all" includes the hotbar; delivery drones and chest effects on/off.
+  whether "Deposit all" includes the hotbar; chest effects on/off.
 - `ServerConfig` (host, synced): Terminal price in gold (applied in `SteampunkerShop.ModifyActiveShop`, so no reload
   needed), reach in blocks (the panel closes beyond it; the server allows reach + 10 for lag), max wire tiles
   walked, and whether portable terminals work (`RemoteTerminalItem.IsLinkedTo` returns false when off).
@@ -299,12 +299,25 @@ Decisions taken:
 
 ### Comfort (0.7)
 
-- **Delivery to the player:** a withdrawn item (click, picked amount, "Take missing", middle click) only drops out of
-  the door when the player is within 3 tiles of it (`DoorPickupReach`). Farther away, since the panel now stays
-  open up to the terminal's reach, the drones fly from the chests to the player (following them) and the item is
-  spawned on the player when they arrive (`PendingDrop.ToPlayer`, same 28 ticks; the door stays shut). The
-  `ChestMoves` packet carries that player (255 = the door). Crafted results still use the door; no drone carries them.
-  Beyond `DoorReach` (portable terminal), items still appear next to the player at once.
+- **Delivery to the player:** using the terminal itself, a withdrawn item (click, picked amount, "Take missing",
+  middle click, crafts) is thrown out of the door, which opens right away, `DoorOpenTicks` (14) later, in an arc that
+  lands on the player (`ThrowVelocity`). Through a portable terminal, even standing next to the terminal (2026-10-23,
+  the user's request), a drone brings it instead. The client sends its `Remote` flag with every contents request
+  (twice a second while the panel is open), and the server keeps it per player (`TerminalSystem.SetRemote`, only if
+  the player really carries a portable terminal linked to it; `ByRemote`) (`TerminalNet.SendDrone`, `NetworkEffects.ShowDrone`):
+  it comes down from the sky, hovers 5 tiles above the player and lets the item go at `ReleaseTicks` (28), when the
+  server spawns the real item under its claw (`NetworkEffects.DropPoint`, on the player under a low ceiling) and it
+  falls onto them. The drone glows (full brightness, additive cyan halo, its own light). (0.7 had drones between the
+  chests and the door; on 2026-10-23 the user had them removed as buggy and then asked for one only for the
+  portable terminal, with the items grabbable right away: the "can't pick it up" bug was `keepTime`, see below.)
+- **Putting in through a portable terminal** ("Deposit all" or the deposit slots; the door stays shut): instead of flying into the
+  door, the items fly up one after another into the claw of a drone that came down above the player
+  (`NetworkEffects.ShowPickupDrone`, from `TerminalSystem.ShowItemsEntering`; others see it through the
+  `ItemsEntering` packet), then it flies off. Only for show: the items are already in the chests.
+- **Reserved for who asked** (2026-10-23): every withdrawn item spawned on the ground (out of the door or at the feet)
+  can only be picked up by the player who asked for it for 10 s (`ReservedItem`, a `GlobalItem` with `CanPickup`,
+  synced with `NetSend`; `Item.FindOwner` already skips players `CanPickup` refuses. Setting `keepTime` broke
+  pickup: it stops `FindOwner`, so nobody could take the item for 10 s; removed on 2026-10-23).
 - **Search focus on open** is optional (`ClientConfig.FocusTerminalSearch`, on by default), because while typing
   the mod's keys don't work.
 - **Remembered search:** reopening the same terminal within 30 s keeps the search text, category tab and page
@@ -320,8 +333,39 @@ Decisions taken:
 - **Blueprint** item (`Content/Building/BlueprintItem.cs`): 10 of any wood at a work bench. Right click opens the
   catalog (`UI/BlueprintState.cs`); left click builds. It isn't used up.
 - Designs (`BlueprintDesigns.All`, in this order): small house 10x7, two-floor house 12x13, tower 10x19, medieval
-  house 24x23 (5 NPC rooms), castle 42x30 (11), pagoda 26x26 (3), wizard tower 14x31 (4), boss arena 40x13. Pictures
-  in `docs/blueprints/`.
+  house 24x23 (5 NPC rooms), castle 42x30 (11), pagoda 26x26 (3), wizard tower 14x31 (4), craftsman's house
+  79x31 (9), tree village 109x60 (30), boss arena 40x13. Pictures in `docs/blueprints/`.
+- **Craftsman's house** (`Workshop` key, `craftsman_house` in `designs.py`, 79x31, 9 NPC rooms; 2026-10-23). The
+  user wanted a place for every crafting station they have (about 25 in a screenshot), then prettier with themed
+  rooms, two bedrooms for the players, **sized to fit between the two trees of their base** (measured on the
+  screenshot at 16 px a tile: about 83 wide in the bottom 14 rows, 89 above, 33 high under the branch), and then
+  in the style of a reference picture they sent (a wooden mountain chalet: stone below, wood above, steep red
+  gables, exposed beams, a stone chimney) and **not symmetric**. So: three gables of different sizes (small left,
+  big middle, low right with the chimney), the second floor and an attic living under them. Ground floor: forge
+  open to the outside (low stone wall, campfire, chains, crate), kitchen, workshop hall (gray brick, stone arches
+  and pillars with corbels and torches). First floor: trophy room (throne, three places for relics), library, two
+  player bedrooms (one with a fireplace). Under the gables: music lounge (piano), inventions workshop with the
+  inventor's loft above, bathroom (not housing). One shaft of platforms: kitchen -> library -> inventions -> loft.
+  27 bays for stations (3 wide, 4 high) and 3 for relics, each labelled on the picture (`Design.labels`, drawn by
+  `build.py` only). The roofs come from `gable()` in `designs.py`.
+- **Tree village** (`TreeVillage`, `tree_village`, 109x60, 30 NPC rooms; 2026-10-23): the NPC village the user asked
+  for above the mansion (they play with Calamity, so many NPCs), then "something like this" with a reference picture:
+  one big lodge between two trees. A deck with balconies (fences, ropes down) and a porch; four wooden stories
+  stepping in as they go up, more on the left (terraces with fences, a covered porch on the right); a steep red gable
+  with three more stories inside and a stone chimney on the left. Rooms are cut by dividers with doors and furnished
+  by code (a lantern, chair and table, one more piece where it fits, keeping door swings and the shaft clear); one
+  shaft of platforms (x 52..54) climbs every story, and walkways from every story's outer doors reach out to where
+  the trees go, with a vine rope (`r`, Vine Rope, falls back to Rope) down each side. **The user builds the trees
+  themselves**: the design had living wood trunks, crowns and branches, and they asked to remove them ("I'll do it
+  better myself"). Don't add trees or foliage to it again unless asked. The walkways end at x 10 and 98; the trees
+  go at x 4..9 and 99..104 (89 apart, their trees' spacing at the branch). Same center column as the mansion, built right above it. Brushes added (unused by any design now): `v` living wood and `e` leaves (placed through the Living Wood Wand and
+  Leaf Wand, which carry the tile), `r` rope, walls `v` living wood, `a` living leaf and `z` wooden fence. `Blueprints.Blocked`
+  doesn't count a cell that already has the very block that goes there, so the trunks can overlap living wood
+  trees already in the world.
+- Brushes added for it: `E` stone slab, `<` `>` its up slopes (`BrushShape.SlopeUpLeft/Right`), walls `p` planked
+  and `x` stone slab, and decorations `f` campfire, `Z` wooden crate, `P` piano, `G` wooden sink, `j` chain (hangs
+  from a block or chain), `h` book, `o` bowl, `u` mug (on tables), `Q` throne and `t` toilet (count as chairs), `V`
+  sofa, `H` bathtub.
 - **Designs are made in `tools/blueprints/designs.py`** (in code, so roofs are loops) and `python
   tools/blueprints/build.py` checks them (known characters, furniture footprints, what each piece stands on or hangs
   from, and every listed room with the game's room check: flood fill counting the frame, 60-750 tiles, walls behind
@@ -338,9 +382,8 @@ Decisions taken:
   charged). `.` must be empty, `+` is covered by furniture, `' '` is left as it is.
 - **Slopes** are named after their solid corner (`SlopeDownRight` = ◢, the left side of a roof). Not checked in game
   yet: if roofs come out mirrored, swap the two shapes in `TileBrushes`.
-- Catalog: one button per design, the materials as item slots, a small preview, the cost in two columns (green = in
-  the inventory, blue = the rest is in the chests of a terminal in reach, red = missing), **Take missing** (through
-  `TerminalSystem.RequestTakeItems`, so the drones bring it) and **Place**, which closes the catalog.
+- Catalog: one button per design, the materials as item slots, a small preview, "free" and **Place**, which closes
+  the catalog.
 - While the item is held, `BuildSystem.PostDrawTiles` draws the house see-through with the material's item icons,
   its bottom row on the tile under the mouse and centered on it, with a green border, or red cells and border where
   something is in the way (any tile except grass and plants, which are cleared, or a player where a block goes).
@@ -354,17 +397,14 @@ Decisions taken:
   vanilla makes them from it. Vanilla pieces are matched by their exact tile and size (so dressers and toilets don't
   count); modded doors, chairs and tables by their housing sets and size, so modded woods work too. Wood comes
   first, then by name.
-- Cost (`Blueprints.Cost`): items already in the inventory are used as they are; the rest are paid with the
-  ingredients of their recipe (the one a material's piece was found with, otherwise the first that isn't made back
-  from the item), one level deep, with no crafting station needed. Background walls already in place aren't charged
-  (or replaced). `Blueprints.Allocate` shares owned items between the lines, exact items first and
-  then group lines ("Any Wood" for torches).
-- Building: the client checks the place and the materials, takes them out of its inventory (synced) and, in
-  multiplayer, sends a `Build` packet with what it used. The server (or single player) checks the place and the
-  distance (60 tiles) again, then `Blueprints.Place`: clears grass, places background walls, then blocks, platforms
+- **Building is free** (2026-10-23, the user's request): the Blueprint itself (10 wood) is all it costs. Until then
+  `Blueprints.Cost`/`Allocate` charged every piece from the inventory (or its recipe's ingredients), with **Take
+  missing** in the catalog; all of that was removed.
+- Building: the client checks the place and, in multiplayer, sends a `Build` packet. The server (or single player)
+  checks the place and the distance (60 tiles) again, then `Blueprints.Place`: clears grass, places background walls, then blocks, platforms
   and beams (setting slopes), then furniture (`TileObject.CanPlace` at the piece's TileObjectData origin), then 1x1
   objects like torches and candles (they go on walls and tables), frames the area and sends it in tile squares of
-  at most 30x30. If it fails the materials are spawned back on the player. `BuildResult`
+  at most 30x30. `BuildResult`
   tells the builder; on success a puff of smoke and a sound.
 - Sprite: `Content/Building/BlueprintItem.png`, 28x28, a blue sheet with a grid and a white house, rolled on
   wooden rods.
@@ -384,22 +424,16 @@ Decisions taken:
   and refreshes the terminal's contents when in reach. After a click the button is greyed out for 45 ticks so a
   double click doesn't craft twice.
 
-### Delivery drones and chest effects (0.7, ideas 38 and 39)
+### Chest effects (0.7, idea 39)
 
-- `StorageNetwork` records every chest an item type went into or out of (`Moves`, one `ChestMove` per chest, type
-  and direction, at most 16). After each withdrawal, deposit (including the automatic retries), craft and "Take
-  missing", `TerminalSystem.ShowMoves` hands them to `NetworkEffects` (single player) or sends a `ChestMoves`
-  packet to every client (server).
-- `NetworkEffects` (client only, just for show): taken out, the chest sparks (electric dust bursting out, a cyan
-  light for 20 ticks and a high `Grab` sound, once per chest) and a drone flies the item to the door in 24 ticks.
-  Put in, after the items fly from the player into the door (`FlyTicks`), drones carry them to the chests, which
-  spark (dust falling in, a lower sound) when they arrive. No drone for chests more than 60 tiles from the door, and
-  nothing at all more than 120 tiles from the player.
-- To let the drone arrive first, a withdrawn item now drops 28 ticks after leaving the chests instead of 14
-  (`DeliveryTicks`), and the door starts rolling up 14 ticks before. This is on the server, so it doesn't depend on
-  the client's settings: with drones off the item simply comes out about a quarter of a second later.
-- Drone sprite: `Content/Storage/DeliveryDrone.png`, 20x28, two 14 px frames (rotors spinning), facing right and
-  flipped when flying left. The carried item hangs from its claw. Both effects can be turned off in `ClientConfig`.
+- `StorageNetwork` records every chest an item type was taken out of (`Moves`, one `ChestMove` per chest and type,
+  at most 16). After each withdrawal, craft and "Take missing", `TerminalSystem.ShowMoves` hands them to
+  `NetworkEffects` (single player) or sends a `ChestMoves` packet to every client (server).
+- `NetworkEffects` (client only, just for show): the chest sparks (electric dust bursting out, a cyan light for 20
+  ticks and a high `Grab` sound, once per chest), within 120 tiles of the player. Can be turned off in `ClientConfig`.
+  Deposits only show the items flying into the door, nothing reaching the chests (2026-10-23, the user's request).
+- The delivery drones between the chests and the door (idea 38, 0.7) were removed on 2026-10-23 at the user's
+  request, with their `DeliveryDrones` setting. `DeliveryDrone.png` is still used by the portable terminal's drone.
 
 ### Languages and in-game help (0.7, ideas 40 and 41)
 
@@ -453,7 +487,7 @@ Decisions taken:
 | `UI/DepositState.cs` | Deposit slots (chest-like) |
 | `UI/HelpButton.cs` | "?" button showing a panel's controls as a tooltip |
 | `UI/StationsRow.cs` | Terminal panel: the crafting stations on the wire |
-| `UI/BlueprintState.cs` | Blueprint catalog: houses, materials, preview, cost, Take missing |
+| `UI/BlueprintState.cs` | Blueprint catalog: houses, materials, preview (building is free) |
 | `Content/Building/Blueprints.cs` | Brushes, materials found in the recipes, cost, place check, placing the tiles |
 | `Content/Building/BlueprintDesigns.cs` | The designs as text rows; generated by `tools/blueprints/build.py` |
 | `../tools/blueprints/` | `designs.py` (the designs, in code) and `build.py` (checks, pictures in `docs/blueprints/`, C#) |
@@ -468,7 +502,8 @@ Decisions taken:
 | `Content/Storage/TerminalNet.cs` | Client ↔ server packets |
 | `Content/Storage/TerminalSystem.cs` | Open/close, received data, sorting, withdrawing and door animation, Deposit all, crafting from the chests, Take missing, chest highlighting, off-screen arrows |
 | `Content/Storage/TerminalEntity.cs` | Pending deposit items per terminal, saved with the world; deposit lock and retries |
-| `Content/Storage/NetworkEffects.cs` | Delivery drones and chest sparks (client only) |
+| `Content/Storage/NetworkEffects.cs` | Chest sparks when items are taken out, the portable terminal's drone (client only) |
+| `Content/Storage/ReservedItem.cs` | Withdrawn items on the ground: only the player who asked can pick them up for 10 s |
 | `Content/Storage/TerminalPlayer.cs` | Shift + click from the inventory into the deposit slots; first-time tips seen |
 | `Localization/*_Mods.TerraIndex.hjson` | Texts: English, Spanish, German, French, Brazilian Portuguese, Russian, Italian, Polish, Simplified Chinese |
 | `README.md` | Installation and usage |
@@ -482,7 +517,7 @@ Decisions taken:
 | `Content/Tiles/TerminalTile.png` | 70x34 | Eight 16x16 pieces with 2 px gaps (Terraria's format for 4x2 tiles), door closed |
 | `Content/Tiles/TerminalDoor.png` | 22x21 | Garage door, drawn over the opening while it rolls up |
 | `Content/Storage/ChestArrow.png` | 16x16 | Arrow pointing right; rotated in game |
-| `Content/Storage/DeliveryDrone.png` | 20x28 | Delivery drone, two 14 px frames (0.7, same palette as the terminal) |
+| `Content/Storage/DeliveryDrone.png` | 20x28 | Delivery drone, two 14 px frames (rotors spinning); used by the portable terminal |
 | `Content/Building/BlueprintItem.png` | 28x28 | Blueprint: blue sheet with a grid and a white house (0.8) |
 | `icon.png` | 80x80 | Mod icon (mod list and Workshop) |
 | `icon_small.png` | 30x30 | Small icon in the mod list |
@@ -510,6 +545,8 @@ Coming from the old name: remove the `ModSources\RecipeIndex` link, create `ModS
 
 ## Pending / ideas
 
+- **Testing only:** `MerchantTestShop` (in `RemoteTerminalItem.cs`) makes the Merchant sell the portable terminal for
+  4 silver. Remove it before publishing 1.0.
 - **Next step:** build 0.8 at home (0.7 and 0.8 were written without a compiler) and go through `TESTING.md` in game. Then
   bump `version` to 1.0 and publish (idea 30).
 - Translations other than English and Spanish were written by Claude; a native speaker could polish them.

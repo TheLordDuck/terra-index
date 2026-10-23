@@ -25,6 +25,18 @@ FURNITURE = {
     'c': (1, 1),  # candle (on a table)
     'b': (1, 1),  # bottle (on a table)
     'i': (1, 1),  # torch (on a wall)
+    'f': (3, 2),  # campfire
+    'Z': (2, 2),  # wooden crate
+    'P': (3, 2),  # piano
+    'G': (2, 2),  # wooden sink
+    'j': (1, 1),  # chain (hangs, one tile)
+    'h': (1, 1),  # book (on a table)
+    'o': (1, 1),  # bowl (on a table)
+    'u': (1, 1),  # mug (on a table)
+    'Q': (3, 4),  # throne (counts as a chair)
+    'V': (3, 2),  # sofa
+    'H': (4, 2),  # bathtub
+    't': (1, 2),  # toilet (counts as a chair)
 }
 
 
@@ -37,6 +49,8 @@ class Design:
         self.walls = [[' '] * width for _ in range(height)]
         # One cell inside each room meant as NPC housing.
         self.rooms = []
+        # Text drawn on the pictures only: (x, y, text), e.g. which crafting station goes in a bay.
+        self.labels = []
 
     def tile(self, x, y, c):
         self.tiles[y][x] = c
@@ -437,4 +451,385 @@ def wizard_tower():
     return d
 
 
-DESIGNS = [small_house, two_floors, tower, medieval, castle, pagoda, wizard_tower, arena]
+def gable(d, x0, x1, eave, wall='p'):
+    """A steep red shingle roof from x0 to x1 with its eaves on row `eave`, two tiles thick, hollow inside (with a
+    background wall). Returns {row: (first, last)} of the open cells under it."""
+    inside = {}
+    k = 0
+    while True:
+        y, a, b = eave - k, x0 + k, x1 - k
+        if b - a < 1:
+            break
+        d.tile(a, y, '(')
+        d.tile(b, y, ')')
+        if b - a >= 2:
+            d.tile(a + 1, y, 'Y')
+            d.tile(b - 1, y, 'Y')
+        if b - a >= 4:
+            d.fill(a + 2, y, b - 2, y, '.')
+            d.wall(a + 2, y, b - 2, y, wall)
+            inside[y] = (a + 2, b - 2)
+        k += 1
+    return inside
+
+
+def craftsman_house():
+    """A mansion with a place for every crafting station, in the style of a wooden mountain chalet: stone below,
+    wood above, three steep red gables of different sizes (the second floor and the attic live under them), a
+    stone chimney. Sized to fit between the two trees of the user's base (about 83 tiles wide at the ground, 33
+    high), with the tree village (tree_village) going above it. Ground floor: the forge, open to the outside on the
+    left (low stone wall, campfire, hanging chains, crate), the kitchen and the workshop hall (gray brick, stone
+    pillars with corbels and torches). First floor: the trophy room (throne, places for relics), the library and
+    two bedrooms for the players, one with a fireplace. Under the gables: the music lounge, the inventions workshop
+    with the inventor's loft above it, and the bathroom. One shaft of platforms goes up from the kitchen to the
+    loft. Every empty bay is 3 wide and 4 high; the pictures say which station each one is meant for."""
+    W = 79
+    d = Design('Workshop', W, 31)
+    G = 30                                  # ground row
+    F2, F3 = 23, 17                         # floor rows of the first floor and of the rooms under the gables
+    L, R = 1, W - 2                         # outer walls
+
+    def bay(x, floor, name, high=4):
+        d.labels.append((x, floor - high, name))
+
+    def room(x0, x1, top, bottom, wall):
+        d.fill(x0, top, x1, bottom, '.')
+        d.wall(x0, top, x1, bottom, wall)
+
+    def divider(x, top, bottom, block):
+        """A wall between two rooms, with a door at the bottom."""
+        d.fill(x, top, x, bottom - 3, block)
+        d.put('D', x, bottom - 2)
+
+    # ---- Frame: stone foundation and ground floor, wooden floors above, posts under the eaves ----
+    d.fill(0, G, W - 1, G, 'E')
+    d.fill(L, F2, R, F2, '#')
+    d.fill(41, F2, R, F2, 'E')
+    d.fill(L, F3, R, F3, '#')
+    d.fill(L, F3 + 1, L, F2 - 1, '#')
+    d.fill(R, F3 + 1, R, F2 - 1, '#')
+    d.fill(R, F2 + 1, R, G - 1, 'E')
+    d.put('D', R, G - 3)
+    d.fill(0, F3, 0, G - 1, '|')
+    d.fill(W - 1, F3, W - 1, G - 1, '|')
+    # The shaft up: kitchen -> library -> inventions workshop -> loft.
+    for (x0, x1), y in (((25, 27), F2), ((26, 28), F3), ((33, 35), 10)):
+        d.fill(x0, y, x1, y, '-')
+
+    # ---- Three gables: a small one on the left, the big one in the middle, a low one on the right ----
+    music = gable(d, 0, 23, F3 - 1)
+    inventions = gable(d, 24, 58, F3 - 1)
+    bath = gable(d, 59, W - 1, F3 - 1, 'x')
+    # The loft floor across the big gable.
+    a, b = inventions[10]
+    d.fill(a, 10, b, 10, '#')
+    d.fill(33, 10, 35, 10, '-')
+    # Chimney on the right slope, a stone slab cap.
+    d.fill(74, 5, 75, 11, 'S')
+    d.fill(73, 4, 76, 4, 'E')
+
+    # ======== Ground floor ========
+    top, bottom = F2 + 1, G - 1
+    # Forge, open to the outside: no wall above the low stone one, and no outer wall on the left.
+    d.fill(L, top, 23, bottom, '.')
+    d.wall(L, bottom - 2, 23, bottom, 'x')
+    d.put('f', 2, bottom - 1)
+    for x, name in ((6, 'Furnace'), (10, 'Hellforge'), (14, 'Anvil'), (18, 'Mythril Anvil')):
+        bay(x, G, name)
+    for x in (5, 9, 13, 17, 21):
+        d.put('j', x, top)
+        d.put('j', x, top + 1)
+    d.put('Z', 22, bottom - 1)
+    d.put('i', 23, top + 2)
+    divider(24, top, bottom, 'E')
+    # Kitchen, under the shaft.
+    room(25, 39, top, bottom, 'p')
+    d.wall(29, top, 34, top + 1, 'g')
+    d.put('G', 25, bottom - 1)
+    bay(28, G, 'Cooking Pot')
+    bay(32, G, 'Keg')
+    d.put('C', 35, bottom - 1)
+    d.put('T', 36, bottom - 1)
+    d.put('C', 39, bottom - 1)
+    d.put('o', 36, bottom - 2)
+    d.put('u', 38, bottom - 2)
+    d.put('L', 36, top)
+    d.rooms.append((31, bottom))
+    divider(40, top, bottom, 'E')
+    # Workshop hall: stone arches at the corners, bays between stone pillars.
+    room(41, R - 1, top, bottom, 's')
+    d.tile(41, top, '<')
+    d.tile(R - 1, top, '>')
+    d.put('C', 41, bottom - 1)
+    d.put('W', 42, bottom)
+    d.put('c', 42, bottom - 1)
+    hall = ['Tinkerer\'s Workshop', 'Loom', 'Sawmill', 'Heavy Work Bench', 'Autohammer', 'Imbuing Station',
+            'Solidifier', 'Adamantite Forge']
+    for i, x in enumerate(range(44, 73, 4)):
+        d.tile(x, top, 'E')
+        if i > 0:
+            d.tile(x - 1, top, '>')
+        d.tile(x + 1, top, '<')
+        d.tile(x + 3, top, '>')
+        d.put('i', x, top + 1)
+        d.fill(x, top + 2, x, bottom, '|')
+        if i % 3 == 1:
+            d.wall(x + 1, top + 1, x + 3, top + 2, 'g')
+        bay(x + 1, G, hall[i])
+    d.rooms.append((58, bottom))
+
+    # ======== First floor ========
+    top, bottom = F3 + 1, F2 - 1
+    # Trophy room: a throne by a table, places for boss relics, the walls free for trophies and banners.
+    room(L + 1, 23, top, bottom, 'x')
+    d.wall(8, top, 13, top, 'g')
+    for x in (3, 7, 11):
+        bay(x, F2, 'Relic')
+    d.put('Q', 15, bottom - 3)
+    d.put('T', 19, bottom - 1)
+    d.put('c', 20, bottom - 2)
+    d.put('l', 18, top)
+    d.rooms.append((10, bottom))
+    divider(24, top, bottom, '#')
+    # Library: the shaft goes up on the left, a reading table, two bookcases, a clock.
+    room(25, 50, top, bottom, 'w')
+    d.wall(40, top, 48, top, 'g')
+    d.put('C', 29, bottom - 1)
+    d.put('T', 30, bottom - 1)
+    d.put('h', 30, bottom - 2)
+    d.put('c', 31, bottom - 2)
+    d.put('b', 32, bottom - 2)
+    d.put('l', 33, top)
+    d.put('K', 34, bottom - 3)
+    d.put('K', 37, bottom - 3)
+    bay(40, F2, 'Crystal Ball')
+    bay(43, F2, 'Alchemy Table')
+    bay(46, F2, 'Bewitching Table')
+    d.put('O', 49, top)
+    d.rooms.append((27, bottom))
+    divider(51, top, bottom, '#')
+    # Two bedrooms for the players; the second one has a fireplace under the chimney.
+    room(52, 63, top, bottom, 'w')
+    d.wall(53, top, 56, top + 1, 'g')
+    d.put('B', 52, bottom - 1)
+    d.put('C', 57, bottom - 1)
+    d.put('T', 58, bottom - 1)
+    d.put('c', 59, bottom - 2)
+    d.put('l', 58, top)
+    d.put('O', 62, top)
+    d.rooms.append((56, bottom))
+    divider(64, top, bottom, '#')
+    room(65, R - 1, top, bottom, 'k')
+    d.wall(69, top, 72, top + 1, 'g')
+    d.put('C', 65, bottom - 1)
+    d.put('T', 66, bottom - 1)
+    d.put('c', 67, bottom - 2)
+    d.put('B', 69, bottom - 1)
+    d.put('F', 73, bottom - 1)
+    d.put('l', 71, top)
+    d.rooms.append((70, bottom - 2))
+    d.fill(66, F3, 68, F3, '-')
+
+    # ======== Under the gables ========
+    bottom = F3 - 1
+    # Music lounge, up from the trophy room.
+    d.fill(2, F3, 4, F3, '-')
+    d.wall(10, 9, 13, 11, 'g')
+    bay(6, F3, 'Dye Vat')
+    bay(10, F3, 'Sky Mill')
+    d.put('T', 14, bottom - 1)
+    d.put('c', 15, bottom - 2)
+    d.put('C', 17, bottom - 1)
+    d.put('P', 18, bottom - 1)
+    d.put('l', music[7][0], 7)
+    d.rooms.append((12, 12))
+    # Inventions workshop: six bays, torches between them, round windows high up.
+    for i, (x, name) in enumerate(zip(range(29, 50, 4), ['Ancient Manipulator', 'Blend-O-Matic', 'Honey Dispenser',
+                                                        'Ice Machine', 'Lihzahrd Furnace', 'Glass Kiln'])):
+        bay(x, F3, name)
+        if i < 5:
+            d.put('i', x + 3, 12)
+    d.put('T', 52, bottom - 1)
+    d.put('c', 53, bottom - 2)
+    d.put('C', 55, bottom - 1)
+    d.rooms.append((40, 14))
+    # The inventor's loft in the top of the big gable.
+    d.wall(40, 4, 42, 5, 'g')
+    bay(37, 10, 'Bone Welder')
+    bay(41, 10, 'Steampunk Boiler')
+    d.put('T', 44, 8)
+    d.put('b', 44, 7)
+    d.put('c', 45, 7)
+    d.put('C', 47, 8)
+    d.put('l', 41, 1)
+    d.rooms.append((40, 7))
+    # Bathroom (not housing), up from the second bedroom.
+    d.wall(67, 11, 70, 13, 'g')
+    d.put('H', 62, bottom - 1)
+    d.put('G', 70, bottom - 1)
+    d.put('t', 74, bottom - 1)
+    d.put('l', bath[9][0], 9)
+    return d
+
+
+def tree_village():
+    """The NPC village that goes above the craftsman's house, in the style of a reference picture the user sent: one
+    big lodge hung between two living wood trunks (89 tiles apart, like the user's trees at the height of their
+    branch). A wide deck with balconies and a porch at the bottom, four wooden stories that step in as they go up,
+    more on the left, then a steep red gable with three more stories inside it and a stone chimney on the left. Walkways reach
+    out from every story's outer doors to where the user's trees go (the user builds the trees), with a vine rope down
+    each side, so any story can be reached from outside on either side; inside, one shaft of platforms climbs every
+    story and the rooms of a story are joined by doors. 30 rooms. Place it centered on the same column as the
+    house, right above it."""
+    W, H = 109, 60
+    d = Design('TreeVillage', W, H)
+    SHAFT = (52, 54)                        # platforms up through every story
+    DECK = 56
+
+    # ---- Stories: (floor row, left wall, right wall), 5 high under the next one's floor. They step in as they go
+    # up, more on the left than on the right, leaving terraces; the second one overhangs a porch on the right ----
+    stories = [(DECK, 16, 86), (50, 20, 93), (44, 24, 80), (38, 34, 80)]
+    d.fill(10, DECK, 98, DECK, '#')
+    for f, x0, x1 in stories:
+        d.fill(x0, f - 5, x0, f - 1, '#')
+        d.fill(x1, f - 5, x1, f - 1, '#')
+        d.fill(x0 + 1, f - 5, x1 - 1, f - 1, '.')
+    d.fill(16, 50, 93, 50, '#')
+    d.fill(20, 44, 93, 44, '#')
+    d.fill(24, 38, 80, 38, '#')
+    d.fill(34, 32, 80, 32, '#')
+    d.wall(17, 51, 85, 55, 'p')
+    d.wall(21, 45, 92, 49, 'w')
+    d.wall(25, 39, 79, 43, 'k')
+    d.wall(35, 33, 79, 37, 'p')
+
+    # The red gable on top, with three more floors inside it; the attic above them is closed roof space.
+    inside = gable(d, 32, 82, 31)
+    gable_floors = [26, 20, 14]
+    for f in gable_floors:
+        a, b = inside[f]
+        d.fill(a, f, b, f, '#')
+    d.wall(56, 9, 58, 11, 'g')
+
+    # The stone chimney on the left slope.
+    d.fill(37, 12, 38, 24, 'S')
+    d.fill(36, 11, 39, 11, 'E')
+
+    # The shaft: platforms in every floor from the first story's ceiling up to the last gable floor.
+    for f in [50, 44, 38, 32] + gable_floors[:-1]:
+        d.fill(SHAFT[0], f, SHAFT[1], f, '-')
+
+    # ---- Walkways from every story's outer doors out to where the user's trees go, and a vine rope down each side
+    # from the top one to the bottom, so any story can be reached from outside on either side ----
+    LEFT_ROPE, RIGHT_ROPE = 14, 95
+    for y, left_end, right_start in ((50, 19, 94), (44, 23, 94), (38, 33, 81)):
+        d.fill(10, y, left_end, y, '#')
+        d.fill(right_start, y, 98, y, '#')
+    for x in (LEFT_ROPE, RIGHT_ROPE):
+        d.fill(x, 36, x, H - 1, 'r')
+
+    # Balconies on the deck, the porch under the second story's overhang, the covered porch under the top right
+    # walkway, fences on the walkways.
+    d.wall(11, 55, 13, 55, 'z')
+    d.wall(96, 55, 97, 55, 'z')
+    d.fill(93, 51, 93, 55, '|')
+    d.put('l', 90, 51)
+    d.put('i', 15, 52)
+    d.put('i', 87, 51)
+    d.wall(17, 49, 18, 49, 'z')
+    d.wall(21, 43, 22, 43, 'z')
+    d.wall(86, 43, 91, 43, 'z')
+    d.fill(92, 41, 92, 43, '|')
+    d.put('l', 85, 39)
+    d.wall(26, 37, 31, 37, 'z')
+    # ---- Rooms: dividers with doors, then furniture ----
+    plans = [   # floor row, divider columns, interior wall
+        (DECK, [26, 37, 48, 62, 74], 'p'),
+        (50, [31, 42, 60, 70, 81], 'w'),
+        (44, [35, 46, 61, 70], 'k'),
+        (38, [45, 60, 70], 'p'),
+        (32, [44, 61, 70], 'w'),
+        (26, [50, 62], 'k'),
+        (20, [58], 'p'),
+    ]
+    reserved = set()
+    for y in range(H):
+        for x in range(SHAFT[0] - 1, SHAFT[1] + 2):
+            reserved.add((x, y))
+
+    def door(x, f):
+        d.put('D', x, f - 3)
+        for y in range(f - 3, f):
+            reserved.update({(x - 1, y), (x + 1, y)})
+
+    # Outer doors: to the balconies, and out onto the terraces.
+    door(16, DECK)
+    door(86, DECK)
+    door(20, 50)
+    door(93, 50)
+    door(24, 44)
+    door(80, 44)
+    door(34, 38)
+    door(80, 38)
+
+    def span(f, y):
+        """Open cells of the story on floor f, on row y."""
+        for ff, x0, x1 in stories:
+            if ff == f:
+                return x0 + 1, x1 - 1
+        a, b = inside[y]
+        return a, b
+
+    def open_(x, y, w, h):
+        return all(d.tiles[y + dy][x + dx] == '.' and (x + dx, y + dy) not in reserved
+                   for dy in range(h) for dx in range(w))
+
+    def solid(x, y):
+        return d.tiles[y][x] in '#SEYv'
+
+    def stand(x, y, w, h):
+        return open_(x, y, w, h) and all(solid(x + dx, y + h) for dx in range(w))
+
+    pieces = [('B', 4, 2), ('K', 3, 4), ('P', 3, 2), ('V', 3, 2), ('Z', 2, 2), ('O', 2, 5), ('W', 2, 1)]
+    n = 0
+    for f, dividers, wall in plans:
+        lo, hi = span(f, f - 1)
+        if f not in [s_[0] for s_ in stories]:
+            for y in range(f - 5, f):
+                d.wall(*inside[y][:1], y, inside[y][1], y, wall)
+        for x in dividers:
+            d.fill(x, f - 5, x, f - 4, '#')
+            door(x, f)
+        bounds = [lo - 1] + dividers + [hi + 1]
+        for a, b in zip(bounds, bounds[1:]):
+            a, b = a + 1, b - 1
+            d.rooms.append((a, f - 1))
+            ta, tb = span(f, f - 5)
+            mid = (max(a, ta) + min(b, tb)) // 2
+            d.wall(mid, f - 4, mid + 1, f - 3, 'g')
+            # A lantern near the middle, hanging from the floor above.
+            for x in sorted(range(a, b + 1), key=lambda x: abs(x - mid)):
+                if open_(x, f - 5, 1, 2) and solid(x, f - 6):
+                    d.put('l', x, f - 5)
+                    break
+            # Chair and table, something on the table.
+            for x in range(a, b - 2):
+                if stand(x, f - 2, 1, 2) and stand(x + 1, f - 2, 3, 2):
+                    d.put('C', x, f - 2)
+                    d.put('T', x + 1, f - 2)
+                    if open_(x + 2, f - 3, 1, 1):
+                        d.put('cbhou'[n % 5], x + 2, f - 3)
+                    break
+            # One more piece where it fits, from the right.
+            for k in range(len(pieces)):
+                c, w, h = pieces[(n + k) % len(pieces)]
+                spot = next((x for x in range(b - w + 1, a - 1, -1) if stand(x, f - h, w, h)), None)
+                if spot is not None:
+                    d.put(c, spot, f - h)
+                    break
+            n += 1
+
+    return d
+
+
+DESIGNS = [small_house, two_floors, tower, medieval, castle, pagoda, wizard_tower, craftsman_house, tree_village, arena]

@@ -46,34 +46,33 @@ UI: {
 	GoalReady: You have everything to craft {0}!
 	GoalReadyShort: Ready to craft!
 	GoalMore: +{0} more
-	GoalStep: "Craft {0} x {1}"
-	GoalStepChests: "Craft {0} x {1} (chests)"
-	GoalNeedsStation: "Next step needs: {0}"
-	GoalCrafted: "Crafted {0} x {1}."
-	TakeNeedsTerminal: "Middle click takes items out of the chests of the last terminal you opened, while you are near it."
+	GoalStep: Craft {0} x {1}
+	GoalStepChests: Craft {0} x {1} (chests)
+	GoalNeedsStation: Next step needs: {0}
+	GoalCrafted: Crafted {0} x {1}.
+	TakeNeedsTerminal: Middle click takes items out of the chests of the last terminal you opened, while you are near it.
 	TakeNotStored: "{0} isn't in the terminal's chests."
-	BlueprintTitle: "Blueprints"
-	BlueprintSmallHouse: "Small house"
-	BlueprintTwoFloors: "Two-floor house"
-	BlueprintTower: "Tower"
-	BlueprintArena: "Boss arena"
-	BlueprintMedieval: "Medieval house"
-	BlueprintCastle: "Castle"
-	BlueprintPagoda: "Pagoda"
-	BlueprintWizardTower: "Wizard tower"
-	BlueprintMaterial: "Material:"
-	BlueprintPickMaterial: "Pick a material."
-	BlueprintNoMaterials: "No materials found."
-	BlueprintCost: "Materials (taken from your inventory):"
-	BlueprintHave: "{0}: {1}/{2}"
-	BlueprintInChests: "(+{0} in the chests)"
-	BlueprintPlace: "Place"
-	BlueprintHint: "Hold the blueprint: left click builds the house where its preview is, right click opens this catalog. Every room is valid housing for an NPC."
-	BlueprintPreviewHint: "Left click: build here   Right click: blueprints"
-	BuildBlocked: "Something is in the way (red tiles): clear it first."
-	BuildMissing: "Missing materials: {0}"
+	BlueprintTitle: Blueprints
+	BlueprintSmallHouse: Small house
+	BlueprintTwoFloors: Two-floor house
+	BlueprintTower: Tower
+	BlueprintArena: Boss arena
+	BlueprintMedieval: Medieval house
+	BlueprintCastle: Castle
+	BlueprintPagoda: Pagoda
+	BlueprintWizardTower: Wizard tower
+	BlueprintWorkshop: Craftsman's house
+	BlueprintTreeVillage: Tree village
+	BlueprintMaterial: Material:
+	BlueprintPickMaterial: Pick a material.
+	BlueprintNoMaterials: No materials found.
+	BlueprintFree: Free: building takes no materials.
+	BlueprintPlace: Place
+	BlueprintHint: Hold the blueprint: left click builds the house where its preview is, right click opens this catalog. Every room is valid housing for an NPC.
+	BlueprintPreviewHint: Left click: build here   Right click: blueprints
+	BuildBlocked: Something is in the way (red tiles): clear it first.
 	BuildDone: "{0} built!"
-	BuildFailed: "It couldn't be built there; your materials were given back."
+	BuildFailed: Couldn't build there.
 	GoalCollapse: Fold (drag the title to move the panel)
 	GoalExpand: Unfold (drag the title to move the panel)
 	CompareAdd: + Compare
@@ -103,9 +102,9 @@ UI: {
 	TakeMissingHint: Takes out of the chests what your inventory lacks for one craft (Shift: for 10)
 	TakeMissingStatus: In the chests, missing from your inventory: {0}
 	TerminalTitle: Storage Terminal
-	ConnectedChests: Connected chests: {0}
-	WireStations: "Stations on the wire:"
-	NoWireStations: "none (put crafting stations on the red wire)"
+	ConnectedChests: "{0} chests · {1}/{2} free · {3}% full"
+	WireStations: Stations on the wire:
+	NoWireStations: none (put crafting stations on the red wire)
 	TerminalHint: Click: a stack   Hold right click: amount   Shift: chest   Ctrl: recipe
 	TerminalHoldingHint: Click an item: take out {0}   Right click empty space: cancel
 	Max: Max
@@ -181,7 +180,7 @@ UI: {
 		Middle click an item: take a stack out of a terminal's chests (near the last one you opened).
 		'''
 	TipPlaced: Terminal placed! Connect it to your chests with red wire (placed with the {0}, sold by the {1}), then right click it.
-	TipOpened: "Tip: hover over the ? button to see the terminal's controls. \"Recipes\" opens the recipe index next to it."
+	TipOpened: Tip: hover over the ? button to see the terminal's controls. "Recipes" opens the recipe index next to it.
 }
 
 Items: {
@@ -206,7 +205,7 @@ Items: {
 	}
 
 	BlueprintItem: {
-		DisplayName: "Blueprint"
+		DisplayName: Blueprint
 		Tooltip:
 			'''
 			Right click to choose a house and its material
@@ -266,13 +265,8 @@ Configs: {
 		}
 
 		FocusTerminalSearch: {
-			Label: "Type in the terminal's search box when it opens"
-			Tooltip: "While typing, the mod's keys (N, [ and ]) don't work"
-		}
-
-		DeliveryDrones: {
-			Label: Delivery drones
-			Tooltip: Little drones carry the items between the chests and the terminal's door (just for show)
+			Label: Type in the terminal's search box when it opens
+			Tooltip: While typing, the mod's keys (N, [ and ]) don't work
 		}
 
 		ChestEffects: {

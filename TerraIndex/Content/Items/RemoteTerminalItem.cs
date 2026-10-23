@@ -118,4 +118,15 @@ namespace TerraIndex.Content.Items
 			LinkWorld = reader.ReadInt32();
 		}
 	}
+
+	// For testing: the Merchant sells it for 4 silver, so it can be tried without reaching the Moon Lord.
+	// Take this out before publishing 1.0.
+	public class MerchantTestShop : GlobalNPC
+	{
+		public override void ModifyShop(NPCShop shop)
+		{
+			if (shop.NpcType == NPCID.Merchant)
+				shop.Add(new Item(ModContent.ItemType<RemoteTerminalItem>()) { shopCustomPrice = Item.buyPrice(silver: 4) });
+		}
+	}
 }

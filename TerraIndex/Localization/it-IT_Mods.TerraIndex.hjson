@@ -42,38 +42,37 @@ UI: {
 	TreeStations: Stazioni di creazione
 	SetGoal: Imposta come obiettivo
 	RemoveGoal: Rimuovi obiettivo
-	GoalTitle: "Obiettivo: {0}"
+	GoalTitle: Obiettivo: {0}
 	GoalReady: Hai tutto per creare {0}!
 	GoalReadyShort: Pronto da creare!
 	GoalMore: altri +{0}
-	GoalStep: "Crea {0} x {1}"
-	GoalStepChests: "Crea {0} x {1} (casse)"
-	GoalNeedsStation: "Il prossimo passo richiede: {0}"
-	GoalCrafted: "Creati {0} x {1}."
-	TakeNeedsTerminal: "Il clic centrale prende oggetti dalle casse dell'ultimo terminale aperto, finché gli sei vicino."
+	GoalStep: Crea {0} x {1}
+	GoalStepChests: Crea {0} x {1} (casse)
+	GoalNeedsStation: Il prossimo passo richiede: {0}
+	GoalCrafted: Creati {0} x {1}.
+	TakeNeedsTerminal: Il clic centrale prende oggetti dalle casse dell'ultimo terminale aperto, finché gli sei vicino.
 	TakeNotStored: "{0} non è nelle casse del terminale."
-	BlueprintTitle: "Progetti"
-	BlueprintSmallHouse: "Casa piccola"
-	BlueprintTwoFloors: "Casa a due piani"
-	BlueprintTower: "Torre"
-	BlueprintArena: "Arena dei boss"
-	BlueprintMedieval: "Casa medievale"
-	BlueprintCastle: "Castello"
-	BlueprintPagoda: "Pagoda"
-	BlueprintWizardTower: "Torre del mago"
-	BlueprintMaterial: "Materiale:"
-	BlueprintPickMaterial: "Scegli un materiale."
-	BlueprintNoMaterials: "Nessun materiale trovato."
-	BlueprintCost: "Materiali (dall'inventario):"
-	BlueprintHave: "{0}: {1}/{2}"
-	BlueprintInChests: "(+{0} nelle casse)"
-	BlueprintPlace: "Posiziona"
-	BlueprintHint: "Con il progetto in mano: clic sinistro costruisce la casa dov'è l'anteprima, clic destro apre questo catalogo. Ogni stanza è un'abitazione valida per un PNG."
-	BlueprintPreviewHint: "Clic sinistro: costruisci qui   Clic destro: progetti"
-	BuildBlocked: "C'è qualcosa in mezzo (caselle rosse): liberalo prima."
-	BuildMissing: "Materiali mancanti: {0}"
-	BuildDone: "Costruito: {0}!"
-	BuildFailed: "Impossibile costruire lì; i materiali ti sono stati restituiti."
+	BlueprintTitle: Progetti
+	BlueprintSmallHouse: Casa piccola
+	BlueprintTwoFloors: Casa a due piani
+	BlueprintTower: Torre
+	BlueprintArena: Arena dei boss
+	BlueprintMedieval: Casa medievale
+	BlueprintCastle: Castello
+	BlueprintPagoda: Pagoda
+	BlueprintWizardTower: Torre del mago
+	BlueprintWorkshop: Casa dell'artigiano
+	BlueprintTreeVillage: Villaggio sugli alberi
+	BlueprintMaterial: Materiale:
+	BlueprintPickMaterial: Scegli un materiale.
+	BlueprintNoMaterials: Nessun materiale trovato.
+	BlueprintFree: Gratis: costruire non consuma materiali.
+	BlueprintPlace: Posiziona
+	BlueprintHint: Con il progetto in mano: clic sinistro costruisce la casa dov'è l'anteprima, clic destro apre questo catalogo. Ogni stanza è un'abitazione valida per un PNG.
+	BlueprintPreviewHint: Clic sinistro: costruisci qui   Clic destro: progetti
+	BuildBlocked: C'è qualcosa in mezzo (caselle rosse): liberalo prima.
+	BuildDone: Costruito: {0}!
+	BuildFailed: Impossibile costruire qui.
 	GoalCollapse: Comprimi (trascina il titolo per spostare il pannello)
 	GoalExpand: Espandi (trascina il titolo per spostare il pannello)
 	CompareAdd: + Confronta
@@ -97,17 +96,17 @@ UI: {
 	CraftNoIngredients: Ingredienti insufficienti nelle casse del terminale
 	CraftNoStation: Manca la stazione di creazione (vicina o sul filo del terminale)
 	CraftNoConditions: Condizioni non soddisfatte qui
-	Crafted: "Creati {0} x {1} dalle tue casse."
+	Crafted: Creati {0} x {1} dalle tue casse.
 	CraftFailed: Le casse non hanno più gli ingredienti.
 	TakeMissing: Prendi i mancanti
 	TakeMissingHint: Prende dalle casse ciò che manca al tuo inventario per una creazione (Maiusc: per 10)
-	TakeMissingStatus: "Nelle casse, mancanti nell'inventario: {0}"
+	TakeMissingStatus: Nelle casse, mancanti nell'inventario: {0}
 	TerminalTitle: Terminale di deposito
-	ConnectedChests: "Casse collegate: {0}"
-	WireStations: "Stazioni sul filo:"
-	NoWireStations: "nessuna (metti stazioni di creazione sul filo rosso)"
-	TerminalHint: "Clic: una pila   Tieni premuto il destro: quantità   Maiusc: cassa   Ctrl: ricetta"
-	TerminalHoldingHint: "Clic su un oggetto: prendine {0}   Clic destro nel vuoto: annulla"
+	ConnectedChests: "{0} casse · {1}/{2} liberi · {3}% pieno"
+	WireStations: Stazioni sul filo:
+	NoWireStations: nessuna (metti stazioni di creazione sul filo rosso)
+	TerminalHint: Clic: una pila   Tieni premuto il destro: quantità   Maiusc: cassa   Ctrl: ricetta
+	TerminalHoldingHint: Clic su un oggetto: prendine {0}   Clic destro nel vuoto: annulla
 	Max: Max
 	TerminalEmpty:
 		'''
@@ -119,12 +118,12 @@ UI: {
 	DepositHint: Alla chiusura, gli oggetti vanno nelle casse attraverso la porta del terminale.
 	Done: Fatto
 	DepositDone: Oggetti riposti nelle casse.
-	DepositNoSpace: "Attenzione: le casse collegate sono piene. {0} oggetto/i non sono stati inviati e restano nel terminale finché non c'è spazio o non li riprendi."
+	DepositNoSpace: Attenzione: le casse collegate sono piene. {0} oggetto/i non sono stati inviati e restano nel terminale finché non c'è spazio o non li riprendi.
 	DepositInUse: Un altro giocatore sta usando gli slot di deposito di questo terminale.
 	QuickDepositButton: Deposita tutto
 	QuickDepositEmpty: Niente da depositare (barra rapida, monete, munizioni e preferiti restano).
-	QuickDepositNoSpace: "Le casse collegate sono piene: {0} oggetto/i ti sono stati restituiti."
-	SortBy: "Ordine: {0}"
+	QuickDepositNoSpace: Le casse collegate sono piene: {0} oggetto/i ti sono stati restituiti.
+	SortBy: Ordine: {0}
 	SortName: Nome
 	SortAmount: Quantità
 	SortRarity: Rarità
@@ -139,14 +138,14 @@ UI: {
 		Nessuna fonte nota: probabilmente si trova nelle casse, pescando
 		o nel mondo (rompendo blocchi, scuotendo alberi, ecc.).
 		'''
-	MoreAbove: "altri {0} sopra (rotellina)"
-	MoreBelow: "altri {0} sotto (rotellina)"
-	SoldBy: "Venduto da {0}: {1}"
+	MoreAbove: altri {0} sopra (rotellina)
+	MoreBelow: altri {0} sotto (rotellina)
+	SoldBy: Venduto da {0}: {1}
 	SoldByFree: Venduto da {0}
 	DroppedBy: Rilasciato da {0} ({1})
 	FoundInside: Dentro {0} ({1})
 	AnyEnemy: qualsiasi nemico
-	SpawnsIn: "Si trova in: {0}"
+	SpawnsIn: Si trova in: {0}
 	Page: Pagina {0} / {1}  ({2} oggetti)
 	Platinum: "{0} di platino"
 	Gold: "{0} d'oro"
@@ -180,8 +179,8 @@ UI: {
 		Tasti (Impostazioni > Controlli): apri l'indice, ricette o usi dell'oggetto sotto il mouse.
 		Clic centrale su un oggetto: prendine una pila dalle casse di un terminale (vicino all'ultimo aperto).
 		'''
-	TipPlaced: "Terminale piazzato! Collegalo alle tue casse con filo rosso (si posa con: {0}, venduto da: {1}), poi fai clic destro su di esso."
-	TipOpened: "Suggerimento: passa il mouse sul pulsante ? per vedere i comandi del terminale. \"Ricette\" apre l'indice delle ricette accanto."
+	TipPlaced: Terminale piazzato! Collegalo alle tue casse con filo rosso (si posa con: {0}, venduto da: {1}), poi fai clic destro su di esso.
+	TipOpened: Suggerimento: passa il mouse sul pulsante ? per vedere i comandi del terminale. "Ricette" apre l'indice delle ricette accanto.
 }
 
 Items: {
@@ -206,7 +205,7 @@ Items: {
 	}
 
 	BlueprintItem: {
-		DisplayName: "Progetto"
+		DisplayName: Progetto
 		Tooltip:
 			'''
 			Clic destro per scegliere una casa e il suo materiale
@@ -246,7 +245,7 @@ Configs: {
 		}
 
 		GoalPanelRows: {
-			Label: "Pannello dell'obiettivo: materiali mostrati"
+			Label: Pannello dell'obiettivo: materiali mostrati
 			Tooltip: Il resto viene riassunto come "altri +N"
 		}
 
@@ -266,13 +265,8 @@ Configs: {
 		}
 
 		FocusTerminalSearch: {
-			Label: "Scrivi nella ricerca del terminale all'apertura"
-			Tooltip: "Mentre scrivi, i tasti della mod (N, [ e ]) non funzionano"
-		}
-
-		DeliveryDrones: {
-			Label: Droni corrieri
-			Tooltip: Piccoli droni portano gli oggetti tra le casse e la porta del terminale (solo estetico)
+			Label: Scrivi nella ricerca del terminale all'apertura
+			Tooltip: Mentre scrivi, i tasti della mod (N, [ e ]) non funzionano
 		}
 
 		ChestEffects: {

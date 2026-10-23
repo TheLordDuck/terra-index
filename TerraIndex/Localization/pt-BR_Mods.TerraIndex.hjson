@@ -42,38 +42,37 @@ UI: {
 	TreeStations: Estações de criação
 	SetGoal: Definir como objetivo
 	RemoveGoal: Remover objetivo
-	GoalTitle: "Objetivo: {0}"
+	GoalTitle: Objetivo: {0}
 	GoalReady: Você tem tudo para fabricar {0}!
 	GoalReadyShort: Pronto para fabricar!
 	GoalMore: +{0} a mais
-	GoalStep: "Fabricar {0} x {1}"
-	GoalStepChests: "Fabricar {0} x {1} (baús)"
-	GoalNeedsStation: "O próximo passo precisa de: {0}"
-	GoalCrafted: "Fabricado: {0} x {1}."
-	TakeNeedsTerminal: "O clique do meio tira itens dos baús do último terminal que você abriu, enquanto estiver perto dele."
+	GoalStep: Fabricar {0} x {1}
+	GoalStepChests: Fabricar {0} x {1} (baús)
+	GoalNeedsStation: O próximo passo precisa de: {0}
+	GoalCrafted: Fabricado: {0} x {1}.
+	TakeNeedsTerminal: O clique do meio tira itens dos baús do último terminal que você abriu, enquanto estiver perto dele.
 	TakeNotStored: "{0} não está nos baús do terminal."
-	BlueprintTitle: "Plantas"
-	BlueprintSmallHouse: "Casa pequena"
-	BlueprintTwoFloors: "Casa de dois andares"
-	BlueprintTower: "Torre"
-	BlueprintArena: "Arena de chefes"
-	BlueprintMedieval: "Casa medieval"
-	BlueprintCastle: "Castelo"
-	BlueprintPagoda: "Pagode"
-	BlueprintWizardTower: "Torre do mago"
-	BlueprintMaterial: "Material:"
-	BlueprintPickMaterial: "Escolha um material."
-	BlueprintNoMaterials: "Nenhum material encontrado."
-	BlueprintCost: "Materiais (do seu inventário):"
-	BlueprintHave: "{0}: {1}/{2}"
-	BlueprintInChests: "(+{0} nos baús)"
-	BlueprintPlace: "Posicionar"
-	BlueprintHint: "Com a planta na mão: clique esquerdo constrói a casa onde está a prévia, clique direito abre este catálogo. Cada cômodo é uma moradia válida para um NPC."
-	BlueprintPreviewHint: "Clique esquerdo: construir aqui   Clique direito: plantas"
-	BuildBlocked: "Tem algo no caminho (blocos vermelhos): libere primeiro."
-	BuildMissing: "Faltam materiais: {0}"
-	BuildDone: "Construído: {0}!"
-	BuildFailed: "Não foi possível construir ali; seus materiais foram devolvidos."
+	BlueprintTitle: Plantas
+	BlueprintSmallHouse: Casa pequena
+	BlueprintTwoFloors: Casa de dois andares
+	BlueprintTower: Torre
+	BlueprintArena: Arena de chefes
+	BlueprintMedieval: Casa medieval
+	BlueprintCastle: Castelo
+	BlueprintPagoda: Pagode
+	BlueprintWizardTower: Torre do mago
+	BlueprintWorkshop: Casa do artesão
+	BlueprintTreeVillage: Vila das árvores
+	BlueprintMaterial: Material:
+	BlueprintPickMaterial: Escolha um material.
+	BlueprintNoMaterials: Nenhum material encontrado.
+	BlueprintFree: Grátis: construir não gasta materiais.
+	BlueprintPlace: Posicionar
+	BlueprintHint: Com a planta na mão: clique esquerdo constrói a casa onde está a prévia, clique direito abre este catálogo. Cada cômodo é uma moradia válida para um NPC.
+	BlueprintPreviewHint: Clique esquerdo: construir aqui   Clique direito: plantas
+	BuildBlocked: Tem algo no caminho (blocos vermelhos): libere primeiro.
+	BuildDone: Construído: {0}!
+	BuildFailed: Não foi possível construir aí.
 	GoalCollapse: Recolher (arraste o título para mover o painel)
 	GoalExpand: Expandir (arraste o título para mover o painel)
 	CompareAdd: + Comparar
@@ -101,13 +100,13 @@ UI: {
 	CraftFailed: Os baús não têm mais os ingredientes.
 	TakeMissing: Pegar o que falta
 	TakeMissingHint: Tira dos baús o que falta no seu inventário para uma fabricação (Shift: para 10)
-	TakeMissingStatus: "Nos baús, faltando no seu inventário: {0}"
+	TakeMissingStatus: Nos baús, faltando no seu inventário: {0}
 	TerminalTitle: Terminal de armazenamento
-	ConnectedChests: "Baús conectados: {0}"
-	WireStations: "Estações no fio:"
-	NoWireStations: "nenhuma (coloque estações de criação no fio vermelho)"
-	TerminalHint: "Clique: uma pilha   Segurar clique direito: quantidade   Shift: baú   Ctrl: receita"
-	TerminalHoldingHint: "Clique em um item: tirar {0}   Clique direito no vazio: cancelar"
+	ConnectedChests: "{0} baús · {1}/{2} livres · {3}% cheio"
+	WireStations: Estações no fio:
+	NoWireStations: nenhuma (coloque estações de criação no fio vermelho)
+	TerminalHint: Clique: uma pilha   Segurar clique direito: quantidade   Shift: baú   Ctrl: receita
+	TerminalHoldingHint: Clique em um item: tirar {0}   Clique direito no vazio: cancelar
 	Max: Máx
 	TerminalEmpty:
 		'''
@@ -119,12 +118,12 @@ UI: {
 	DepositHint: Ao fechar, os itens vão para os baús pela porta do terminal.
 	Done: Pronto
 	DepositDone: Itens guardados nos baús.
-	DepositNoSpace: "Atenção: os baús conectados estão cheios. {0} item(ns) não foram enviados e ficam no terminal até haver espaço ou você tirá-los."
+	DepositNoSpace: Atenção: os baús conectados estão cheios. {0} item(ns) não foram enviados e ficam no terminal até haver espaço ou você tirá-los.
 	DepositInUse: Outro jogador está usando os espaços de depósito deste terminal.
 	QuickDepositButton: Guardar tudo
 	QuickDepositEmpty: Nada para guardar (a barra de atalhos, moedas, munição e favoritos ficam com você).
-	QuickDepositNoSpace: "Os baús conectados estão cheios: {0} item(ns) foram devolvidos a você."
-	SortBy: "Ordem: {0}"
+	QuickDepositNoSpace: Os baús conectados estão cheios: {0} item(ns) foram devolvidos a você.
+	SortBy: Ordem: {0}
 	SortName: Nome
 	SortAmount: Quantidade
 	SortRarity: Raridade
@@ -141,12 +140,12 @@ UI: {
 		'''
 	MoreAbove: "{0} a mais acima (roda do mouse)"
 	MoreBelow: "{0} a mais abaixo (roda do mouse)"
-	SoldBy: "Vendido por {0}: {1}"
+	SoldBy: Vendido por {0}: {1}
 	SoldByFree: Vendido por {0}
 	DroppedBy: Derrubado por {0} ({1})
 	FoundInside: Dentro de {0} ({1})
 	AnyEnemy: qualquer inimigo
-	SpawnsIn: "Encontrado em: {0}"
+	SpawnsIn: Encontrado em: {0}
 	Page: Página {0} / {1}  ({2} itens)
 	Platinum: "{0} de platina"
 	Gold: "{0} de ouro"
@@ -180,8 +179,8 @@ UI: {
 		Teclas (Configurações > Controles): abrir o índice, receitas ou usos do item sob o mouse.
 		Clique do meio em um item: tirar uma pilha dos baús de um terminal (perto do último que você abriu).
 		'''
-	TipPlaced: "Terminal colocado! Conecte-o aos seus baús com fio vermelho (colocado com: {0}, vendido por: {1}) e clique nele com o botão direito."
-	TipOpened: "Dica: passe o mouse sobre o botão ? para ver os controles do terminal. \"Receitas\" abre o índice de receitas ao lado."
+	TipPlaced: Terminal colocado! Conecte-o aos seus baús com fio vermelho (colocado com: {0}, vendido por: {1}) e clique nele com o botão direito.
+	TipOpened: Dica: passe o mouse sobre o botão ? para ver os controles do terminal. "Receitas" abre o índice de receitas ao lado.
 }
 
 Items: {
@@ -206,7 +205,7 @@ Items: {
 	}
 
 	BlueprintItem: {
-		DisplayName: "Planta"
+		DisplayName: Planta
 		Tooltip:
 			'''
 			Clique direito para escolher uma casa e seu material
@@ -246,7 +245,7 @@ Configs: {
 		}
 
 		GoalPanelRows: {
-			Label: "Painel do objetivo: materiais mostrados"
+			Label: Painel do objetivo: materiais mostrados
 			Tooltip: O resto é resumido como "+N a mais"
 		}
 
@@ -266,13 +265,8 @@ Configs: {
 		}
 
 		FocusTerminalSearch: {
-			Label: "Digitar na pesquisa do terminal ao abri-lo"
-			Tooltip: "Enquanto você digita, as teclas do mod (N, [ e ]) não funcionam"
-		}
-
-		DeliveryDrones: {
-			Label: Drones de entrega
-			Tooltip: Pequenos drones levam os itens entre os baús e a porta do terminal (apenas visual)
+			Label: Digitar na pesquisa do terminal ao abri-lo
+			Tooltip: Enquanto você digita, as teclas do mod (N, [ e ]) não funcionam
 		}
 
 		ChestEffects: {

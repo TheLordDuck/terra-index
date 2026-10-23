@@ -48,32 +48,31 @@ UI: {
 	GoalMore: +{0} weitere
 	GoalStep: "{0} x {1} herstellen"
 	GoalStepChests: "{0} x {1} herstellen (Truhen)"
-	GoalNeedsStation: "Nächster Schritt braucht: {0}"
+	GoalNeedsStation: Nächster Schritt braucht: {0}
 	GoalCrafted: "{0} x {1} hergestellt."
-	TakeNeedsTerminal: "Mittelklick nimmt Gegenstände aus den Truhen des zuletzt geöffneten Terminals, solange du in seiner Nähe bist."
+	TakeNeedsTerminal: Mittelklick nimmt Gegenstände aus den Truhen des zuletzt geöffneten Terminals, solange du in seiner Nähe bist.
 	TakeNotStored: "{0} ist nicht in den Truhen des Terminals."
-	BlueprintTitle: "Baupläne"
-	BlueprintSmallHouse: "Kleines Haus"
-	BlueprintTwoFloors: "Zweistöckiges Haus"
-	BlueprintTower: "Turm"
-	BlueprintArena: "Boss-Arena"
-	BlueprintMedieval: "Mittelalterhaus"
-	BlueprintCastle: "Burg"
-	BlueprintPagoda: "Pagode"
-	BlueprintWizardTower: "Zauberturm"
-	BlueprintMaterial: "Material:"
-	BlueprintPickMaterial: "Wähle ein Material."
-	BlueprintNoMaterials: "Keine Materialien gefunden."
-	BlueprintCost: "Materialien (aus deinem Inventar):"
-	BlueprintHave: "{0}: {1}/{2}"
-	BlueprintInChests: "(+{0} in den Truhen)"
-	BlueprintPlace: "Platzieren"
-	BlueprintHint: "Halte den Bauplan: Linksklick baut das Haus dort, wo die Vorschau ist, Rechtsklick öffnet diesen Katalog. Jeder Raum ist ein gültiges NPC-Zuhause."
-	BlueprintPreviewHint: "Linksklick: hier bauen   Rechtsklick: Baupläne"
-	BuildBlocked: "Etwas ist im Weg (rote Felder): räume es zuerst weg."
-	BuildMissing: "Fehlende Materialien: {0}"
+	BlueprintTitle: Baupläne
+	BlueprintSmallHouse: Kleines Haus
+	BlueprintTwoFloors: Zweistöckiges Haus
+	BlueprintTower: Turm
+	BlueprintArena: Boss-Arena
+	BlueprintMedieval: Mittelalterhaus
+	BlueprintCastle: Burg
+	BlueprintPagoda: Pagode
+	BlueprintWizardTower: Zauberturm
+	BlueprintWorkshop: Handwerkerhaus
+	BlueprintTreeVillage: Baumdorf
+	BlueprintMaterial: Material:
+	BlueprintPickMaterial: Wähle ein Material.
+	BlueprintNoMaterials: Keine Materialien gefunden.
+	BlueprintFree: Kostenlos: Bauen verbraucht keine Materialien.
+	BlueprintPlace: Platzieren
+	BlueprintHint: Halte den Bauplan: Linksklick baut das Haus dort, wo die Vorschau ist, Rechtsklick öffnet diesen Katalog. Jeder Raum ist ein gültiges NPC-Zuhause.
+	BlueprintPreviewHint: Linksklick: hier bauen   Rechtsklick: Baupläne
+	BuildBlocked: Etwas ist im Weg (rote Felder): räume es zuerst weg.
 	BuildDone: "{0} gebaut!"
-	BuildFailed: "Es konnte dort nicht gebaut werden; deine Materialien wurden zurückgegeben."
+	BuildFailed: Dort konnte nicht gebaut werden.
 	GoalCollapse: Einklappen (Titel ziehen, um das Fenster zu verschieben)
 	GoalExpand: Ausklappen (Titel ziehen, um das Fenster zu verschieben)
 	CompareAdd: + Vergleichen
@@ -101,13 +100,13 @@ UI: {
 	CraftFailed: Die Truhen haben die Zutaten nicht mehr.
 	TakeMissing: Fehlendes nehmen
 	TakeMissingHint: Nimmt aus den Truhen, was deinem Inventar für eine Herstellung fehlt (Umschalt: für 10)
-	TakeMissingStatus: "In den Truhen, fehlt in deinem Inventar: {0}"
+	TakeMissingStatus: In den Truhen, fehlt in deinem Inventar: {0}
 	TerminalTitle: Lagerterminal
-	ConnectedChests: "Verbundene Truhen: {0}"
-	WireStations: "Stationen am Draht:"
-	NoWireStations: "keine (lege Handwerksstationen an den roten Draht)"
-	TerminalHint: "Klick: ein Stapel   Rechtsklick halten: Menge   Umschalt: Truhe   Strg: Rezept"
-	TerminalHoldingHint: "Klick auf einen Gegenstand: {0} herausnehmen   Rechtsklick ins Leere: abbrechen"
+	ConnectedChests: "{0} Truhen · {1}/{2} frei · {3}% voll"
+	WireStations: Stationen am Draht:
+	NoWireStations: keine (lege Handwerksstationen an den roten Draht)
+	TerminalHint: Klick: ein Stapel   Rechtsklick halten: Menge   Umschalt: Truhe   Strg: Rezept
+	TerminalHoldingHint: Klick auf einen Gegenstand: {0} herausnehmen   Rechtsklick ins Leere: abbrechen
 	Max: Max
 	TerminalEmpty:
 		'''
@@ -119,12 +118,12 @@ UI: {
 	DepositHint: Beim Schließen gehen die Gegenstände durch die Tür des Terminals in die Truhen.
 	Done: Fertig
 	DepositDone: Gegenstände in den Truhen verstaut.
-	DepositNoSpace: "Achtung: Die verbundenen Truhen sind voll. {0} Gegenstand/Gegenstände wurden nicht gesendet und bleiben im Terminal, bis Platz ist oder du sie herausnimmst."
+	DepositNoSpace: Achtung: Die verbundenen Truhen sind voll. {0} Gegenstand/Gegenstände wurden nicht gesendet und bleiben im Terminal, bis Platz ist oder du sie herausnimmst.
 	DepositInUse: Ein anderer Spieler benutzt gerade die Einlagerungsplätze dieses Terminals.
 	QuickDepositButton: Alles einlagern
 	QuickDepositEmpty: Nichts einzulagern (Schnellleiste, Münzen, Munition und Favoriten bleiben).
-	QuickDepositNoSpace: "Die verbundenen Truhen sind voll: {0} Gegenstand/Gegenstände wurden dir zurückgegeben."
-	SortBy: "Sortieren: {0}"
+	QuickDepositNoSpace: Die verbundenen Truhen sind voll: {0} Gegenstand/Gegenstände wurden dir zurückgegeben.
+	SortBy: Sortieren: {0}
 	SortName: Name
 	SortAmount: Menge
 	SortRarity: Seltenheit
@@ -141,12 +140,12 @@ UI: {
 		'''
 	MoreAbove: "{0} weitere oben (Mausrad)"
 	MoreBelow: "{0} weitere unten (Mausrad)"
-	SoldBy: "Verkauft von {0}: {1}"
+	SoldBy: Verkauft von {0}: {1}
 	SoldByFree: Verkauft von {0}
 	DroppedBy: Fallen gelassen von {0} ({1})
 	FoundInside: In {0} ({1})
 	AnyEnemy: jedem Gegner
-	SpawnsIn: "Zu finden in: {0}"
+	SpawnsIn: Zu finden in: {0}
 	Page: Seite {0} / {1}  ({2} Gegenstände)
 	Platinum: "{0} Platin"
 	Gold: "{0} Gold"
@@ -180,8 +179,8 @@ UI: {
 		Tasten (Einstellungen > Steuerung): Index öffnen, Rezepte oder Verwendungen des Gegenstands unter der Maus.
 		Mittelklick auf einen Gegenstand: einen Stapel aus den Truhen eines Terminals nehmen (in der Nähe des zuletzt geöffneten).
 		'''
-	TipPlaced: "Terminal platziert! Verbinde es mit rotem Draht mit deinen Truhen (verlegt mit: {0}, verkauft von: {1}) und klicke es dann mit Rechts an."
-	TipOpened: "Tipp: Fahre mit der Maus über den ?-Knopf, um die Steuerung des Terminals zu sehen. \"Rezepte\" öffnet den Rezeptindex daneben."
+	TipPlaced: Terminal platziert! Verbinde es mit rotem Draht mit deinen Truhen (verlegt mit: {0}, verkauft von: {1}) und klicke es dann mit Rechts an.
+	TipOpened: Tipp: Fahre mit der Maus über den ?-Knopf, um die Steuerung des Terminals zu sehen. "Rezepte" öffnet den Rezeptindex daneben.
 }
 
 Items: {
@@ -206,7 +205,7 @@ Items: {
 	}
 
 	BlueprintItem: {
-		DisplayName: "Bauplan"
+		DisplayName: Bauplan
 		Tooltip:
 			'''
 			Rechtsklick, um ein Haus und sein Material zu wählen
@@ -246,7 +245,7 @@ Configs: {
 		}
 
 		GoalPanelRows: {
-			Label: "Zielfenster: angezeigte Materialien"
+			Label: Zielfenster: angezeigte Materialien
 			Tooltip: Der Rest wird als "+N weitere" zusammengefasst
 		}
 
@@ -266,13 +265,8 @@ Configs: {
 		}
 
 		FocusTerminalSearch: {
-			Label: "Beim Öffnen des Terminals ins Suchfeld tippen"
-			Tooltip: "Während du tippst, funktionieren die Tasten des Mods (N, [ und ]) nicht"
-		}
-
-		DeliveryDrones: {
-			Label: Lieferdrohnen
-			Tooltip: Kleine Drohnen tragen die Gegenstände zwischen den Truhen und der Tür des Terminals (nur optisch)
+			Label: Beim Öffnen des Terminals ins Suchfeld tippen
+			Tooltip: Während du tippst, funktionieren die Tasten des Mods (N, [ und ]) nicht
 		}
 
 		ChestEffects: {
