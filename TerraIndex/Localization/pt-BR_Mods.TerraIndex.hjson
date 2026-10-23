@@ -52,6 +52,28 @@ UI: {
 	GoalCrafted: "Fabricado: {0} x {1}."
 	TakeNeedsTerminal: "O clique do meio tira itens dos baús do último terminal que você abriu, enquanto estiver perto dele."
 	TakeNotStored: "{0} não está nos baús do terminal."
+	BlueprintTitle: "Plantas"
+	BlueprintSmallHouse: "Casa pequena"
+	BlueprintTwoFloors: "Casa de dois andares"
+	BlueprintTower: "Torre"
+	BlueprintArena: "Arena de chefes"
+	BlueprintMedieval: "Casa medieval"
+	BlueprintCastle: "Castelo"
+	BlueprintPagoda: "Pagode"
+	BlueprintWizardTower: "Torre do mago"
+	BlueprintMaterial: "Material:"
+	BlueprintPickMaterial: "Escolha um material."
+	BlueprintNoMaterials: "Nenhum material encontrado."
+	BlueprintCost: "Materiais (do seu inventário):"
+	BlueprintHave: "{0}: {1}/{2}"
+	BlueprintInChests: "(+{0} nos baús)"
+	BlueprintPlace: "Posicionar"
+	BlueprintHint: "Com a planta na mão: clique esquerdo constrói a casa onde está a prévia, clique direito abre este catálogo. Cada cômodo é uma moradia válida para um NPC."
+	BlueprintPreviewHint: "Clique esquerdo: construir aqui   Clique direito: plantas"
+	BuildBlocked: "Tem algo no caminho (blocos vermelhos): libere primeiro."
+	BuildMissing: "Faltam materiais: {0}"
+	BuildDone: "Construído: {0}!"
+	BuildFailed: "Não foi possível construir ali; seus materiais foram devolvidos."
 	GoalCollapse: Recolher (arraste o título para mover o painel)
 	GoalExpand: Expandir (arraste o título para mover o painel)
 	CompareAdd: + Comparar
@@ -177,6 +199,16 @@ Items: {
 			Segure-o e clique com o botão direito em um terminal para vinculá-los
 			Use-o para abrir o terminal vinculado de qualquer lugar
 			Os itens que você tira aparecem ao seu lado
+			'''
+	}
+
+	BlueprintItem: {
+		DisplayName: "Planta"
+		Tooltip:
+			'''
+			Clique direito para escolher uma casa e seu material
+			Clique esquerdo para construí-la onde está a prévia
+			Os materiais saem do seu inventário; não precisa de estação de criação
 			'''
 	}
 

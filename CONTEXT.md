@@ -12,7 +12,7 @@ Summary of the conversations with Claude Code (2026-10-21 and 2026-10-22), to pi
   fixed in `RecipeDatabase`). **Version 0.5** added picking an amount with right click in the terminal, and
   **0.6** the radio. **0.7** (2026-10-23, written on the PC without tModLoader, not compiled yet) docks the recipe
   index next to the terminal, adds delivery drones, chest effects, 7 more languages and in-game help. None of them
-  has been **tested in game** yet. The checklist is in [`TESTING.md`](TESTING.md). The only idea left after that is
+  has been **tested in game** yet. **0.8** (also uncompiled) adds blueprints to build houses. The checklist is in [`TESTING.md`](TESTING.md). The only idea left after that is
   publishing 1.0 on the Workshop.
 - **UI panels are built on first open** (`UIHelpers.Build`), never in `Load`: translations aren't loaded yet there, so
   texts would show raw keys like `Mods.TerraIndex.UI.TerminalTitle`. They are rebuilt when the game language changes.
@@ -70,6 +70,13 @@ Third conversation (2026-10-23):
     short-range portable terminal): drones bring items to a player who isn't at the door, an option to not type in
     the terminal's search on open, the search remembered for 30 s, and middle click in the index to take a stack out
     of the chests (idea 36). See "Comfort" below.
+20. 0.7 was committed and pushed (`5dbabfd`). Then the user said they aren't good at building and want to make
+    houses; of three options (blueprints in the mod, a building guide, a separate mod) they chose **blueprints in
+    Terra Index** (0.8, see "Blueprints").
+21. The user wanted **more spectacular builds**. They picked all four proposed styles (medieval house, castle,
+    pagoda, wizard tower) and "fixed materials + wood of your choice". The blueprint engine was rewritten for
+    several materials, slopes and more furniture, and the designs moved to a Python tool that checks and draws them
+    (`tools/blueprints/`).
 
 ---
 
@@ -304,6 +311,60 @@ Decisions taken:
   Messages when no terminal is in reach or the item isn't stored.
 - Discarded for now: an early, short-range portable terminal.
 
+### Blueprints (0.8)
+
+- **Blueprint** item (`Content/Building/BlueprintItem.cs`): 10 of any wood at a work bench. Right click opens the
+  catalog (`UI/BlueprintState.cs`); left click builds. It isn't used up.
+- Designs (`BlueprintDesigns.All`, in this order): small house 10x7, two-floor house 12x13, tower 10x19, medieval
+  house 24x23 (5 NPC rooms), castle 42x30 (11), pagoda 26x26 (3), wizard tower 14x31 (4), boss arena 40x13. Pictures
+  in `docs/blueprints/`.
+- **Designs are made in `tools/blueprints/designs.py`** (in code, so roofs are loops) and `python
+  tools/blueprints/build.py` checks them (known characters, furniture footprints, what each piece stands on or hangs
+  from, and every listed room with the game's room check: flood fill counting the frame, 60-750 tiles, walls behind
+  every open cell, light, chair, table, door or platform), draws `docs/blueprints/*.png` and writes
+  `Content/Building/BlueprintDesigns.cs`. Don't edit that file by hand.
+- Two layers of text rows: tiles and background walls. Characters are **brushes** (`Blueprints.TileBrushes`,
+  `WallBrushes`): a piece of the chosen material (`#` block, `-` platform, `D` door, `C` chair, `T` table, `W` work
+  bench, `B` bed, `K` bookcase, `L` chandelier, `l` lantern, `c` candle, `O` clock; `w` wall), or a fixed item found by
+  its `ItemID` name at runtime with fallbacks (`S` gray brick, `R` `/` `\` red brick and its slopes, `Y` `(` `)` red
+  dynasty shingles (or red brick), `U` `[` `]` blue dynasty shingles (or obsidian brick), `d` dynasty wood (or the
+  material), `|` wooden beam, `F` fireplace, `n` red banner, `y` dynasty lantern, `b` bottle, `i` torch; walls `s` gray
+  brick, `g` glass, `k`/`q` white/blue dynasty). A material without a piece uses plain wood's, then the fixed
+  fallbacks; lights fall back to a torch so rooms stay valid. Names that don't exist are skipped (nothing placed, not
+  charged). `.` must be empty, `+` is covered by furniture, `' '` is left as it is.
+- **Slopes** are named after their solid corner (`SlopeDownRight` = ◢, the left side of a roof). Not checked in game
+  yet: if roofs come out mirrored, swap the two shapes in `TileBrushes`.
+- Catalog: one button per design, the materials as item slots, a small preview, the cost in two columns (green = in
+  the inventory, blue = the rest is in the chests of a terminal in reach, red = missing), **Take missing** (through
+  `TerminalSystem.RequestTakeItems`, so the drones bring it) and **Place**, which closes the catalog.
+- While the item is held, `BuildSystem.PostDrawTiles` draws the house see-through with the material's item icons,
+  its bottom row on the tile under the mouse and centered on it, with a green border, or red cells and border where
+  something is in the way (any tile except grass and plants, which are cleared, or a player where a block goes).
+- Blueprints are text rows (legend in `Blueprints.cs`): `#` block, `.` background wall, `-` platform, `_` platform
+  with no wall, `D`/`C`/`T`/`i` door, chair, table, torch (top-left cell), `+` the rest of a piece of furniture. Every
+  room is valid NPC housing (at least 60 tiles with the frame, walls, a torch, a chair, a table, a door or platforms).
+  They were checked with a script (footprints, door and furniture supports).
+- Materials are found in the recipes when they load (`Blueprints.FindMaterials`): any solid block with a house
+  wall (not a fence), a platform, a door (1x3), a chair (1x2) and a table (3x2) made from it (recipes with exactly one
+  block among their ingredients), plus the work bench, bed, bookcase, chandelier, lantern, candle and clock when
+  vanilla makes them from it. Vanilla pieces are matched by their exact tile and size (so dressers and toilets don't
+  count); modded doors, chairs and tables by their housing sets and size, so modded woods work too. Wood comes
+  first, then by name.
+- Cost (`Blueprints.Cost`): items already in the inventory are used as they are; the rest are paid with the
+  ingredients of their recipe (the one a material's piece was found with, otherwise the first that isn't made back
+  from the item), one level deep, with no crafting station needed. Background walls already in place aren't charged
+  (or replaced). `Blueprints.Allocate` shares owned items between the lines, exact items first and
+  then group lines ("Any Wood" for torches).
+- Building: the client checks the place and the materials, takes them out of its inventory (synced) and, in
+  multiplayer, sends a `Build` packet with what it used. The server (or single player) checks the place and the
+  distance (60 tiles) again, then `Blueprints.Place`: clears grass, places background walls, then blocks, platforms
+  and beams (setting slopes), then furniture (`TileObject.CanPlace` at the piece's TileObjectData origin), then 1x1
+  objects like torches and candles (they go on walls and tables), frames the area and sends it in tile squares of
+  at most 30x30. If it fails the materials are spawned back on the player. `BuildResult`
+  tells the builder; on success a puff of smoke and a sound.
+- Sprite: `Content/Building/BlueprintItem.png`, 28x28, a blue sheet with a grid and a white house, rolled on
+  wooden rods.
+
 ### Goal "next step" button (0.7, idea 35 as the user chose it)
 
 - Above the goal panel's list, a green button crafts the next step towards the goal: "Craft 3 x Iron Bar", then
@@ -387,6 +448,12 @@ Decisions taken:
 | `UI/TerminalState.cs` | Terminal panel |
 | `UI/DepositState.cs` | Deposit slots (chest-like) |
 | `UI/HelpButton.cs` | "?" button showing a panel's controls as a tooltip |
+| `UI/BlueprintState.cs` | Blueprint catalog: houses, materials, preview, cost, Take missing |
+| `Content/Building/Blueprints.cs` | Brushes, materials found in the recipes, cost, place check, placing the tiles |
+| `Content/Building/BlueprintDesigns.cs` | The designs as text rows; generated by `tools/blueprints/build.py` |
+| `../tools/blueprints/` | `designs.py` (the designs, in code) and `build.py` (checks, pictures in `docs/blueprints/`, C#) |
+| `Content/Building/BuildSystem.cs` | Catalog UI layer, in-world preview, building (client), `ReceiveBuild` (server) |
+| `Content/Building/BlueprintItem.cs` | Blueprint item (right click: catalog, left click: build) |
 | `Content/Items/TerminalItem.cs` | Terminal item and Steampunker shop entry (`SteampunkerShop`) |
 | `Content/Items/RemoteTerminalItem.cs` | Portable terminal: link, remote opening, `CanReach` distance check |
 | `Content/Tiles/TerminalTile.cs` | Terminal tile (4x2 on a wall; right click opens the panel; door area) |
@@ -411,6 +478,7 @@ Decisions taken:
 | `Content/Tiles/TerminalDoor.png` | 22x21 | Garage door, drawn over the opening while it rolls up |
 | `Content/Storage/ChestArrow.png` | 16x16 | Arrow pointing right; rotated in game |
 | `Content/Storage/DeliveryDrone.png` | 20x28 | Delivery drone, two 14 px frames (0.7, same palette as the terminal) |
+| `Content/Building/BlueprintItem.png` | 28x28 | Blueprint: blue sheet with a grid and a white house (0.8) |
 | `icon.png` | 80x80 | Mod icon (mod list and Workshop) |
 | `icon_small.png` | 30x30 | Small icon in the mod list |
 
@@ -437,7 +505,7 @@ Coming from the old name: remove the `ModSources\RecipeIndex` link, create `ModS
 
 ## Pending / ideas
 
-- **Next step:** build 0.7 at home (it was written without a compiler) and go through `TESTING.md` in game. Then
+- **Next step:** build 0.8 at home (0.7 and 0.8 were written without a compiler) and go through `TESTING.md` in game. Then
   bump `version` to 1.0 and publish (idea 30).
 - Translations other than English and Spanish were written by Claude; a native speaker could polish them.
 - Known limits: clicking a crafting station shows that item's recipes, not everything crafted at that station;

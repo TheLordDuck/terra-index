@@ -52,6 +52,28 @@ UI: {
 	GoalCrafted: "{0} x {1} fabriqué(s)."
 	TakeNeedsTerminal: "Le clic molette sort des objets des coffres du dernier terminal ouvert, tant que tu es près de lui."
 	TakeNotStored: "{0} n'est pas dans les coffres du terminal."
+	BlueprintTitle: "Plans"
+	BlueprintSmallHouse: "Petite maison"
+	BlueprintTwoFloors: "Maison à deux étages"
+	BlueprintTower: "Tour"
+	BlueprintArena: "Arène de boss"
+	BlueprintMedieval: "Maison médiévale"
+	BlueprintCastle: "Château"
+	BlueprintPagoda: "Pagode"
+	BlueprintWizardTower: "Tour de mage"
+	BlueprintMaterial: "Matériau :"
+	BlueprintPickMaterial: "Choisis un matériau."
+	BlueprintNoMaterials: "Aucun matériau trouvé."
+	BlueprintCost: "Matériaux (pris dans ton inventaire) :"
+	BlueprintHave: "{0} : {1}/{2}"
+	BlueprintInChests: "(+{0} dans les coffres)"
+	BlueprintPlace: "Placer"
+	BlueprintHint: "Plan en main : clic gauche construit la maison là où est l'aperçu, clic droit ouvre ce catalogue. Chaque pièce est un logement valide pour un PNJ."
+	BlueprintPreviewHint: "Clic gauche : construire ici   Clic droit : plans"
+	BuildBlocked: "Quelque chose gêne (cases rouges) : dégage-le d'abord."
+	BuildMissing: "Matériaux manquants : {0}"
+	BuildDone: "Construit : {0} !"
+	BuildFailed: "Impossible de construire ici ; tes matériaux t'ont été rendus."
 	GoalCollapse: Replier (fais glisser le titre pour déplacer le panneau)
 	GoalExpand: Déplier (fais glisser le titre pour déplacer le panneau)
 	CompareAdd: + Comparer
@@ -177,6 +199,16 @@ Items: {
 			Tiens-le et fais un clic droit sur un terminal pour les lier
 			Utilise-le pour ouvrir le terminal lié de n'importe où
 			Les objets que tu sors apparaissent à côté de toi
+			'''
+	}
+
+	BlueprintItem: {
+		DisplayName: "Plan"
+		Tooltip:
+			'''
+			Clic droit pour choisir une maison et son matériau
+			Clic gauche pour la construire là où est l'aperçu
+			Les matériaux viennent de ton inventaire ; aucune station d'artisanat requise
 			'''
 	}
 

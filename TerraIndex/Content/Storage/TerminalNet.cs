@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using TerraIndex.Content.Building;
 using TerraIndex.Content.Items;
 using TerraIndex.Content.Tiles;
 using Terraria;
@@ -37,11 +38,15 @@ namespace TerraIndex.Content.Storage
 			RadioToggle,
 			RadioPlay,
 			ChestMoves,
+			Build,
+			BuildResult,
 		}
 
 		// A ModPacket can't exceed ~65 KB; large networks are sent in several chunks.
 		private const int ChunkBudget = 30000;
 		private const int MinTicksBetweenRequests = 10;
+		// More than any blueprint's cost has lines.
+		private const int MaxBuildItems = 60;
 		// Main inventory slots, the most a quick deposit can send.
 		private const int MaxQuickDepositItems = 40;
 
@@ -180,6 +185,23 @@ namespace TerraIndex.Content.Storage
 					ModContent.GetInstance<NetworkEffects>().Show(terminal, moves, toPlayer == byte.MaxValue ? -1 : toPlayer);
 					break;
 				}
+				case MessageType.Build: {
+					int blueprint = reader.ReadByte();
+					int block = reader.ReadInt32();
+					Point origin = ReadPoint(reader);
+					var used = new List<(int Type, int Amount)>();
+					for (int count = Math.Min((int)reader.ReadByte(), MaxBuildItems); count > 0; count--)
+						used.Add((reader.ReadInt32(), reader.ReadInt32()));
+					if (Main.netMode == NetmodeID.Server)
+						ModContent.GetInstance<BuildSystem>().ReceiveBuild(whoAmI, blueprint, block, origin, used);
+					break;
+				}
+				case MessageType.BuildResult: {
+					bool ok = reader.ReadBoolean();
+					int blueprint = reader.ReadByte();
+					ModContent.GetInstance<BuildSystem>().ShowBuildResult(ok, blueprint, ReadPoint(reader));
+					break;
+				}
 				case MessageType.ItemsEntering: {
 					Point terminal = ReadPoint(reader);
 					Player player = Main.player[reader.ReadByte()];
@@ -222,6 +244,34 @@ namespace TerraIndex.Content.Storage
 				packet.Write(move.Entering);
 			}
 			packet.Send();
+		}
+
+		// Client -> server: build this blueprint here. used: the materials the client already took out of its inventory,
+		// given back if the server can't build it (blueprints aren't part of the terminal, but share the mod's packets).
+		public static void SendBuild(int blueprint, int block, Point origin, List<(int Type, int Amount)> used)
+		{
+			ModPacket packet = Mod.GetPacket();
+			packet.Write((byte)MessageType.Build);
+			packet.Write((byte)blueprint);
+			packet.Write(block);
+			WritePoint(packet, origin);
+			packet.Write((byte)Math.Min(used.Count, MaxBuildItems));
+			foreach (var (type, amount) in used.Take(MaxBuildItems)) {
+				packet.Write(type);
+				packet.Write(amount);
+			}
+			packet.Send();
+		}
+
+		// Server -> the builder.
+		public static void SendBuildResult(int toClient, bool ok, int blueprint, Point origin)
+		{
+			ModPacket packet = Mod.GetPacket();
+			packet.Write((byte)MessageType.BuildResult);
+			packet.Write(ok);
+			packet.Write((byte)blueprint);
+			WritePoint(packet, origin);
+			packet.Send(toClient);
 		}
 
 		// Client -> server: turns a radio on or off (not part of the terminal, but it shares the mod's packets).

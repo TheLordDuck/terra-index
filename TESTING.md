@@ -1,4 +1,4 @@
-# Testing checklist (version 0.7)
+# Testing checklist (version 0.8)
 
 0.4 compiles since 2026-10-22 (one type error fixed), but none of 0.4 to 0.7 has been tested in game yet. 0.7 was
 written without a compiler: build it first and copy any errors.
@@ -159,6 +159,28 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 - [ ] Index open near the terminal: middle click an item in the grid and an ingredient in a recipe takes a stack out
 - [ ] Middle click with no terminal in reach, or on an item that isn't stored: a message explains why
 - [ ] Multiplayer: the other player sees the drone flying to you
+
+## Blueprints (0.8)
+
+- [ ] Craft the Blueprint (10 wood at a work bench); its tooltip explains it
+- [ ] Right click: the catalog opens with 4 houses; the material list starts with Wood and includes other woods and glass (and modded woods if you have any)
+- [ ] Changing house or material updates the small preview and the cost
+- [ ] Cost colors: green when you have it; blue when the rest is in the terminal's chests; red when missing
+- [ ] Take missing (near a terminal) brings the missing materials, and the lines turn green
+- [ ] Place closes the catalog; holding the item shows the see-through house standing on the tile under the mouse
+- [ ] Over dirt or stone the cells turn red with a message; over grass and plants it stays green
+- [ ] Left click builds it: walls, blocks, platforms, door, chairs, tables and torches all in place; smoke and a sound; the materials leave your inventory
+- [ ] Missing materials: a message lists them and nothing is built
+- [ ] Every room of the small house, the two-floor house and the tower is valid housing (housing query / an NPC moves in)
+- [ ] Boss arena: three rows of platforms you can jump between
+- [ ] Building over existing background walls keeps them and costs fewer walls
+- [ ] With another material (e.g. Boreal Wood or Glass) everything uses that material
+- [ ] Multiplayer: the other player sees the house; building where something is in the way gives the materials back
+- [ ] Medieval house, castle, pagoda and wizard tower look like `docs/blueprints/` (roof slopes the right way round: if they are mirrored, swap the slopes in `Blueprints.TileBrushes`)
+- [ ] Their fixed materials show up in the cost (gray brick, red brick, glass walls, shingles...) and whatever isn't in this game is simply left out
+- [ ] Furniture the wood you picked doesn't have (e.g. a clock) uses plain wood's or a vanilla one; lights never go missing
+- [ ] Every NPC room of the big ones is valid housing (medieval 5, castle 11, pagoda 3, wizard tower 4)
+- [ ] The catalog fits on screen with the castle selected (cost in two columns)
 
 ## 40 and 41. Languages and help
 

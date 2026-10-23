@@ -52,6 +52,28 @@ UI: {
 	GoalCrafted: "Crafted {0} x {1}."
 	TakeNeedsTerminal: "Middle click takes items out of the chests of the last terminal you opened, while you are near it."
 	TakeNotStored: "{0} isn't in the terminal's chests."
+	BlueprintTitle: "Blueprints"
+	BlueprintSmallHouse: "Small house"
+	BlueprintTwoFloors: "Two-floor house"
+	BlueprintTower: "Tower"
+	BlueprintArena: "Boss arena"
+	BlueprintMedieval: "Medieval house"
+	BlueprintCastle: "Castle"
+	BlueprintPagoda: "Pagoda"
+	BlueprintWizardTower: "Wizard tower"
+	BlueprintMaterial: "Material:"
+	BlueprintPickMaterial: "Pick a material."
+	BlueprintNoMaterials: "No materials found."
+	BlueprintCost: "Materials (taken from your inventory):"
+	BlueprintHave: "{0}: {1}/{2}"
+	BlueprintInChests: "(+{0} in the chests)"
+	BlueprintPlace: "Place"
+	BlueprintHint: "Hold the blueprint: left click builds the house where its preview is, right click opens this catalog. Every room is valid housing for an NPC."
+	BlueprintPreviewHint: "Left click: build here   Right click: blueprints"
+	BuildBlocked: "Something is in the way (red tiles): clear it first."
+	BuildMissing: "Missing materials: {0}"
+	BuildDone: "{0} built!"
+	BuildFailed: "It couldn't be built there; your materials were given back."
 	GoalCollapse: Fold (drag the title to move the panel)
 	GoalExpand: Unfold (drag the title to move the panel)
 	CompareAdd: + Compare
@@ -177,6 +199,16 @@ Items: {
 			Hold it and right click a terminal to link them
 			Use it to open the linked terminal from anywhere
 			Items you take out appear next to you
+			'''
+	}
+
+	BlueprintItem: {
+		DisplayName: "Blueprint"
+		Tooltip:
+			'''
+			Right click to choose a house and its material
+			Left click to build it where the preview is
+			Materials come from your inventory; no crafting station needed
 			'''
 	}
 

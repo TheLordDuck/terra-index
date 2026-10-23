@@ -52,6 +52,28 @@ UI: {
 	GoalCrafted: "{0} x {1} hergestellt."
 	TakeNeedsTerminal: "Mittelklick nimmt Gegenstände aus den Truhen des zuletzt geöffneten Terminals, solange du in seiner Nähe bist."
 	TakeNotStored: "{0} ist nicht in den Truhen des Terminals."
+	BlueprintTitle: "Baupläne"
+	BlueprintSmallHouse: "Kleines Haus"
+	BlueprintTwoFloors: "Zweistöckiges Haus"
+	BlueprintTower: "Turm"
+	BlueprintArena: "Boss-Arena"
+	BlueprintMedieval: "Mittelalterhaus"
+	BlueprintCastle: "Burg"
+	BlueprintPagoda: "Pagode"
+	BlueprintWizardTower: "Zauberturm"
+	BlueprintMaterial: "Material:"
+	BlueprintPickMaterial: "Wähle ein Material."
+	BlueprintNoMaterials: "Keine Materialien gefunden."
+	BlueprintCost: "Materialien (aus deinem Inventar):"
+	BlueprintHave: "{0}: {1}/{2}"
+	BlueprintInChests: "(+{0} in den Truhen)"
+	BlueprintPlace: "Platzieren"
+	BlueprintHint: "Halte den Bauplan: Linksklick baut das Haus dort, wo die Vorschau ist, Rechtsklick öffnet diesen Katalog. Jeder Raum ist ein gültiges NPC-Zuhause."
+	BlueprintPreviewHint: "Linksklick: hier bauen   Rechtsklick: Baupläne"
+	BuildBlocked: "Etwas ist im Weg (rote Felder): räume es zuerst weg."
+	BuildMissing: "Fehlende Materialien: {0}"
+	BuildDone: "{0} gebaut!"
+	BuildFailed: "Es konnte dort nicht gebaut werden; deine Materialien wurden zurückgegeben."
 	GoalCollapse: Einklappen (Titel ziehen, um das Fenster zu verschieben)
 	GoalExpand: Ausklappen (Titel ziehen, um das Fenster zu verschieben)
 	CompareAdd: + Vergleichen
@@ -177,6 +199,16 @@ Items: {
 			Halte es und klicke mit Rechts auf ein Terminal, um sie zu verbinden
 			Benutze es, um das verbundene Terminal von überall zu öffnen
 			Herausgenommene Gegenstände erscheinen neben dir
+			'''
+	}
+
+	BlueprintItem: {
+		DisplayName: "Bauplan"
+		Tooltip:
+			'''
+			Rechtsklick, um ein Haus und sein Material zu wählen
+			Linksklick, um es dort zu bauen, wo die Vorschau ist
+			Die Materialien kommen aus deinem Inventar; keine Handwerksstation nötig
 			'''
 	}
 

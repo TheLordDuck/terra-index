@@ -52,6 +52,28 @@ UI: {
 	GoalCrafted: "已制作 {0} x {1}。"
 	TakeNeedsTerminal: "鼠标中键会从你最后打开的终端的箱子中取出物品，前提是你在它附近。"
 	TakeNotStored: "{0} 不在终端的箱子里。"
+	BlueprintTitle: "蓝图"
+	BlueprintSmallHouse: "小房子"
+	BlueprintTwoFloors: "两层房屋"
+	BlueprintTower: "塔楼"
+	BlueprintArena: "Boss 竞技场"
+	BlueprintMedieval: "中世纪房屋"
+	BlueprintCastle: "城堡"
+	BlueprintPagoda: "宝塔"
+	BlueprintWizardTower: "法师塔"
+	BlueprintMaterial: "材料："
+	BlueprintPickMaterial: "请选择一种材料。"
+	BlueprintNoMaterials: "没有找到材料。"
+	BlueprintCost: "材料（从物品栏中扣除）："
+	BlueprintHave: "{0}：{1}/{2}"
+	BlueprintInChests: "（箱子里 +{0}）"
+	BlueprintPlace: "放置"
+	BlueprintHint: "手持蓝图：左键在预览位置建造房屋，右键打开此目录。每个房间都是有效的 NPC 住房。"
+	BlueprintPreviewHint: "左键：在此建造   右键：蓝图"
+	BuildBlocked: "有东西挡住了（红色格子）：请先清除。"
+	BuildMissing: "缺少材料：{0}"
+	BuildDone: "{0} 已建成！"
+	BuildFailed: "无法在此建造；材料已退还给你。"
 	GoalCollapse: 折叠（拖动标题可移动面板）
 	GoalExpand: 展开（拖动标题可移动面板）
 	CompareAdd: + 比较
@@ -177,6 +199,16 @@ Items: {
 			手持它并右键点击终端即可连接
 			使用它可在任何地方打开已连接的终端
 			取出的物品会出现在你身边
+			'''
+	}
+
+	BlueprintItem: {
+		DisplayName: "蓝图"
+		Tooltip:
+			'''
+			右键选择房屋和材料
+			左键在预览位置建造
+			材料来自你的物品栏；无需制作站
 			'''
 	}
 

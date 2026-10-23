@@ -52,6 +52,28 @@ UI: {
 	GoalCrafted: "Creati {0} x {1}."
 	TakeNeedsTerminal: "Il clic centrale prende oggetti dalle casse dell'ultimo terminale aperto, finché gli sei vicino."
 	TakeNotStored: "{0} non è nelle casse del terminale."
+	BlueprintTitle: "Progetti"
+	BlueprintSmallHouse: "Casa piccola"
+	BlueprintTwoFloors: "Casa a due piani"
+	BlueprintTower: "Torre"
+	BlueprintArena: "Arena dei boss"
+	BlueprintMedieval: "Casa medievale"
+	BlueprintCastle: "Castello"
+	BlueprintPagoda: "Pagoda"
+	BlueprintWizardTower: "Torre del mago"
+	BlueprintMaterial: "Materiale:"
+	BlueprintPickMaterial: "Scegli un materiale."
+	BlueprintNoMaterials: "Nessun materiale trovato."
+	BlueprintCost: "Materiali (dall'inventario):"
+	BlueprintHave: "{0}: {1}/{2}"
+	BlueprintInChests: "(+{0} nelle casse)"
+	BlueprintPlace: "Posiziona"
+	BlueprintHint: "Con il progetto in mano: clic sinistro costruisce la casa dov'è l'anteprima, clic destro apre questo catalogo. Ogni stanza è un'abitazione valida per un PNG."
+	BlueprintPreviewHint: "Clic sinistro: costruisci qui   Clic destro: progetti"
+	BuildBlocked: "C'è qualcosa in mezzo (caselle rosse): liberalo prima."
+	BuildMissing: "Materiali mancanti: {0}"
+	BuildDone: "Costruito: {0}!"
+	BuildFailed: "Impossibile costruire lì; i materiali ti sono stati restituiti."
 	GoalCollapse: Comprimi (trascina il titolo per spostare il pannello)
 	GoalExpand: Espandi (trascina il titolo per spostare il pannello)
 	CompareAdd: + Confronta
@@ -177,6 +199,16 @@ Items: {
 			Tienilo in mano e fai clic destro su un terminale per collegarli
 			Usalo per aprire il terminale collegato da ovunque
 			Gli oggetti che prendi appaiono accanto a te
+			'''
+	}
+
+	BlueprintItem: {
+		DisplayName: "Progetto"
+		Tooltip:
+			'''
+			Clic destro per scegliere una casa e il suo materiale
+			Clic sinistro per costruirla dov'è l'anteprima
+			I materiali vengono dall'inventario; nessuna stazione di creazione necessaria
 			'''
 	}
 

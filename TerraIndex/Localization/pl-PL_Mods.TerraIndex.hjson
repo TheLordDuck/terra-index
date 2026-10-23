@@ -52,6 +52,28 @@ UI: {
 	GoalCrafted: "Wytworzono {0} x {1}."
 	TakeNeedsTerminal: "Środkowy przycisk myszy wyjmuje przedmioty ze skrzyń ostatnio otwartego terminala, gdy jesteś blisko niego."
 	TakeNotStored: "{0} nie ma w skrzyniach terminala."
+	BlueprintTitle: "Plany"
+	BlueprintSmallHouse: "Mały dom"
+	BlueprintTwoFloors: "Dom piętrowy"
+	BlueprintTower: "Wieża"
+	BlueprintArena: "Arena na bossy"
+	BlueprintMedieval: "Dom średniowieczny"
+	BlueprintCastle: "Zamek"
+	BlueprintPagoda: "Pagoda"
+	BlueprintWizardTower: "Wieża maga"
+	BlueprintMaterial: "Materiał:"
+	BlueprintPickMaterial: "Wybierz materiał."
+	BlueprintNoMaterials: "Nie znaleziono materiałów."
+	BlueprintCost: "Materiały (z ekwipunku):"
+	BlueprintHave: "{0}: {1}/{2}"
+	BlueprintInChests: "(+{0} w skrzyniach)"
+	BlueprintPlace: "Postaw"
+	BlueprintHint: "Trzymając plan: LPM buduje dom tam, gdzie jest podgląd, PPM otwiera ten katalog. Każdy pokój jest poprawnym mieszkaniem dla NPC."
+	BlueprintPreviewHint: "LPM: buduj tutaj   PPM: plany"
+	BuildBlocked: "Coś przeszkadza (czerwone pola): najpierw to usuń."
+	BuildMissing: "Brakuje materiałów: {0}"
+	BuildDone: "Zbudowano: {0}!"
+	BuildFailed: "Nie dało się tu zbudować; materiały zostały zwrócone."
 	GoalCollapse: Zwiń (przeciągnij tytuł, by przesunąć panel)
 	GoalExpand: Rozwiń (przeciągnij tytuł, by przesunąć panel)
 	CompareAdd: + Porównaj
@@ -177,6 +199,16 @@ Items: {
 			Trzymaj go i kliknij PPM na terminal, by je połączyć
 			Użyj go, by otworzyć połączony terminal z dowolnego miejsca
 			Wyjmowane przedmioty pojawiają się obok ciebie
+			'''
+	}
+
+	BlueprintItem: {
+		DisplayName: "Plan budowy"
+		Tooltip:
+			'''
+			PPM, by wybrać dom i materiał
+			LPM, by zbudować go tam, gdzie jest podgląd
+			Materiały są brane z ekwipunku; stacja rzemieślnicza niepotrzebna
 			'''
 	}
 

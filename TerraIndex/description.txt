@@ -31,6 +31,9 @@ Buy the Terminal from the Steampunker for 1 platinum and hang it on a background
 PORTABLE TERMINAL
 Craft it after the Moon Lord (Terminal + 10 Luminite Bars at the Ancient Manipulator). Right click a terminal while holding it to link them, then use it anywhere to open that terminal: items you take out appear right next to you.
 
+BLUEPRINTS
+Not good at building? Craft a Blueprint (10 wood at a work bench), pick a design (small house, two-floor house, tower, medieval house, castle, pagoda, wizard tower or boss arena) and its wood (any wood, glass, and woods from other mods), see a preview where it goes and left click to build it. Every room is valid NPC housing. Materials come from your inventory, and the terminal can bring whatever is missing from your chests.
+
 MULTIPLAYER
 Fully supported. The server scans the chests and keeps the terminal updated, so you see changes made by other players.
 

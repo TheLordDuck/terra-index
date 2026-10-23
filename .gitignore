@@ -6,3 +6,4 @@ obj/
 .vscode/
 *.tmod
 launchSettings.json
+__pycache__/

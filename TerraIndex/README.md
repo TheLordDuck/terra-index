@@ -130,6 +130,22 @@ Crafted at the **Ancient Manipulator** from a Terminal and 10 Luminite Bars.
 
 The host can turn portable terminals off in the server settings.
 
+## Blueprints
+
+Craft a **Blueprint** (10 of any wood at a work bench) to build ready-made houses:
+
+1. Hold it and **right click**: pick a design and its material (every wood, glass and more, including woods from
+   other mods): small house, two-floor house, tower, **medieval house**, **castle**, **pagoda**, **wizard tower** or
+   boss arena. The big ones mix fixed materials (gray brick, red brick or shingle roofs, glass windows, banners,
+   fireplaces) with the wood you pick for the frame and the furniture. Pictures of all of them are in
+   [`docs/blueprints/`](../docs/blueprints/). The catalog shows what it costs and what you
+   have: green in your inventory, blue in the chests of a terminal you are near (**Take missing** brings it), red
+   missing. **Place** closes the catalog.
+2. Move the mouse: a see-through preview shows where it goes, standing on the tile under the mouse. Red tiles mean
+   something is in the way (grass and plants are cleared on their own).
+3. **Left click** to build it. The materials come from your inventory; no crafting station is needed, and walls
+   already there are kept and not charged. Every room is valid housing for an NPC.
+
 ## Multiplayer
 
 - The mod must be installed on the server and on every client (tModLoader syncs it automatically on join).
@@ -161,6 +177,11 @@ In **Settings → Mod Configuration → Terra Index**:
 | Allow the Portable Terminal | On |
 
 ## Changelog
+
+**0.8**
+- Blueprints: pick a design and a material, see a preview where it goes and build it with one click, with
+  materials from your inventory (or brought from the terminal's chests). Every room is valid NPC housing.
+  Designs: small house, two-floor house, tower, medieval house, castle, pagoda, wizard tower, boss arena.
 
 **0.7**
 - The recipe index opens next to the terminal (Recipes button or Ctrl + click), and both can be used at once.

@@ -52,6 +52,28 @@ UI: {
 	GoalCrafted: "Fabricado: {0} x {1}."
 	TakeNeedsTerminal: "El clic central saca objetos de los cofres del último terminal que abriste, mientras estés cerca de él."
 	TakeNotStored: "{0} no está en los cofres del terminal."
+	BlueprintTitle: "Planos"
+	BlueprintSmallHouse: "Casa pequeña"
+	BlueprintTwoFloors: "Casa de dos plantas"
+	BlueprintTower: "Torre"
+	BlueprintArena: "Arena de jefes"
+	BlueprintMedieval: "Casa medieval"
+	BlueprintCastle: "Castillo"
+	BlueprintPagoda: "Pagoda"
+	BlueprintWizardTower: "Torre de mago"
+	BlueprintMaterial: "Material:"
+	BlueprintPickMaterial: "Elige un material."
+	BlueprintNoMaterials: "No se encontró ningún material."
+	BlueprintCost: "Materiales (de tu inventario):"
+	BlueprintHave: "{0}: {1}/{2}"
+	BlueprintInChests: "(+{0} en los cofres)"
+	BlueprintPlace: "Colocar"
+	BlueprintHint: "Con el plano en la mano: clic izquierdo construye la casa donde está la vista previa, clic derecho abre este catálogo. Cada habitación es una vivienda válida para un PNJ."
+	BlueprintPreviewHint: "Clic izquierdo: construir aquí   Clic derecho: planos"
+	BuildBlocked: "Hay algo en medio (casillas rojas): despéjalo primero."
+	BuildMissing: "Faltan materiales: {0}"
+	BuildDone: "Construido: {0}."
+	BuildFailed: "No se pudo construir ahí; se te han devuelto los materiales."
 	GoalCollapse: Plegar (arrastra el título para mover el panel)
 	GoalExpand: Desplegar (arrastra el título para mover el panel)
 	CompareAdd: + Comparar
@@ -177,6 +199,16 @@ Items: {
 			Sostenla y haz clic derecho en una terminal para vincularlas
 			Úsala para abrir la terminal vinculada desde cualquier lugar
 			Los objetos que saques aparecen a tu lado
+			'''
+	}
+
+	BlueprintItem: {
+		DisplayName: "Plano"
+		Tooltip:
+			'''
+			Clic derecho para elegir una casa y su material
+			Clic izquierdo para construirla donde está la vista previa
+			Los materiales salen de tu inventario; no hace falta estación de fabricación
 			'''
 	}
 
