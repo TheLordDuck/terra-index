@@ -63,6 +63,8 @@ UI: {
 	BlueprintWizardTower: Zauberturm
 	BlueprintWorkshop: Handwerkerhaus
 	BlueprintTreeVillage: Baumdorf
+	BlueprintBigTree: Großer Baum
+	BlueprintThickTree: Dicker Baum
 	BlueprintMaterial: Material:
 	BlueprintPickMaterial: Wähle ein Material.
 	BlueprintNoMaterials: Keine Materialien gefunden.
@@ -92,12 +94,12 @@ UI: {
 	CompareValue: Verkaufswert
 	CompareEffects: Effekte
 	CraftButton: Herstellen
-	CraftCanMake: Aus deinen Truhen kannst du {0} herstellen
-	CraftNoIngredients: Nicht genug Zutaten in den Truhen des Terminals
+	CraftCanMake: Mit deinen Truhen und deinem Inventar kannst du {0} herstellen
+	CraftNoIngredients: Nicht genug Zutaten in den Truhen und deinem Inventar
 	CraftNoStation: Handwerksstation fehlt (in der Nähe oder am Draht des Terminals)
 	CraftNoConditions: Bedingungen hier nicht erfüllt
-	Crafted: "{0} x {1} aus deinen Truhen hergestellt."
-	CraftFailed: Die Truhen haben die Zutaten nicht mehr.
+	Crafted: "{0} x {1} mit dem Terminal hergestellt."
+	CraftFailed: Die Truhen und dein Inventar haben die Zutaten nicht mehr.
 	TakeMissing: Fehlendes nehmen
 	TakeMissingHint: Nimmt aus den Truhen, was deinem Inventar für eine Herstellung fehlt (Umschalt: für 10)
 	TakeMissingStatus: In den Truhen, fehlt in deinem Inventar: {0}

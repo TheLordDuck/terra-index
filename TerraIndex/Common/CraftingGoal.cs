@@ -251,21 +251,7 @@ namespace TerraIndex.Common
 					return false;
 			}
 
-			foreach (var (type, amount) in taking) {
-				int left = amount;
-				for (int slot = 0; slot < player.inventory.Length && left > 0; slot++) {
-					Item item = player.inventory[slot];
-					if (item.IsAir || item.type != type)
-						continue;
-					int taken = Math.Min(item.stack, left);
-					item.stack -= taken;
-					left -= taken;
-					if (item.stack <= 0)
-						item.TurnToAir();
-					if (Main.netMode == NetmodeID.MultiplayerClient)
-						NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: slot);
-				}
-			}
+			TerminalSystem.TakeFromInventory(player, taking);
 			return true;
 		}
 

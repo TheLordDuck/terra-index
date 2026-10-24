@@ -9,7 +9,7 @@ Terraria mod (tModLoader 1.4.4) by **thelordduck22** that ties recipes and stora
 - **Item comparison**: up to 3 weapons, tools, armor or accessories side by side.
 - **Storage terminal**: connect your chests with red wire, search them from the terminal, take items out of its
   door, deposit into the chests, and make the chest holding an item light up.
-- **Crafting from your chests**: craft straight from the terminal's chests, with crafting stations near you or on
+- **Crafting from your chests**: craft straight from the terminal's chests (plus your inventory), with crafting stations near you or on
   its wire, or take out only the ingredients you are missing.
 - **Portable terminal**: open your terminal from anywhere in the world.
 - **Blueprints**: pick a ready-made house and its material, see where it goes, and build it with one click.

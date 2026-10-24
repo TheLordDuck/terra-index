@@ -63,6 +63,8 @@ UI: {
 	BlueprintWizardTower: Torre de mago
 	BlueprintWorkshop: Casa del artesano
 	BlueprintTreeVillage: Aldea del árbol
+	BlueprintBigTree: Árbol grande
+	BlueprintThickTree: Árbol grueso
 	BlueprintMaterial: Material:
 	BlueprintPickMaterial: Elige un material.
 	BlueprintNoMaterials: No se encontró ningún material.
@@ -92,12 +94,12 @@ UI: {
 	CompareValue: Valor de venta
 	CompareEffects: Efectos
 	CraftButton: Fabricar
-	CraftCanMake: Con tus cofres puedes fabricar {0}
-	CraftNoIngredients: No hay ingredientes suficientes en los cofres de la terminal
+	CraftCanMake: Con tus cofres y tu inventario puedes fabricar {0}
+	CraftNoIngredients: No hay ingredientes suficientes en los cofres y tu inventario
 	CraftNoStation: Falta una estación de trabajo (cerca o en el cable de la terminal)
 	CraftNoConditions: Aquí no se cumplen las condiciones
-	Crafted: Fabricado {0} x {1} con tus cofres.
-	CraftFailed: Los cofres ya no tienen los ingredientes.
+	Crafted: Fabricado {0} x {1} con la terminal.
+	CraftFailed: Los cofres y tu inventario ya no tienen los ingredientes.
 	TakeMissing: Sacar lo que falta
 	TakeMissingHint: Saca de los cofres lo que le falta a tu inventario para fabricarlo una vez (Mayús: para 10)
 	TakeMissingStatus: En los cofres, te faltan en el inventario: {0}

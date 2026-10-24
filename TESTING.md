@@ -1,7 +1,7 @@
-# Testing checklist (version 0.8)
+# Testing checklist (version 0.9)
 
 0.4 compiles since 2026-10-22 (one type error fixed), but none of 0.4 to 0.7 has been tested in game yet. 0.7 was
-written without a compiler: build it first and copy any errors.
+written without a compiler, and so were 0.8 and 0.9: build it first and copy any errors.
 Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 
 ## 0. Setup
@@ -25,6 +25,10 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 - [ ] Recipe with a group ingredient ("Any Wood"): another kind of wood is accepted
 - [ ] Walk away from the terminal: the craft row disappears
 - [ ] **Multiplayer:** both players crafting at once with the same materials don't duplicate anything
+- [ ] Half the ingredients in the chests and half in the inventory: "you can make" counts both, the ingredients
+      show blue, and crafting uses the chests first and then the inventory
+- [ ] Everything in the inventory and nothing in the chests: the terminal also crafts it
+- [ ] **Multiplayer:** if the chests empty out before the craft arrives, the inventory items come back
 
 ## 2. Blue ingredients
 
@@ -190,6 +194,10 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 - [ ] Each station goes in its labelled bay (Furnace, Hellforge, anvils, Cooking Pot, Keg, Tinkerer's Workshop, Loom, Sawmill, Heavy Work Bench, Autohammer, Imbuing Station, Solidifier, Adamantite Forge, Crystal Ball, Alchemy Table, Bewitching Table, Dye Vat, Sky Mill, Ancient Manipulator, Blend-O-Matic, Honey Dispenser, Ice Machine, Lihzahrd Furnace, Glass Kiln, Bone Welder, Steampunk Boiler), and relics in the trophy room
 - [ ] The nine rooms (not the forge or bathroom) are valid housing; the shaft (kitchen -> library -> inventions -> loft) and second bedroom -> bathroom platforms can be jumped through; the doors open
 - [ ] Tree village (109x60) built above the mansion on the same column: a lodge of stepped stories under a red gable, no trees, 30 rooms all valid housing, doors open (not blocked by furniture), the platform shaft climbs every story, the vine rope on each side reaches every walkway and each walkway leads to a story's door, fences show on the balconies and walkways
+- [ ] Big tree (75x61) looks like `docs/blueprints/10 - Big tree.png`: living wood trunk and branches, leaf blocks, rounded
+      edges (wood and leaves sloped the right way round), living leaf wall behind the crown, vines hanging under it
+- [ ] Thick tree (75x61) is the same tree with the trunk and branches two tiles thicker, like `docs/blueprints/11 - Thick tree.png`
+- [ ] Placed with its bottom row on top of a living wood trunk you built, it isn't blocked and continues it
 - [ ] Furniture the wood you picked doesn't have (e.g. a clock) uses plain wood's or a vanilla one; lights never go missing
 - [ ] Every NPC room of the big ones is valid housing (medieval 5, castle 11, pagoda 3, wizard tower 4)
 - [ ] The catalog fits on screen with the castle selected (cost in two columns)

@@ -22,7 +22,7 @@ DOCS = os.path.join(ROOT, 'docs', 'blueprints')
 CS = os.path.join(ROOT, 'TerraIndex', 'Content', 'Building', 'BlueprintDesigns.cs')
 
 # What each character places. Keep in sync with Blueprints.TileBrushes / WallBrushes in the mod.
-SOLID = set('#SRdYUEve') | set('/\\()[]<>')
+SOLID = set('#SRdYUEve') | set('/\\()[]<>') | set('12345678')
 PLATFORM = '-'
 TILE_CHARS = SOLID | {' ', '.', '+', '-', '|', 'r'} | set(FURNITURE)
 WALL_CHARS = set(' wsgkqpxvaz')
@@ -36,7 +36,8 @@ TABLES = set('TW')
 NAMES = {
     'SmallHouse': 'Small house', 'TwoFloors': 'Two-floor house', 'Tower': 'Tower', 'Arena': 'Boss arena',
     'Medieval': 'Medieval house', 'Castle': 'Castle', 'Pagoda': 'Pagoda', 'WizardTower': 'Wizard tower',
-    'Workshop': "Craftsman's house", 'TreeVillage': 'Tree village',
+    'Workshop': "Craftsman's house", 'TreeVillage': 'Tree village', 'BigTree': 'Big tree',
+    'ThickTree': 'Thick tree',
 }
 
 
@@ -172,7 +173,9 @@ COLORS = {
     'e': ((70, 150, 60), (45, 105, 40)),      # leaves
 }
 SLOPES = {'/': ('R', 'dr'), '\\': ('R', 'dl'), '(': ('Y', 'dr'), ')': ('Y', 'dl'), '[': ('U', 'dr'), ']': ('U', 'dl'),
-          '<': ('E', 'ul'), '>': ('E', 'ur')}
+          '<': ('E', 'ul'), '>': ('E', 'ur'),
+          '1': ('e', 'dr'), '2': ('e', 'dl'), '3': ('e', 'ul'), '4': ('e', 'ur'),
+          '5': ('v', 'dr'), '6': ('v', 'dl'), '7': ('v', 'ul'), '8': ('v', 'ur')}
 WALLS = {'w': (110, 78, 50), 's': (82, 82, 92), 'g': (170, 210, 235), 'k': (225, 215, 195), 'q': (70, 90, 150),
          'p': (140, 100, 60), 'x': (100, 100, 104), 'v': (105, 72, 42), 'a': (50, 110, 45), 'z': (165, 120, 70)}
 WOOD = (150, 100, 55)

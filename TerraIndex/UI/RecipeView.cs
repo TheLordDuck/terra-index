@@ -680,12 +680,13 @@ namespace TerraIndex.UI
 			string name = group != null ? group.GetText() : Lang.GetItemNameValue(shown);
 			string text = stack > 1 ? $"{stack} x {name}" : name;
 			Color color = Color.White;
-			// Green: enough in the inventory. Blue: enough in the terminal's chests (in reach). Red: not enough.
+			// Green: enough in the inventory. Blue: enough in the terminal's chests (in reach), or in both together,
+			// which the terminal can craft with. Red: not enough.
 			if (colorByOwned) {
 				int owned = group != null ? UIHelpers.CountOwned(group.ValidItems.Contains) : UIHelpers.CountOwned(t => t == type);
 				TerminalSystem terminal = Terminal;
 				int stored = !terminal.CanCraft ? 0 : group != null ? group.ValidItems.Sum(t => terminal.StoredCount(t)) : terminal.StoredCount(type);
-				color = owned >= stack ? new Color(140, 255, 140) : stored >= stack ? InChests : new Color(255, 150, 150);
+				color = owned >= stack ? new Color(140, 255, 140) : owned + stored >= stack ? InChests : new Color(255, 150, 150);
 			}
 			Utils.DrawBorderString(spriteBatch, UIHelpers.Fit(text, width - 40, 0.85f), new Vector2(x + 38, y + 8), color, 0.85f);
 

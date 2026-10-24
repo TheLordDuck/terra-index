@@ -832,4 +832,139 @@ def tree_village():
     return d
 
 
-DESIGNS = [small_house, two_floors, tower, medieval, castle, pagoda, wizard_tower, craftsman_house, tree_village, arena]
+def big_tree():
+    """A big living wood tree from halfway up its trunk: the bottom row is the cut trunk, to put on top of a trunk
+    the player builds (or on the ground). Above it, the trunk splits into three limbs that curve out and thin down,
+    with smaller branches off them, each ending in a lumpy cluster of leaves; the branches run through the leaves
+    so they can be seen inside the crown. Wood and leaf edges are sloped so the outline is round, with living leaf
+    wall behind the crown for depth and vines hanging under it. Not a house: it has no rooms."""
+    return tree('BigTree', 0)
+
+
+def thick_tree():
+    """The big tree with its trunk and every branch two tiles thicker at the base (a bit thicker at the tips too)."""
+    return tree('ThickTree', 1)
+
+
+def tree(key, thicker):
+    """The big tree; thicker is added to the radius of the trunk and the branches where they start."""
+    import math
+    import random
+    rng = random.Random(7)
+    BW, BH = 90, 70                    # working canvas, cropped at the end
+    wood, leaves, leaf_walls = set(), set(), set()
+
+    def bezier(points, t):
+        while len(points) > 1:
+            points = [(a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t) for a, b in zip(points, points[1:])]
+        return points[0]
+
+    def limb(points, r0, r1, tip=0.4):
+        """A branch along a Bezier curve, r0 thick at its start and r1 at its tip; tip: how much of thicker the tip gets."""
+        for k in range(301):
+            t = k / 300
+            cx, cy = bezier(points, t)
+            r = max(0.55, r0 + thicker + (r1 + thicker * tip - r0 - thicker) * t)
+            for y in range(int(cy - r) - 1, int(cy + r) + 2):
+                for x in range(int(cx - r) - 1, int(cx + r) + 2):
+                    if (x + 0.5 - cx) ** 2 + (y + 0.5 - cy) ** 2 <= r * r:
+                        wood.add((x, y))
+
+    def crown(cx, cy, rx, ry):
+        """A cluster of leaves: an ellipse with a wavy edge, and leaf wall reaching a little past it."""
+        p1, p2 = rng.uniform(0, 6.3), rng.uniform(0, 6.3)
+        for y in range(int(cy - ry * 1.4) - 1, int(cy + ry * 1.4) + 2):
+            for x in range(int(cx - rx * 1.4) - 1, int(cx + rx * 1.4) + 2):
+                dx, dy = (x + 0.5 - cx) / rx, (y + 0.5 - cy) / ry
+                edge = 1 + 0.16 * math.sin(3 * math.atan2(dy, dx) + p1) + 0.09 * math.sin(7 * math.atan2(dy, dx) + p2)
+                dist = math.hypot(dx, dy)
+                if dist <= edge:
+                    leaves.add((x, y))
+                if dist <= edge * 1.12:
+                    leaf_walls.add((x, y))
+
+    BOTTOM = BH                        # the bottom row (the cut trunk) is BOTTOM - 1
+    # Leaves first; the branches are drawn over them.
+    for cx, cy, rx, ry in [
+        (46, 16, 11, 6),               # top
+        (35, 21, 8, 5), (57, 20, 8, 5),
+        (30, 31, 9, 5.5), (61, 30, 9, 5.5),
+        (22, 41, 9, 5), (69, 40, 9, 5),
+        (15, 49, 6, 3.5), (76, 49, 6, 3.5),
+        (46, 28, 7, 5), (40, 38, 5, 3.5), (52, 37, 5, 3.5),
+    ]:
+        crown(cx, cy, rx, ry)
+
+    # The trunk, straight and slightly tapered, up to the fork.
+    limb([(45.5, BOTTOM + 1), (45.5, 64), (45.5, 57)], 3.4, 3.0, tip=1)
+    # Three main limbs: two curving out and up, and the leader.
+    limb([(44, 59), (34, 57), (24, 44)], 2.4, 0.8)
+    limb([(47, 59), (57, 57), (67, 44)], 2.4, 0.8)
+    limb([(45.5, 58), (45, 40), (46, 16)], 2.6, 0.8)
+    # Limbs off the leader, then off those.
+    limb([(45, 50), (38, 46), (32, 32)], 1.8, 0.6)
+    limb([(46, 48), (53, 44), (59, 31)], 1.8, 0.6)
+    limb([(45, 36), (40, 30), (35, 22)], 1.3, 0.5)
+    limb([(46, 34), (51, 28), (57, 21)], 1.3, 0.5)
+    # The low limbs reaching out sideways, and twigs into the side clusters.
+    limb([(33, 55), (25, 55), (16, 50)], 1.3, 0.5)
+    limb([(58, 55), (66, 55), (75, 50)], 1.3, 0.5)
+    limb([(28, 49), (27, 44), (22, 40)], 0.9, 0.5)
+    limb([(63, 49), (64, 44), (69, 39)], 0.9, 0.5)
+
+    wood = {(x, y) for x, y in wood if y < BOTTOM}
+    leaves -= wood
+    solid = wood | leaves
+    # Lone leaves and pinholes in the crown look like noise.
+    leaves = {(x, y) for x, y in leaves if any(n in solid for n in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)))}
+    solid = wood | leaves
+    for _ in range(2):
+        holes = {(x + dx, y + dy) for x, y in leaves for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))} - solid
+        leaves |= {(x, y) for x, y in holes
+                   if sum(n in solid for n in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1))) >= 3}
+        solid = wood | leaves
+
+    xs = [x for x, _ in solid]
+    top = min(y for _, y in solid) - 1
+    left, right = min(xs) - 1, max(xs) + 1
+    d = Design(key, right - left + 1, BOTTOM - top)
+
+    def at(x, y):
+        return x - left, y - top
+
+    def filled(x, y):
+        return (x, y) in solid or y >= BOTTOM
+
+    for x, y in solid:
+        up, down, l_, r_ = filled(x, y - 1), filled(x, y + 1), filled(x - 1, y), filled(x + 1, y)
+        # Round the corners: ◢ ◣ ◤ ◥ where two sides next to each other are open and the other two are not.
+        shape = 0
+        if not up and not l_ and down and r_:
+            shape = 1
+        elif not up and not r_ and down and l_:
+            shape = 2
+        elif not down and not l_ and up and r_:
+            shape = 4
+        elif not down and not r_ and up and l_:
+            shape = 3
+        chars = '#5678' if (x, y) in wood else '#1234'
+        c = ('v' if (x, y) in wood else 'e') if shape == 0 else chars[shape]
+        d.tile(*at(x, y), c)
+    for x, y in leaf_walls:
+        if left <= x <= right and top <= y < BOTTOM:
+            d.walls[y - top][x - left] = 'a'
+
+    # Vines under the crown, where there is room for them to hang.
+    for x, y in sorted(leaves):
+        if (x, y + 1) in solid or rng.random() > 0.16:
+            continue
+        length = rng.randint(2, 5)
+        cells = [(x, y + k) for k in range(1, length + 1)]
+        if all(c not in solid and c[1] < BOTTOM - 1 and d.tiles[c[1] - top][c[0] - left] == ' ' for c in cells):
+            for c in cells:
+                d.tile(*at(*c), 'r')
+    return d
+
+
+DESIGNS = [small_house, two_floors, tower, medieval, castle, pagoda, wizard_tower, craftsman_house, tree_village,
+           big_tree, thick_tree, arena]

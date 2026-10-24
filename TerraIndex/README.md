@@ -43,18 +43,20 @@ list, and rebind the N / [ / ] keys if you had changed them.
 After using a storage terminal, while you stay in its reach (or carry a Portable Terminal linked to it), the recipe
 index can craft straight from the terminal's chests:
 
-- At the bottom of a recipe: how many you can make from the chests, and **Craft** / **x10** / **Max** buttons
+- At the bottom of a recipe: how many you can make from the chests and your inventory, and **Craft** / **x10** / **Max** buttons
   (up to 999 crafts at once, or 20 for items that don't stack). The result comes out of the terminal's door, or
   appears next to you when you are far away with the Portable Terminal.
 - Crafting stations count if they are **near you** (as usual) **or touched by the terminal's red wire**: wire your
   anvil, furnace, etc. into the network and you can craft from anywhere with the Portable Terminal. A Hellforge
   also counts as a Furnace, a Mythril Anvil as an Anvil, and so on.
 - Special conditions (near water, lava, honey, snow biome...) are checked where you stand.
-- Ingredients are taken **only from the chests**, not from your inventory (use **Deposit all** first if needed).
+- Ingredients are taken **from the chests first**, and whatever they lack **from your inventory**, so you can mix
+  both (e.g. 5 bars in the chests and 5 in your pocket for a 10-bar recipe).
 - **Take missing** (above the craft buttons) does the opposite: it takes out of the chests whatever your inventory
   lacks for one craft (Shift + click: for 10), so you can craft it the usual way. It only appears when the chests
   hold some of what is missing.
-- Ingredient colors: green = enough in your inventory, **blue = enough in the terminal's chests**, red = not enough.
+- Ingredient colors: green = enough in your inventory, **blue = enough in the terminal's chests** (or in the chests
+  and your inventory together), red = not enough.
   Stations turn green or red too.
 
 ### Comparing items
@@ -140,7 +142,9 @@ Craft a **Blueprint** (10 of any wood at a work bench) to build ready-made house
    other mods): small house, two-floor house, tower, **medieval house**, **castle**, **pagoda**, **wizard tower**,
    **craftsman's house** (a forge yard, kitchen, workshop hall, library, bedroom and attic with a place for every
    crafting station), **tree village** (a big lodge with 30 NPC rooms between two big trees, to go above the
-   craftsman's house) or boss arena. The big ones mix fixed materials (gray brick, red brick or shingle roofs, glass windows, banners,
+   craftsman's house), **big tree** (a living wood tree from halfway up its trunk: branches that curve out and
+   thin down into clusters of leaves, with vines; put it on top of a trunk you build, or on the ground), **thick tree** (the same
+   tree with a trunk and branches two tiles thicker) or boss arena. The big ones mix fixed materials (gray brick, red brick or shingle roofs, glass windows, banners,
    fireplaces) with the wood you pick for the frame and the furniture. Pictures of all of them are in
    [`docs/blueprints/`](../docs/blueprints/). **Place** closes the catalog.
 2. Move the mouse: a see-through preview shows where it goes, standing on the tile under the mouse. Red tiles mean
@@ -154,7 +158,8 @@ Craft a **Blueprint** (10 of any wood at a work bench) to build ready-made house
 - The server scans the chests and does every withdrawal, deposit and craft, since it is the only one that knows
   every chest. While the panel is open it refreshes every half second, so you see changes made by other players.
 - Crafting takes all the ingredients out of the chests or none, so two players crafting at once can't spend the
-  same items twice. Only one player at a time can use a terminal's deposit slots.
+  same items twice. What comes from your inventory is taken out before asking the server, and given back if the
+  craft fails. Only one player at a time can use a terminal's deposit slots.
 - Crafting goals, the goal panel and your settings are per player; server settings are chosen by the host.
 
 ## Settings
@@ -179,11 +184,20 @@ In **Settings → Mod Configuration → Terra Index**:
 
 ## Changelog
 
-**0.8**
-- The terminal shows the crafting stations on its wire.
+**0.9**
+- Crafting from the terminal also uses your inventory: the chests first, then what they lack from your inventory.
+- The terminal shows the crafting stations on its wire, and its free slots and how full the chests are.
 - Ores and bars are in the materials tab, not with the blocks and furniture.
-- Blueprints: pick a design and a material, see a preview where it goes and build it with one click, for free.
-  Every room is valid NPC housing. The craftsman's house has a themed room and a place for every crafting station.
+- What you take out drops out of the terminal's door, reserved for you for 10 seconds; drones only bring items to
+  a portable terminal far from the door.
+- Blueprints are free: the Blueprint itself is all they cost.
+- New blueprints: craftsman's house (a themed room and a place for every crafting station), tree village (30 NPC
+  rooms), big tree and thick tree.
+- Fixed translations whose text starts with a placeholder breaking the language files.
+
+**0.8**
+- Blueprints: pick a design and a material, see a preview where it goes and build it with one click, with
+  materials from your inventory (or brought from the terminal's chests). Every room is valid NPC housing.
   Designs: small house, two-floor house, tower, medieval house, castle, pagoda, wizard tower, boss arena.
 
 **0.7**

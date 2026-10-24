@@ -63,6 +63,8 @@ UI: {
 	BlueprintWizardTower: Wieża maga
 	BlueprintWorkshop: Dom rzemieślnika
 	BlueprintTreeVillage: Wioska na drzewach
+	BlueprintBigTree: Duże drzewo
+	BlueprintThickTree: Grube drzewo
 	BlueprintMaterial: Materiał:
 	BlueprintPickMaterial: Wybierz materiał.
 	BlueprintNoMaterials: Nie znaleziono materiałów.
@@ -92,12 +94,12 @@ UI: {
 	CompareValue: Wartość sprzedaży
 	CompareEffects: Efekty
 	CraftButton: Wytwórz
-	CraftCanMake: Z twoich skrzyń możesz wytworzyć {0}
-	CraftNoIngredients: Za mało składników w skrzyniach terminala
+	CraftCanMake: Ze skrzyń i ekwipunku możesz wytworzyć {0}
+	CraftNoIngredients: Za mało składników w skrzyniach i ekwipunku
 	CraftNoStation: Brak stacji rzemieślniczej (w pobliżu lub na kablu terminala)
 	CraftNoConditions: Warunki nie są tu spełnione
-	Crafted: Wytworzono {0} x {1} z twoich skrzyń.
-	CraftFailed: W skrzyniach nie ma już składników.
+	Crafted: Wytworzono {0} x {1} terminalem.
+	CraftFailed: W skrzyniach i ekwipunku nie ma już składników.
 	TakeMissing: Weź brakujące
 	TakeMissingHint: Wyjmuje ze skrzyń to, czego brakuje w ekwipunku na jedno wytworzenie (Shift: na 10)
 	TakeMissingStatus: W skrzyniach, brakuje w ekwipunku: {0}

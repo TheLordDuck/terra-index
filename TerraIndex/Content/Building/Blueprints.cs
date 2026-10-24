@@ -185,6 +185,14 @@ namespace TerraIndex.Content.Building
 			// Trees: the wands place living wood and leaves (building is free, so no wood or acorns are taken).
 			['v'] = Brush.Fixed("LivingWoodWand", "Wood"),
 			['e'] = Brush.Fixed("LeafWand"),
+			['1'] = Brush.Sloped(BrushShape.SlopeDownRight, "LeafWand"),
+			['2'] = Brush.Sloped(BrushShape.SlopeDownLeft, "LeafWand"),
+			['3'] = Brush.Sloped(BrushShape.SlopeUpLeft, "LeafWand"),
+			['4'] = Brush.Sloped(BrushShape.SlopeUpRight, "LeafWand"),
+			['5'] = Brush.Sloped(BrushShape.SlopeDownRight, "LivingWoodWand", "Wood"),
+			['6'] = Brush.Sloped(BrushShape.SlopeDownLeft, "LivingWoodWand", "Wood"),
+			['7'] = Brush.Sloped(BrushShape.SlopeUpLeft, "LivingWoodWand", "Wood"),
+			['8'] = Brush.Sloped(BrushShape.SlopeUpRight, "LivingWoodWand", "Wood"),
 			['r'] = Brush.Fixed("VineRope", "Rope"),
 		};
 

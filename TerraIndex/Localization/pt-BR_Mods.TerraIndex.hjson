@@ -63,6 +63,8 @@ UI: {
 	BlueprintWizardTower: Torre do mago
 	BlueprintWorkshop: Casa do artesão
 	BlueprintTreeVillage: Vila das árvores
+	BlueprintBigTree: Árvore grande
+	BlueprintThickTree: Árvore grossa
 	BlueprintMaterial: Material:
 	BlueprintPickMaterial: Escolha um material.
 	BlueprintNoMaterials: Nenhum material encontrado.
@@ -92,12 +94,12 @@ UI: {
 	CompareValue: Valor de venda
 	CompareEffects: Efeitos
 	CraftButton: Fabricar
-	CraftCanMake: Com seus baús você pode fazer {0}
-	CraftNoIngredients: Não há ingredientes suficientes nos baús do terminal
+	CraftCanMake: Com seus baús e seu inventário você pode fazer {0}
+	CraftNoIngredients: Não há ingredientes suficientes nos baús e no seu inventário
 	CraftNoStation: Falta a estação de criação (por perto ou no fio do terminal)
 	CraftNoConditions: Condições não atendidas aqui
-	Crafted: "{0} x {1} fabricado(s) com seus baús."
-	CraftFailed: Os baús não têm mais os ingredientes.
+	Crafted: "{0} x {1} fabricado(s) com o terminal."
+	CraftFailed: Os baús e seu inventário já não têm os ingredientes.
 	TakeMissing: Pegar o que falta
 	TakeMissingHint: Tira dos baús o que falta no seu inventário para uma fabricação (Shift: para 10)
 	TakeMissingStatus: Nos baús, faltando no seu inventário: {0}

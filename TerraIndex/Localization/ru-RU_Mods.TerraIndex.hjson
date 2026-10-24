@@ -63,6 +63,8 @@ UI: {
 	BlueprintWizardTower: Башня мага
 	BlueprintWorkshop: Дом мастера
 	BlueprintTreeVillage: Деревня на деревьях
+	BlueprintBigTree: Большое дерево
+	BlueprintThickTree: Толстое дерево
 	BlueprintMaterial: Материал:
 	BlueprintPickMaterial: Выбери материал.
 	BlueprintNoMaterials: Материалы не найдены.
@@ -92,12 +94,12 @@ UI: {
 	CompareValue: Цена продажи
 	CompareEffects: Эффекты
 	CraftButton: Создать
-	CraftCanMake: Из твоих сундуков можно создать {0}
-	CraftNoIngredients: В сундуках терминала не хватает ингредиентов
+	CraftCanMake: Из сундуков и инвентаря можно создать {0}
+	CraftNoIngredients: В сундуках и инвентаре не хватает ингредиентов
 	CraftNoStation: Нет станции крафта (рядом или на проводе терминала)
 	CraftNoConditions: Здесь условия не выполнены
-	Crafted: Создано {0} x {1} из твоих сундуков.
-	CraftFailed: В сундуках больше нет нужных ингредиентов.
+	Crafted: Создано {0} x {1} через терминал.
+	CraftFailed: В сундуках и инвентаре больше нет ингредиентов.
 	TakeMissing: Взять недостающее
 	TakeMissingHint: Достаёт из сундуков то, чего в инвентаре не хватает на один крафт (Shift: на 10)
 	TakeMissingStatus: В сундуках, но нет в инвентаре: {0}

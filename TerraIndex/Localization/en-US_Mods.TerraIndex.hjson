@@ -63,6 +63,8 @@ UI: {
 	BlueprintWizardTower: Wizard tower
 	BlueprintWorkshop: Craftsman's house
 	BlueprintTreeVillage: Tree village
+	BlueprintBigTree: Big tree
+	BlueprintThickTree: Thick tree
 	BlueprintMaterial: Material:
 	BlueprintPickMaterial: Pick a material.
 	BlueprintNoMaterials: No materials found.
@@ -92,12 +94,12 @@ UI: {
 	CompareValue: Sell value
 	CompareEffects: Effects
 	CraftButton: Craft
-	CraftCanMake: From your chests you can make {0}
-	CraftNoIngredients: Not enough ingredients in the terminal's chests
+	CraftCanMake: With your chests and inventory you can make {0}
+	CraftNoIngredients: Not enough ingredients in the chests and your inventory
 	CraftNoStation: Missing crafting station (nearby or on the terminal's wire)
 	CraftNoConditions: Conditions not met here
-	Crafted: Crafted {0} x {1} from your chests.
-	CraftFailed: The chests no longer have the ingredients.
+	Crafted: Crafted {0} x {1} with the terminal.
+	CraftFailed: The chests and your inventory no longer have the ingredients.
 	TakeMissing: Take missing
 	TakeMissingHint: Takes out of the chests what your inventory lacks for one craft (Shift: for 10)
 	TakeMissingStatus: In the chests, missing from your inventory: {0}

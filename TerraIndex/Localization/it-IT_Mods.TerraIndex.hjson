@@ -63,6 +63,8 @@ UI: {
 	BlueprintWizardTower: Torre del mago
 	BlueprintWorkshop: Casa dell'artigiano
 	BlueprintTreeVillage: Villaggio sugli alberi
+	BlueprintBigTree: Albero grande
+	BlueprintThickTree: Albero robusto
 	BlueprintMaterial: Materiale:
 	BlueprintPickMaterial: Scegli un materiale.
 	BlueprintNoMaterials: Nessun materiale trovato.
@@ -92,12 +94,12 @@ UI: {
 	CompareValue: Valore di vendita
 	CompareEffects: Effetti
 	CraftButton: Crea
-	CraftCanMake: Con le tue casse puoi crearne {0}
-	CraftNoIngredients: Ingredienti insufficienti nelle casse del terminale
+	CraftCanMake: Con le tue casse e il tuo inventario puoi crearne {0}
+	CraftNoIngredients: Ingredienti insufficienti nelle casse e nel tuo inventario
 	CraftNoStation: Manca la stazione di creazione (vicina o sul filo del terminale)
 	CraftNoConditions: Condizioni non soddisfatte qui
-	Crafted: Creati {0} x {1} dalle tue casse.
-	CraftFailed: Le casse non hanno più gli ingredienti.
+	Crafted: Creati {0} x {1} con il terminale.
+	CraftFailed: Le casse e il tuo inventario non hanno più gli ingredienti.
 	TakeMissing: Prendi i mancanti
 	TakeMissingHint: Prende dalle casse ciò che manca al tuo inventario per una creazione (Maiusc: per 10)
 	TakeMissingStatus: Nelle casse, mancanti nell'inventario: {0}

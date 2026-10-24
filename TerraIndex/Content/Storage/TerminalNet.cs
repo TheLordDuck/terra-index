@@ -48,6 +48,8 @@ namespace TerraIndex.Content.Storage
 		private const int MinTicksBetweenRequests = 10;
 		// Main inventory slots, the most a quick deposit can send.
 		private const int MaxQuickDepositItems = 40;
+		// Every inventory slot, the most a craft can take items from.
+		private const int MaxCraftItems = 59;
 
 		private static Mod Mod => ModContent.GetInstance<TerminalSystem>().Mod;
 
@@ -150,8 +152,11 @@ namespace TerraIndex.Content.Storage
 					Point terminal = ReadPoint(reader);
 					int recipe = reader.ReadInt32();
 					int times = reader.ReadInt32();
-					if (Allowed(terminal, whoAmI, lastCraft))
-						ModContent.GetInstance<TerminalSystem>().Craft(terminal, recipe, times, Main.player[whoAmI]);
+					Item[] provided = ReadItems(reader, MaxCraftItems);
+					// Like a quick deposit: the client already took these out of its inventory, so a refused request
+					// still gets them back.
+					if (Main.netMode == NetmodeID.Server)
+						ModContent.GetInstance<TerminalSystem>().Craft(terminal, recipe, times, Main.player[whoAmI], provided, Allowed(terminal, whoAmI, lastCraft));
 					break;
 				}
 				case MessageType.CraftResult:
@@ -333,14 +338,16 @@ namespace TerraIndex.Content.Storage
 			packet.Send();
 		}
 
-		// Client -> server: craft the recipe (index in Main.recipe) this many times from the network's chests.
-		public static void SendCraft(Point terminal, int recipe, int times)
+		// Client -> server: craft the recipe (index in Main.recipe) this many times from the network's chests, plus the
+		// items already taken out of the inventory for what the chests lack.
+		public static void SendCraft(Point terminal, int recipe, int times, Item[] provided)
 		{
 			ModPacket packet = Mod.GetPacket();
 			packet.Write((byte)MessageType.Craft);
 			WritePoint(packet, terminal);
 			packet.Write(recipe);
 			packet.Write(times);
+			WriteItems(packet, provided);
 			packet.Send();
 		}
 

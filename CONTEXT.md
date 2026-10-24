@@ -12,7 +12,7 @@ Summary of the conversations with Claude Code (2026-10-21 and 2026-10-22), to pi
   fixed in `RecipeDatabase`). **Version 0.5** added picking an amount with right click in the terminal, and
   **0.6** the radio. **0.7** (2026-10-23, written on the PC without tModLoader, not compiled yet) docks the recipe
   index next to the terminal, adds delivery drones, chest effects, 7 more languages and in-game help. None of them
-  has been **tested in game** yet. **0.8** (also uncompiled) adds blueprints to build houses. The checklist is in [`TESTING.md`](TESTING.md). The only idea left after that is
+  has been **tested in game** yet. **0.8** (also uncompiled) adds blueprints to build houses, and **0.9** (uncompiled too) more blueprints, crafting with the inventory and the stations row. The checklist is in [`TESTING.md`](TESTING.md). The only idea left after that is
   publishing 1.0 on the Workshop.
 - **UI panels are built on first open** (`UIHelpers.Build`), never in `Load`: translations aren't loaded yet there, so
   texts would show raw keys like `Mods.TerraIndex.UI.TerminalTitle`. They are rebuilt when the game language changes.
@@ -82,6 +82,20 @@ Third conversation (2026-10-23):
     station tiles in the snapshot, by name, rebuilt only when they change), drawn as their items (hover: name),
     with "+N" when they don't fit. The grid moved down 32 px and the panel grew to 510.
 
+Conversation of 2026-10-24:
+
+23. Crafting from the terminal **also uses the inventory**: the chests first, then what they lack from the inventory.
+    The client takes its part out of the inventory (`TerminalSystem.FromInventory` / `TakeFromInventory`) and sends
+    it with the `Craft` packet; the server uses those items before the chests (`StorageNetwork.TakeIngredients`,
+    `extra`) and gives back whatever isn't used, or everything if the craft fails or is refused (like a quick deposit).
+24. A **big tree** blueprint (`big_tree` in `tools/blueprints/designs.py`, 75x61): only from halfway up the trunk,
+    with well made branches and leaves. Built in code: Bezier limbs that thin down, lumpy leaf clusters, sloped
+    edges (new brushes `1`-`4` sloped leaves, `5`-`8` sloped living wood), living leaf wall and vines. The boss
+    arena picture became number 11.
+25. A variant, the **thick tree** (`thick_tree`): the same tree with the trunk and branches two tiles thicker
+    (`tree(key, thicker)` adds 1 to every radius; the tips get less, so they don't end blunt). The boss arena is
+    now picture 12.
+
 ---
 
 ## Idea list (2026-10-22)
@@ -125,7 +139,8 @@ touch the terminal or only the recipe index.
 
 Decisions taken:
 - Crafting from the chests (1): crafting stations count if they are **near the player or on the terminal's wire**
-  (options A + B); ingredients come **only from the chests**, not the inventory.
+  (options A + B). Ingredients came only from the chests until 2026-10-24, when the user asked to also use the
+  inventory: the chests are used first, then the inventory.
 - Crafting tree (4): owned items come from the inventory only; intermediates use their first recipe that doesn't
   loop back.
 - Goal panel (18): position and folding are saved per character, so the X/Y options were removed from the config.
@@ -545,9 +560,7 @@ Coming from the old name: remove the `ModSources\RecipeIndex` link, create `ModS
 
 ## Pending / ideas
 
-- **Testing only:** `MerchantTestShop` (in `RemoteTerminalItem.cs`) makes the Merchant sell the portable terminal for
-  4 silver. Remove it before publishing 1.0.
-- **Next step:** build 0.8 at home (0.7 and 0.8 were written without a compiler) and go through `TESTING.md` in game. Then
+- **Next step:** build 0.9 at home (0.7 to 0.9 were written without a compiler) and go through `TESTING.md` in game. Then
   bump `version` to 1.0 and publish (idea 30).
 - Translations other than English and Spanish were written by Claude; a native speaker could polish them.
 - Known limits: clicking a crafting station shows that item's recipes, not everything crafted at that station;

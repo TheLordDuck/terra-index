@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using TerraIndex.Common;
 using TerraIndex.Content.Tiles;
@@ -197,9 +198,12 @@ namespace TerraIndex.Content.Storage
 
 		// Removes the ingredients of `times` crafts of the recipe from the chests: all of them, or nothing if any is short.
 		// Group ingredients ("Any Wood") take the listed item first, then any other member.
+		// Items in extra (type -> amount, already out of a player's inventory) are used before the chests; on success,
+		// extra is left with what wasn't used, and on failure it isn't touched.
 		// Like Scan, only call this in single player or on the server; changed slots are synced to clients.
-		public static bool TakeIngredients(List<int> chests, Recipe recipe, int times)
+		public static bool TakeIngredients(List<int> chests, Recipe recipe, int times, Dictionary<int, int> extra)
 		{
+			var left = new Dictionary<int, int>(extra);
 			var available = new Dictionary<int, int>();
 			foreach (int index in chests) {
 				foreach (Item item in Main.chest[index]?.item ?? Array.Empty<Item>()) {
@@ -211,15 +215,23 @@ namespace TerraIndex.Content.Storage
 			var taking = new List<(int Type, int Amount)>();
 			foreach (Item ingredient in recipe.requiredItem) {
 				int needed = ingredient.stack * times;
-				foreach (int type in RecipeDatabase.AcceptedItems(recipe, ingredient.type)) {
+				List<int> accepted = RecipeDatabase.AcceptedItems(recipe, ingredient.type).ToList();
+				foreach (int type in accepted) {
+					int use = Math.Min(left.GetValueOrDefault(type), needed);
+					if (use <= 0)
+						continue;
+					left[type] -= use;
+					needed -= use;
+				}
+				foreach (int type in accepted) {
+					if (needed == 0)
+						break;
 					int take = Math.Min(available.GetValueOrDefault(type), needed);
 					if (take <= 0)
 						continue;
 					available[type] -= take;
 					needed -= take;
 					taking.Add((type, take));
-					if (needed == 0)
-						break;
 				}
 				if (needed > 0)
 					return false;
@@ -227,6 +239,8 @@ namespace TerraIndex.Content.Storage
 
 			foreach (var (type, amount) in taking)
 				Remove(chests, type, amount);
+			foreach (var (type, amount) in left)
+				extra[type] = amount;
 			return true;
 		}
 

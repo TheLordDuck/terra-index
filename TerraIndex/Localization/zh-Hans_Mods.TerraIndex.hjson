@@ -63,6 +63,8 @@ UI: {
 	BlueprintWizardTower: 法师塔
 	BlueprintWorkshop: 工匠之家
 	BlueprintTreeVillage: 树屋村
+	BlueprintBigTree: 大树
+	BlueprintThickTree: 粗壮大树
 	BlueprintMaterial: 材料：
 	BlueprintPickMaterial: 请选择一种材料。
 	BlueprintNoMaterials: 没有找到材料。
@@ -92,12 +94,12 @@ UI: {
 	CompareValue: 售价
 	CompareEffects: 效果
 	CraftButton: 制作
-	CraftCanMake: 用你的箱子可以制作 {0} 次
-	CraftNoIngredients: 终端的箱子里材料不足
+	CraftCanMake: 用你的箱子和背包可以制作 {0} 次
+	CraftNoIngredients: 箱子和背包里材料不足
 	CraftNoStation: 缺少制作站（在附近或终端的电线上）
 	CraftNoConditions: 此处不满足条件
-	Crafted: 已用你的箱子制作 {0} x {1}。
-	CraftFailed: 箱子里已经没有这些材料了。
+	Crafted: 已用终端制作 {0} x {1}。
+	CraftFailed: 箱子和背包里已经没有这些材料了。
 	TakeMissing: 取出缺少的
 	TakeMissingHint: 从箱子中取出物品栏制作一次所缺的材料（Shift：制作 10 次）
 	TakeMissingStatus: 箱子里有、物品栏里缺：{0}

@@ -571,7 +571,9 @@ namespace TerraIndex.Content.Storage
 
 		// ---- Crafting from the chests (recipe index) ----
 		// The client checks stations and conditions, as vanilla crafting does; the server only takes the ingredients
-		// out of the chests (all or nothing), so two players can't spend the same items.
+		// out of the chests (all or nothing), so two players can't spend the same items. What the chests lack comes
+		// from the inventory: the client takes it out and sends it along (the inventory is the client's), and the
+		// server gives back whatever it doesn't use.
 
 		// Crafts per click are capped so "Max" can't flood the world with dropped items.
 		private const int MaxCraftsStackable = 999;
@@ -591,14 +593,18 @@ namespace TerraIndex.Content.Storage
 			return group == null ? StoredCount(ingredient) : group.ValidItems.Sum(type => StoredCount(type));
 		}
 
-		// Client: how many times the recipe can be crafted with what is in the chests (0 if a station or condition is missing).
+		// Client: how many times the recipe can be crafted with what is in the chests and the inventory (0 if a station
+		// or condition is missing).
 		public int MaxCrafts(Recipe recipe)
 		{
 			if (!recipe.requiredTile.All(HasStation) || !recipe.Conditions.All(condition => condition.IsMet()))
 				return 0;
 			int max = recipe.createItem.maxStack > 1 ? MaxCraftsStackable : MaxCraftsSingle;
-			foreach (Item ingredient in recipe.requiredItem)
-				max = Math.Min(max, StoredCount(recipe, ingredient.type) / ingredient.stack);
+			Dictionary<int, int> owned = CraftingPlan.Inventory(Main.LocalPlayer);
+			foreach (Item ingredient in recipe.requiredItem) {
+				int inInventory = RecipeDatabase.AcceptedItems(recipe, ingredient.type).Sum(type => owned.GetValueOrDefault(type));
+				max = Math.Min(max, (StoredCount(recipe, ingredient.type) + inInventory) / ingredient.stack);
+			}
 			return max;
 		}
 
@@ -617,25 +623,93 @@ namespace TerraIndex.Content.Storage
 
 		public void RequestCraft(Recipe recipe, int times)
 		{
-			if (Main.netMode == NetmodeID.MultiplayerClient)
-				TerminalNet.SendCraft(Terminal, recipe.RecipeIndex, times);
-			else
-				Craft(Terminal, recipe.RecipeIndex, times, Main.LocalPlayer);
 			craftRefreshTimer = 0;
+			List<(int Type, int Amount)> fromInventory = FromInventory(recipe, times);
+			if (fromInventory == null) {
+				ShowCraftResult(recipe.createItem.type, 0);
+				return;
+			}
+			Item[] provided = TakeFromInventory(Main.LocalPlayer, fromInventory);
+			if (Main.netMode == NetmodeID.MultiplayerClient)
+				TerminalNet.SendCraft(Terminal, recipe.RecipeIndex, times, provided);
+			else
+				Craft(Terminal, recipe.RecipeIndex, times, Main.LocalPlayer, provided, true);
 		}
 
-		// Single player or server.
-		public void Craft(Point terminal, int recipeIndex, int times, Player player)
+		// Client: what the inventory has to add to the chests for `times` crafts (the chests are used first, so the
+		// items carried are kept when possible), or null if not even both together are enough.
+		private List<(int Type, int Amount)> FromInventory(Recipe recipe, int times)
 		{
-			if (recipeIndex < 0 || recipeIndex >= Recipe.numRecipes || times <= 0)
+			Dictionary<int, int> owned = CraftingPlan.Inventory(Main.LocalPlayer);
+			var stored = new Dictionary<int, int>(snapshot.Totals);
+			var taking = new List<(int Type, int Amount)>();
+			foreach (Item ingredient in recipe.requiredItem) {
+				int needed = ingredient.stack * times;
+				List<int> accepted = RecipeDatabase.AcceptedItems(recipe, ingredient.type).ToList();
+				foreach (int type in accepted) {
+					int use = Math.Min(stored.GetValueOrDefault(type), needed);
+					stored[type] = stored.GetValueOrDefault(type) - use;
+					needed -= use;
+				}
+				foreach (int type in accepted) {
+					int take = Math.Min(owned.GetValueOrDefault(type), needed);
+					if (take <= 0)
+						continue;
+					owned[type] -= take;
+					needed -= take;
+					taking.Add((type, take));
+				}
+				if (needed > 0)
+					return null;
+			}
+			return taking;
+		}
+
+		// Takes these amounts out of the inventory and returns what was taken, one item per slot touched (prefixes kept,
+		// so whatever isn't used can be given back as it was). The caller has checked that the inventory holds them.
+		public static Item[] TakeFromInventory(Player player, List<(int Type, int Amount)> items)
+		{
+			var taken = new List<Item>();
+			foreach (var (type, amount) in items) {
+				int left = amount;
+				for (int slot = 0; slot < player.inventory.Length && left > 0; slot++) {
+					Item item = player.inventory[slot];
+					if (item.IsAir || item.type != type)
+						continue;
+					int take = Math.Min(item.stack, left);
+					Item part = item.Clone();
+					part.stack = take;
+					taken.Add(part);
+					item.stack -= take;
+					left -= take;
+					if (item.stack <= 0)
+						item.TurnToAir();
+					if (Main.netMode == NetmodeID.MultiplayerClient)
+						NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: slot);
+				}
+			}
+			return taken.ToArray();
+		}
+
+		// Single player or server. provided: what the client already took out of its inventory for this craft; whatever
+		// isn't used (or everything, if the craft fails or the request was refused) is given back.
+		public void Craft(Point terminal, int recipeIndex, int times, Player player, Item[] provided, bool allowed)
+		{
+			var unused = new Dictionary<int, int>();
+			foreach (Item item in provided) {
+				if (!item.IsAir)
+					unused[item.type] = unused.GetValueOrDefault(item.type) + item.stack;
+			}
+
+			Recipe recipe = recipeIndex >= 0 && recipeIndex < Recipe.numRecipes ? Main.recipe[recipeIndex] : null;
+			if (!allowed || times <= 0 || recipe == null || recipe.Disabled || recipe.createItem.IsAir) {
+				GiveBack(player, provided, unused);
 				return;
-			Recipe recipe = Main.recipe[recipeIndex];
-			if (recipe == null || recipe.Disabled || recipe.createItem.IsAir)
-				return;
+			}
 			times = Math.Min(times, recipe.createItem.maxStack > 1 ? MaxCraftsStackable : MaxCraftsSingle);
 
 			int crafted = 0;
-			if (StorageNetwork.TakeIngredients(StorageNetwork.FindConnectedChests(terminal), recipe, times)) {
+			if (StorageNetwork.TakeIngredients(StorageNetwork.FindConnectedChests(terminal), recipe, times, unused)) {
 				// Like vanilla crafting: a copy of the result, with a random prefix for weapons and accessories.
 				for (int total = recipe.createItem.stack * times; total > 0;) {
 					Item item = recipe.createItem.Clone();
@@ -646,12 +720,25 @@ namespace TerraIndex.Content.Storage
 					Deliver(terminal, item, player);
 				}
 			}
+			GiveBack(player, provided, unused);
 			ShowMoves();
 
 			if (Main.netMode == NetmodeID.Server)
 				TerminalNet.SendCraftResult(player.whoAmI, recipe.createItem.type, crafted);
 			else
 				ShowCraftResult(recipe.createItem.type, crafted);
+		}
+
+		// Gives back to the player the provided items still listed in unused (type -> amount).
+		private static void GiveBack(Player player, Item[] provided, Dictionary<int, int> unused)
+		{
+			foreach (Item item in provided) {
+				int amount = item.IsAir ? 0 : Math.Min(item.stack, unused.GetValueOrDefault(item.type));
+				if (amount <= 0)
+					continue;
+				unused[item.type] -= amount;
+				player.QuickSpawnItem(new EntitySource_Misc("TerraIndex/Craft"), item, amount);
+			}
 		}
 
 		// Client: what has to come out of the chests so the inventory has the ingredients for `times` crafts

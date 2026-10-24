@@ -63,6 +63,8 @@ UI: {
 	BlueprintWizardTower: Tour de mage
 	BlueprintWorkshop: Maison de l'artisan
 	BlueprintTreeVillage: Village des arbres
+	BlueprintBigTree: Grand arbre
+	BlueprintThickTree: Arbre épais
 	BlueprintMaterial: Matériau :
 	BlueprintPickMaterial: Choisis un matériau.
 	BlueprintNoMaterials: Aucun matériau trouvé.
@@ -92,12 +94,12 @@ UI: {
 	CompareValue: Valeur de vente
 	CompareEffects: Effets
 	CraftButton: Fabriquer
-	CraftCanMake: Avec tes coffres tu peux en fabriquer {0}
-	CraftNoIngredients: Pas assez d'ingrédients dans les coffres du terminal
+	CraftCanMake: Avec tes coffres et ton inventaire tu peux en fabriquer {0}
+	CraftNoIngredients: Pas assez d'ingrédients dans les coffres et ton inventaire
 	CraftNoStation: Station d'artisanat manquante (à proximité ou sur le fil du terminal)
 	CraftNoConditions: Conditions non remplies ici
-	Crafted: "{0} x {1} fabriqué(s) avec tes coffres."
-	CraftFailed: Les coffres n'ont plus les ingrédients.
+	Crafted: "{0} x {1} fabriqué(s) avec le terminal."
+	CraftFailed: Les coffres et ton inventaire n'ont plus les ingrédients.
 	TakeMissing: Prendre le manquant
 	TakeMissingHint: Sort des coffres ce qui manque à ton inventaire pour une fabrication (Maj : pour 10)
 	TakeMissingStatus: Dans les coffres, absent de ton inventaire : {0}
