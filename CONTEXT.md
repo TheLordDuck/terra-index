@@ -465,7 +465,8 @@ Decisions taken:
 ### Radio (0.6, a joke item the user asked for on 2026-10-22)
 
 - 2x1 floor tile like the Piggy Bank, crafted at an anvil (8 Wood, 3 Iron/Lead Bars, 2 Glass).
-- Two clips the user supplied (`Content/Sounds/RadioSiu.mp3`, `RadioLosDos.mp3`, ID3 tags stripped; tModLoader
+- Four clips the user supplied (`Content/Sounds/RadioSiu.mp3`, `RadioLosDos.mp3`, and `RadioSi.mp3` / `RadioNo.mp3`,
+  the two halves of the "Si turuturuturu No turuturuturu" video cut at its silence; ID3 tags stripped; tModLoader
   decodes mp3 sounds with MP3Sharp). `RadioSystem` plays them alternately: 3-15 s after a radio appears, then gaps of
   10-40 s (35%), 40-90 s (45%) or 90-150 s (20%) after each clip. The server (or single player) runs the schedule,
   so everyone hears the same clip at the same time: it collects each player's nearest radio that is on (within

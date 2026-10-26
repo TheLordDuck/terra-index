@@ -27,9 +27,11 @@ namespace TerraIndex.Content.Tiles
 		private static readonly SoundStyle[] Clips = {
 			new("TerraIndex/Content/Sounds/RadioSiu") { Volume = 0.8f, MaxInstances = 1 },
 			new("TerraIndex/Content/Sounds/RadioLosDos") { Volume = 0.8f, MaxInstances = 1 },
+			new("TerraIndex/Content/Sounds/RadioSi") { Volume = 0.8f, MaxInstances = 1 },
+			new("TerraIndex/Content/Sounds/RadioNo") { Volume = 0.8f, MaxInstances = 1 },
 		};
-		// The server can't load sounds to ask how long they are: 6.7 s and 18.3 s, rounded up.
-		private static readonly int[] ClipTicks = { 7 * 60, 19 * 60 };
+		// The server can't load sounds to ask how long they are: 6.7 s, 18.3 s, 5.4 s and 5 s, rounded up.
+		private static readonly int[] ClipTicks = { 7 * 60, 19 * 60, 6 * 60, 5 * 60 };
 
 		// Server or single player: the schedule.
 		private readonly List<Point> radios = new();
