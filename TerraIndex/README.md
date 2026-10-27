@@ -184,6 +184,8 @@ In **Settings → Mod Configuration → Terra Index**:
 
 ## Changelog
 
+**1.0**: first release on the Steam Workshop, with everything from 0.9.
+
 **0.9**
 - Crafting from the terminal also uses your inventory: the chests first, then what they lack from your inventory.
 - The terminal shows the crafting stations on its wire, and its free slots and how full the chests are.

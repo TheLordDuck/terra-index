@@ -12,8 +12,8 @@ Summary of the conversations with Claude Code (2026-10-21 and 2026-10-22), to pi
   fixed in `RecipeDatabase`). **Version 0.5** added picking an amount with right click in the terminal, and
   **0.6** the radio. **0.7** (2026-10-23, written on the PC without tModLoader, not compiled yet) docks the recipe
   index next to the terminal, adds delivery drones, chest effects, 7 more languages and in-game help. None of them
-  has been **tested in game** yet. **0.8** (also uncompiled) adds blueprints to build houses, and **0.9** (uncompiled too) more blueprints, crafting with the inventory and the stations row. The checklist is in [`TESTING.md`](TESTING.md). The only idea left after that is
-  publishing 1.0 on the Workshop.
+  has been **tested in game** yet. **0.8** (also uncompiled) adds blueprints to build houses, and **0.9** (uncompiled too) more blueprints, crafting with the inventory and the stations row. The checklist is in [`TESTING.md`](TESTING.md). On 2026-10-27 the version was bumped to
+  **1.0** for the first Workshop release (the publish itself is done from tModLoader by the user).
 - **UI panels are built on first open** (`UIHelpers.Build`), never in `Load`: translations aren't loaded yet there, so
   texts would show raw keys like `Mods.TerraIndex.UI.TerminalTitle`. They are rebuilt when the game language changes.
 - **Convention:** everything in the repo (code, comments, docs, commits) is in **English**, even though the
@@ -116,7 +116,7 @@ The user refers to features by these numbers, so keep them stable.
 | 18 | Movable, foldable goal panel | Done (0.4) |
 | 27 | Mod settings (ModConfig) | Done (0.4) |
 | 28 | Final sprites | Done: the user accepted the current ones |
-| 30 | Publish 1.0 on the Workshop | **Pending** (after compiling and testing 0.7) |
+| 30 | Publish 1.0 on the Workshop | Done (1.0, 2026-10-27) |
 | 31 | Pay with the coins in the chests (shops, reforging, Nurse) | Proposed |
 | 32 | Refill blocks, torches and ammo from the chests while building | Proposed |
 | 33 | Kits / loadouts taken out of and put back into the chests | Proposed |
@@ -561,8 +561,7 @@ Coming from the old name: remove the `ModSources\RecipeIndex` link, create `ModS
 
 ## Pending / ideas
 
-- **Next step:** build 0.9 at home (0.7 to 0.9 were written without a compiler) and go through `TESTING.md` in game. Then
-  bump `version` to 1.0 and publish (idea 30).
+- **1.0** is the first Workshop release (2026-10-27). Updates: bump `version` in `build.txt`, rebuild and publish again.
 - Translations other than English and Spanish were written by Claude; a native speaker could polish them.
 - Known limits: clicking a crafting station shows that item's recipes, not everything crafted at that station;
   terminal items are grouped by type (prefixes not distinguished); crafting from the chests doesn't apply the
