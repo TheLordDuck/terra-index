@@ -79,7 +79,7 @@ namespace TerraIndex.Content.Building
 	// A house plan: two layers of text rows of the same size, the tiles and the background walls. Generated from
 	// tools/blueprints/designs.py (see BlueprintDesigns), which also checks them and draws them.
 	// Tile layer: ' ' leaves the cell as it is, '.' must be empty, '+' is covered by a piece of furniture whose
-	// top-left cell has its letter; any other character is a brush (TileBrushes). Wall layer: ' ' leaves the
+	// top-left cell has its letter, '~' is filled with water; any other character is a brush (TileBrushes). Wall layer: ' ' leaves the
 	// background wall as it is; any other character is a brush (WallBrushes).
 	public class Blueprint
 	{
@@ -132,6 +132,9 @@ namespace TerraIndex.Content.Building
 	public class Blueprints : ModSystem
 	{
 		public static Blueprint[] All => BlueprintDesigns.All;
+
+		// Tile layer: an empty cell filled with water (a pond), once the blocks holding it are in place.
+		public const char Water = '~';
 
 		// Keep in sync with the character sets in tools/blueprints/build.py, which checks and draws the designs.
 		public static readonly Dictionary<char, Brush> TileBrushes = new() {
@@ -194,6 +197,10 @@ namespace TerraIndex.Content.Building
 			['7'] = Brush.Sloped(BrushShape.SlopeUpLeft, "LivingWoodWand", "Wood"),
 			['8'] = Brush.Sloped(BrushShape.SlopeUpRight, "LivingWoodWand", "Wood"),
 			['r'] = Brush.Fixed("VineRope", "Rope"),
+			// Gardens and arenas. Any herb grows in any planter box; they are jumped through like platforms.
+			['='] = Brush.Fixed("DayBloomPlanterBox", "BlinkrootPlanterBox", "MoonglowPlanterBox"),
+			['A'] = Brush.Fixed("HeartLantern"),
+			['N'] = Brush.Fixed("StarinaBottle"),
 		};
 
 		public static readonly Dictionary<char, Brush> WallBrushes = new() {
@@ -221,6 +228,7 @@ namespace TerraIndex.Content.Building
 		{
 			Materials.Clear();
 			Wood = null;
+			Happiness.Unload();
 		}
 
 		public static BuildMaterial Find(int block) => Materials.Find(material => material.Block == block);
@@ -414,6 +422,16 @@ namespace TerraIndex.Content.Building
 						WorldGen.PlaceTile(i, j, item.createTile, mute: true, style: item.placeStyle);
 					else if (TileObject.CanPlace(i + data.Origin.X, j + data.Origin.Y, item.createTile, item.placeStyle, 1, out TileObject placed))
 						TileObject.Place(placed);
+				}
+			}
+
+			for (int y = 0; y < height; y++) {
+				for (int x = 0; x < width; x++) {
+					if (blueprint.TileAt(x, y) != Water)
+						continue;
+					Tile tile = Main.tile[origin.X + x, origin.Y + y];
+					tile.LiquidType = LiquidID.Water;
+					tile.LiquidAmount = byte.MaxValue;
 				}
 			}
 

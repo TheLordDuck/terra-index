@@ -24,12 +24,14 @@ CS = os.path.join(ROOT, 'TerraIndex', 'Content', 'Building', 'BlueprintDesigns.c
 # What each character places. Keep in sync with Blueprints.TileBrushes / WallBrushes in the mod.
 SOLID = set('#SRdYUEve') | set('/\\()[]<>') | set('12345678')
 PLATFORM = '-'
-TILE_CHARS = SOLID | {' ', '.', '+', '-', '|', 'r'} | set(FURNITURE)
+PLANTER = '='
+WATER = '~'
+TILE_CHARS = SOLID | {' ', '.', '+', '-', '|', 'r', PLANTER, WATER} | set(FURNITURE)
 WALL_CHARS = set(' wsgkqpxvaz')
 STANDING = set('CTWBKOFfZPGQVHt')
-HANGING = set('Llyn')
+HANGING = set('LlynAN')
 ON_TABLE = set('cbhou')
-LIGHTS = set('Llycif')
+LIGHTS = set('LlycifAN')
 CHAIRS = set('CQt')
 TABLES = set('TW')
 
@@ -37,7 +39,7 @@ NAMES = {
     'SmallHouse': 'Small house', 'TwoFloors': 'Two-floor house', 'Tower': 'Tower', 'Arena': 'Boss arena',
     'Medieval': 'Medieval house', 'Castle': 'Castle', 'Pagoda': 'Pagoda', 'WizardTower': 'Wizard tower',
     'Workshop': "Craftsman's house", 'TreeVillage': 'Tree village', 'BigTree': 'Big tree',
-    'ThickTree': 'Thick tree',
+    'ThickTree': 'Thick tree', 'HerbGarden': 'Herb garden', 'FishingPond': 'Fishing pond', 'BuffArena': 'Arena with buffs',
 }
 
 
@@ -71,6 +73,10 @@ def check(d):
     def solid(x, y):
         return 0 <= x < W and 0 <= y < H and t[y][x] in SOLID
 
+    def support(x, y):
+        """Furniture stands on and hangs from platforms too (campfires and heart lanterns in arenas)."""
+        return solid(x, y) or (0 <= x < W and 0 <= y < H and t[y][x] == PLATFORM)
+
     seen = {}
     for y in range(H):
         for x in range(W):
@@ -91,11 +97,11 @@ def check(d):
                     seen[(cx, cy)] = (x, y)
             if c == 'D' and not (solid(x, y - 1) and solid(x, y + 3)):
                 errors.append(f'door at {x},{y} needs blocks above and below')
-            if c in STANDING and not all(solid(x + dx, y + h) for dx in range(w)):
+            if c in STANDING and not all(support(x + dx, y + h) for dx in range(w)):
                 errors.append(f'{c} at {x},{y} needs blocks under it')
             if c == 'j' and not (solid(x, y - 1) or t[y - 1][x] == 'j'):
                 errors.append(f'chain at {x},{y} needs a block or a chain above it')
-            if c in HANGING and not all(solid(x + dx, y - 1) for dx in range(w)):
+            if c in HANGING and not all(support(x + dx, y - 1) for dx in range(w)):
                 errors.append(f'{c} at {x},{y} needs blocks above it')
             if c in ON_TABLE:
                 below = own.get((x, y + 1))
@@ -103,6 +109,13 @@ def check(d):
                     errors.append(f'{c} at {x},{y} must stand on a table or work bench')
             if c == 'i' and wl[y][x] == ' ' and not (solid(x - 1, y) or solid(x + 1, y) or solid(x, y + 1)):
                 errors.append(f'torch at {x},{y} needs a wall behind it')
+
+    # Water must be held: blocks or more water below it and on both sides.
+    for y in range(H):
+        for x in range(W):
+            if t[y][x] == WATER and not all(solid(nx, ny) or (0 <= nx < W and 0 <= ny < H and t[ny][nx] == WATER)
+                                            for nx, ny in ((x - 1, y), (x + 1, y), (x, y + 1))):
+                errors.append(f'water at {x},{y} would spill')
 
     for seed in d.rooms:
         errors += [f'room at {seed}: {e}' for e in check_room(d, own, seed)]
@@ -223,6 +236,11 @@ def draw(d, scale=1):
                 g.rectangle([x0 + 3, y0, x1 - 3, y1], fill=(120, 80, 45))
             elif c == 'r':
                 g.line([x0 + C // 2, y0, x0 + C // 2, y1], fill=(60, 130, 50), width=2)
+            elif c == PLANTER:
+                g.rectangle([x0, y0 + 3, x1, y1], fill=(150, 95, 55), outline=WOOD_DARK)
+                g.rectangle([x0 + 1, y0 + 3, x1 - 1, y0 + 5], fill=(90, 60, 35))
+            elif c == WATER:
+                g.rectangle([x0, y0, x1, y1], fill=(60, 110, 200))
     for y in range(H):
         for x in range(W):
             c = d.tiles[y][x]
@@ -277,9 +295,9 @@ def draw_piece(g, c, x0, y0, x1, y1):
         for k in range(3):
             fx = x0 + 3 + k * (w - 6) // 2
             g.ellipse([fx - 2, y0 + h // 3 - 5, fx + 2, y0 + h // 3], fill=(255, 220, 90))
-    elif c in 'ly':
+    elif c in 'lyAN':
         g.line([x0 + w // 2, y0, x0 + w // 2, y0 + 4], fill=(60, 60, 60))
-        color = (220, 60, 50) if c == 'y' else (255, 210, 90)
+        color = {'y': (220, 60, 50), 'A': (255, 80, 120), 'N': (120, 200, 255)}.get(c, (255, 210, 90))
         g.ellipse([x0 + 1, y0 + 4, x1 - 1, y1 - 1], fill=color, outline=(120, 60, 20))
     elif c == 'n':
         g.rectangle([x0 + 1, y0, x1 - 1, y1 - 3], fill=(180, 30, 40))

@@ -96,6 +96,30 @@ Conversation of 2026-10-24:
     (`tree(key, thicker)` adds 1 to every radius; the tips get less, so they don't end blunt). The boss arena is
     now picture 12.
 
+Conversation of 2026-10-28 (after the 1.0 release):
+
+26. Claude proposed **ideas 43-50** (see "Idea list"); the user asked to explain 42, 43 and 32, then picked
+    **47, 48, 49 and 50**. All four were written on the PC without tModLoader, so they are **not compiled yet**:
+    build first and fix any errors. Checklist sections 47-50 in [`TESTING.md`](TESTING.md). `build.txt` still says 1.0.
+27. **47, useful blueprints:** herb garden (`HerbGarden`, 40x15: an alchemist's hut with a bottle on the table and a
+    bay for the Alchemy Table, three rows of planter boxes), fishing pond (`FishingPond`, 65x20: 312 water tiles, a
+    pier, a fisherman's hut on stilts) and arena with buffs (`BuffArena`, 100x21: four rows of platforms with
+    campfires, heart lanterns and stars in a bottle). Pictures 13-15. New tile characters: `=` planter box, `A` heart
+    lantern, `N` star in a bottle (both hang), and `~` water (`Blueprints.Water`: filled after everything else in
+    `Place`, drawn blue in the previews; `build.py` checks it can't spill). `build.py` now lets furniture stand on
+    and hang from platforms.
+28. **48, NPC happiness:** under the blueprint catalog, the town NPCs' heads; clicking one lists the biomes and NPCs
+    it loves, likes, dislikes and hates (`Common/Happiness.cs`). Read from the game's personality database
+    (`ShopHelper._database`, private, by reflection), so modded NPCs show too. Panel height 760 (max 96% of the screen).
+29. **49, Next upgrades:** a tab in the recipe index only (`ItemCategory.Upgrades`, `ItemCategories.IndexTabs`, Night's
+    Edge icon), worked out by `Common/Upgrades.cs` on every grid refresh: the 3 strongest weapons (damage per second)
+    of each damage class the player carries that beat theirs by 15%, the 2 toughest pieces per armor slot over what
+    is worn, and the strongest pickaxe. Only items with a recipe, not carried, and with a rarity up to a cap set by
+    the bosses beaten (`Upgrades.RarityCap`); modded rarities are never suggested. No accessories (no way to rank them).
+30. **50, chest counts in tooltips:** `Content/Storage/ChestCountTooltip.cs` (a `GlobalItem`) adds "In your chests: N"
+    to every tooltip while the crafting terminal is in reach (`CanCraft`), refreshing like the index does. Setting
+    `ClientConfig.ChestCountTooltip` (on).
+
 ---
 
 ## Idea list (2026-10-22)
@@ -129,6 +153,14 @@ The user refers to features by these numbers, so keep them stable.
 | 40 | More languages | Done (0.7): German, French, Brazilian Portuguese, Russian, Italian, Polish, Simplified Chinese |
 | 41 | In-game guide | Done (0.7): "?" buttons and first-time tips |
 | 42 | Compatibility with Calamity, Magic Storage, Recipe Browser | Proposed |
+| 43 | Autocrafter: a tile on the wire that keeps N of an item crafted from the chests | Proposed |
+| 44 | Junk marking and selling all junk in the chests to an NPC | Proposed |
+| 45 | Blueprint from something the player built (copy and place again) | Proposed |
+| 46 | Fix a house: say what a room lacks to be housing and place it | Proposed |
+| 47 | Useful blueprints: herb garden, fishing pond, arena with buffs | Done (next version, not compiled yet) |
+| 48 | NPC happiness (biomes and neighbours) in the blueprint catalog | Done (next version, not compiled yet) |
+| 49 | Next upgrades tab in the recipe index | Done (next version, not compiled yet) |
+| 50 | "In your chests: N" in every item tooltip | Done (next version, not compiled yet) |
 
 Discarded by the user, don't propose them again: 3 "what can I craft" tab, 7 terminal favorites, 9 per-chest
 filters, 11 seen/obtained collection %, 12 chest loot and fishing in "how to obtain", 14 stat search, 15 tree/goal
@@ -493,6 +525,9 @@ Decisions taken:
 | `Common/ItemCategories.cs` | Item category tabs (weapons, tools, armor...) |
 | `Common/CraftingPlan.cs` | Crafting tree of a recipe minus what the player owns; base materials and stations |
 | `Common/Configs.cs` | `ClientConfig` (goal panel, default sort, highlight time, hotbar in Deposit all) and `ServerConfig` (terminal price, reach, max wire tiles, allow portable terminal) |
+| `Common/Happiness.cs` | Town NPCs' biome and neighbour preferences, for the blueprint catalog (48) |
+| `Common/Upgrades.cs` | Next upgrades tab: better craftable gear within the bosses' rarity cap (49) |
+| `Content/Storage/ChestCountTooltip.cs` | "In your chests: N" in item tooltips (50) |
 | `Common/CraftingGoal.cs` | Crafting goal: `GoalPlayer` (saved per character) and the on-screen list (`GoalSystem`) |
 | `UI/UIHelpers.cs` | Localization, text measuring/truncating/wrapping, coin amounts, drawing item slots, counting inventory |
 | `UI/SearchBox.cs` | Text box; only one is focused at a time (`AnyFocused` blocks the mod's keys) |

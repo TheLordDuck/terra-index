@@ -16,6 +16,8 @@ UI: {
 	CategoryConsumables: Potions and consumables
 	CategoryMaterials: Materials
 	CategoryMisc: Miscellaneous
+	CategoryUpgrades: Next upgrades (for the bosses you have beaten)
+	InChests: In your chests: {0}
 	NoResults: No items match your search.
 	Hint:
 		'''
@@ -65,6 +67,17 @@ UI: {
 	BlueprintTreeVillage: Tree village
 	BlueprintBigTree: Big tree
 	BlueprintThickTree: Thick tree
+	BlueprintHerbGarden: Herb garden
+	BlueprintFishingPond: Fishing pond
+	BlueprintBuffArena: Arena with buffs
+	HappinessTitle: Who will live here? Pick a town NPC to see where they are happiest:
+	HappinessPick: Click an NPC's head.
+	HappinessLove: Loves: {0}
+	HappinessLike: Likes: {0}
+	HappinessDislike: Dislikes: {0}
+	HappinessHate: Hates: {0}
+	HappinessNone: No preferences.
+	HappinessCrowd: All of them are happier with no more than 2 other NPCs living close by.
 	BlueprintMaterial: Material:
 	BlueprintPickMaterial: Pick a material.
 	BlueprintNoMaterials: No materials found.
@@ -269,6 +282,11 @@ Configs: {
 		FocusTerminalSearch: {
 			Label: Type in the terminal's search box when it opens
 			Tooltip: While typing, the mod's keys (N, [ and ]) don't work
+		}
+
+		ChestCountTooltip: {
+			Label: Show how many are in your chests in item tooltips
+			Tooltip: While a terminal is in reach (or you carry its portable terminal)
 		}
 
 		ChestEffects: {

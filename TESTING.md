@@ -202,6 +202,38 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 - [ ] Every NPC room of the big ones is valid housing (medieval 5, castle 11, pagoda 3, wizard tower 4)
 - [ ] The catalog fits on screen with the castle selected (cost in two columns)
 
+## 47. Herb garden, fishing pond and arena with buffs
+
+- [ ] They show in the catalog (names translated) and look like `docs/blueprints/13`, `14` and `15`
+- [ ] Herb garden: the three rows of planter boxes are placed (row by row, from the hut's wall to the post at the far end), you can jump up through them and drop down, and seeds can be planted in them
+- [ ] Herb garden: the hut is valid housing, and the bottle on its table works as an alchemy station
+- [ ] Fishing pond: the pond is full of water, doesn't leak, and the in-game preview shows the water in blue
+- [ ] Fishing pond: fishing from the pier doesn't say the pool is too small; the hut is valid housing
+- [ ] Arena with buffs: campfires stand on the platforms and the heart lanterns and stars in a bottle hang under them; standing on any row gives Campfire, Heart Lamp and Star in a Bottle
+- [ ] **Multiplayer:** the other player sees the pond's water (not an empty basin)
+
+## 48. NPC happiness in the catalog
+
+- [ ] Under the catalog, a row of town NPC heads (hover: the NPC's name); the panel fits on screen
+- [ ] Clicking a head shows "Loves / Likes / Dislikes / Hates" lines with biomes (in your language) and NPCs; clicking it again hides them
+- [ ] Compare a couple with the wiki (e.g. the Guide likes the forest, the Nurse loves the Arms Dealer)
+- [ ] With Calamity (or another mod adding town NPCs): its NPCs show up with their own preferences
+
+## 49. Next upgrades tab
+
+- [ ] The index has a Night's Edge tab right after All; its tooltip says how many items it has
+- [ ] New character (copper gear): it suggests better weapons of the classes you carry, armor pieces and a pickaxe, nothing from hardmode
+- [ ] After beating bosses (or in a later world) it suggests later gear; never what you already carry or wear
+- [ ] Click a suggestion, Tree tab, set it as the goal: the goal panel tracks it
+- [ ] The terminal's grid doesn't have this tab
+
+## 50. "In your chests" in tooltips
+
+- [ ] Near a terminal (or with its portable terminal), hovering an item in your inventory says "In your chests: N" in blue, if there are any
+- [ ] The number follows the chests (take some out: it goes down within a second)
+- [ ] Far from the terminal, or with the setting off, the line isn't there
+- [ ] Also in chests, shops and the index
+
 ## 40 and 41. Languages and help
 
 - [ ] Switch the game to each language (German, French, Portuguese, Russian, Italian, Polish, Chinese): the panels show translated texts, not keys

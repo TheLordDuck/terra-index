@@ -16,6 +16,8 @@ UI: {
 	CategoryConsumables: Зелья и расходуемое
 	CategoryMaterials: Материалы
 	CategoryMisc: Разное
+	CategoryUpgrades: Следующие улучшения (по побеждённым боссам)
+	InChests: В ваших сундуках: {0}
 	NoResults: Ни один предмет не подходит под поиск.
 	Hint:
 		'''
@@ -65,6 +67,17 @@ UI: {
 	BlueprintTreeVillage: Деревня на деревьях
 	BlueprintBigTree: Большое дерево
 	BlueprintThickTree: Толстое дерево
+	BlueprintHerbGarden: Сад трав
+	BlueprintFishingPond: Пруд для рыбалки
+	BlueprintBuffArena: Арена с баффами
+	HappinessTitle: Кто будет здесь жить? Выберите NPC, чтобы узнать, где он счастливее всего:
+	HappinessPick: Нажмите на голову NPC.
+	HappinessLove: Обожает: {0}
+	HappinessLike: Нравится: {0}
+	HappinessDislike: Не нравится: {0}
+	HappinessHate: Ненавидит: {0}
+	HappinessNone: Нет предпочтений.
+	HappinessCrowd: Все счастливее, если рядом живут не больше 2 других NPC.
 	BlueprintMaterial: Материал:
 	BlueprintPickMaterial: Выбери материал.
 	BlueprintNoMaterials: Материалы не найдены.
@@ -269,6 +282,11 @@ Configs: {
 		FocusTerminalSearch: {
 			Label: Сразу печатать в поиске терминала при открытии
 			Tooltip: Пока ты печатаешь, клавиши мода (N, [ и ]) не работают
+		}
+
+		ChestCountTooltip: {
+			Label: Показывать в подсказках, сколько предметов в сундуках
+			Tooltip: Пока терминал в досягаемости (или с вами его портативный терминал)
 		}
 
 		ChestEffects: {

@@ -16,6 +16,8 @@ UI: {
 	CategoryConsumables: Mikstury i przedmioty jednorazowe
 	CategoryMaterials: Materiały
 	CategoryMisc: Różne
+	CategoryUpgrades: Następne ulepszenia (według pokonanych bossów)
+	InChests: W twoich skrzyniach: {0}
 	NoResults: Żaden przedmiot nie pasuje do wyszukiwania.
 	Hint:
 		'''
@@ -65,6 +67,17 @@ UI: {
 	BlueprintTreeVillage: Wioska na drzewach
 	BlueprintBigTree: Duże drzewo
 	BlueprintThickTree: Grube drzewo
+	BlueprintHerbGarden: Ogród ziół
+	BlueprintFishingPond: Staw rybacki
+	BlueprintBuffArena: Arena ze wzmocnieniami
+	HappinessTitle: Kto tu zamieszka? Wybierz NPC, aby zobaczyć, gdzie jest najszczęśliwszy:
+	HappinessPick: Kliknij głowę NPC.
+	HappinessLove: Uwielbia: {0}
+	HappinessLike: Lubi: {0}
+	HappinessDislike: Nie lubi: {0}
+	HappinessHate: Nienawidzi: {0}
+	HappinessNone: Brak preferencji.
+	HappinessCrowd: Wszyscy są szczęśliwsi, gdy w pobliżu mieszka najwyżej 2 innych NPC.
 	BlueprintMaterial: Materiał:
 	BlueprintPickMaterial: Wybierz materiał.
 	BlueprintNoMaterials: Nie znaleziono materiałów.
@@ -269,6 +282,11 @@ Configs: {
 		FocusTerminalSearch: {
 			Label: Pisz w wyszukiwarce terminala po jego otwarciu
 			Tooltip: Podczas pisania klawisze moda (N, [ i ]) nie działają
+		}
+
+		ChestCountTooltip: {
+			Label: Pokazuj w opisach przedmiotów, ile jest w skrzyniach
+			Tooltip: Gdy terminal jest w zasięgu (lub masz przy sobie jego przenośny terminal)
 		}
 
 		ChestEffects: {

@@ -39,6 +39,8 @@ namespace TerraIndex.Content.Building
 		// Chosen in the catalog. Kept for the session.
 		public int Selected { get; set; }
 		public int MaterialIndex { get; set; }
+		// Town NPC whose preferences the catalog shows (0: none).
+		public int HappinessNpc { get; set; }
 
 		public Blueprint Blueprint => Blueprints.All[Math.Clamp(Selected, 0, Blueprints.All.Length - 1)];
 		public BuildMaterial Material => MaterialIndex >= 0 && MaterialIndex < Blueprints.Materials.Count ? Blueprints.Materials[MaterialIndex] : null;
@@ -208,6 +210,9 @@ namespace TerraIndex.Content.Building
 					if (Blueprints.TileBrushes.TryGetValue(blueprint.TileAt(x, y), out Brush brush) && brush.Item(material) is int item and > 0) {
 						Point size = Blueprints.Size(item);
 						DrawIcon(spriteBatch, item, position, new Vector2(size.X, size.Y) * cell, alpha);
+					}
+					else if (blueprint.TileAt(x, y) == Blueprints.Water) {
+						spriteBatch.Draw(pixel, new Rectangle((int)position.X, (int)position.Y, (int)Math.Ceiling(cell), (int)Math.Ceiling(cell)), new Color(60, 110, 200) * (alpha * 0.8f));
 					}
 					if (blocked != null && blocked(new Point(x, y)))
 						spriteBatch.Draw(pixel, new Rectangle((int)position.X, (int)position.Y, (int)Math.Ceiling(cell), (int)Math.Ceiling(cell)), Color.Red * 0.45f);

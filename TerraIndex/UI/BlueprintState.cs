@@ -8,6 +8,7 @@ using TerraIndex.Content.Building;
 using TerraIndex.Content.Storage;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -16,6 +17,8 @@ using Terraria.UI;
 namespace TerraIndex.UI
 {
 	// Blueprint catalog (see BuildSystem): which house, which material and a small preview. Building is free.
+	// Below, the town NPCs: picking one shows the biomes and neighbours it loves, likes, dislikes and hates, to choose
+	// where its house goes.
 	public class BlueprintState : UIState
 	{
 		private UIPanel panel;
@@ -24,7 +27,8 @@ namespace TerraIndex.UI
 		{
 			panel = new UIPanel();
 			panel.Width.Set(640, 0);
-			panel.Height.Set(620, 0);
+			panel.Height.Set(760, 0);
+			panel.MaxHeight.Set(0, 0.96f);
 			panel.HAlign = panel.VAlign = 0.5f;
 			Append(panel);
 
@@ -58,6 +62,7 @@ namespace TerraIndex.UI
 	{
 		private const int Slot = 34;
 		private const float PreviewHeight = 160;
+		private const int Head = 28;
 
 		private readonly List<(Rectangle Area, Action Click)> hotspots = new();
 
@@ -157,6 +162,64 @@ namespace TerraIndex.UI
 				Utils.DrawBorderString(spriteBatch, hintLine, new Vector2(left, y), Color.LightGray, 0.75f);
 				y += 20;
 			}
+			y += 10;
+
+			DrawHappiness(spriteBatch, left, right, y);
+		}
+
+		private static readonly Color[] LevelColors = { new(120, 255, 120), new(190, 240, 170), new(255, 190, 110), new(255, 110, 100) };
+
+		// The town NPCs' heads; under them, the picked NPC's preferences, one line per level.
+		private void DrawHappiness(SpriteBatch spriteBatch, float left, float right, float y)
+		{
+			List<int> npcs = Happiness.Npcs;
+			if (npcs.Count == 0)
+				return;
+			Utils.DrawBorderString(spriteBatch, UIHelpers.T("HappinessTitle"), new Vector2(left, y), Color.White, 0.85f);
+			y += 26;
+
+			float x = left;
+			foreach (int type in npcs) {
+				if (x + Head > right) {
+					x = left;
+					y += Head + 4;
+				}
+				var area = new Rectangle((int)x, (int)y, Head, Head);
+				bool picked = type == Build.HappinessNpc;
+				bool hovered = area.Contains(Main.MouseScreen.ToPoint());
+				Utils.DrawInvBG(spriteBatch, area, (picked ? new Color(100, 120, 210) : hovered ? new Color(80, 95, 170) : new Color(55, 65, 130)) * 0.95f);
+				Texture2D texture = TextureAssets.NpcHead[NPC.TypeToDefaultHeadIndex(type)].Value;
+				float scale = Math.Min(1f, (Head - 6) / (float)Math.Max(texture.Width, texture.Height));
+				spriteBatch.Draw(texture, area.Center.ToVector2(), null, Color.White, 0f, texture.Size() / 2f, scale, SpriteEffects.None, 0f);
+				if (hovered)
+					Main.hoverItemName = Lang.GetNPCNameValue(type);
+				int npc = type;
+				hotspots.Add((area, () => Build.HappinessNpc = Build.HappinessNpc == npc ? 0 : npc));
+				x += Head + 4;
+			}
+			y += Head + 10;
+
+			if (Build.HappinessNpc <= 0) {
+				Utils.DrawBorderString(spriteBatch, UIHelpers.T("HappinessPick"), new Vector2(left, y), Color.LightGray, 0.75f);
+				return;
+			}
+			bool any = false;
+			for (int i = 0; i < Happiness.Levels.Length; i++) {
+				List<string> names = Happiness.Names(Build.HappinessNpc, Happiness.Levels[i]);
+				if (names.Count == 0)
+					continue;
+				any = true;
+				string text = UIHelpers.T("Happiness" + Happiness.Levels[i], string.Join(", ", names));
+				foreach (string line in UIHelpers.Wrap(text, right - left, 0.75f)) {
+					Utils.DrawBorderString(spriteBatch, line, new Vector2(left, y), LevelColors[i], 0.75f);
+					y += 20;
+				}
+			}
+			if (!any) {
+				Utils.DrawBorderString(spriteBatch, UIHelpers.T("HappinessNone"), new Vector2(left, y), Color.LightGray, 0.75f);
+				y += 20;
+			}
+			Utils.DrawBorderString(spriteBatch, UIHelpers.Fit(UIHelpers.T("HappinessCrowd"), right - left, 0.75f), new Vector2(left, y), Color.LightGray, 0.75f);
 		}
 
 		private static void Button(SpriteBatch spriteBatch, Rectangle area, string text, bool enabled, bool selected)

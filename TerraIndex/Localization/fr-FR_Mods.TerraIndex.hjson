@@ -16,6 +16,8 @@ UI: {
 	CategoryConsumables: Potions et consommables
 	CategoryMaterials: Matériaux
 	CategoryMisc: Divers
+	CategoryUpgrades: Prochaines améliorations (selon les boss vaincus)
+	InChests: Dans tes coffres : {0}
 	NoResults: Aucun objet ne correspond à la recherche.
 	Hint:
 		'''
@@ -65,6 +67,17 @@ UI: {
 	BlueprintTreeVillage: Village des arbres
 	BlueprintBigTree: Grand arbre
 	BlueprintThickTree: Arbre épais
+	BlueprintHerbGarden: Jardin d'herbes
+	BlueprintFishingPond: Étang de pêche
+	BlueprintBuffArena: Arène avec bonus
+	HappinessTitle: Qui va habiter ici ? Choisis un PNJ pour voir où il est le plus heureux :
+	HappinessPick: Clique sur la tête d'un PNJ.
+	HappinessLove: Adore : {0}
+	HappinessLike: Aime : {0}
+	HappinessDislike: N'aime pas : {0}
+	HappinessHate: Déteste : {0}
+	HappinessNone: Aucune préférence.
+	HappinessCrowd: Tous sont plus heureux avec au plus 2 autres PNJ à proximité.
 	BlueprintMaterial: Matériau :
 	BlueprintPickMaterial: Choisis un matériau.
 	BlueprintNoMaterials: Aucun matériau trouvé.
@@ -269,6 +282,11 @@ Configs: {
 		FocusTerminalSearch: {
 			Label: Écrire dans la recherche du terminal à l'ouverture
 			Tooltip: Pendant la saisie, les touches du mod (N, [ et ]) ne marchent pas
+		}
+
+		ChestCountTooltip: {
+			Label: Afficher dans les infobulles combien il y en a dans tes coffres
+			Tooltip: Tant qu'un terminal est à portée (ou que tu portes son terminal portable)
 		}
 
 		ChestEffects: {

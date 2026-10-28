@@ -16,6 +16,8 @@ UI: {
 	CategoryConsumables: Tränke und Verbrauchsgüter
 	CategoryMaterials: Materialien
 	CategoryMisc: Verschiedenes
+	CategoryUpgrades: Nächste Verbesserungen (für die besiegten Bosse)
+	InChests: In deinen Truhen: {0}
 	NoResults: Keine Gegenstände passen zur Suche.
 	Hint:
 		'''
@@ -65,6 +67,17 @@ UI: {
 	BlueprintTreeVillage: Baumdorf
 	BlueprintBigTree: Großer Baum
 	BlueprintThickTree: Dicker Baum
+	BlueprintHerbGarden: Kräutergarten
+	BlueprintFishingPond: Angelteich
+	BlueprintBuffArena: Arena mit Buffs
+	HappinessTitle: Wer wird hier wohnen? Wähle einen NPC, um zu sehen, wo er am glücklichsten ist:
+	HappinessPick: Klicke auf den Kopf eines NPCs.
+	HappinessLove: Liebt: {0}
+	HappinessLike: Mag: {0}
+	HappinessDislike: Mag nicht: {0}
+	HappinessHate: Hasst: {0}
+	HappinessNone: Keine Vorlieben.
+	HappinessCrowd: Alle sind glücklicher, wenn höchstens 2 andere NPCs in der Nähe wohnen.
 	BlueprintMaterial: Material:
 	BlueprintPickMaterial: Wähle ein Material.
 	BlueprintNoMaterials: Keine Materialien gefunden.
@@ -269,6 +282,11 @@ Configs: {
 		FocusTerminalSearch: {
 			Label: Beim Öffnen des Terminals ins Suchfeld tippen
 			Tooltip: Während du tippst, funktionieren die Tasten des Mods (N, [ und ]) nicht
+		}
+
+		ChestCountTooltip: {
+			Label: In Tooltips anzeigen, wie viele in deinen Truhen sind
+			Tooltip: Solange ein Terminal in Reichweite ist (oder du sein tragbares Terminal dabeihast)
 		}
 
 		ChestEffects: {

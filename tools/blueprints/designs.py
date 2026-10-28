@@ -5,7 +5,7 @@ docs/blueprints/*.png and writes TerraIndex/Content/Building/BlueprintDesigns.cs
 
 Each design has two layers of the same size, as rows of characters (what each one places is in
 Blueprints.TileBrushes / WallBrushes in the mod; build.py knows which ones are solid, furniture, lights...). Tile layer: ' ' leaves the cell as it is, '.' must be empty, '+' is covered by a piece of furniture whose
-top-left cell has its letter. Wall layer: ' ' leaves the background wall as it is.
+top-left cell has its letter, '~' is filled with water. Wall layer: ' ' leaves the background wall as it is.
 """
 
 # Furniture letters and their size (width, height). Must match the game's tiles.
@@ -37,6 +37,8 @@ FURNITURE = {
     'V': (3, 2),  # sofa
     'H': (4, 2),  # bathtub
     't': (1, 2),  # toilet (counts as a chair)
+    'A': (1, 2),  # heart lantern (hangs)
+    'N': (1, 2),  # star in a bottle (hangs)
 }
 
 
@@ -966,5 +968,89 @@ def tree(key, thicker):
     return d
 
 
+def herb_garden():
+    """An alchemist's hut and a garden of planter boxes: three rows of 27 boxes, four tiles apart so the player can
+    walk between them (planter boxes are jumped through like platforms), held between the hut and a post at the far
+    end. The seeds are planted by the player; any herb grows in any box. The hut is NPC housing with a bottle on its
+    table (a bottle works as an alchemy station) and a bay for the Alchemy Table."""
+    W, G = 40, 14                       # width, ground row
+    d = Design('HerbGarden', W, 15)
+    # The hut: walls of the material, a door into the garden, a red gable on top.
+    d.fill(0, G, 11, G, '#')
+    d.fill(0, 6, 11, 6, '#')
+    d.fill(0, 7, 0, G - 1, '#')
+    d.fill(11, 7, 11, G - 4, '#')
+    d.put('D', 11, G - 3)
+    d.fill(1, 7, 10, G - 1, '.')
+    d.wall(0, 7, 11, G - 1, 'w')
+    d.wall(3, 8, 4, 9, 'g')
+    gable(d, 0, 11, 5)
+    d.put('C', 1, G - 2)
+    d.put('T', 2, G - 2)
+    d.put('b', 3, G - 3)
+    d.put('c', 4, G - 3)
+    d.put('l', 5, 7)
+    d.labels.append((7, G - 4, 'Alchemy Table'))
+    d.rooms.append((6, G - 1))
+    # The garden: rows of planter boxes from the hut's wall to a post of the material at the far end.
+    for y in (G, G - 4, G - 8):
+        d.fill(12, y, W - 2, y, '=')
+    d.fill(W - 1, G - 8, W - 1, G, '#')
+    return d
+
+
+def fishing_pond():
+    """A pond of 312 water tiles (more than the 300 that fishing needs for full power), a pier over it and a
+    fisherman's hut on stilts at the end of the pier, under a red gable. The hut is NPC housing."""
+    W, H = 65, 20
+    d = Design('FishingPond', W, H)
+    G, F = H - 1, 12                    # bottom row, pier and hut floor
+    # The basin and its water.
+    d.fill(0, G, W - 1, G, '#')
+    d.fill(0, F, 0, G - 1, '#')
+    d.fill(53, F, 53, G - 1, '#')
+    d.fill(1, F + 1, 52, G - 1, '~')
+    d.fill(30, F, 52, F, '-')
+    # The hut on stilts.
+    d.fill(53, F, W - 1, F, '#')
+    d.fill(53, 6, W - 1, 6, '#')
+    d.fill(53, 7, 53, F - 4, '#')
+    d.put('D', 53, F - 3)
+    d.fill(W - 1, 7, W - 1, F - 1, '#')
+    d.fill(54, 7, W - 2, F - 1, '.')
+    d.wall(53, 7, W - 1, F - 1, 'w')
+    d.wall(59, 8, 60, 9, 'g')
+    gable(d, 53, W - 1, 5)
+    for x in (57, W - 2):
+        d.fill(x, F + 1, x, G - 1, '|')
+    d.put('C', 55, F - 2)
+    d.put('T', 56, F - 2)
+    d.put('u', 57, F - 3)
+    d.put('l', 61, 7)
+    d.put('Z', 62, F - 2)
+    d.rooms.append((58, F - 3))
+    return d
+
+
+def buff_arena():
+    """A boss arena of four rows of platforms, 100 wide and six apart, with campfires on them and heart lanterns
+    and stars in a bottle hanging under them, so the regeneration and mana buffs reach every row."""
+    W = 100
+    rows = (2, 8, 14, 20)
+    d = Design('BuffArena', W, rows[-1] + 1)
+    for y in rows:
+        d.fill(0, y, W - 1, y, '-')
+    for k, y in enumerate(rows):
+        # Campfires stand on every row, staggered from one row to the next.
+        for x in ((18, 48, 78) if k % 2 == 0 else (33, 63)):
+            d.put('f', x, y - 2)
+        if y != rows[-1]:
+            for x in (10, 50, 90):
+                d.put('A', x, y + 1)
+            for x in (30, 70):
+                d.put('N', x, y + 1)
+    return d
+
+
 DESIGNS = [small_house, two_floors, tower, medieval, castle, pagoda, wizard_tower, craftsman_house, tree_village,
-           big_tree, thick_tree, arena]
+           big_tree, thick_tree, arena, herb_garden, fishing_pond, buff_arena]

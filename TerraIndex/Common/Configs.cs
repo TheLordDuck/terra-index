@@ -34,6 +34,9 @@ namespace TerraIndex.Common
 		[DefaultValue(true)]
 		public bool FocusTerminalSearch;
 
+		[DefaultValue(true)]
+		public bool ChestCountTooltip;
+
 		[Header("Effects")]
 		[DefaultValue(true)]
 		public bool ChestEffects;

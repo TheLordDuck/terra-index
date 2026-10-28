@@ -18,7 +18,8 @@ namespace TerraIndex.UI
 {
 	// Item grid (every item in the index, chest contents in the terminal), shown one page at a time.
 	// Only the current page is drawn, and item textures are loaded a few per frame, so big modpacks don't freeze the game.
-	// Header: one tab per item category (ItemCategories), with its count in the tooltip.
+	// Header: one tab per item category (ItemCategories), with its count in the tooltip. The recipe index's grid also
+	// has the Next upgrades tab (Upgrades), worked out again on every refresh.
 	// Footer: |< < [page bar] > >|. The mouse wheel turns pages (Shift: 10 at a time); dragging the bar jumps to a page on release.
 	public class ItemGrid : UIElement
 	{
@@ -44,8 +45,10 @@ namespace TerraIndex.UI
 		private int rows = 1;
 		private Vector2 origin;
 		private ItemCategory category = ItemCategory.All;
-		private readonly int[] counts = new int[ItemCategories.Tabs.Length];
-		private readonly Rectangle[] tabs = new Rectangle[ItemCategories.Tabs.Length];
+		private readonly ItemCategory[] tabList;
+		private readonly int[] counts = new int[Enum.GetValues<ItemCategory>().Length];
+		private readonly Rectangle[] tabs;
+		private HashSet<int> upgrades;
 
 		// Footer layout from the last draw.
 		private Rectangle first, previous, next, last, bar;
@@ -61,9 +64,11 @@ namespace TerraIndex.UI
 		public string EmptyText { get; set; } = UIHelpers.T("NoResults");
 		private int PageSize => columns * rows;
 
-		public ItemGrid(Func<IEnumerable<Item>> source)
+		public ItemGrid(Func<IEnumerable<Item>> source, bool upgradesTab = false)
 		{
 			this.source = source;
+			tabList = upgradesTab ? ItemCategories.IndexTabs : ItemCategories.Tabs;
+			tabs = new Rectangle[tabList.Length];
 		}
 
 		public static void ClearCache()
@@ -86,7 +91,15 @@ namespace TerraIndex.UI
 			counts[(int)ItemCategory.All] = matching.Count;
 			foreach (Item item in matching)
 				counts[(int)ItemCategories.Of(item.type)]++;
-			items = category == ItemCategory.All ? matching : matching.Where(item => ItemCategories.Of(item.type) == category).ToList();
+			if (tabList.Contains(ItemCategory.Upgrades)) {
+				upgrades = Upgrades.Find(Main.LocalPlayer);
+				counts[(int)ItemCategory.Upgrades] = matching.Count(item => upgrades.Contains(item.type));
+			}
+			items = category switch {
+				ItemCategory.All => matching,
+				ItemCategory.Upgrades => matching.Where(item => upgrades.Contains(item.type)).ToList(),
+				_ => matching.Where(item => ItemCategories.Of(item.type) == category).ToList(),
+			};
 		}
 
 		private void SetCategory(ItemCategory value)
@@ -183,7 +196,7 @@ namespace TerraIndex.UI
 			Point mouse = evt.MousePosition.ToPoint();
 			int tab = Array.FindIndex(tabs, area => area.Contains(mouse));
 			if (tab >= 0)
-				SetCategory(ItemCategories.Tabs[tab]);
+				SetCategory(tabList[tab]);
 			else if (first.Contains(mouse))
 				SetPage(0);
 			else if (previous.Contains(mouse))
@@ -252,7 +265,7 @@ namespace TerraIndex.UI
 			// Narrow panels shrink the gap between tabs instead of cutting the last ones off.
 			int gap = Math.Clamp(((int)inner.Width - tabs.Length * TabSize) / Math.Max(1, tabs.Length - 1), 0, 4);
 			for (int i = 0; i < tabs.Length; i++) {
-				ItemCategory tab = ItemCategories.Tabs[i];
+				ItemCategory tab = tabList[i];
 				Rectangle area = tabs[i] = new Rectangle((int)inner.X + i * (TabSize + gap), (int)inner.Y, TabSize, TabSize);
 				bool hovered = area.Contains(mouse);
 				Color background = tab == category ? new Color(100, 120, 210) : hovered ? new Color(80, 95, 170) : new Color(55, 65, 130);
@@ -261,12 +274,12 @@ namespace TerraIndex.UI
 				Main.GetItemDrawFrame(ItemCategories.Icon(tab), out Texture2D texture, out Rectangle frame);
 				float scale = Math.Min(1f, (TabSize - 10) / (float)Math.Max(frame.Width, frame.Height));
 				// Tabs with nothing in them (for the current search) are dimmed.
-				Color color = counts[i] > 0 ? Color.White : Color.White * 0.35f;
+				Color color = counts[(int)tab] > 0 ? Color.White : Color.White * 0.35f;
 				spriteBatch.Draw(texture, area.Center.ToVector2(), frame, color, 0f, frame.Size() / 2f, scale, SpriteEffects.None, 0f);
 
 				if (hovered) {
 					Main.LocalPlayer.mouseInterface = true;
-					Main.hoverItemName = $"{ItemCategories.Name(tab)} ({counts[i]})";
+					Main.hoverItemName = $"{ItemCategories.Name(tab)} ({counts[(int)tab]})";
 				}
 			}
 		}

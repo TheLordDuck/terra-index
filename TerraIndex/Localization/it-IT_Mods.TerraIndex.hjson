@@ -16,6 +16,8 @@ UI: {
 	CategoryConsumables: Pozioni e consumabili
 	CategoryMaterials: Materiali
 	CategoryMisc: Varie
+	CategoryUpgrades: Prossimi potenziamenti (in base ai boss sconfitti)
+	InChests: Nei tuoi forzieri: {0}
 	NoResults: Nessun oggetto corrisponde alla ricerca.
 	Hint:
 		'''
@@ -65,6 +67,17 @@ UI: {
 	BlueprintTreeVillage: Villaggio sugli alberi
 	BlueprintBigTree: Albero grande
 	BlueprintThickTree: Albero robusto
+	BlueprintHerbGarden: Orto di erbe
+	BlueprintFishingPond: Laghetto da pesca
+	BlueprintBuffArena: Arena con potenziamenti
+	HappinessTitle: Chi abiterà qui? Scegli un PNG per vedere dove è più felice:
+	HappinessPick: Clicca sulla testa di un PNG.
+	HappinessLove: Adora: {0}
+	HappinessLike: Gli piace: {0}
+	HappinessDislike: Non gli piace: {0}
+	HappinessHate: Odia: {0}
+	HappinessNone: Nessuna preferenza.
+	HappinessCrowd: Tutti sono più felici con al massimo 2 altri PNG vicino.
 	BlueprintMaterial: Materiale:
 	BlueprintPickMaterial: Scegli un materiale.
 	BlueprintNoMaterials: Nessun materiale trovato.
@@ -269,6 +282,11 @@ Configs: {
 		FocusTerminalSearch: {
 			Label: Scrivi nella ricerca del terminale all'apertura
 			Tooltip: Mentre scrivi, i tasti della mod (N, [ e ]) non funzionano
+		}
+
+		ChestCountTooltip: {
+			Label: Mostra nei tooltip quanti ce ne sono nei tuoi forzieri
+			Tooltip: Finché un terminale è a portata (o porti il suo terminale portatile)
 		}
 
 		ChestEffects: {

@@ -16,6 +16,8 @@ UI: {
 	CategoryConsumables: Poções e consumíveis
 	CategoryMaterials: Materiais
 	CategoryMisc: Diversos
+	CategoryUpgrades: Próximas melhorias (pelos chefes que você derrotou)
+	InChests: Nos seus baús: {0}
 	NoResults: Nenhum item corresponde à pesquisa.
 	Hint:
 		'''
@@ -65,6 +67,17 @@ UI: {
 	BlueprintTreeVillage: Vila das árvores
 	BlueprintBigTree: Árvore grande
 	BlueprintThickTree: Árvore grossa
+	BlueprintHerbGarden: Horta de ervas
+	BlueprintFishingPond: Lago de pesca
+	BlueprintBuffArena: Arena com bônus
+	HappinessTitle: Quem vai morar aqui? Escolha um NPC para ver onde ele fica mais feliz:
+	HappinessPick: Clique na cabeça de um NPC.
+	HappinessLove: Ama: {0}
+	HappinessLike: Gosta: {0}
+	HappinessDislike: Não gosta: {0}
+	HappinessHate: Odeia: {0}
+	HappinessNone: Sem preferências.
+	HappinessCrowd: Todos ficam mais felizes com no máximo 2 outros NPCs morando perto.
 	BlueprintMaterial: Material:
 	BlueprintPickMaterial: Escolha um material.
 	BlueprintNoMaterials: Nenhum material encontrado.
@@ -269,6 +282,11 @@ Configs: {
 		FocusTerminalSearch: {
 			Label: Digitar na pesquisa do terminal ao abri-lo
 			Tooltip: Enquanto você digita, as teclas do mod (N, [ e ]) não funcionam
+		}
+
+		ChestCountTooltip: {
+			Label: Mostrar nas dicas dos itens quantos há nos seus baús
+			Tooltip: Enquanto houver um terminal ao alcance (ou você levar o terminal portátil dele)
 		}
 
 		ChestEffects: {

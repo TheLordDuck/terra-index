@@ -16,6 +16,8 @@ UI: {
 	CategoryConsumables: 药水和消耗品
 	CategoryMaterials: 材料
 	CategoryMisc: 杂项
+	CategoryUpgrades: 下一步升级（根据已击败的 Boss）
+	InChests: 你的箱子里：{0}
 	NoResults: 没有符合搜索的物品。
 	Hint:
 		'''
@@ -65,6 +67,17 @@ UI: {
 	BlueprintTreeVillage: 树屋村
 	BlueprintBigTree: 大树
 	BlueprintThickTree: 粗壮大树
+	BlueprintHerbGarden: 草药园
+	BlueprintFishingPond: 钓鱼池
+	BlueprintBuffArena: 增益竞技场
+	HappinessTitle: 谁会住在这里？选择一个城镇 NPC，查看它在哪里最快乐：
+	HappinessPick: 点击 NPC 的头像。
+	HappinessLove: 喜爱：{0}
+	HappinessLike: 喜欢：{0}
+	HappinessDislike: 不喜欢：{0}
+	HappinessHate: 讨厌：{0}
+	HappinessNone: 没有偏好。
+	HappinessCrowd: 附近其他 NPC 不超过 2 个时，他们都会更快乐。
 	BlueprintMaterial: 材料：
 	BlueprintPickMaterial: 请选择一种材料。
 	BlueprintNoMaterials: 没有找到材料。
@@ -269,6 +282,11 @@ Configs: {
 		FocusTerminalSearch: {
 			Label: 打开终端时直接在搜索框中输入
 			Tooltip: 输入时，模组的按键（N、[ 和 ]）不起作用
+		}
+
+		ChestCountTooltip: {
+			Label: 在物品提示中显示箱子里的数量
+			Tooltip: 终端在范围内时（或携带其便携终端时）
 		}
 
 		ChestEffects: {

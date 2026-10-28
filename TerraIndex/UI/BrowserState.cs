@@ -44,7 +44,7 @@ namespace TerraIndex.UI
 			help.Top.Set(-4, 0);
 			panel.Append(help);
 
-			grid = new ItemGrid(() => RecipeDatabase.AllItems.Select(type => ContentSamples.ItemsByType[type]));
+			grid = new ItemGrid(() => RecipeDatabase.AllItems.Select(type => ContentSamples.ItemsByType[type]), upgradesTab: true);
 			grid.Top.Set(76, 0);
 			grid.Width.Set(400, 0);
 			grid.Height.Set(-76, 1f);
@@ -70,9 +70,9 @@ namespace TerraIndex.UI
 		public override void OnActivate()
 		{
 			Layout();
-			// The item list only exists once recipes are loaded, not when the UI is initialized.
-			if (grid.Count == 0)
-				grid.Refresh();
+			// The item list only exists once recipes are loaded, not when the UI is initialized; and the Next upgrades tab
+			// follows the player's gear and the bosses beaten.
+			grid.Refresh();
 		}
 
 		public override void OnDeactivate() => search.Unfocus();

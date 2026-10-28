@@ -29,6 +29,10 @@ list, and rebind the N / [ / ] keys if you had changed them.
 - Mouse wheel over the right panel: switch recipe.
 - Tabs above the items split them by type: all, weapons and ammo, tools, armor, accessories, blocks and furniture,
   potions and consumables, materials (ores and bars too), and miscellaneous (hover a tab for its name and count).
+- The **Next upgrades** tab (the Night's Edge, second) suggests gear you can craft that beats yours: the strongest
+  weapons of each class you use, armor with more defense than what you wear, and a stronger pickaxe. It only
+  suggests what the bosses you have beaten let you reach (by rarity), so modded items with their own rarities
+  don't show up. Click one and set it as your goal from the **Tree** tab.
 - The item list is split into pages: use the buttons at the bottom, the mouse wheel (Shift: 10 pages at a time),
   or drag the page bar.
 - Esc closes the index.
@@ -50,6 +54,8 @@ index can craft straight from the terminal's chests:
   anvil, furnace, etc. into the network and you can craft from anywhere with the Portable Terminal. A Hellforge
   also counts as a Furnace, a Mythril Anvil as an Anvil, and so on.
 - Special conditions (near water, lava, honey, snow biome...) are checked where you stand.
+- Every item's tooltip (in your inventory, chests, shops...) says **"In your chests: N"** while the terminal is in
+  reach. It can be turned off in the settings.
 - Ingredients are taken **from the chests first**, and whatever they lack **from your inventory**, so you can mix
   both (e.g. 5 bars in the chests and 5 in your pocket for a 10-bar recipe).
 - **Take missing** (above the craft buttons) does the opposite: it takes out of the chests whatever your inventory
@@ -144,9 +150,13 @@ Craft a **Blueprint** (10 of any wood at a work bench) to build ready-made house
    crafting station), **tree village** (a big lodge with 30 NPC rooms between two big trees, to go above the
    craftsman's house), **big tree** (a living wood tree from halfway up its trunk: branches that curve out and
    thin down into clusters of leaves, with vines; put it on top of a trunk you build, or on the ground), **thick tree** (the same
-   tree with a trunk and branches two tiles thicker) or boss arena. The big ones mix fixed materials (gray brick, red brick or shingle roofs, glass windows, banners,
+   tree with a trunk and branches two tiles thicker), boss arena, **herb garden** (an alchemist's hut and three rows
+   of planter boxes for your seeds), **fishing pond** (312 tiles of water, a pier and a fisherman's hut) or **arena
+   with buffs** (four rows of platforms with campfires, heart lanterns and stars in a bottle). The big ones mix fixed materials (gray brick, red brick or shingle roofs, glass windows, banners,
    fireplaces) with the wood you pick for the frame and the furniture. Pictures of all of them are in
    [`docs/blueprints/`](../docs/blueprints/). **Place** closes the catalog.
+   Under it, click a town NPC's head to see the biomes and neighbours it loves, likes, dislikes and hates, so you
+   know where to build its house.
 2. Move the mouse: a see-through preview shows where it goes, standing on the tile under the mouse. Red tiles mean
    something is in the way (grass and plants are cleared on their own).
 3. **Left click** to build it. It's free: the Blueprint itself is all it costs. Walls already there are kept. Every
@@ -174,6 +184,7 @@ In **Settings → Mod Configuration → Terra Index**:
 | Include the hotbar in "Deposit all" | Off |
 | Type in the terminal's search box when it opens | On |
 | Chest effects (sparks, light, sound) | On |
+| "In your chests" in item tooltips | On |
 
 | Server settings (the host's, synced to everyone) | Default |
 |---|---|
@@ -183,6 +194,12 @@ In **Settings → Mod Configuration → Terra Index**:
 | Allow the Portable Terminal | On |
 
 ## Changelog
+
+**Next version** (not released yet)
+- New blueprints: herb garden, fishing pond (it comes with its water) and arena with buffs.
+- The blueprint catalog shows what each town NPC loves, likes, dislikes and hates.
+- **Next upgrades** tab in the recipe index.
+- Item tooltips say how many are in your chests while a terminal is in reach.
 
 **1.0**: first release on the Steam Workshop, with everything from 0.9.
 
