@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework><Nullable>disable</Nullable></PropertyGroup>
+  <ItemGroup><Reference Include="FNA"><HintPath>C:\SteamLibrary\steamapps\common\tModLoader\Libraries\FNA\1.0.0\FNA.dll</HintPath></Reference></ItemGroup>
+</Project>

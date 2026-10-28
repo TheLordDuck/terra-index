@@ -18,7 +18,11 @@ UI: {
 	CategoryMisc: Varios
 	CategoryUpgrades: Siguientes mejoras (según los jefes que has derrotado)
 	InChests: En tus cofres: {0}
+	DummyDamage: Últimos {0}s: {1} de daño ({2} DPS)
+	DummyTotal: Total: {0} de daño
 	NoResults: Ningún objeto coincide con la búsqueda.
+	UpgradesButton: Siguientes mejoras ({0})
+	UpgradesEmpty: Nada que sugerir: no hay equipo fabricable mejor que el tuyo entre lo que permiten los jefes que has derrotado. Derrota otro jefe, o lleva encima las armas que usas.
 	Hint:
 		'''
 		Clic izquierdo en un objeto: cómo se fabrica.
@@ -70,12 +74,14 @@ UI: {
 	BlueprintHerbGarden: Huerto de hierbas
 	BlueprintFishingPond: Estanque de pesca
 	BlueprintBuffArena: Arena con potenciadores
+	BlueprintTabBuildings: Construcciones
+	BlueprintTabNpcs: PNJ
 	HappinessTitle: ¿Quién vivirá aquí? Elige un PNJ para ver dónde es más feliz:
 	HappinessPick: Haz clic en la cabeza de un PNJ.
-	HappinessLove: Le encanta: {0}
-	HappinessLike: Le gusta: {0}
-	HappinessDislike: No le gusta: {0}
-	HappinessHate: Odia: {0}
+	HappinessLove: Le encanta:
+	HappinessLike: Le gusta:
+	HappinessDislike: No le gusta:
+	HappinessHate: Odia:
 	HappinessNone: Sin preferencias.
 	HappinessCrowd: Todos son más felices si no viven más de 2 PNJ cerca.
 	BlueprintMaterial: Material:
@@ -196,9 +202,33 @@ UI: {
 		'''
 	TipPlaced: ¡Terminal colocado! Conéctalo a tus cofres con cable rojo (se pone con: {0}, lo vende: {1}) y haz clic derecho en él.
 	TipOpened: Consejo: pasa el ratón por el botón ? para ver los controles del terminal. "Recetas" abre el índice de recetas a su lado.
+	TeleporterNotLinked: Este teletransportador no está vinculado. Con el Vinculador en la mano, haz clic derecho en él y luego en otro.
+	TeleporterPicked: Teletransportador elegido. Haz clic derecho en otro para vincularlos.
+	TeleporterCancelled: Vinculación cancelada.
+	TeleporterLinked: Teletransportadores vinculados (a {0} bloques).
+	TeleporterPickedTooltip: Hay un teletransportador elegido: haz clic derecho en otro para vincularlos
 }
 
 Items: {
+	WirelessTeleporterItem: {
+		DisplayName: Teletransportador inalámbrico
+		Tooltip:
+			'''
+			No necesita cables: vincúlalo a otro con el Vinculador de teletransportadores
+			Clic derecho para teletransportarte al vinculado
+			Puedes ponerte de pie encima
+			'''
+	}
+
+	TeleporterLinkerItem: {
+		DisplayName: Vinculador de teletransportadores
+		Tooltip:
+			'''
+			Con él en la mano, haz clic derecho en un teletransportador inalámbrico y luego en otro para vincularlos
+			Clic derecho otra vez en el primero para cancelar
+			'''
+	}
+
 	TerminalItem: {
 		DisplayName: Terminal
 		Tooltip:
@@ -239,7 +269,41 @@ Items: {
 	}
 }
 
+NPCs: {
+	Apothecary: {
+		DisplayName: Boticario
+		Bestiary: Un alquimista ambulante que vende pociones de combate casi regaladas. Nadie sabe cómo mantiene esos precios.
+		Census.SpawnCondition: Tras derrotar al Ojo de Cthulhu
+
+		Dialogue: {
+			0: Cada poción cuesta una moneda de plata. No preguntes de dónde saco los ingredientes.
+			1: ¿Pelear contra un jefe sin Piel de hierro? Qué valiente.
+			2: Ira y Furia juntas. Hazme caso.
+			3: Si algo explota, no ha sido culpa mía.
+		}
+
+		TownNPCMood: {
+			// Content: Estoy feliz.
+			// NoHome: Detesto no tener un hogar.
+			// FarFromHome: Estoy demasiado lejos de casa.
+			// LoveSpace: Me encanta tener tanto espacio.
+			// DislikeCrowded: No me gusta tener tan poco espacio.
+			// HateCrowded: Detesto tener poco espacio.
+			// LoveBiome: Adoro el biomedio {BiomeName}.
+			// LikeBiome: Me gusta el biomedio {BiomeName}.
+			// DislikeBiome: No me gusta el biomedio {BiomeName}.
+			// LoveNPC: Adoro a {NPCName}.
+			// LikeNPC: Me gusta {NPCName}.
+			// DislikeNPC: "{NPCName} no me cae nada bien."
+			// HateNPC: Detesto a {NPCName}.
+			// LikeNPC_Princess: Me gusta {NPCName}.
+			// Princess_LovesNPC: Me gusta {NPCName}.
+		}
+	}
+}
+
 Tiles: {
+	WirelessTeleporterTile.MapEntry: Teletransportador inalámbrico
 	TerminalTile.MapEntry: Terminal
 	RadioTile.MapEntry: Radio
 }
@@ -292,6 +356,11 @@ Configs: {
 		ChestEffects: {
 			Label: Efectos en los cofres
 			Tooltip: Chispas, luz y un sonido en los cofres de los que salen o a los que entran objetos
+		}
+
+		DummyDamageMeter: {
+			Label: Medidor de daño en el muñeco de pruebas
+			Tooltip: El daño que recibió en los últimos 5 y 10 segundos, y el daño por segundo
 		}
 	}
 

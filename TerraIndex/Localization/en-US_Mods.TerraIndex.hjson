@@ -18,7 +18,11 @@ UI: {
 	CategoryMisc: Miscellaneous
 	CategoryUpgrades: Next upgrades (for the bosses you have beaten)
 	InChests: In your chests: {0}
+	DummyDamage: Last {0}s: {1} damage ({2} DPS)
+	DummyTotal: Total: {0} damage
 	NoResults: No items match your search.
+	UpgradesButton: Next upgrades ({0})
+	UpgradesEmpty: Nothing to suggest: no craftable gear beats yours among what the bosses you have beaten let you make. Beat another boss, or carry the weapons you use.
 	Hint:
 		'''
 		Left click an item: how to craft it.
@@ -70,12 +74,14 @@ UI: {
 	BlueprintHerbGarden: Herb garden
 	BlueprintFishingPond: Fishing pond
 	BlueprintBuffArena: Arena with buffs
+	BlueprintTabBuildings: Buildings
+	BlueprintTabNpcs: Town NPCs
 	HappinessTitle: Who will live here? Pick a town NPC to see where they are happiest:
 	HappinessPick: Click an NPC's head.
-	HappinessLove: Loves: {0}
-	HappinessLike: Likes: {0}
-	HappinessDislike: Dislikes: {0}
-	HappinessHate: Hates: {0}
+	HappinessLove: Loves:
+	HappinessLike: Likes:
+	HappinessDislike: Dislikes:
+	HappinessHate: Hates:
 	HappinessNone: No preferences.
 	HappinessCrowd: All of them are happier with no more than 2 other NPCs living close by.
 	BlueprintMaterial: Material:
@@ -196,9 +202,33 @@ UI: {
 		'''
 	TipPlaced: Terminal placed! Connect it to your chests with red wire (placed with the {0}, sold by the {1}), then right click it.
 	TipOpened: Tip: hover over the ? button to see the terminal's controls. "Recipes" opens the recipe index next to it.
+	TeleporterNotLinked: This teleporter isn't linked. Hold a Teleporter Linker and right click it, then another one.
+	TeleporterPicked: Teleporter picked. Right click another one to link them.
+	TeleporterCancelled: Link cancelled.
+	TeleporterLinked: Teleporters linked ({0} blocks apart).
+	TeleporterPickedTooltip: A teleporter is picked: right click another one to link them
 }
 
 Items: {
+	WirelessTeleporterItem: {
+		DisplayName: Wireless Teleporter
+		Tooltip:
+			'''
+			Needs no wire: link it to another one with the Teleporter Linker
+			Right click it to teleport to the linked one
+			You can stand on it
+			'''
+	}
+
+	TeleporterLinkerItem: {
+		DisplayName: Teleporter Linker
+		Tooltip:
+			'''
+			Hold it and right click a wireless teleporter, then another one, to link them
+			Right click the first one again to cancel
+			'''
+	}
+
 	TerminalItem: {
 		DisplayName: Terminal
 		Tooltip:
@@ -239,7 +269,41 @@ Items: {
 	}
 }
 
+NPCs: {
+	Apothecary: {
+		DisplayName: Apothecary
+		Bestiary: A wandering brewer who sells battle potions for next to nothing. Nobody knows how the prices stay so low.
+		Census.SpawnCondition: After defeating the Eye of Cthulhu
+
+		Dialogue: {
+			0: Every potion is one silver. Don't ask where the ingredients come from.
+			1: Fighting a boss without Ironskin? Bold.
+			2: Wrath and Rage together. Trust me.
+			3: If something explodes, it wasn't my fault.
+		}
+
+		TownNPCMood: {
+			Content: Estoy feliz.
+			NoHome: Detesto no tener un hogar.
+			FarFromHome: Estoy demasiado lejos de casa.
+			LoveSpace: Me encanta tener tanto espacio.
+			DislikeCrowded: No me gusta tener tan poco espacio.
+			HateCrowded: Detesto tener poco espacio.
+			LoveBiome: Adoro el biomedio {BiomeName}.
+			LikeBiome: Me gusta el biomedio {BiomeName}.
+			DislikeBiome: No me gusta el biomedio {BiomeName}.
+			LoveNPC: Adoro a {NPCName}.
+			LikeNPC: Me gusta {NPCName}.
+			DislikeNPC: "{NPCName} no me cae nada bien."
+			HateNPC: Detesto a {NPCName}.
+			LikeNPC_Princess: Me gusta {NPCName}.
+			Princess_LovesNPC: Me gusta {NPCName}.
+		}
+	}
+}
+
 Tiles: {
+	WirelessTeleporterTile.MapEntry: Wireless Teleporter
 	TerminalTile.MapEntry: Terminal
 	RadioTile.MapEntry: Radio
 }
@@ -292,6 +356,11 @@ Configs: {
 		ChestEffects: {
 			Label: Chest effects
 			Tooltip: Sparks, light and a sound on the chests items go into or come out of
+		}
+
+		DummyDamageMeter: {
+			Label: Damage meter on the Target Dummy
+			Tooltip: Damage it took in the last 5 and 10 seconds, and the damage per second
 		}
 	}
 

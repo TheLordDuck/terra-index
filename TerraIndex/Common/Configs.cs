@@ -40,6 +40,9 @@ namespace TerraIndex.Common
 		[Header("Effects")]
 		[DefaultValue(true)]
 		public bool ChestEffects;
+
+		[DefaultValue(true)]
+		public bool DummyDamageMeter;
 	}
 
 	// Gameplay settings chosen by the host and synced to every player.

@@ -18,7 +18,11 @@ UI: {
 	CategoryMisc: Разное
 	CategoryUpgrades: Следующие улучшения (по побеждённым боссам)
 	InChests: В ваших сундуках: {0}
+	DummyDamage: Последние {0} с: {1} урона ({2} DPS)
+	DummyTotal: Всего: {0} урона
 	NoResults: Ни один предмет не подходит под поиск.
+	UpgradesButton: Следующие улучшения ({0})
+	UpgradesEmpty: Нечего предложить: среди того, что открывают побеждённые боссы, нет создаваемого снаряжения лучше твоего. Победи ещё одного босса или носи с собой оружие, которым пользуешься.
 	Hint:
 		'''
 		ЛКМ по предмету: как его создать.
@@ -70,12 +74,14 @@ UI: {
 	BlueprintHerbGarden: Сад трав
 	BlueprintFishingPond: Пруд для рыбалки
 	BlueprintBuffArena: Арена с баффами
+	BlueprintTabBuildings: Постройки
+	BlueprintTabNpcs: Жители
 	HappinessTitle: Кто будет здесь жить? Выберите NPC, чтобы узнать, где он счастливее всего:
 	HappinessPick: Нажмите на голову NPC.
-	HappinessLove: Обожает: {0}
-	HappinessLike: Нравится: {0}
-	HappinessDislike: Не нравится: {0}
-	HappinessHate: Ненавидит: {0}
+	HappinessLove: Обожает:
+	HappinessLike: Нравится:
+	HappinessDislike: Не нравится:
+	HappinessHate: Ненавидит:
 	HappinessNone: Нет предпочтений.
 	HappinessCrowd: Все счастливее, если рядом живут не больше 2 других NPC.
 	BlueprintMaterial: Материал:
@@ -196,9 +202,33 @@ UI: {
 		'''
 	TipPlaced: Терминал установлен! Соедини его с сундуками красным проводом (прокладывается: {0}, продаёт: {1}), затем нажми по нему ПКМ.
 	TipOpened: Совет: наведи курсор на кнопку ?, чтобы увидеть управление терминалом. «Рецепты» открывает указатель рецептов рядом.
+	TeleporterNotLinked: Этот телепорт не связан. Возьми связыватель телепортов и нажми ПКМ по нему, затем по другому.
+	TeleporterPicked: Телепорт выбран. Нажми ПКМ по другому, чтобы связать их.
+	TeleporterCancelled: Связывание отменено.
+	TeleporterLinked: Телепорты связаны (расстояние: {0} блоков).
+	TeleporterPickedTooltip: Выбран телепорт: нажми ПКМ по другому, чтобы связать их
 }
 
 Items: {
+	WirelessTeleporterItem: {
+		DisplayName: Беспроводной телепорт
+		Tooltip:
+			'''
+			Не нужны провода: свяжи его с другим с помощью связывателя телепортов
+			ПКМ — переместиться к связанному
+			На нём можно стоять
+			'''
+	}
+
+	TeleporterLinkerItem: {
+		DisplayName: Связыватель телепортов
+		Tooltip:
+			'''
+			Держи его и нажми ПКМ по беспроводному телепорту, затем по другому, чтобы связать их
+			Нажми по первому ещё раз для отмены
+			'''
+	}
+
 	TerminalItem: {
 		DisplayName: Терминал
 		Tooltip:
@@ -239,7 +269,41 @@ Items: {
 	}
 }
 
+NPCs: {
+	Apothecary: {
+		DisplayName: Аптекарь
+		Bestiary: Странствующий зельевар, который продаёт боевые зелья почти даром. Никто не знает, откуда такие цены.
+		Census.SpawnCondition: После победы над Глазом Ктулху
+
+		Dialogue: {
+			0: Каждое зелье стоит одну серебряную монету. Не спрашивай, откуда ингредиенты.
+			1: Драться с боссом без Железной кожи? Смело.
+			2: Гнев и Ярость вместе. Поверь мне.
+			3: Если что-то взорвётся, я тут ни при чём.
+		}
+
+		TownNPCMood: {
+			// Content: Estoy feliz.
+			// NoHome: Detesto no tener un hogar.
+			// FarFromHome: Estoy demasiado lejos de casa.
+			// LoveSpace: Me encanta tener tanto espacio.
+			// DislikeCrowded: No me gusta tener tan poco espacio.
+			// HateCrowded: Detesto tener poco espacio.
+			// LoveBiome: Adoro el biomedio {BiomeName}.
+			// LikeBiome: Me gusta el biomedio {BiomeName}.
+			// DislikeBiome: No me gusta el biomedio {BiomeName}.
+			// LoveNPC: Adoro a {NPCName}.
+			// LikeNPC: Me gusta {NPCName}.
+			// DislikeNPC: "{NPCName} no me cae nada bien."
+			// HateNPC: Detesto a {NPCName}.
+			// LikeNPC_Princess: Me gusta {NPCName}.
+			// Princess_LovesNPC: Me gusta {NPCName}.
+		}
+	}
+}
+
 Tiles: {
+	WirelessTeleporterTile.MapEntry: Беспроводной телепорт
 	TerminalTile.MapEntry: Терминал
 	RadioTile.MapEntry: Радио
 }
@@ -292,6 +356,11 @@ Configs: {
 		ChestEffects: {
 			Label: Эффекты сундуков
 			Tooltip: Искры, свет и звук у сундуков, в которые кладутся или из которых достаются предметы
+		}
+
+		DummyDamageMeter: {
+			Label: Счётчик урона на манекене-мишени
+			Tooltip: Урон за последние 5 и 10 секунд и урон в секунду
 		}
 	}
 

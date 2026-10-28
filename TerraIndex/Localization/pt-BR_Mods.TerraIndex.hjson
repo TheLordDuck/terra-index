@@ -18,7 +18,11 @@ UI: {
 	CategoryMisc: Diversos
 	CategoryUpgrades: Próximas melhorias (pelos chefes que você derrotou)
 	InChests: Nos seus baús: {0}
+	DummyDamage: Últimos {0}s: {1} de dano ({2} DPS)
+	DummyTotal: Total: {0} de dano
 	NoResults: Nenhum item corresponde à pesquisa.
+	UpgradesButton: Próximas melhorias ({0})
+	UpgradesEmpty: Nada a sugerir: nenhum equipamento fabricável supera o seu entre o que os chefes derrotados permitem. Derrote outro chefe, ou carregue as armas que você usa.
 	Hint:
 		'''
 		Clique esquerdo em um item: como fabricá-lo.
@@ -70,12 +74,14 @@ UI: {
 	BlueprintHerbGarden: Horta de ervas
 	BlueprintFishingPond: Lago de pesca
 	BlueprintBuffArena: Arena com bônus
+	BlueprintTabBuildings: Construções
+	BlueprintTabNpcs: NPCs
 	HappinessTitle: Quem vai morar aqui? Escolha um NPC para ver onde ele fica mais feliz:
 	HappinessPick: Clique na cabeça de um NPC.
-	HappinessLove: Ama: {0}
-	HappinessLike: Gosta: {0}
-	HappinessDislike: Não gosta: {0}
-	HappinessHate: Odeia: {0}
+	HappinessLove: Ama:
+	HappinessLike: Gosta:
+	HappinessDislike: Não gosta:
+	HappinessHate: Odeia:
 	HappinessNone: Sem preferências.
 	HappinessCrowd: Todos ficam mais felizes com no máximo 2 outros NPCs morando perto.
 	BlueprintMaterial: Material:
@@ -196,9 +202,33 @@ UI: {
 		'''
 	TipPlaced: Terminal colocado! Conecte-o aos seus baús com fio vermelho (colocado com: {0}, vendido por: {1}) e clique nele com o botão direito.
 	TipOpened: Dica: passe o mouse sobre o botão ? para ver os controles do terminal. "Receitas" abre o índice de receitas ao lado.
+	TeleporterNotLinked: Este teletransportador não está vinculado. Segure um Vinculador de teletransportadores e clique com o botão direito nele, depois em outro.
+	TeleporterPicked: Teletransportador escolhido. Clique com o botão direito em outro para vinculá-los.
+	TeleporterCancelled: Vínculo cancelado.
+	TeleporterLinked: Teletransportadores vinculados (a {0} blocos).
+	TeleporterPickedTooltip: Há um teletransportador escolhido: clique com o botão direito em outro para vinculá-los
 }
 
 Items: {
+	WirelessTeleporterItem: {
+		DisplayName: Teletransportador sem fio
+		Tooltip:
+			'''
+			Não precisa de fios: vincule-o a outro com o Vinculador de teletransportadores
+			Clique com o botão direito para se teletransportar até o vinculado
+			Dá para ficar em cima dele
+			'''
+	}
+
+	TeleporterLinkerItem: {
+		DisplayName: Vinculador de teletransportadores
+		Tooltip:
+			'''
+			Segure-o e clique com o botão direito em um teletransportador sem fio, depois em outro, para vinculá-los
+			Clique de novo no primeiro para cancelar
+			'''
+	}
+
 	TerminalItem: {
 		DisplayName: Terminal
 		Tooltip:
@@ -239,7 +269,41 @@ Items: {
 	}
 }
 
+NPCs: {
+	Apothecary: {
+		DisplayName: Boticário
+		Bestiary: Um alquimista andarilho que vende poções de combate quase de graça. Ninguém sabe como ele mantém esses preços.
+		Census.SpawnCondition: Depois de derrotar o Olho de Cthulhu
+
+		Dialogue: {
+			0: Cada poção custa uma moeda de prata. Não pergunte de onde vêm os ingredientes.
+			1: Enfrentar um chefe sem Pele de Ferro? Corajoso.
+			2: Ira e Fúria juntas. Confie em mim.
+			3: Se algo explodir, não foi culpa minha.
+		}
+
+		TownNPCMood: {
+			// Content: Estoy feliz.
+			// NoHome: Detesto no tener un hogar.
+			// FarFromHome: Estoy demasiado lejos de casa.
+			// LoveSpace: Me encanta tener tanto espacio.
+			// DislikeCrowded: No me gusta tener tan poco espacio.
+			// HateCrowded: Detesto tener poco espacio.
+			// LoveBiome: Adoro el biomedio {BiomeName}.
+			// LikeBiome: Me gusta el biomedio {BiomeName}.
+			// DislikeBiome: No me gusta el biomedio {BiomeName}.
+			// LoveNPC: Adoro a {NPCName}.
+			// LikeNPC: Me gusta {NPCName}.
+			// DislikeNPC: "{NPCName} no me cae nada bien."
+			// HateNPC: Detesto a {NPCName}.
+			// LikeNPC_Princess: Me gusta {NPCName}.
+			// Princess_LovesNPC: Me gusta {NPCName}.
+		}
+	}
+}
+
 Tiles: {
+	WirelessTeleporterTile.MapEntry: Teletransportador sem fio
 	TerminalTile.MapEntry: Terminal
 	RadioTile.MapEntry: Rádio
 }
@@ -292,6 +356,11 @@ Configs: {
 		ChestEffects: {
 			Label: Efeitos nos baús
 			Tooltip: Faíscas, luz e um som nos baús onde os itens entram ou de onde saem
+		}
+
+		DummyDamageMeter: {
+			Label: Medidor de dano no boneco de alvo
+			Tooltip: O dano recebido nos últimos 5 e 10 segundos e o dano por segundo
 		}
 	}
 

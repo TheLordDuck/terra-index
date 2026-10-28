@@ -39,7 +39,8 @@ namespace TerraIndex.Content.Building
 		// Chosen in the catalog. Kept for the session.
 		public int Selected { get; set; }
 		public int MaterialIndex { get; set; }
-		// Town NPC whose preferences the catalog shows (0: none).
+		// The catalog's tab (false: buildings, true: town NPCs), and the town NPC whose preferences it shows (0: none).
+		public bool NpcTab { get; set; }
 		public int HappinessNpc { get; set; }
 
 		public Blueprint Blueprint => Blueprints.All[Math.Clamp(Selected, 0, Blueprints.All.Length - 1)];

@@ -1,4 +1,4 @@
-# Testing checklist (version 0.9)
+# Testing checklist (version 1.1)
 
 0.4 compiles since 2026-10-22 (one type error fixed), but none of 0.4 to 0.7 has been tested in game yet. 0.7 was
 written without a compiler, and so were 0.8 and 0.9: build it first and copy any errors.
@@ -208,21 +208,25 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 - [ ] Herb garden: the three rows of planter boxes are placed (row by row, from the hut's wall to the post at the far end), you can jump up through them and drop down, and seeds can be planted in them
 - [ ] Herb garden: the hut is valid housing, and the bottle on its table works as an alchemy station
 - [ ] Fishing pond: the pond is full of water, doesn't leak, and the in-game preview shows the water in blue
-- [ ] Fishing pond: fishing from the pier doesn't say the pool is too small; the hut is valid housing
+- [ ] Fishing pond: the pond is 30 wide and 10 deep (300 tiles); fishing from the pier doesn't say the pool is too small; the hut is valid housing
 - [ ] Arena with buffs: campfires stand on the platforms and the heart lanterns and stars in a bottle hang under them; standing on any row gives Campfire, Heart Lamp and Star in a Bottle
 - [ ] **Multiplayer:** the other player sees the pond's water (not an empty basin)
 
 ## 48. NPC happiness in the catalog
 
-- [ ] Under the catalog, a row of town NPC heads (hover: the NPC's name); the panel fits on screen
-- [ ] Clicking a head shows "Loves / Likes / Dislikes / Hates" lines with biomes (in your language) and NPCs; clicking it again hides them
+- [ ] The catalog has two tabs, Buildings and Town NPCs; the Buildings one looks as before and nothing goes off the panel
+- [ ] Town NPCs tab: a grid of heads (hover: the NPC's name)
+- [ ] Clicking a head shows its name and "Loves / Likes / Dislikes / Hates" rows of biome icons (the bestiary's) and NPC heads; hovering one names it (in your language); clicking a neighbour's head shows that NPC; clicking the picked head again hides them
 - [ ] Compare a couple with the wiki (e.g. the Guide likes the forest, the Nurse loves the Arms Dealer)
 - [ ] With Calamity (or another mod adding town NPCs): its NPCs show up with their own preferences
 
 ## 49. Next upgrades tab
 
-- [ ] The index has a Night's Edge tab right after All; its tooltip says how many items it has
+- [ ] The index has a gold "Next upgrades (N)" button next to its title (it doesn't overlap the ? and X buttons, also next to the terminal); clicking it shows the suggestions and turns brighter, clicking again goes back to All
+- [ ] The Night's Edge tab right after All does the same; its tooltip says how many items it has
+- [ ] With nothing to suggest, the tab says why instead of showing an empty grid
 - [ ] New character (copper gear): it suggests better weapons of the classes you carry, armor pieces and a pickaxe, nothing from hardmode
+- [ ] Accessories: wearing Hermes Boots suggests Spectre Boots (once allowed by bosses); also 3 new accessories you don't have; never one you carry or wear
 - [ ] After beating bosses (or in a later world) it suggests later gear; never what you already carry or wear
 - [ ] Click a suggestion, Tree tab, set it as the goal: the goal panel tracks it
 - [ ] The terminal's grid doesn't have this tab
@@ -233,6 +237,19 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 - [ ] The number follows the chests (take some out: it goes down within a second)
 - [ ] Far from the terminal, or with the setting off, the line isn't there
 - [ ] Also in chests, shops and the index
+
+## 51. Wireless teleporters
+
+- [ ] Craft the Wireless Teleporter (Teleporter + 10 Wire, Tinkerer's Workshop) and the Teleporter Linker (Red Wrench + 3 Iron/Lead Bars, anvil); their sprites look right
+- [ ] Place two on the floor (3 wide); you can stand on them
+- [ ] Right click one without linking: message that it isn't linked
+- [ ] With the linker: right click one ("picked", the tooltip says so), right click the other: "linked (N blocks apart)"; both glow
+- [ ] Right click the picked one again: cancelled
+- [ ] Right click a linked one: you appear standing on the other one, with the teleporter effect; and back
+- [ ] Linking a third one to one of them leaves the old partner unlinked (no glow)
+- [ ] Breaking one drops it and leaves its partner unlinked
+- [ ] Leave and rejoin the world: links kept
+- [ ] **Multiplayer:** linking works for a client; teleporting to one far away (out of the loaded area) works; the other player sees you teleport
 
 ## 40 and 41. Languages and help
 
@@ -258,6 +275,22 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 - [ ] Changes made by another player still show up in an open terminal within a second (multiplayer)
 - [ ] Opening a terminal right after closing the recipe index shows its items (not an empty list)
 - [ ] The goal panel still updates when you pick up or use a material
+
+## Target Dummy damage meter
+
+- [ ] Hitting a Target Dummy shows over it the damage of the last 5 and 10 seconds, with the DPS of each, and the total
+- [ ] Swords, projectiles and minions count; debuff damage (On Fire!, Poisoned...) adds up too
+- [ ] The text goes away 10 seconds after the last hit, and the total starts over on the next one
+- [ ] The "Damage meter on the Target Dummy" setting hides it
+
+## Apothecary (town NPC)
+
+- [ ] After beating the Eye of Cthulhu, they move into a free house
+- [ ] The shop sells the combat potions for 1 silver each (37 items before Hardmode, 38 in Hardmode; no "Unable to fit" warning in client.log)
+- [ ] In Hardmode, Healing/Mana become Greater Healing/Greater Mana, and Fire/Poison/Party flasks become the Hardmode ones
+- [ ] After the Lunatic Cultist, Greater Healing becomes Super Healing
+- [ ] The sprite walks, talks and throws flasks at enemies without looking broken; the head shows on the map and housing menu
+- [ ] Name, chat lines, bestiary entry and happiness texts are translated
 
 ## 28. Sprites
 

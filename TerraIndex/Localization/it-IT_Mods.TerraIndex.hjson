@@ -18,7 +18,11 @@ UI: {
 	CategoryMisc: Varie
 	CategoryUpgrades: Prossimi potenziamenti (in base ai boss sconfitti)
 	InChests: Nei tuoi forzieri: {0}
+	DummyDamage: Ultimi {0}s: {1} danni ({2} DPS)
+	DummyTotal: Totale: {0} danni
 	NoResults: Nessun oggetto corrisponde alla ricerca.
+	UpgradesButton: Prossimi potenziamenti ({0})
+	UpgradesEmpty: Niente da suggerire: nessun equipaggiamento craftabile supera il tuo tra quelli permessi dai boss sconfitti. Sconfiggi un altro boss, o porta con te le armi che usi.
 	Hint:
 		'''
 		Clic sinistro su un oggetto: come crearlo.
@@ -70,12 +74,14 @@ UI: {
 	BlueprintHerbGarden: Orto di erbe
 	BlueprintFishingPond: Laghetto da pesca
 	BlueprintBuffArena: Arena con potenziamenti
+	BlueprintTabBuildings: Edifici
+	BlueprintTabNpcs: PNG
 	HappinessTitle: Chi abiterà qui? Scegli un PNG per vedere dove è più felice:
 	HappinessPick: Clicca sulla testa di un PNG.
-	HappinessLove: Adora: {0}
-	HappinessLike: Gli piace: {0}
-	HappinessDislike: Non gli piace: {0}
-	HappinessHate: Odia: {0}
+	HappinessLove: Adora:
+	HappinessLike: Gli piace:
+	HappinessDislike: Non gli piace:
+	HappinessHate: Odia:
 	HappinessNone: Nessuna preferenza.
 	HappinessCrowd: Tutti sono più felici con al massimo 2 altri PNG vicino.
 	BlueprintMaterial: Materiale:
@@ -196,9 +202,33 @@ UI: {
 		'''
 	TipPlaced: Terminale piazzato! Collegalo alle tue casse con filo rosso (si posa con: {0}, venduto da: {1}), poi fai clic destro su di esso.
 	TipOpened: Suggerimento: passa il mouse sul pulsante ? per vedere i comandi del terminale. "Ricette" apre l'indice delle ricette accanto.
+	TeleporterNotLinked: Questo teletrasporto non è collegato. Tieni in mano un Collegatore di teletrasporti e fai clic destro su di esso, poi su un altro.
+	TeleporterPicked: Teletrasporto scelto. Fai clic destro su un altro per collegarli.
+	TeleporterCancelled: Collegamento annullato.
+	TeleporterLinked: Teletrasporti collegati (a {0} blocchi).
+	TeleporterPickedTooltip: Un teletrasporto è scelto: clic destro su un altro per collegarli
 }
 
 Items: {
+	WirelessTeleporterItem: {
+		DisplayName: Teletrasporto senza fili
+		Tooltip:
+			'''
+			Non serve il cavo: collegalo a un altro con il Collegatore di teletrasporti
+			Clic destro per teletrasportarti a quello collegato
+			Ci si può stare sopra
+			'''
+	}
+
+	TeleporterLinkerItem: {
+		DisplayName: Collegatore di teletrasporti
+		Tooltip:
+			'''
+			Tienilo in mano e fai clic destro su un teletrasporto senza fili, poi su un altro, per collegarli
+			Fai di nuovo clic destro sul primo per annullare
+			'''
+	}
+
 	TerminalItem: {
 		DisplayName: Terminale
 		Tooltip:
@@ -239,7 +269,41 @@ Items: {
 	}
 }
 
+NPCs: {
+	Apothecary: {
+		DisplayName: Speziale
+		Bestiary: Un alchimista errante che vende pozioni da battaglia quasi gratis. Nessuno sa come tenga i prezzi così bassi.
+		Census.SpawnCondition: Dopo aver sconfitto l'Occhio di Cthulhu
+
+		Dialogue: {
+			0: Ogni pozione costa un argento. Non chiedere da dove vengono gli ingredienti.
+			1: Affrontare un boss senza Pelle di ferro? Coraggioso.
+			2: Collera e Rabbia insieme. Fidati.
+			3: Se qualcosa esplode, non è colpa mia.
+		}
+
+		TownNPCMood: {
+			// Content: Estoy feliz.
+			// NoHome: Detesto no tener un hogar.
+			// FarFromHome: Estoy demasiado lejos de casa.
+			// LoveSpace: Me encanta tener tanto espacio.
+			// DislikeCrowded: No me gusta tener tan poco espacio.
+			// HateCrowded: Detesto tener poco espacio.
+			// LoveBiome: Adoro el biomedio {BiomeName}.
+			// LikeBiome: Me gusta el biomedio {BiomeName}.
+			// DislikeBiome: No me gusta el biomedio {BiomeName}.
+			// LoveNPC: Adoro a {NPCName}.
+			// LikeNPC: Me gusta {NPCName}.
+			// DislikeNPC: "{NPCName} no me cae nada bien."
+			// HateNPC: Detesto a {NPCName}.
+			// LikeNPC_Princess: Me gusta {NPCName}.
+			// Princess_LovesNPC: Me gusta {NPCName}.
+		}
+	}
+}
+
 Tiles: {
+	WirelessTeleporterTile.MapEntry: Teletrasporto senza fili
 	TerminalTile.MapEntry: Terminale
 	RadioTile.MapEntry: Radio
 }
@@ -292,6 +356,11 @@ Configs: {
 		ChestEffects: {
 			Label: Effetti sulle casse
 			Tooltip: Scintille, luce e un suono sulle casse in cui entrano o da cui escono gli oggetti
+		}
+
+		DummyDamageMeter: {
+			Label: Misuratore di danni sul manichino bersaglio
+			Tooltip: I danni subiti negli ultimi 5 e 10 secondi e i danni al secondo
 		}
 	}
 

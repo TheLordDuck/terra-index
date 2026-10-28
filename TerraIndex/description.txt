@@ -14,6 +14,8 @@ Press N to open a searchable list of every item in the game, including items fro
 - Set any item as your goal and a small on-screen list (movable and foldable) shows the materials you are still missing as you gather them, with a button that crafts the next step (first the bars, then the sword).
 - Craft straight from your chests near a storage terminal (or anywhere with the Portable Terminal). Crafting stations count if they are near you or connected to the terminal's red wire. Or take out just the ingredients your inventory is missing with one click.
 - Compare up to 3 weapons, tools, armor or accessories side by side, with the best stats highlighted.
+- Next upgrades (gold button): the weapons, armor, accessories and pickaxe you can craft that beat what you have, among what the bosses you have beaten let you reach.
+- Near a terminal, every item's tooltip says how many you have in your chests.
 
 STORAGE TERMINAL
 Buy the Terminal from the Steampunker for 1 platinum and hang it on a background wall.
@@ -32,7 +34,11 @@ PORTABLE TERMINAL
 Craft it after the Moon Lord (Terminal + 10 Luminite Bars at the Ancient Manipulator). Right click a terminal while holding it to link them, then use it anywhere to open that terminal: items you take out appear right next to you.
 
 BLUEPRINTS
-Not good at building? Craft a Blueprint (10 wood at a work bench), pick a design (small house, two-floor house, tower, medieval house, castle, pagoda, wizard tower, a craftsman's house with themed rooms and a place for every crafting station, a tree village lodge with 30 NPC rooms, or boss arena) and its wood (any wood, glass, and woods from other mods), see a preview where it goes and left click to build it, for free. Every room is valid NPC housing.
+Not good at building? Craft a Blueprint (10 wood at a work bench), pick a design (small house, two-floor house, tower, medieval house, castle, pagoda, wizard tower, a craftsman's house with themed rooms and a place for every crafting station, a tree village lodge with 30 NPC rooms, big trees, a herb garden with planter boxes, a fishing pond full of water, a boss arena, or an arena with campfires and heart lanterns) and its wood (any wood, glass, and woods from other mods), see a preview where it goes and left click to build it, for free. Every room is valid NPC housing.
+The catalog's Town NPCs tab shows which biomes and neighbours each NPC loves and hates, so you know where to put its house.
+
+WIRELESS TELEPORTERS
+Teleporters without wire: craft a Wireless Teleporter (Teleporter + 10 Wire at the Tinkerer's Workshop), link two with the Teleporter Linker (Red Wrench + 3 Iron Bars), and right click one to go to the other.
 
 MULTIPLAYER
 Fully supported. The server scans the chests and keeps the terminal updated, so you see changes made by other players.

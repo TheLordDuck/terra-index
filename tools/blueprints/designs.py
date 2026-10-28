@@ -1000,35 +1000,36 @@ def herb_garden():
 
 
 def fishing_pond():
-    """A pond of 312 water tiles (more than the 300 that fishing needs for full power), a pier over it and a
-    fisherman's hut on stilts at the end of the pier, under a red gable. The hut is NPC housing."""
-    W, H = 65, 20
+    """A pond of exactly the 300 water tiles that fishing needs for full power (30 wide, 10 deep), a pier over it
+    and a fisherman's hut on stilts at the end of the pier, under a red gable. The hut is NPC housing."""
+    W, H = 43, 24
     d = Design('FishingPond', W, H)
     G, F = H - 1, 12                    # bottom row, pier and hut floor
+    P = 31                              # the basin's right wall and the hut's left one
     # The basin and its water.
     d.fill(0, G, W - 1, G, '#')
     d.fill(0, F, 0, G - 1, '#')
-    d.fill(53, F, 53, G - 1, '#')
-    d.fill(1, F + 1, 52, G - 1, '~')
-    d.fill(30, F, 52, F, '-')
+    d.fill(P, F, P, G - 1, '#')
+    d.fill(1, F + 1, P - 1, G - 1, '~')
+    d.fill(15, F, P - 1, F, '-')
     # The hut on stilts.
-    d.fill(53, F, W - 1, F, '#')
-    d.fill(53, 6, W - 1, 6, '#')
-    d.fill(53, 7, 53, F - 4, '#')
-    d.put('D', 53, F - 3)
+    d.fill(P, F, W - 1, F, '#')
+    d.fill(P, 6, W - 1, 6, '#')
+    d.fill(P, 7, P, F - 4, '#')
+    d.put('D', P, F - 3)
     d.fill(W - 1, 7, W - 1, F - 1, '#')
-    d.fill(54, 7, W - 2, F - 1, '.')
-    d.wall(53, 7, W - 1, F - 1, 'w')
-    d.wall(59, 8, 60, 9, 'g')
-    gable(d, 53, W - 1, 5)
-    for x in (57, W - 2):
+    d.fill(P + 1, 7, W - 2, F - 1, '.')
+    d.wall(P, 7, W - 1, F - 1, 'w')
+    d.wall(P + 6, 8, P + 7, 9, 'g')
+    gable(d, P, W - 1, 5)
+    for x in (P + 4, W - 2):
         d.fill(x, F + 1, x, G - 1, '|')
-    d.put('C', 55, F - 2)
-    d.put('T', 56, F - 2)
-    d.put('u', 57, F - 3)
-    d.put('l', 61, 7)
-    d.put('Z', 62, F - 2)
-    d.rooms.append((58, F - 3))
+    d.put('C', P + 2, F - 2)
+    d.put('T', P + 3, F - 2)
+    d.put('u', P + 4, F - 3)
+    d.put('l', P + 8, 7)
+    d.put('Z', P + 9, F - 2)
+    d.rooms.append((P + 5, F - 3))
     return d
 
 

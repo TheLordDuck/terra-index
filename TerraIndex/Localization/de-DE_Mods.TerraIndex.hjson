@@ -18,7 +18,11 @@ UI: {
 	CategoryMisc: Verschiedenes
 	CategoryUpgrades: Nächste Verbesserungen (für die besiegten Bosse)
 	InChests: In deinen Truhen: {0}
+	DummyDamage: Letzte {0}s: {1} Schaden ({2} DPS)
+	DummyTotal: Gesamt: {0} Schaden
 	NoResults: Keine Gegenstände passen zur Suche.
+	UpgradesButton: Nächste Verbesserungen ({0})
+	UpgradesEmpty: Nichts vorzuschlagen: Unter dem, was die besiegten Bosse erlauben, ist keine herstellbare Ausrüstung besser als deine. Besiege einen weiteren Boss oder trage die Waffen bei dir, die du benutzt.
 	Hint:
 		'''
 		Linksklick auf einen Gegenstand: wie man ihn herstellt.
@@ -70,12 +74,14 @@ UI: {
 	BlueprintHerbGarden: Kräutergarten
 	BlueprintFishingPond: Angelteich
 	BlueprintBuffArena: Arena mit Buffs
+	BlueprintTabBuildings: Gebäude
+	BlueprintTabNpcs: Stadt-NPCs
 	HappinessTitle: Wer wird hier wohnen? Wähle einen NPC, um zu sehen, wo er am glücklichsten ist:
 	HappinessPick: Klicke auf den Kopf eines NPCs.
-	HappinessLove: Liebt: {0}
-	HappinessLike: Mag: {0}
-	HappinessDislike: Mag nicht: {0}
-	HappinessHate: Hasst: {0}
+	HappinessLove: Liebt:
+	HappinessLike: Mag:
+	HappinessDislike: Mag nicht:
+	HappinessHate: Hasst:
 	HappinessNone: Keine Vorlieben.
 	HappinessCrowd: Alle sind glücklicher, wenn höchstens 2 andere NPCs in der Nähe wohnen.
 	BlueprintMaterial: Material:
@@ -196,9 +202,33 @@ UI: {
 		'''
 	TipPlaced: Terminal platziert! Verbinde es mit rotem Draht mit deinen Truhen (verlegt mit: {0}, verkauft von: {1}) und klicke es dann mit Rechts an.
 	TipOpened: Tipp: Fahre mit der Maus über den ?-Knopf, um die Steuerung des Terminals zu sehen. "Rezepte" öffnet den Rezeptindex daneben.
+	TeleporterNotLinked: Dieser Teleporter ist nicht verbunden. Halte einen Teleporter-Verbinder und klicke mit Rechts darauf, dann auf einen anderen.
+	TeleporterPicked: Teleporter ausgewählt. Klicke mit Rechts auf einen anderen, um sie zu verbinden.
+	TeleporterCancelled: Verbindung abgebrochen.
+	TeleporterLinked: Teleporter verbunden ({0} Blöcke entfernt).
+	TeleporterPickedTooltip: Ein Teleporter ist ausgewählt: Rechtsklick auf einen anderen verbindet sie
 }
 
 Items: {
+	WirelessTeleporterItem: {
+		DisplayName: Kabelloser Teleporter
+		Tooltip:
+			'''
+			Braucht keinen Draht: verbinde ihn mit dem Teleporter-Verbinder mit einem anderen
+			Rechtsklick teleportiert dich zum verbundenen
+			Man kann darauf stehen
+			'''
+	}
+
+	TeleporterLinkerItem: {
+		DisplayName: Teleporter-Verbinder
+		Tooltip:
+			'''
+			Halte ihn und klicke mit Rechts auf einen kabellosen Teleporter, dann auf einen anderen, um sie zu verbinden
+			Klicke erneut auf den ersten, um abzubrechen
+			'''
+	}
+
 	TerminalItem: {
 		DisplayName: Terminal
 		Tooltip:
@@ -239,7 +269,41 @@ Items: {
 	}
 }
 
+NPCs: {
+	Apothecary: {
+		DisplayName: Apotheker
+		Bestiary: Ein reisender Brauer, der Kampftränke fast verschenkt. Niemand weiß, wie er so billig bleibt.
+		Census.SpawnCondition: Nach dem Sieg über das Auge von Cthulhu
+
+		Dialogue: {
+			0: Jeder Trank kostet ein Silber. Frag nicht, woher die Zutaten kommen.
+			1: Ohne Eisenhaut gegen einen Boss? Mutig.
+			2: Zorn und Wut zusammen. Vertrau mir.
+			3: Wenn etwas explodiert, war ich es nicht.
+		}
+
+		TownNPCMood: {
+			// Content: Estoy feliz.
+			// NoHome: Detesto no tener un hogar.
+			// FarFromHome: Estoy demasiado lejos de casa.
+			// LoveSpace: Me encanta tener tanto espacio.
+			// DislikeCrowded: No me gusta tener tan poco espacio.
+			// HateCrowded: Detesto tener poco espacio.
+			// LoveBiome: Adoro el biomedio {BiomeName}.
+			// LikeBiome: Me gusta el biomedio {BiomeName}.
+			// DislikeBiome: No me gusta el biomedio {BiomeName}.
+			// LoveNPC: Adoro a {NPCName}.
+			// LikeNPC: Me gusta {NPCName}.
+			// DislikeNPC: "{NPCName} no me cae nada bien."
+			// HateNPC: Detesto a {NPCName}.
+			// LikeNPC_Princess: Me gusta {NPCName}.
+			// Princess_LovesNPC: Me gusta {NPCName}.
+		}
+	}
+}
+
 Tiles: {
+	WirelessTeleporterTile.MapEntry: Kabelloser Teleporter
 	TerminalTile.MapEntry: Terminal
 	RadioTile.MapEntry: Radio
 }
@@ -292,6 +356,11 @@ Configs: {
 		ChestEffects: {
 			Label: Truheneffekte
 			Tooltip: Funken, Licht und ein Geräusch an den Truhen, in die Gegenstände hinein- oder aus denen sie herausgehen
+		}
+
+		DummyDamageMeter: {
+			Label: Schadensanzeige an der Zielpuppe
+			Tooltip: Schaden der letzten 5 und 10 Sekunden und der Schaden pro Sekunde
 		}
 	}
 

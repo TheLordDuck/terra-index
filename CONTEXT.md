@@ -100,25 +100,43 @@ Conversation of 2026-10-28 (after the 1.0 release):
 
 26. Claude proposed **ideas 43-50** (see "Idea list"); the user asked to explain 42, 43 and 32, then picked
     **47, 48, 49 and 50**. All four were written on the PC without tModLoader, so they are **not compiled yet**:
-    build first and fix any errors. Checklist sections 47-50 in [`TESTING.md`](TESTING.md). `build.txt` still says 1.0.
+    build first and fix any errors. Checklist sections 47-50 in [`TESTING.md`](TESTING.md). `build.txt` was bumped to **1.1** on 2026-10-28 to publish all of this.
 27. **47, useful blueprints:** herb garden (`HerbGarden`, 40x15: an alchemist's hut with a bottle on the table and a
-    bay for the Alchemy Table, three rows of planter boxes), fishing pond (`FishingPond`, 65x20: 312 water tiles, a
+    bay for the Alchemy Table, three rows of planter boxes), fishing pond (`FishingPond`, 43x24: 300 water tiles, 30 wide and 10 deep, a
     pier, a fisherman's hut on stilts) and arena with buffs (`BuffArena`, 100x21: four rows of platforms with
     campfires, heart lanterns and stars in a bottle). Pictures 13-15. New tile characters: `=` planter box, `A` heart
     lantern, `N` star in a bottle (both hang), and `~` water (`Blueprints.Water`: filled after everything else in
     `Place`, drawn blue in the previews; `build.py` checks it can't spill). `build.py` now lets furniture stand on
     and hang from platforms.
-28. **48, NPC happiness:** under the blueprint catalog, the town NPCs' heads; clicking one lists the biomes and NPCs
-    it loves, likes, dislikes and hates (`Common/Happiness.cs`). Read from the game's personality database
-    (`ShopHelper._database`, private, by reflection), so modded NPCs show too. Panel height 760 (max 96% of the screen).
+28. **48, NPC happiness:** in the blueprint catalog's second tab (Buildings / Town NPCs, `BuildSystem.NpcTab`),
+    the town NPCs' heads; clicking one shows the biomes (bestiary icons from `Icon_Tags_Shadow`, or the modded biome's
+    `BestiaryIcon`) and NPC heads it loves, likes, dislikes and hates (`Common/Happiness.cs`). Read from the game's personality database
+    (`ShopHelper._database`, private, by reflection), so modded NPCs show too. Panel height 660 (max 96% of the screen); the tabs keep it from going off the panel.
 29. **49, Next upgrades:** a tab in the recipe index only (`ItemCategory.Upgrades`, `ItemCategories.IndexTabs`, Night's
     Edge icon), worked out by `Common/Upgrades.cs` on every grid refresh: the 3 strongest weapons (damage per second)
     of each damage class the player carries that beat theirs by 15%, the 2 toughest pieces per armor slot over what
     is worn, and the strongest pickaxe. Only items with a recipe, not carried, and with a rarity up to a cap set by
-    the bosses beaten (`Upgrades.RarityCap`); modded rarities are never suggested. No accessories (no way to rank them).
+    the bosses beaten (`Upgrades.RarityCap`); modded rarities are never suggested. Accessories have no stat to rank them by: those crafted from one the player carries or wears
+    (`RecipeDatabase.UsesOf`), plus the 3 rarest, most valuable new ones.
 30. **50, chest counts in tooltips:** `Content/Storage/ChestCountTooltip.cs` (a `GlobalItem`) adds "In your chests: N"
     to every tooltip while the crafting terminal is in reach (`CanCraft`), refreshing like the index does. Setting
-    `ClientConfig.ChestCountTooltip` (on).
+. **51, wireless teleporters** (asked for on 2026-10-28, so teleporting needs no wire): `WirelessTeleporterTile` (3x1,
+    stands on the floor, solid top) and `WirelessTeleporterItem` (Teleporter + 10 Wire at the Tinkerer's Workshop);
+    `TeleporterLinkerItem` (Red Wrench + 3 Iron/Lead Bars at an anvil) links two by right clicking one and then the
+    other. Right clicking a linked one teleports the player onto the other (no pressure plate). Links are pairs in
+    `TeleporterSystem`, saved with the world and sent to clients with the world data (`NetSend`), so a client can
+    teleport to a partner whose tiles it doesn't have; linking in multiplayer is the `TeleporterLink` packet. Breaking
+    one unlinks it. Linked ones glow. Sprites drawn by a PowerShell script (no Python on that PC).
+. **52, Target Dummy damage meter** (2026-10-28): `Content/Combat/DummyDamageMeter.cs` shows over each Target Dummy the
+    damage of the last 5 and 10 seconds with their DPS, and the total (starts over after 10 seconds without damage).
+    Counts the local player's hits (OnHitByItem / OnHitByProjectile) and debuff damage (lifeRegen). Drawn from an
+    interface layer, not PostDraw: the dummy NPC is invisible and PostDraw showed nothing. Client setting `DummyDamageMeter`.
+. **53, the Apothecary** (2026-10-28): a town NPC (`Content/NPCs/Apothecary.cs`) that moves in after the Eye of
+    Cthulhu and sells combat potions for 1 silver each, plus rarer useful ones (luck, battle, flasks, Red Potion...).
+    Shops show only 39 items (the last slot is kept for selling; tML logs "Unable to fit all item in the shop"), so
+    healing, mana and flasks are staged by progression: 37 items before Hardmode, 38 after. The sprite is built on the
+    Guide's 26 vanilla frames by `tools/sprites/apothecary.js` (hood, robe, potion belt), so it matches the game's
+    style (2 x 2 art pixels) and uses `AnimationType = Guide`; the frame counts are copied from the Guide.
 
 ---
 
@@ -157,10 +175,13 @@ The user refers to features by these numbers, so keep them stable.
 | 44 | Junk marking and selling all junk in the chests to an NPC | Proposed |
 | 45 | Blueprint from something the player built (copy and place again) | Proposed |
 | 46 | Fix a house: say what a room lacks to be housing and place it | Proposed |
-| 47 | Useful blueprints: herb garden, fishing pond, arena with buffs | Done (next version, not compiled yet) |
-| 48 | NPC happiness (biomes and neighbours) in the blueprint catalog | Done (next version, not compiled yet) |
-| 49 | Next upgrades tab in the recipe index | Done (next version, not compiled yet) |
-| 50 | "In your chests: N" in every item tooltip | Done (next version, not compiled yet) |
+| 47 | Useful blueprints: herb garden, fishing pond, arena with buffs | Done (1.1) |
+| 48 | NPC happiness (biomes and neighbours) in the blueprint catalog | Done (1.1) |
+| 49 | Next upgrades tab in the recipe index | Done (1.1) |
+| 50 | "In your chests: N" in every item tooltip | Done (1.1) |
+| 51 | Wireless teleporters linked with a Teleporter Linker | Done (1.1) |
+| 52 | Damage meter on the Target Dummy | Done (1.1) |
+| 53 | The Apothecary, a town NPC selling potions for 1 silver | Done (1.1) |
 
 Discarded by the user, don't propose them again: 3 "what can I craft" tab, 7 terminal favorites, 9 per-chest
 filters, 11 seen/obtained collection %, 12 chest loot and fishing in "how to obtain", 14 stat search, 15 tree/goal

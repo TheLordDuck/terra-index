@@ -102,7 +102,12 @@ namespace TerraIndex.UI
 			};
 		}
 
-		private void SetCategory(ItemCategory value)
+		public ItemCategory Category => category;
+
+		// How many items the tab has (for the current search).
+		public int CountOf(ItemCategory tab) => counts[(int)tab];
+
+		public void SetCategory(ItemCategory value)
 		{
 			if (value == category)
 				return;
@@ -243,7 +248,13 @@ namespace TerraIndex.UI
 			DrawFooter(spriteBatch, inner);
 
 			if (items.Count == 0) {
-				Utils.DrawBorderString(spriteBatch, EmptyText, origin, Color.Gray, 0.9f);
+				// An empty Next upgrades tab says why, rather than looking broken.
+				string empty = category == ItemCategory.Upgrades && filter.Length == 0 ? UIHelpers.T("UpgradesEmpty") : EmptyText;
+				Vector2 line = origin;
+				foreach (string text in UIHelpers.Wrap(empty, inner.Width, 0.9f)) {
+					Utils.DrawBorderString(spriteBatch, text, line, Color.Gray, 0.9f);
+					line.Y += 24;
+				}
 				return;
 			}
 

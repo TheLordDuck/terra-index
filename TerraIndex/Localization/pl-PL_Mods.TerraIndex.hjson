@@ -18,7 +18,11 @@ UI: {
 	CategoryMisc: Różne
 	CategoryUpgrades: Następne ulepszenia (według pokonanych bossów)
 	InChests: W twoich skrzyniach: {0}
+	DummyDamage: Ostatnie {0}s: {1} obrażeń ({2} DPS)
+	DummyTotal: Łącznie: {0} obrażeń
 	NoResults: Żaden przedmiot nie pasuje do wyszukiwania.
+	UpgradesButton: Następne ulepszenia ({0})
+	UpgradesEmpty: Nic do zaproponowania: wśród tego, na co pozwalają pokonane bossy, nie ma lepszego ekwipunku do wytworzenia. Pokonaj kolejnego bossa albo noś przy sobie broń, której używasz.
 	Hint:
 		'''
 		LPM na przedmiocie: jak go wytworzyć.
@@ -70,12 +74,14 @@ UI: {
 	BlueprintHerbGarden: Ogród ziół
 	BlueprintFishingPond: Staw rybacki
 	BlueprintBuffArena: Arena ze wzmocnieniami
+	BlueprintTabBuildings: Budowle
+	BlueprintTabNpcs: NPC
 	HappinessTitle: Kto tu zamieszka? Wybierz NPC, aby zobaczyć, gdzie jest najszczęśliwszy:
 	HappinessPick: Kliknij głowę NPC.
-	HappinessLove: Uwielbia: {0}
-	HappinessLike: Lubi: {0}
-	HappinessDislike: Nie lubi: {0}
-	HappinessHate: Nienawidzi: {0}
+	HappinessLove: Uwielbia:
+	HappinessLike: Lubi:
+	HappinessDislike: Nie lubi:
+	HappinessHate: Nienawidzi:
 	HappinessNone: Brak preferencji.
 	HappinessCrowd: Wszyscy są szczęśliwsi, gdy w pobliżu mieszka najwyżej 2 innych NPC.
 	BlueprintMaterial: Materiał:
@@ -196,9 +202,33 @@ UI: {
 		'''
 	TipPlaced: Terminal postawiony! Połącz go ze skrzyniami czerwonym kablem (kładzie się go: {0}, sprzedaje: {1}), a potem kliknij go PPM.
 	TipOpened: Wskazówka: najedź na przycisk ?, by zobaczyć sterowanie terminala. „Przepisy” otwiera obok indeks przepisów.
+	TeleporterNotLinked: Ten teleporter nie jest połączony. Trzymając Łącznik teleporterów, kliknij go prawym przyciskiem, a potem inny.
+	TeleporterPicked: Wybrano teleporter. Kliknij prawym przyciskiem inny, by je połączyć.
+	TeleporterCancelled: Anulowano łączenie.
+	TeleporterLinked: Połączono teleportery (odległość: {0} bloków).
+	TeleporterPickedTooltip: Wybrano teleporter: kliknij prawym przyciskiem inny, by je połączyć
 }
 
 Items: {
+	WirelessTeleporterItem: {
+		DisplayName: Bezprzewodowy teleporter
+		Tooltip:
+			'''
+			Nie potrzebuje kabli: połącz go z innym Łącznikiem teleporterów
+			Kliknij go prawym przyciskiem, by przenieść się do połączonego
+			Można na nim stać
+			'''
+	}
+
+	TeleporterLinkerItem: {
+		DisplayName: Łącznik teleporterów
+		Tooltip:
+			'''
+			Trzymając go, kliknij prawym przyciskiem bezprzewodowy teleporter, a potem inny, by je połączyć
+			Kliknij ponownie pierwszy, by anulować
+			'''
+	}
+
 	TerminalItem: {
 		DisplayName: Terminal
 		Tooltip:
@@ -239,7 +269,41 @@ Items: {
 	}
 }
 
+NPCs: {
+	Apothecary: {
+		DisplayName: Aptekarz
+		Bestiary: Wędrowny warzyciel, który sprzedaje mikstury bojowe niemal za darmo. Nikt nie wie, jak utrzymuje takie ceny.
+		Census.SpawnCondition: Po pokonaniu Oka Cthulhu
+
+		Dialogue: {
+			0: Każda mikstura kosztuje jedną srebrną monetę. Nie pytaj, skąd mam składniki.
+			1: Walka z bossem bez Żelaznej skóry? Odważnie.
+			2: Gniew i Furia razem. Zaufaj mi.
+			3: Jeśli coś wybuchnie, to nie moja wina.
+		}
+
+		TownNPCMood: {
+			// Content: Estoy feliz.
+			// NoHome: Detesto no tener un hogar.
+			// FarFromHome: Estoy demasiado lejos de casa.
+			// LoveSpace: Me encanta tener tanto espacio.
+			// DislikeCrowded: No me gusta tener tan poco espacio.
+			// HateCrowded: Detesto tener poco espacio.
+			// LoveBiome: Adoro el biomedio {BiomeName}.
+			// LikeBiome: Me gusta el biomedio {BiomeName}.
+			// DislikeBiome: No me gusta el biomedio {BiomeName}.
+			// LoveNPC: Adoro a {NPCName}.
+			// LikeNPC: Me gusta {NPCName}.
+			// DislikeNPC: "{NPCName} no me cae nada bien."
+			// HateNPC: Detesto a {NPCName}.
+			// LikeNPC_Princess: Me gusta {NPCName}.
+			// Princess_LovesNPC: Me gusta {NPCName}.
+		}
+	}
+}
+
 Tiles: {
+	WirelessTeleporterTile.MapEntry: Bezprzewodowy teleporter
 	TerminalTile.MapEntry: Terminal
 	RadioTile.MapEntry: Radio
 }
@@ -292,6 +356,11 @@ Configs: {
 		ChestEffects: {
 			Label: Efekty skrzyń
 			Tooltip: Iskry, światło i dźwięk przy skrzyniach, do których trafiają lub z których wychodzą przedmioty
+		}
+
+		DummyDamageMeter: {
+			Label: Licznik obrażeń na manekinie treningowym
+			Tooltip: Obrażenia z ostatnich 5 i 10 sekund oraz obrażenia na sekundę
 		}
 	}
 

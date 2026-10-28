@@ -10,11 +10,13 @@ namespace TerraIndex.Common
 	// beaten so far let them make. Rarity stands in for progression (vanilla gives later gear higher rarities), so each
 	// boss raises the highest rarity suggested; modded rarities are above every vanilla one and never suggested.
 	// Weapons: the strongest few of each damage class the player already uses, by damage per second. Armor: the
-	// toughest pieces for each slot, against what is equipped. Tools: the strongest pickaxe.
+	// toughest pieces for each slot, against what is equipped. Accessories: those crafted from one the player has, and
+	// a few new ones. Tools: the strongest pickaxe.
 	public static class Upgrades
 	{
 		private const int WeaponsPerClass = 3;
 		private const int ArmorPerSlot = 2;
+		private const int NewAccessories = 3;
 		// A weapon has to be this much stronger to be worth suggesting.
 		private const float MinWeaponGain = 1.15f;
 
@@ -66,6 +68,19 @@ namespace TerraIndex.Common
 				result.UnionWith(candidates.Where(item => slots[slot](item) && !item.vanity && item.defense > defense)
 					.OrderByDescending(item => item.defense).ThenBy(item => item.rare).Take(ArmorPerSlot).Select(item => item.type));
 			}
+
+			// Accessories can't be ranked by a stat: the ones crafted from an accessory the player has (Hermes Boots ->
+			// Spectre Boots), and a few new ones, the rarest and most valuable.
+			var accessories = new HashSet<int>(owned.Concat(player.armor.Skip(3).Take(7)).Where(item => !item.IsAir && item.accessory).Select(item => item.type));
+			var allowed = new HashSet<int>(candidates.Where(item => item.accessory && !item.vanity && !accessories.Contains(item.type)).Select(item => item.type));
+			foreach (int accessory in accessories) {
+				foreach (Recipe recipe in RecipeDatabase.UsesOf(accessory)) {
+					if (allowed.Contains(recipe.createItem.type))
+						result.Add(recipe.createItem.type);
+				}
+			}
+			result.UnionWith(candidates.Where(item => allowed.Contains(item.type) && !result.Contains(item.type))
+				.OrderByDescending(item => item.rare).ThenByDescending(item => item.value).Take(NewAccessories).Select(item => item.type));
 
 			// The strongest pickaxe, if it beats the best one carried.
 			int pick = owned.Select(item => item.pick).DefaultIfEmpty(0).Max();

@@ -18,7 +18,11 @@ UI: {
 	CategoryMisc: Divers
 	CategoryUpgrades: Prochaines améliorations (selon les boss vaincus)
 	InChests: Dans tes coffres : {0}
+	DummyDamage: "{0} dernières s : {1} dégâts ({2} DPS)"
+	DummyTotal: Total : {0} dégâts
 	NoResults: Aucun objet ne correspond à la recherche.
+	UpgradesButton: Prochaines améliorations ({0})
+	UpgradesEmpty: Rien à suggérer : aucun équipement fabricable ne dépasse le tien parmi ce que permettent les boss vaincus. Bats un autre boss, ou garde sur toi les armes que tu utilises.
 	Hint:
 		'''
 		Clic gauche sur un objet : comment le fabriquer.
@@ -70,12 +74,14 @@ UI: {
 	BlueprintHerbGarden: Jardin d'herbes
 	BlueprintFishingPond: Étang de pêche
 	BlueprintBuffArena: Arène avec bonus
+	BlueprintTabBuildings: Bâtiments
+	BlueprintTabNpcs: PNJ
 	HappinessTitle: Qui va habiter ici ? Choisis un PNJ pour voir où il est le plus heureux :
 	HappinessPick: Clique sur la tête d'un PNJ.
-	HappinessLove: Adore : {0}
-	HappinessLike: Aime : {0}
-	HappinessDislike: N'aime pas : {0}
-	HappinessHate: Déteste : {0}
+	HappinessLove: Adore :
+	HappinessLike: Aime :
+	HappinessDislike: N'aime pas :
+	HappinessHate: Déteste :
 	HappinessNone: Aucune préférence.
 	HappinessCrowd: Tous sont plus heureux avec au plus 2 autres PNJ à proximité.
 	BlueprintMaterial: Matériau :
@@ -196,9 +202,33 @@ UI: {
 		'''
 	TipPlaced: Terminal posé ! Relie-le à tes coffres avec du fil rouge (posé avec : {0}, vendu par : {1}), puis fais un clic droit dessus.
 	TipOpened: Astuce : survole le bouton ? pour voir les commandes du terminal. « Recettes » ouvre l'index des recettes à côté.
+	TeleporterNotLinked: Ce téléporteur n'est relié à aucun autre. Tiens un Lieur de téléporteurs et fais un clic droit dessus, puis sur un autre.
+	TeleporterPicked: Téléporteur choisi. Fais un clic droit sur un autre pour les relier.
+	TeleporterCancelled: Liaison annulée.
+	TeleporterLinked: Téléporteurs reliés (à {0} blocs).
+	TeleporterPickedTooltip: Un téléporteur est choisi : clic droit sur un autre pour les relier
 }
 
 Items: {
+	WirelessTeleporterItem: {
+		DisplayName: Téléporteur sans fil
+		Tooltip:
+			'''
+			Pas besoin de câble : relie-le à un autre avec le Lieur de téléporteurs
+			Clic droit pour te téléporter vers celui qui est relié
+			On peut se tenir dessus
+			'''
+	}
+
+	TeleporterLinkerItem: {
+		DisplayName: Lieur de téléporteurs
+		Tooltip:
+			'''
+			Tiens-le et fais un clic droit sur un téléporteur sans fil, puis sur un autre, pour les relier
+			Refais un clic droit sur le premier pour annuler
+			'''
+	}
+
 	TerminalItem: {
 		DisplayName: Terminal
 		Tooltip:
@@ -239,7 +269,41 @@ Items: {
 	}
 }
 
+NPCs: {
+	Apothecary: {
+		DisplayName: Apothicaire
+		Bestiary: Un brasseur itinérant qui vend des potions de combat pour presque rien. Personne ne sait comment il tient ses prix.
+		Census.SpawnCondition: Après avoir vaincu l'Œil de Cthulhu
+
+		Dialogue: {
+			0: Chaque potion coûte une pièce d'argent. Ne demande pas d'où viennent les ingrédients.
+			1: Affronter un boss sans Peau de fer ? Audacieux.
+			2: Colère et Rage ensemble. Fais-moi confiance.
+			3: Si quelque chose explose, ce n'est pas ma faute.
+		}
+
+		TownNPCMood: {
+			// Content: Estoy feliz.
+			// NoHome: Detesto no tener un hogar.
+			// FarFromHome: Estoy demasiado lejos de casa.
+			// LoveSpace: Me encanta tener tanto espacio.
+			// DislikeCrowded: No me gusta tener tan poco espacio.
+			// HateCrowded: Detesto tener poco espacio.
+			// LoveBiome: Adoro el biomedio {BiomeName}.
+			// LikeBiome: Me gusta el biomedio {BiomeName}.
+			// DislikeBiome: No me gusta el biomedio {BiomeName}.
+			// LoveNPC: Adoro a {NPCName}.
+			// LikeNPC: Me gusta {NPCName}.
+			// DislikeNPC: "{NPCName} no me cae nada bien."
+			// HateNPC: Detesto a {NPCName}.
+			// LikeNPC_Princess: Me gusta {NPCName}.
+			// Princess_LovesNPC: Me gusta {NPCName}.
+		}
+	}
+}
+
 Tiles: {
+	WirelessTeleporterTile.MapEntry: Téléporteur sans fil
 	TerminalTile.MapEntry: Terminal
 	RadioTile.MapEntry: Radio
 }
@@ -292,6 +356,11 @@ Configs: {
 		ChestEffects: {
 			Label: Effets sur les coffres
 			Tooltip: Étincelles, lumière et un son sur les coffres où les objets entrent ou d'où ils sortent
+		}
+
+		DummyDamageMeter: {
+			Label: Compteur de dégâts sur le mannequin cible
+			Tooltip: Les dégâts reçus pendant les 5 et 10 dernières secondes, et les dégâts par seconde
 		}
 	}
 

@@ -29,8 +29,9 @@ list, and rebind the N / [ / ] keys if you had changed them.
 - Mouse wheel over the right panel: switch recipe.
 - Tabs above the items split them by type: all, weapons and ammo, tools, armor, accessories, blocks and furniture,
   potions and consumables, materials (ores and bars too), and miscellaneous (hover a tab for its name and count).
-- The **Next upgrades** tab (the Night's Edge, second) suggests gear you can craft that beats yours: the strongest
-  weapons of each class you use, armor with more defense than what you wear, and a stronger pickaxe. It only
+- The **Next upgrades** tab (the gold button next to the title, or the Night's Edge tab, second) suggests gear you can craft that beats yours: the strongest
+  weapons of each class you use, armor with more defense than what you wear, accessories crafted from the ones you
+  have (Hermes Boots -> Spectre Boots) plus the 3 best new ones, and a stronger pickaxe. It only
   suggests what the bosses you have beaten let you reach (by rarity), so modded items with their own rarities
   don't show up. Click one and set it as your goal from the **Tree** tab.
 - The item list is split into pages: use the buttons at the bottom, the mouse wheel (Shift: 10 pages at a time),
@@ -151,16 +152,30 @@ Craft a **Blueprint** (10 of any wood at a work bench) to build ready-made house
    craftsman's house), **big tree** (a living wood tree from halfway up its trunk: branches that curve out and
    thin down into clusters of leaves, with vines; put it on top of a trunk you build, or on the ground), **thick tree** (the same
    tree with a trunk and branches two tiles thicker), boss arena, **herb garden** (an alchemist's hut and three rows
-   of planter boxes for your seeds), **fishing pond** (312 tiles of water, a pier and a fisherman's hut) or **arena
+   of planter boxes for your seeds), **fishing pond** (300 tiles of water, just what fishing needs, a pier and a fisherman's hut) or **arena
    with buffs** (four rows of platforms with campfires, heart lanterns and stars in a bottle). The big ones mix fixed materials (gray brick, red brick or shingle roofs, glass windows, banners,
    fireplaces) with the wood you pick for the frame and the furniture. Pictures of all of them are in
    [`docs/blueprints/`](../docs/blueprints/). **Place** closes the catalog.
-   Under it, click a town NPC's head to see the biomes and neighbours it loves, likes, dislikes and hates, so you
-   know where to build its house.
+   The catalog's **Town NPCs** tab shows every town NPC's head: click one to see the biomes and neighbours it
+   loves, likes, dislikes and hates, as icons (hover one for its name, click a neighbour to see theirs), so you know
+   where to build its house.
 2. Move the mouse: a see-through preview shows where it goes, standing on the tile under the mouse. Red tiles mean
    something is in the way (grass and plants are cleared on their own).
 3. **Left click** to build it. It's free: the Blueprint itself is all it costs. Walls already there are kept. Every
    room is valid housing for an NPC.
+
+## Wireless teleporters
+
+Teleporters that need no wire:
+
+1. Craft a **Wireless Teleporter** (a Teleporter and 10 Wire at the Tinkerer's Workshop) and place at least two on
+   the floor (3 wide, you can stand on them).
+2. Craft a **Teleporter Linker** (a Red Wrench and 3 Iron or Lead Bars at an anvil). Hold it, **right click** one
+   teleporter and then the other: they are linked, and glow. Right clicking the first one again cancels.
+3. **Right click** a linked teleporter to go to the other one. No pressure plate or wire needed.
+
+Each teleporter has one partner: linking it to a third one breaks its old link, and breaking a teleporter unlinks
+it. Links are saved with the world and work in multiplayer.
 
 ## Multiplayer
 
@@ -195,10 +210,12 @@ In **Settings → Mod Configuration → Terra Index**:
 
 ## Changelog
 
-**Next version** (not released yet)
-- New blueprints: herb garden, fishing pond (it comes with its water) and arena with buffs.
-- The blueprint catalog shows what each town NPC loves, likes, dislikes and hates.
-- **Next upgrades** tab in the recipe index.
+**1.1**
+- Wireless teleporters: link two with the Teleporter Linker and right click one to go to the other, no wire needed.
+- New blueprints: herb garden, fishing pond (it comes with its 300 tiles of water) and arena with buffs.
+- The blueprint catalog has two tabs, buildings and town NPCs: the second shows what each town NPC loves, likes,
+  dislikes and hates, as biome icons and NPC heads.
+- **Next upgrades** in the recipe index (gold button): better weapons, armor, accessories and pickaxe you can craft.
 - Item tooltips say how many are in your chests while a terminal is in reach.
 
 **1.0**: first release on the Steam Workshop, with everything from 0.9.

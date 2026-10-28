@@ -18,7 +18,11 @@ UI: {
 	CategoryMisc: 杂项
 	CategoryUpgrades: 下一步升级（根据已击败的 Boss）
 	InChests: 你的箱子里：{0}
+	DummyDamage: 最近{0}秒：{1} 伤害（{2} DPS）
+	DummyTotal: 总计：{0} 伤害
 	NoResults: 没有符合搜索的物品。
+	UpgradesButton: 下一步升级（{0}）
+	UpgradesEmpty: 没有可推荐的：在已击败的 Boss 所解锁的范围内，没有比你现有装备更好的可制作装备。再击败一个 Boss，或把你使用的武器带在身上。
 	Hint:
 		'''
 		左键点击物品：查看如何制作。
@@ -70,12 +74,14 @@ UI: {
 	BlueprintHerbGarden: 草药园
 	BlueprintFishingPond: 钓鱼池
 	BlueprintBuffArena: 增益竞技场
+	BlueprintTabBuildings: 建筑
+	BlueprintTabNpcs: 城镇 NPC
 	HappinessTitle: 谁会住在这里？选择一个城镇 NPC，查看它在哪里最快乐：
 	HappinessPick: 点击 NPC 的头像。
-	HappinessLove: 喜爱：{0}
-	HappinessLike: 喜欢：{0}
-	HappinessDislike: 不喜欢：{0}
-	HappinessHate: 讨厌：{0}
+	HappinessLove: 喜爱：
+	HappinessLike: 喜欢：
+	HappinessDislike: 不喜欢：
+	HappinessHate: 讨厌：
 	HappinessNone: 没有偏好。
 	HappinessCrowd: 附近其他 NPC 不超过 2 个时，他们都会更快乐。
 	BlueprintMaterial: 材料：
@@ -196,9 +202,33 @@ UI: {
 		'''
 	TipPlaced: 终端已放置！用红电线把它连接到你的箱子（铺设工具：{0}，出售者：{1}），然后右键点击它。
 	TipOpened: 提示：把鼠标移到 ? 按钮上可以查看终端的操作说明。“配方”按钮会在旁边打开配方索引。
+	TeleporterNotLinked: 这个传送机还没有连接。手持传送机连接器右键点击它，再点击另一个。
+	TeleporterPicked: 已选择传送机。右键点击另一个即可连接。
+	TeleporterCancelled: 已取消连接。
+	TeleporterLinked: 传送机已连接（相距 {0} 格）。
+	TeleporterPickedTooltip: 已选择一个传送机：右键点击另一个即可连接
 }
 
 Items: {
+	WirelessTeleporterItem: {
+		DisplayName: 无线传送机
+		Tooltip:
+			'''
+			不需要电线：用传送机连接器把它和另一个连接起来
+			右键点击即可传送到已连接的那个
+			可以站在上面
+			'''
+	}
+
+	TeleporterLinkerItem: {
+		DisplayName: 传送机连接器
+		Tooltip:
+			'''
+			手持它右键点击一个无线传送机，再点击另一个，即可将它们连接
+			再次右键点击第一个可取消
+			'''
+	}
+
 	TerminalItem: {
 		DisplayName: 终端
 		Tooltip:
@@ -239,7 +269,41 @@ Items: {
 	}
 }
 
+NPCs: {
+	Apothecary: {
+		DisplayName: 药剂师
+		Bestiary: 一位四处游历的药剂师，几乎白送战斗药水。没人知道他的价格为何这么低。
+		Census.SpawnCondition: 击败克苏鲁之眼后
+
+		Dialogue: {
+			0: 每瓶药水只要一银币。别问原料从哪来。
+			1: 不喝铁皮药水就去打Boss？真勇敢。
+			2: 怒气和暴怒一起喝。相信我。
+			3: 要是有什么爆炸了，那可不怪我。
+		}
+
+		TownNPCMood: {
+			// Content: Estoy feliz.
+			// NoHome: Detesto no tener un hogar.
+			// FarFromHome: Estoy demasiado lejos de casa.
+			// LoveSpace: Me encanta tener tanto espacio.
+			// DislikeCrowded: No me gusta tener tan poco espacio.
+			// HateCrowded: Detesto tener poco espacio.
+			// LoveBiome: Adoro el biomedio {BiomeName}.
+			// LikeBiome: Me gusta el biomedio {BiomeName}.
+			// DislikeBiome: No me gusta el biomedio {BiomeName}.
+			// LoveNPC: Adoro a {NPCName}.
+			// LikeNPC: Me gusta {NPCName}.
+			// DislikeNPC: "{NPCName} no me cae nada bien."
+			// HateNPC: Detesto a {NPCName}.
+			// LikeNPC_Princess: Me gusta {NPCName}.
+			// Princess_LovesNPC: Me gusta {NPCName}.
+		}
+	}
+}
+
 Tiles: {
+	WirelessTeleporterTile.MapEntry: 无线传送机
 	TerminalTile.MapEntry: 终端
 	RadioTile.MapEntry: 收音机
 }
@@ -292,6 +356,11 @@ Configs: {
 		ChestEffects: {
 			Label: 箱子特效
 			Tooltip: 物品进出箱子时，箱子上会出现火花、光亮和音效
+		}
+
+		DummyDamageMeter: {
+			Label: 训练假人伤害统计
+			Tooltip: 最近5秒和10秒内受到的伤害，以及每秒伤害
 		}
 	}
 

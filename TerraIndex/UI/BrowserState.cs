@@ -16,6 +16,8 @@ namespace TerraIndex.UI
 		private SearchBox search;
 		private ItemGrid grid;
 		private RecipeView view;
+		private UITextPanel<string> upgrades;
+		private int upgradesShown = -1;
 		// Layout applied last: docked next to the terminal panel or centered, and for which screen width.
 		private bool docked;
 		private float layoutWidth;
@@ -29,6 +31,16 @@ namespace TerraIndex.UI
 			Append(panel);
 
 			panel.Append(new UIText(UIHelpers.T("Title"), 1.1f));
+
+			// The Next upgrades tab is easy to miss among the icon tabs, so it also has a labelled button.
+			upgrades = new UITextPanel<string>(UIHelpers.T("UpgradesButton", 0), 0.85f);
+			upgrades.Left.Set(UIHelpers.Measure(UIHelpers.T("Title"), 1.1f).X + 16, 0);
+			upgrades.Top.Set(-6, 0);
+			upgrades.Height.Set(30, 0);
+			upgrades.SetPadding(7);
+			upgrades.BackgroundColor = new Color(150, 110, 40) * 0.9f;
+			upgrades.OnLeftClick += (_, _) => grid.SetCategory(grid.Category == ItemCategory.Upgrades ? ItemCategory.All : ItemCategory.Upgrades);
+			panel.Append(upgrades);
 
 			var close = new UITextPanel<string>("X");
 			close.Width.Set(34, 0);
@@ -107,6 +119,13 @@ namespace TerraIndex.UI
 		{
 			Layout();
 			base.Update(gameTime);
+			int count = grid.CountOf(ItemCategory.Upgrades);
+			if (count != upgradesShown) {
+				upgradesShown = count;
+				upgrades.SetText(UIHelpers.T("UpgradesButton", count));
+			}
+			bool on = grid.Category == ItemCategory.Upgrades;
+			upgrades.BackgroundColor = (on ? new Color(220, 170, 60) : upgrades.IsMouseHovering ? new Color(185, 140, 50) : new Color(150, 110, 40)) * 0.9f;
 			if (panel.ContainsPoint(Main.MouseScreen))
 				Main.LocalPlayer.mouseInterface = true;
 		}
