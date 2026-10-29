@@ -16,13 +16,38 @@ UI: {
 	CategoryConsumables: Poções e consumíveis
 	CategoryMaterials: Materiais
 	CategoryMisc: Diversos
-	CategoryUpgrades: Próximas melhorias (pelos chefes que você derrotou)
 	InChests: Nos seus baús: {0}
-	DummyDamage: Últimos {0}s: {1} de dano ({2} DPS)
-	DummyTotal: Total: {0} de dano
+	DummyTotal: Dano total: {0}
+	DummyDps: DPS: {0} (em {1}s)
+	DummyCombo: Último combo: {0}
+	ClassAll: Todas as classes
+	ClassMelee: Corpo a corpo
+	ClassRanged: À distância
+	ClassMagic: Magia
+	ClassSummon: Invocador
+	ClassThrowing: Arremesso
+	ClassRogue: Ladino (Calamity)
+	CategoryGuide: Guia do Calamity (sua classe e etapa)
+	GuideButton: Guia do Calamity: {0} · {1}
+	GuidePickClass: Escolha sua classe
+	GuideRogue: Ladino
+	GuideNoClass: Escolha sua classe com o botão de classe (ao lado da busca) para ver o equipamento que a wiki do Calamity recomenda.
+	GuideEmpty: O guia não tem nada para esta classe nesta etapa.
+	GuideBefore: Antes de {0}
+	GuideAfter: Depois de {0}
+	GuideMech0: Antes dos chefes mecânicos
+	GuideMech1: Após 1 chefe mecânico
+	GuideMech2: Após 2 chefes mecânicos
+	GuideExoMechs: os Exo Mechs
+	GuideEndgame: Fim de jogo
+	GuideSectionArmor: armadura
+	GuideSectionWeapons: arma
+	GuideSectionAccessories: acessório
+	GuideSectionPotions: poção ou bônus
+	GuideTooltip: Guia do Calamity: recomendado para {1} ({0})
+	GuideNewStage: Guia do Calamity: nova etapa, {0}. {1} itens novos recomendados para {2}: {3}. Veja-os no índice de receitas (Guia do Calamity).
+	GuideNewStageNoClass: Guia do Calamity: nova etapa, {0}. Escolha sua classe no índice de receitas (Guia do Calamity) para ver seu equipamento.
 	NoResults: Nenhum item corresponde à pesquisa.
-	UpgradesButton: Próximas melhorias ({0})
-	UpgradesEmpty: Nada a sugerir: nenhum equipamento fabricável supera o seu entre o que os chefes derrotados permitem. Derrote outro chefe, ou carregue as armas que você usa.
 	Hint:
 		'''
 		Clique esquerdo em um item: como fabricá-lo.
@@ -193,6 +218,8 @@ UI: {
 	HelpIndex:
 		'''
 		Clique esquerdo em um item: como fabricá-lo. Clique direito: para que serve.
+		Botão de classe (ao lado da busca): só as armas de uma classe; clique esquerdo a próxima, clique direito a anterior.
+		Guia do Calamity (botão dourado): o equipamento recomendado pela wiki para sua classe na sua etapa; o botão de classe escolhe a classe.
 		Roda do mouse sobre uma receita: a próxima. Voltar: o item anterior.
 		Ingredientes: verde = no seu inventário, azul = nos baús de um terminal, vermelho = falta.
 		Árvore: tudo o que é preciso até os materiais básicos; pode virar seu objetivo.
@@ -202,11 +229,17 @@ UI: {
 		'''
 	TipPlaced: Terminal colocado! Conecte-o aos seus baús com fio vermelho (colocado com: {0}, vendido por: {1}) e clique nele com o botão direito.
 	TipOpened: Dica: passe o mouse sobre o botão ? para ver os controles do terminal. "Receitas" abre o índice de receitas ao lado.
-	TeleporterNotLinked: Este teletransportador não está vinculado. Segure um Vinculador de teletransportadores e clique com o botão direito nele, depois em outro.
-	TeleporterPicked: Teletransportador escolhido. Clique com o botão direito em outro para vinculá-los.
-	TeleporterCancelled: Vínculo cancelado.
-	TeleporterLinked: Teletransportadores vinculados (a {0} blocos).
-	TeleporterPickedTooltip: Há um teletransportador escolhido: clique com o botão direito em outro para vinculá-los
+	TeleporterNotLinked: Este teletransportador não tem canal. Segure um Vinculador de teletransportadores e clique com o botão direito nele para escolher um.
+	TeleporterAlone: Nenhum outro teletransportador está no canal {0}. Coloque outro nele com o Vinculador.
+	TeleporterChannel: Canal {0}
+	TeleporterNoChannel: Sem canal
+	TeleporterMenuTitle: Canal do teletransportador
+	TeleporterNewChannel: Novo canal
+	TeleporterChannelCount: Canal {0} — teletransportadores: {1}
+	TeleporterNoChannels: Ainda não há canais.
+	TeleporterClearChannel: Tirar o canal
+	TeleporterChannelSet: Teletransportador no canal {0}.
+	TeleporterChannelCleared: Teletransportador sem canal.
 }
 
 Items: {
@@ -214,9 +247,9 @@ Items: {
 		DisplayName: Teletransportador sem fio
 		Tooltip:
 			'''
-			Não precisa de fios: vincule-o a outro com o Vinculador de teletransportadores
-			Clique com o botão direito para se teletransportar até o vinculado
-			Dá para ficar em cima dele
+			Não precisa de fios: dê um canal a ele com o Vinculador de teletransportadores
+			Clique com o botão direito para ir ao próximo do mesmo canal
+			Dá para ficar em pé em cima
 			'''
 	}
 
@@ -224,8 +257,8 @@ Items: {
 		DisplayName: Vinculador de teletransportadores
 		Tooltip:
 			'''
-			Segure-o e clique com o botão direito em um teletransportador sem fio, depois em outro, para vinculá-los
-			Clique de novo no primeiro para cancelar
+			Segure-o e clique com o botão direito num teletransportador sem fio para escolher o canal
+			Um canal novo ou um já criado: teletransportadores no mesmo canal levam de um ao outro
 			'''
 	}
 
@@ -360,7 +393,7 @@ Configs: {
 
 		DummyDamageMeter: {
 			Label: Medidor de dano no boneco de alvo
-			Tooltip: O dano recebido nos últimos 5 e 10 segundos e o dano por segundo
+			Tooltip: Dano total, DPS e último combo de cada luta, como o boneco de treino do League of Legends
 		}
 	}
 

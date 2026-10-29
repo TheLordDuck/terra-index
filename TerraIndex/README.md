@@ -29,15 +29,21 @@ list, and rebind the N / [ / ] keys if you had changed them.
 - Mouse wheel over the right panel: switch recipe.
 - Tabs above the items split them by type: all, weapons and ammo, tools, armor, accessories, blocks and furniture,
   potions and consumables, materials (ores and bars too), and miscellaneous (hover a tab for its name and count).
-- The **Next upgrades** tab (the gold button next to the title, or the Night's Edge tab, second) suggests gear you can craft that beats yours: the strongest
-  weapons of each class you use, armor with more defense than what you wear, accessories crafted from the ones you
-  have (Hermes Boots -> Spectre Boots) plus the 3 best new ones, and a stronger pickaxe. It only
-  suggests what the bosses you have beaten let you reach (by rarity), so modded items with their own rarities
-  don't show up. Click one and set it as your goal from the **Tree** tab.
+- **Calamity guide** (only with the Calamity Mod enabled): the gold button next to the title (or the book tab,
+  second) shows the gear the Calamity wiki's [class setups guide](https://calamitymod.wiki.gg/wiki/Guide:Class_setups)
+  recommends for your class at your point of the game: armor first, then weapons, accessories and potions. Pick
+  your class (melee, ranged, magic, summoner or rogue) with the class button next to the search; it is saved with
+  the character, and the first time it takes your held weapon's class. Your stage comes from the bosses beaten in
+  the world (before the Desert Scourge, before the Eater of Worlds / Brain of Cthulhu... up to the endgame), and
+  when a kill moves you to the next stage, the chat tells you and names some of the new gear. Click an item to see
+  its recipe with what you have (green), what is in the chests (blue) and what is missing (red).
 - The item list is split into pages: use the buttons at the bottom, the mouse wheel (Shift: 10 pages at a time),
   or drag the page bar.
 - Esc closes the index.
 - Search box: type a name, or `@calamity` / `@terraria` to filter by mod. Right click clears it.
+- Class button (next to the search box): only the weapons of one class: melee, ranged, magic, summoner, throwing,
+  and the classes mods add, such as Calamity's **rogue**. Left click the next class, right click the previous one.
+  It works together with the search and the tabs.
 - Ingredients are green if you have enough in your inventory, red if not (blue when they are in a storage
   terminal's chests, see below).
 - Items that can't be crafted show **how to obtain** them: who sells them (and the price), which enemies drop them
@@ -170,12 +176,14 @@ Teleporters that need no wire:
 
 1. Craft a **Wireless Teleporter** (a Teleporter and 10 Wire at the Tinkerer's Workshop) and place at least two on
    the floor (3 wide, you can stand on them).
-2. Craft a **Teleporter Linker** (a Red Wrench and 3 Iron or Lead Bars at an anvil). Hold it, **right click** one
-   teleporter and then the other: they are linked, and glow. Right clicking the first one again cancels.
-3. **Right click** a linked teleporter to go to the other one. No pressure plate or wire needed.
+2. Craft a **Teleporter Linker** (a Red Wrench and 3 Iron or Lead Bars at an anvil). Hold it and **right click** a
+   teleporter: a menu lists the channels already in use (and how many teleporters each has). Pick one, or make a
+   **new channel**. Do the same on the other teleporter, picking the same channel.
+3. **Right click** a teleporter to go to the next one on its channel. No pressure plate or wire needed.
 
-Each teleporter has one partner: linking it to a third one breaks its old link, and breaking a teleporter unlinks
-it. Links are saved with the world and work in multiplayer.
+Breaking a teleporter doesn't touch the others: they stay on their channel, so a new one put on it works right away.
+With three or more on a channel, right clicking goes round them in a loop. Hovering a teleporter shows its channel.
+Channels are saved with the world and work in multiplayer.
 
 ## Multiplayer
 
@@ -211,11 +219,15 @@ In **Settings → Mod Configuration → Terra Index**:
 ## Changelog
 
 **1.1**
-- Wireless teleporters: link two with the Teleporter Linker and right click one to go to the other, no wire needed.
+- Wireless teleporters: put them on a channel with the Teleporter Linker and right click one to go to the next one
+  on its channel, no wire needed.
+- Target Dummy damage meter, like the League of Legends practice dummy: total damage, DPS and last combo of each fight.
 - New blueprints: herb garden, fishing pond (it comes with its 300 tiles of water) and arena with buffs.
 - The blueprint catalog has two tabs, buildings and town NPCs: the second shows what each town NPC loves, likes,
   dislikes and hates, as biome icons and NPC heads.
-- **Next upgrades** in the recipe index (gold button): better weapons, armor, accessories and pickaxe you can craft.
+- **Calamity guide** in the recipe index (gold button, only with Calamity): the wiki's recommended gear for your
+  class at your stage, with a chat message when a boss kill brings new gear. It replaces the Next upgrades tab.
+- The recipe index filters by class (melee, ranged, magic, summoner, throwing, Calamity's rogue and other mods' classes).
 - Item tooltips say how many are in your chests while a terminal is in reach.
 
 **1.0**: first release on the Steam Workshop, with everything from 0.9.

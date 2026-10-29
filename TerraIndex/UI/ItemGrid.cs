@@ -18,8 +18,10 @@ namespace TerraIndex.UI
 {
 	// Item grid (every item in the index, chest contents in the terminal), shown one page at a time.
 	// Only the current page is drawn, and item textures are loaded a few per frame, so big modpacks don't freeze the game.
-	// Header: one tab per item category (ItemCategories), with its count in the tooltip. The recipe index's grid also
-	// has the Next upgrades tab (Upgrades), worked out again on every refresh.
+	// Header: one tab per item category (ItemCategories), with its count in the tooltip. With Calamity, the recipe
+	// index's grid also has the Guide tab (CalamityGuide), worked out again on every refresh, in the guide's order. The
+	// grid can be narrowed to one combat class (ItemClasses), on top of the search and the tab; the Guide only follows
+	// the search, since its armor and accessories have no class.
 	// Footer: |< < [page bar] > >|. The mouse wheel turns pages (Shift: 10 at a time); dragging the bar jumps to a page on release.
 	public class ItemGrid : UIElement
 	{
@@ -48,7 +50,8 @@ namespace TerraIndex.UI
 		private readonly ItemCategory[] tabList;
 		private readonly int[] counts = new int[Enum.GetValues<ItemCategory>().Length];
 		private readonly Rectangle[] tabs;
-		private HashSet<int> upgrades;
+		private List<int> guide = new();
+		private DamageClass classFilter;
 
 		// Footer layout from the last draw.
 		private Rectangle first, previous, next, last, bar;
@@ -64,10 +67,10 @@ namespace TerraIndex.UI
 		public string EmptyText { get; set; } = UIHelpers.T("NoResults");
 		private int PageSize => columns * rows;
 
-		public ItemGrid(Func<IEnumerable<Item>> source, bool upgradesTab = false)
+		public ItemGrid(Func<IEnumerable<Item>> source, bool guideTab = false)
 		{
 			this.source = source;
-			tabList = upgradesTab ? ItemCategories.IndexTabs : ItemCategories.Tabs;
+			tabList = guideTab ? ItemCategories.IndexTabs : ItemCategories.Tabs;
 			tabs = new Rectangle[tabList.Length];
 		}
 
@@ -75,6 +78,7 @@ namespace TerraIndex.UI
 		{
 			lowerNames.Clear();
 			ItemCategories.ClearCache();
+			ItemClasses.ClearCache();
 		}
 
 		public void SetFilter(string text)
@@ -91,18 +95,31 @@ namespace TerraIndex.UI
 			counts[(int)ItemCategory.All] = matching.Count;
 			foreach (Item item in matching)
 				counts[(int)ItemCategories.Of(item.type)]++;
-			if (tabList.Contains(ItemCategory.Upgrades)) {
-				upgrades = Upgrades.Find(Main.LocalPlayer);
-				counts[(int)ItemCategory.Upgrades] = matching.Count(item => upgrades.Contains(item.type));
+			if (tabList.Contains(ItemCategory.Guide)) {
+				guide = CalamityGuide.CurrentItems().Where(MatchesText).ToList();
+				counts[(int)ItemCategory.Guide] = guide.Count;
 			}
 			items = category switch {
 				ItemCategory.All => matching,
-				ItemCategory.Upgrades => matching.Where(item => upgrades.Contains(item.type)).ToList(),
+				ItemCategory.Guide => guide.Select(type => ContentSamples.ItemsByType[type]).ToList(),
 				_ => matching.Where(item => ItemCategories.Of(item.type) == category).ToList(),
 			};
 		}
 
 		public ItemCategory Category => category;
+
+		// The combat class shown, or null for all.
+		public DamageClass ClassFilter => classFilter;
+
+		public void SetClass(DamageClass value)
+		{
+			if (value == classFilter)
+				return;
+			classFilter = value;
+			page = 0;
+			Refresh();
+			SoundEngine.PlaySound(SoundID.MenuTick);
+		}
 
 		// How many items the tab has (for the current search).
 		public int CountOf(ItemCategory tab) => counts[(int)tab];
@@ -118,7 +135,9 @@ namespace TerraIndex.UI
 		}
 
 		// "@name" filters by mod (e.g. "@calamity", "@terraria"); any other text filters by item name.
-		private bool Matches(int type)
+		private bool Matches(int type) => (classFilter == null || ItemClasses.Of(type) == classFilter) && MatchesText(type);
+
+		private bool MatchesText(int type)
 		{
 			if (filter.Length == 0)
 				return true;
@@ -248,8 +267,9 @@ namespace TerraIndex.UI
 			DrawFooter(spriteBatch, inner);
 
 			if (items.Count == 0) {
-				// An empty Next upgrades tab says why, rather than looking broken.
-				string empty = category == ItemCategory.Upgrades && filter.Length == 0 ? UIHelpers.T("UpgradesEmpty") : EmptyText;
+				// An empty Guide says why, rather than looking broken.
+				string empty = category != ItemCategory.Guide || filter.Length > 0 ? EmptyText
+					: UIHelpers.T(Main.LocalPlayer.GetModPlayer<CalamityGuidePlayer>().GuideClass == null ? "GuideNoClass" : "GuideEmpty");
 				Vector2 line = origin;
 				foreach (string text in UIHelpers.Wrap(empty, inner.Width, 0.9f)) {
 					Utils.DrawBorderString(spriteBatch, text, line, Color.Gray, 0.9f);

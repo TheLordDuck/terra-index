@@ -16,13 +16,38 @@ UI: {
 	CategoryConsumables: Pozioni e consumabili
 	CategoryMaterials: Materiali
 	CategoryMisc: Varie
-	CategoryUpgrades: Prossimi potenziamenti (in base ai boss sconfitti)
 	InChests: Nei tuoi forzieri: {0}
-	DummyDamage: Ultimi {0}s: {1} danni ({2} DPS)
-	DummyTotal: Totale: {0} danni
+	DummyTotal: Danni totali: {0}
+	DummyDps: DPS: {0} (in {1}s)
+	DummyCombo: Ultima combo: {0}
+	ClassAll: Tutte le classi
+	ClassMelee: Mischia
+	ClassRanged: Distanza
+	ClassMagic: Magia
+	ClassSummon: Evocatore
+	ClassThrowing: Da lancio
+	ClassRogue: Ladro (Calamity)
+	CategoryGuide: Guida di Calamity (la tua classe e fase)
+	GuideButton: Guida di Calamity: {0} · {1}
+	GuidePickClass: Scegli la tua classe
+	GuideRogue: Ladro
+	GuideNoClass: Scegli la tua classe con il pulsante classe (accanto alla ricerca) per vedere l'equipaggiamento consigliato dal wiki di Calamity.
+	GuideEmpty: La guida non ha niente per questa classe in questa fase.
+	GuideBefore: Prima di {0}
+	GuideAfter: Dopo {0}
+	GuideMech0: Prima dei boss meccanici
+	GuideMech1: Dopo 1 boss meccanico
+	GuideMech2: Dopo 2 boss meccanici
+	GuideExoMechs: gli Exo Mech
+	GuideEndgame: Fine del gioco
+	GuideSectionArmor: armatura
+	GuideSectionWeapons: arma
+	GuideSectionAccessories: accessorio
+	GuideSectionPotions: pozione o potenziamento
+	GuideTooltip: Guida di Calamity: consigliato per {1} ({0})
+	GuideNewStage: Guida di Calamity: nuova fase, {0}. {1} nuovi oggetti consigliati per {2}: {3}. Guardali nell'indice delle ricette (Guida di Calamity).
+	GuideNewStageNoClass: Guida di Calamity: nuova fase, {0}. Scegli la tua classe nell'indice delle ricette (Guida di Calamity) per vedere il tuo equipaggiamento.
 	NoResults: Nessun oggetto corrisponde alla ricerca.
-	UpgradesButton: Prossimi potenziamenti ({0})
-	UpgradesEmpty: Niente da suggerire: nessun equipaggiamento craftabile supera il tuo tra quelli permessi dai boss sconfitti. Sconfiggi un altro boss, o porta con te le armi che usi.
 	Hint:
 		'''
 		Clic sinistro su un oggetto: come crearlo.
@@ -193,6 +218,8 @@ UI: {
 	HelpIndex:
 		'''
 		Clic sinistro su un oggetto: come crearlo. Clic destro: a cosa serve.
+		Pulsante classe (accanto alla ricerca): solo le armi di una classe; clic sinistro la successiva, clic destro la precedente.
+		Guida di Calamity (pulsante dorato): l'equipaggiamento consigliato dal wiki per la tua classe nella tua fase; il pulsante classe sceglie la classe.
 		Rotellina su una ricetta: la successiva. Indietro: l'oggetto precedente.
 		Ingredienti: verde = nell'inventario, blu = nelle casse di un terminale, rosso = mancante.
 		Albero: tutto il necessario fino ai materiali di base; può diventare il tuo obiettivo.
@@ -202,11 +229,17 @@ UI: {
 		'''
 	TipPlaced: Terminale piazzato! Collegalo alle tue casse con filo rosso (si posa con: {0}, venduto da: {1}), poi fai clic destro su di esso.
 	TipOpened: Suggerimento: passa il mouse sul pulsante ? per vedere i comandi del terminale. "Ricette" apre l'indice delle ricette accanto.
-	TeleporterNotLinked: Questo teletrasporto non è collegato. Tieni in mano un Collegatore di teletrasporti e fai clic destro su di esso, poi su un altro.
-	TeleporterPicked: Teletrasporto scelto. Fai clic destro su un altro per collegarli.
-	TeleporterCancelled: Collegamento annullato.
-	TeleporterLinked: Teletrasporti collegati (a {0} blocchi).
-	TeleporterPickedTooltip: Un teletrasporto è scelto: clic destro su un altro per collegarli
+	TeleporterNotLinked: Questo teletrasporto non ha un canale. Tieni in mano un Collegatore di teletrasporti e fai clic destro su di esso per sceglierne uno.
+	TeleporterAlone: Nessun altro teletrasporto è sul canale {0}. Mettine un altro su quel canale con il Collegatore.
+	TeleporterChannel: Canale {0}
+	TeleporterNoChannel: Nessun canale
+	TeleporterMenuTitle: Canale del teletrasporto
+	TeleporterNewChannel: Nuovo canale
+	TeleporterChannelCount: Canale {0} — teletrasporti: {1}
+	TeleporterNoChannels: Ancora nessun canale.
+	TeleporterClearChannel: Togli il canale
+	TeleporterChannelSet: Teletrasporto sul canale {0}.
+	TeleporterChannelCleared: Teletrasporto senza canale.
 }
 
 Items: {
@@ -214,8 +247,8 @@ Items: {
 		DisplayName: Teletrasporto senza fili
 		Tooltip:
 			'''
-			Non serve il cavo: collegalo a un altro con il Collegatore di teletrasporti
-			Clic destro per teletrasportarti a quello collegato
+			Non servono cavi: dagli un canale con il Collegatore di teletrasporti
+			Clic destro per teletrasportarti al successivo del suo canale
 			Ci si può stare sopra
 			'''
 	}
@@ -224,8 +257,8 @@ Items: {
 		DisplayName: Collegatore di teletrasporti
 		Tooltip:
 			'''
-			Tienilo in mano e fai clic destro su un teletrasporto senza fili, poi su un altro, per collegarli
-			Fai di nuovo clic destro sul primo per annullare
+			Tienilo in mano e fai clic destro su un teletrasporto senza fili per sceglierne il canale
+			Un canale nuovo o uno già usato: i teletrasporti sullo stesso canale ti portano dall'uno all'altro
 			'''
 	}
 
@@ -360,7 +393,7 @@ Configs: {
 
 		DummyDamageMeter: {
 			Label: Misuratore di danni sul manichino bersaglio
-			Tooltip: I danni subiti negli ultimi 5 e 10 secondi e i danni al secondo
+			Tooltip: Danni totali, DPS e ultima combo di ogni scontro, come il manichino di allenamento di League of Legends
 		}
 	}
 

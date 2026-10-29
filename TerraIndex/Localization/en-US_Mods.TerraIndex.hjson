@@ -16,13 +16,38 @@ UI: {
 	CategoryConsumables: Potions and consumables
 	CategoryMaterials: Materials
 	CategoryMisc: Miscellaneous
-	CategoryUpgrades: Next upgrades (for the bosses you have beaten)
 	InChests: In your chests: {0}
-	DummyDamage: Last {0}s: {1} damage ({2} DPS)
-	DummyTotal: Total: {0} damage
+	DummyTotal: Total damage: {0}
+	DummyDps: DPS: {0} (over {1}s)
+	DummyCombo: Last combo: {0}
+	ClassAll: All classes
+	ClassMelee: Melee
+	ClassRanged: Ranged
+	ClassMagic: Magic
+	ClassSummon: Summoner
+	ClassThrowing: Throwing
+	ClassRogue: Rogue (Calamity)
+	CategoryGuide: Calamity guide (your class and stage)
+	GuideButton: Calamity guide: {0} · {1}
+	GuidePickClass: Pick your class
+	GuideRogue: Rogue
+	GuideNoClass: Pick your class with the class button (next to the search) to see the gear the Calamity wiki recommends for it.
+	GuideEmpty: The guide has nothing for this class at this stage.
+	GuideBefore: Before {0}
+	GuideAfter: After {0}
+	GuideMech0: Before the mechanical bosses
+	GuideMech1: After 1 mechanical boss
+	GuideMech2: After 2 mechanical bosses
+	GuideExoMechs: the Exo Mechs
+	GuideEndgame: Endgame
+	GuideSectionArmor: armor
+	GuideSectionWeapons: weapon
+	GuideSectionAccessories: accessory
+	GuideSectionPotions: potion or buff
+	GuideTooltip: Calamity guide: recommended {0} for {1}
+	GuideNewStage: Calamity guide: new stage, {0}. {1} new items recommended for {2}: {3}. See them in the recipe index (Calamity guide).
+	GuideNewStageNoClass: Calamity guide: new stage, {0}. Pick your class in the recipe index (Calamity guide) to see your gear.
 	NoResults: No items match your search.
-	UpgradesButton: Next upgrades ({0})
-	UpgradesEmpty: Nothing to suggest: no craftable gear beats yours among what the bosses you have beaten let you make. Beat another boss, or carry the weapons you use.
 	Hint:
 		'''
 		Left click an item: how to craft it.
@@ -193,6 +218,8 @@ UI: {
 	HelpIndex:
 		'''
 		Left click an item: how to craft it. Right click: what it is used in.
+		Class button (next to the search): only one class's weapons; left click the next, right click the previous.
+		Calamity guide (gold button): the wiki's recommended gear for your class at your stage; the class button picks the class.
 		Mouse wheel over a recipe: the next one. Back: the previous item.
 		Ingredients: green = in your inventory, blue = in a terminal's chests, red = missing.
 		Tree: everything needed down to the base materials; it can be set as your goal.
@@ -202,11 +229,17 @@ UI: {
 		'''
 	TipPlaced: Terminal placed! Connect it to your chests with red wire (placed with the {0}, sold by the {1}), then right click it.
 	TipOpened: Tip: hover over the ? button to see the terminal's controls. "Recipes" opens the recipe index next to it.
-	TeleporterNotLinked: This teleporter isn't linked. Hold a Teleporter Linker and right click it, then another one.
-	TeleporterPicked: Teleporter picked. Right click another one to link them.
-	TeleporterCancelled: Link cancelled.
-	TeleporterLinked: Teleporters linked ({0} blocks apart).
-	TeleporterPickedTooltip: A teleporter is picked: right click another one to link them
+	TeleporterNotLinked: This teleporter has no channel. Hold a Teleporter Linker and right click it to pick one.
+	TeleporterAlone: No other teleporter is on channel {0}. Put another one on it with the Teleporter Linker.
+	TeleporterChannel: Channel {0}
+	TeleporterNoChannel: No channel
+	TeleporterMenuTitle: Teleporter channel
+	TeleporterNewChannel: New channel
+	TeleporterChannelCount: Channel {0} — teleporters: {1}
+	TeleporterNoChannels: No channels yet.
+	TeleporterClearChannel: Take it off its channel
+	TeleporterChannelSet: Teleporter on channel {0}.
+	TeleporterChannelCleared: Teleporter taken off its channel.
 }
 
 Items: {
@@ -214,8 +247,8 @@ Items: {
 		DisplayName: Wireless Teleporter
 		Tooltip:
 			'''
-			Needs no wire: link it to another one with the Teleporter Linker
-			Right click it to teleport to the linked one
+			Needs no wire: put it on a channel with the Teleporter Linker
+			Right click it to teleport to the next one on its channel
 			You can stand on it
 			'''
 	}
@@ -224,8 +257,8 @@ Items: {
 		DisplayName: Teleporter Linker
 		Tooltip:
 			'''
-			Hold it and right click a wireless teleporter, then another one, to link them
-			Right click the first one again to cancel
+			Hold it and right click a wireless teleporter to pick its channel
+			A new channel or one already in use: teleporters on the same channel take you to each other
 			'''
 	}
 
@@ -360,7 +393,7 @@ Configs: {
 
 		DummyDamageMeter: {
 			Label: Damage meter on the Target Dummy
-			Tooltip: Damage it took in the last 5 and 10 seconds, and the damage per second
+			Tooltip: Total damage, DPS and last combo of each fight, like the League of Legends practice dummy
 		}
 	}
 

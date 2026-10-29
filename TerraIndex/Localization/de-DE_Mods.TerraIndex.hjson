@@ -16,13 +16,38 @@ UI: {
 	CategoryConsumables: Tränke und Verbrauchsgüter
 	CategoryMaterials: Materialien
 	CategoryMisc: Verschiedenes
-	CategoryUpgrades: Nächste Verbesserungen (für die besiegten Bosse)
 	InChests: In deinen Truhen: {0}
-	DummyDamage: Letzte {0}s: {1} Schaden ({2} DPS)
-	DummyTotal: Gesamt: {0} Schaden
+	DummyTotal: Gesamtschaden: {0}
+	DummyDps: DPS: {0} (über {1}s)
+	DummyCombo: Letzte Kombo: {0}
+	ClassAll: Alle Klassen
+	ClassMelee: Nahkampf
+	ClassRanged: Fernkampf
+	ClassMagic: Magie
+	ClassSummon: Beschwörer
+	ClassThrowing: Wurfwaffen
+	ClassRogue: Schurke (Calamity)
+	CategoryGuide: Calamity-Leitfaden (deine Klasse und Phase)
+	GuideButton: Calamity-Leitfaden: {0} · {1}
+	GuidePickClass: Wähle deine Klasse
+	GuideRogue: Schurke
+	GuideNoClass: Wähle deine Klasse mit dem Klassen-Knopf (neben der Suche), um die Ausrüstung zu sehen, die das Calamity-Wiki empfiehlt.
+	GuideEmpty: Der Leitfaden hat für diese Klasse in dieser Phase nichts.
+	GuideBefore: Vor {0}
+	GuideAfter: Nach {0}
+	GuideMech0: Vor den mechanischen Bossen
+	GuideMech1: Nach 1 mechanischen Boss
+	GuideMech2: Nach 2 mechanischen Bossen
+	GuideExoMechs: den Exo-Mechs
+	GuideEndgame: Endspiel
+	GuideSectionArmor: Rüstung
+	GuideSectionWeapons: Waffe
+	GuideSectionAccessories: Zubehör
+	GuideSectionPotions: Trank oder Buff
+	GuideTooltip: Calamity-Leitfaden: empfohlen als {0} für {1}
+	GuideNewStage: Calamity-Leitfaden: neue Phase, {0}. {1} neue Gegenstände empfohlen für {2}: {3}. Sieh sie dir im Rezeptindex an (Calamity-Leitfaden).
+	GuideNewStageNoClass: Calamity-Leitfaden: neue Phase, {0}. Wähle deine Klasse im Rezeptindex (Calamity-Leitfaden), um deine Ausrüstung zu sehen.
 	NoResults: Keine Gegenstände passen zur Suche.
-	UpgradesButton: Nächste Verbesserungen ({0})
-	UpgradesEmpty: Nichts vorzuschlagen: Unter dem, was die besiegten Bosse erlauben, ist keine herstellbare Ausrüstung besser als deine. Besiege einen weiteren Boss oder trage die Waffen bei dir, die du benutzt.
 	Hint:
 		'''
 		Linksklick auf einen Gegenstand: wie man ihn herstellt.
@@ -193,6 +218,8 @@ UI: {
 	HelpIndex:
 		'''
 		Linksklick auf einen Gegenstand: wie man ihn herstellt. Rechtsklick: wofür er verwendet wird.
+		Klassen-Knopf (neben der Suche): nur die Waffen einer Klasse; Linksklick die nächste, Rechtsklick die vorige.
+		Calamity-Leitfaden (goldener Knopf): die vom Wiki empfohlene Ausrüstung für deine Klasse in deiner Phase; der Klassen-Knopf wählt die Klasse.
 		Mausrad über einem Rezept: das nächste. Zurück: der vorherige Gegenstand.
 		Zutaten: grün = im Inventar, blau = in den Truhen eines Terminals, rot = fehlt.
 		Baum: alles Nötige bis zu den Grundmaterialien; er kann als Ziel gesetzt werden.
@@ -202,11 +229,17 @@ UI: {
 		'''
 	TipPlaced: Terminal platziert! Verbinde es mit rotem Draht mit deinen Truhen (verlegt mit: {0}, verkauft von: {1}) und klicke es dann mit Rechts an.
 	TipOpened: Tipp: Fahre mit der Maus über den ?-Knopf, um die Steuerung des Terminals zu sehen. "Rezepte" öffnet den Rezeptindex daneben.
-	TeleporterNotLinked: Dieser Teleporter ist nicht verbunden. Halte einen Teleporter-Verbinder und klicke mit Rechts darauf, dann auf einen anderen.
-	TeleporterPicked: Teleporter ausgewählt. Klicke mit Rechts auf einen anderen, um sie zu verbinden.
-	TeleporterCancelled: Verbindung abgebrochen.
-	TeleporterLinked: Teleporter verbunden ({0} Blöcke entfernt).
-	TeleporterPickedTooltip: Ein Teleporter ist ausgewählt: Rechtsklick auf einen anderen verbindet sie
+	TeleporterNotLinked: Dieser Teleporter hat keinen Kanal. Halte einen Teleporter-Verbinder und klicke mit Rechts darauf, um einen zu wählen.
+	TeleporterAlone: Kein anderer Teleporter ist auf Kanal {0}. Setze mit dem Teleporter-Verbinder einen weiteren darauf.
+	TeleporterChannel: Kanal {0}
+	TeleporterNoChannel: Kein Kanal
+	TeleporterMenuTitle: Kanal des Teleporters
+	TeleporterNewChannel: Neuer Kanal
+	TeleporterChannelCount: Kanal {0} — Teleporter: {1}
+	TeleporterNoChannels: Noch keine Kanäle.
+	TeleporterClearChannel: Vom Kanal nehmen
+	TeleporterChannelSet: Teleporter auf Kanal {0}.
+	TeleporterChannelCleared: Teleporter vom Kanal genommen.
 }
 
 Items: {
@@ -214,9 +247,9 @@ Items: {
 		DisplayName: Kabelloser Teleporter
 		Tooltip:
 			'''
-			Braucht keinen Draht: verbinde ihn mit dem Teleporter-Verbinder mit einem anderen
-			Rechtsklick teleportiert dich zum verbundenen
-			Man kann darauf stehen
+			Braucht keinen Draht: gib ihm mit dem Teleporter-Verbinder einen Kanal
+			Rechtsklick teleportiert dich zum nächsten auf seinem Kanal
+			Du kannst darauf stehen
 			'''
 	}
 
@@ -224,8 +257,8 @@ Items: {
 		DisplayName: Teleporter-Verbinder
 		Tooltip:
 			'''
-			Halte ihn und klicke mit Rechts auf einen kabellosen Teleporter, dann auf einen anderen, um sie zu verbinden
-			Klicke erneut auf den ersten, um abzubrechen
+			Halte ihn und klicke mit Rechts auf einen kabellosen Teleporter, um seinen Kanal zu wählen
+			Ein neuer oder ein bestehender Kanal: Teleporter auf demselben Kanal bringen dich zueinander
 			'''
 	}
 
@@ -360,7 +393,7 @@ Configs: {
 
 		DummyDamageMeter: {
 			Label: Schadensanzeige an der Zielpuppe
-			Tooltip: Schaden der letzten 5 und 10 Sekunden und der Schaden pro Sekunde
+			Tooltip: Gesamtschaden, DPS und letzte Kombo jedes Kampfes, wie die Übungspuppe in League of Legends
 		}
 	}
 

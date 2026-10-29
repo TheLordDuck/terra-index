@@ -220,16 +220,18 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 - [ ] Compare a couple with the wiki (e.g. the Guide likes the forest, the Nurse loves the Arms Dealer)
 - [ ] With Calamity (or another mod adding town NPCs): its NPCs show up with their own preferences
 
-## 49. Next upgrades tab
+## 49. Calamity guide (replaces Next upgrades)
 
-- [ ] The index has a gold "Next upgrades (N)" button next to its title (it doesn't overlap the ? and X buttons, also next to the terminal); clicking it shows the suggestions and turns brighter, clicking again goes back to All
-- [ ] The Night's Edge tab right after All does the same; its tooltip says how many items it has
-- [ ] With nothing to suggest, the tab says why instead of showing an empty grid
-- [ ] New character (copper gear): it suggests better weapons of the classes you carry, armor pieces and a pickaxe, nothing from hardmode
-- [ ] Accessories: wearing Hermes Boots suggests Spectre Boots (once allowed by bosses); also 3 new accessories you don't have; never one you carry or wear
-- [ ] After beating bosses (or in a later world) it suggests later gear; never what you already carry or wear
-- [ ] Click a suggestion, Tree tab, set it as the goal: the goal panel tracks it
-- [ ] The terminal's grid doesn't have this tab
+- [ ] **Without Calamity:** the index has no gold button and no book tab; nothing else changes
+- [ ] **With Calamity:** a gold "Calamity guide: Pick your class · Before Desert Scourge" button next to the title (it doesn't overlap the ? and X buttons, also next to the terminal); clicking it, or the book tab after All, opens the guide
+- [ ] No class picked: holding a rogue weapon picks Rogue by itself; with nothing held, the grid says to pick a class
+- [ ] In the guide the class button cycles Melee, Ranged, Magic, Summoner, Rogue (right click backwards); the list changes; leaving the guide gives the class button back its filter
+- [ ] The list goes armor (Victide: only the rogue head for Rogue), weapons, accessories, potions; hovering one says "Calamity guide: recommended ... for Rogue"
+- [ ] The search narrows the guide too; clicking an item shows its recipe with green / blue / red ingredients
+- [ ] The stage in the button follows the world: new world "Before Desert Scourge"; after it, Eater of Worlds/Brain; ... Hardmode "Before the mechanical bosses", "After 1 mechanical boss"...
+- [ ] Killing the next boss: within a second the chat says the new stage, how many new items and names three with icons
+- [ ] Leave and come back: the class is kept; entering a more advanced world doesn't send the message
+- [ ] Names in another language: the stage uses the game's boss names in that language
 
 ## 50. "In your chests" in tooltips
 
@@ -242,14 +244,18 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 
 - [ ] Craft the Wireless Teleporter (Teleporter + 10 Wire, Tinkerer's Workshop) and the Teleporter Linker (Red Wrench + 3 Iron/Lead Bars, anvil); their sprites look right
 - [ ] Place two on the floor (3 wide); you can stand on them
-- [ ] Right click one without linking: message that it isn't linked
-- [ ] With the linker: right click one ("picked", the tooltip says so), right click the other: "linked (N blocks apart)"; both glow
-- [ ] Right click the picked one again: cancelled
-- [ ] Right click a linked one: you appear standing on the other one, with the teleporter effect; and back
-- [ ] Linking a third one to one of them leaves the old partner unlinked (no glow)
-- [ ] Breaking one drops it and leaves its partner unlinked
-- [ ] Leave and rejoin the world: links kept
-- [ ] **Multiplayer:** linking works for a client; teleporting to one far away (out of the loaded area) works; the other player sees you teleport
+- [ ] Hovering one shows "No channel"; right click it: message that it has no channel
+- [ ] With the linker, right click one: the channel menu opens ("No channels yet" the first time). "New channel": "Teleporter on channel 1"
+- [ ] Right click the second one with the linker: channel 1 is listed ("teleporters: 1"); pick it. Both glow, hovering shows "Channel 1"
+- [ ] Right click one of them: you appear standing on the other one, with the teleporter effect; and back
+- [ ] A teleporter alone on its channel: message "No other teleporter is on channel N"
+- [ ] Three on the same channel: right clicking goes round all three in a loop
+- [ ] Break one of a pair: the other keeps its channel; place a new one, put it on that channel: they work again
+- [ ] "Take it off its channel" in the menu; its current channel is green; the menu closes with Escape, X, or walking away
+- [ ] Many channels: the list scrolls
+- [ ] A world with teleporters linked by the old version: each pair is on a channel of its own and still works
+- [ ] Leave and rejoin the world: channels kept
+- [ ] **Multiplayer:** setting a channel works for a client and the other player sees it; teleporting to one far away (out of the loaded area) works; the other player sees you teleport
 
 ## 40 and 41. Languages and help
 
@@ -278,10 +284,20 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 
 ## Target Dummy damage meter
 
-- [ ] Hitting a Target Dummy shows over it the damage of the last 5 and 10 seconds, with the DPS of each, and the total
+- [ ] Hitting a Target Dummy shows over it the total damage, the DPS (and over how many seconds) and the last combo
 - [ ] Swords, projectiles and minions count; debuff damage (On Fire!, Poisoned...) adds up too
-- [ ] The text goes away 10 seconds after the last hit, and the total starts over on the next one
+- [ ] Pausing hits for over a second starts a new combo; the total and DPS keep counting
+- [ ] 4 seconds without damage ends the fight: the text turns grey and the DPS doesn't drop while waiting
+- [ ] The grey results go away 15 seconds later; hitting again starts a new fight from 0
 - [ ] The "Damage meter on the Target Dummy" setting hides it
+
+## Recipe index class filter
+
+- [ ] The button next to the search says "All classes"; left click goes Melee, Ranged, Magic, Summoner (and Throwing if any item has it), back to All; right click goes the other way
+- [ ] Each class shows only its weapons (and ammo for Ranged); whips are in Summoner; the tab counts follow the class
+- [ ] It works with the search and the tabs (e.g. Ranged + "bow"); the text fits the button in every language
+- [ ] **With Calamity:** "Rogue (Calamity)" appears and lists the rogue weapons; true melee weapons are in Melee
+- [ ] With another class mod (Thorium...): its classes appear with the mod's name
 
 ## Apothecary (town NPC)
 

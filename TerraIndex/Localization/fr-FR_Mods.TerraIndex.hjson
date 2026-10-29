@@ -16,13 +16,38 @@ UI: {
 	CategoryConsumables: Potions et consommables
 	CategoryMaterials: Matériaux
 	CategoryMisc: Divers
-	CategoryUpgrades: Prochaines améliorations (selon les boss vaincus)
 	InChests: Dans tes coffres : {0}
-	DummyDamage: "{0} dernières s : {1} dégâts ({2} DPS)"
-	DummyTotal: Total : {0} dégâts
+	DummyTotal: Dégâts totaux : {0}
+	DummyDps: DPS : {0} (sur {1} s)
+	DummyCombo: Dernier combo : {0}
+	ClassAll: Toutes les classes
+	ClassMelee: Mêlée
+	ClassRanged: Distance
+	ClassMagic: Magie
+	ClassSummon: Invocateur
+	ClassThrowing: Lancer
+	ClassRogue: Voleur (Calamity)
+	CategoryGuide: Guide Calamity (ta classe et ton étape)
+	GuideButton: Guide Calamity : {0} · {1}
+	GuidePickClass: Choisis ta classe
+	GuideRogue: Voleur
+	GuideNoClass: Choisis ta classe avec le bouton de classe (à côté de la recherche) pour voir l'équipement que recommande le wiki de Calamity.
+	GuideEmpty: Le guide n'a rien pour cette classe à cette étape.
+	GuideBefore: Avant {0}
+	GuideAfter: Après {0}
+	GuideMech0: Avant les boss mécaniques
+	GuideMech1: Après 1 boss mécanique
+	GuideMech2: Après 2 boss mécaniques
+	GuideExoMechs: les Exo-Mécas
+	GuideEndgame: Fin du jeu
+	GuideSectionArmor: armure
+	GuideSectionWeapons: arme
+	GuideSectionAccessories: accessoire
+	GuideSectionPotions: potion ou bonus
+	GuideTooltip: Guide Calamity : recommandé pour {1} ({0})
+	GuideNewStage: Guide Calamity : nouvelle étape, {0}. {1} nouveaux objets recommandés pour {2} : {3}. Vois-les dans l'index des recettes (Guide Calamity).
+	GuideNewStageNoClass: Guide Calamity : nouvelle étape, {0}. Choisis ta classe dans l'index des recettes (Guide Calamity) pour voir ton équipement.
 	NoResults: Aucun objet ne correspond à la recherche.
-	UpgradesButton: Prochaines améliorations ({0})
-	UpgradesEmpty: Rien à suggérer : aucun équipement fabricable ne dépasse le tien parmi ce que permettent les boss vaincus. Bats un autre boss, ou garde sur toi les armes que tu utilises.
 	Hint:
 		'''
 		Clic gauche sur un objet : comment le fabriquer.
@@ -193,6 +218,8 @@ UI: {
 	HelpIndex:
 		'''
 		Clic gauche sur un objet : comment le fabriquer. Clic droit : à quoi il sert.
+		Bouton de classe (à côté de la recherche) : les armes d'une seule classe ; clic gauche la suivante, clic droit la précédente.
+		Guide Calamity (bouton doré) : l'équipement recommandé par le wiki pour ta classe à ton étape ; le bouton de classe choisit la classe.
 		Molette sur une recette : la suivante. Retour : l'objet précédent.
 		Ingrédients : vert = dans ton inventaire, bleu = dans les coffres d'un terminal, rouge = manquant.
 		Arbre : tout le nécessaire jusqu'aux matériaux de base ; il peut devenir ton objectif.
@@ -202,11 +229,17 @@ UI: {
 		'''
 	TipPlaced: Terminal posé ! Relie-le à tes coffres avec du fil rouge (posé avec : {0}, vendu par : {1}), puis fais un clic droit dessus.
 	TipOpened: Astuce : survole le bouton ? pour voir les commandes du terminal. « Recettes » ouvre l'index des recettes à côté.
-	TeleporterNotLinked: Ce téléporteur n'est relié à aucun autre. Tiens un Lieur de téléporteurs et fais un clic droit dessus, puis sur un autre.
-	TeleporterPicked: Téléporteur choisi. Fais un clic droit sur un autre pour les relier.
-	TeleporterCancelled: Liaison annulée.
-	TeleporterLinked: Téléporteurs reliés (à {0} blocs).
-	TeleporterPickedTooltip: Un téléporteur est choisi : clic droit sur un autre pour les relier
+	TeleporterNotLinked: Ce téléporteur n'a pas de canal. Tiens un Lieur de téléporteurs et fais un clic droit dessus pour en choisir un.
+	TeleporterAlone: Aucun autre téléporteur n'est sur le canal {0}. Mets-en un autre dessus avec le Lieur de téléporteurs.
+	TeleporterChannel: Canal {0}
+	TeleporterNoChannel: Aucun canal
+	TeleporterMenuTitle: Canal du téléporteur
+	TeleporterNewChannel: Nouveau canal
+	TeleporterChannelCount: Canal {0} — téléporteurs : {1}
+	TeleporterNoChannels: Aucun canal pour l'instant.
+	TeleporterClearChannel: Retirer son canal
+	TeleporterChannelSet: Téléporteur sur le canal {0}.
+	TeleporterChannelCleared: Téléporteur retiré de son canal.
 }
 
 Items: {
@@ -214,8 +247,8 @@ Items: {
 		DisplayName: Téléporteur sans fil
 		Tooltip:
 			'''
-			Pas besoin de câble : relie-le à un autre avec le Lieur de téléporteurs
-			Clic droit pour te téléporter vers celui qui est relié
+			Pas besoin de câble : donne-lui un canal avec le Lieur de téléporteurs
+			Clic droit pour te téléporter vers le suivant de son canal
 			On peut se tenir dessus
 			'''
 	}
@@ -224,8 +257,8 @@ Items: {
 		DisplayName: Lieur de téléporteurs
 		Tooltip:
 			'''
-			Tiens-le et fais un clic droit sur un téléporteur sans fil, puis sur un autre, pour les relier
-			Refais un clic droit sur le premier pour annuler
+			Tiens-le et fais un clic droit sur un téléporteur sans fil pour choisir son canal
+			Un nouveau canal ou un canal existant : les téléporteurs du même canal mènent de l'un à l'autre
 			'''
 	}
 
@@ -360,7 +393,7 @@ Configs: {
 
 		DummyDamageMeter: {
 			Label: Compteur de dégâts sur le mannequin cible
-			Tooltip: Les dégâts reçus pendant les 5 et 10 dernières secondes, et les dégâts par seconde
+			Tooltip: Dégâts totaux, DPS et dernier combo de chaque combat, comme le mannequin d'entraînement de League of Legends
 		}
 	}
 

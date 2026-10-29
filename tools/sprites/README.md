@@ -9,3 +9,7 @@ The Apothecary's sprite is built on the Guide's vanilla sheet, so it has his pos
    `sheet.ps1` lays a sheet out scaled up, with frame numbers, to look at it.
 
 The extracted vanilla files are not kept in the repo.
+
+4. From the repo root, `python tools/sprites/terrarian.py` repaints that hooded sheet as "The Terrarian" (the user's
+   character): brown hair with red bangs, a gold band with blue, green and red plumes, a navy coat and white
+   trousers. It overwrites both PNGs, so run it once, on step 3's output.

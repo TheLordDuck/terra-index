@@ -10,18 +10,23 @@ using Terraria.UI;
 
 namespace TerraIndex.Content.Combat
 {
-	// Counts the damage each Target Dummy took in the last 10 seconds: your hits (items, projectiles and minions) and
-	// damage over time from debuffs. Other players' hits aren't counted, each player sees their own damage.
+	// Measures the damage each Target Dummy takes, like the Practice Tool dummy in League of Legends: a fight starts
+	// with the first hit and ends after a few seconds without damage, and the meter shows its total damage, its DPS
+	// (over the time from the first hit to the last, so the wait at the end doesn't lower it) and the last combo's
+	// damage (hits less than a second apart). The results stay on screen for a while after the fight, and the next hit
+	// starts a new one. Counts your hits (items, projectiles and minions) and damage over time from debuffs; other
+	// players' hits aren't counted, each player sees their own damage.
 	public class DummyDamageMeter : GlobalNPC
 	{
-		public const int Ticks = 10 * 60;
+		public const int ComboGap = 60;
+		public const int FightEnd = 4 * 60;
+		public const int ShowFor = 15 * 60;
 
-		// Damage taken on each of the last 10 seconds' ticks, indexed by GameUpdateCount % Ticks.
-		readonly float[] damage = new float[Ticks];
-		uint lastTick;
+		uint fightStart;
+		uint lastHit;
 
-		// Damage since the dummy started taking it; starts over after 10 seconds without damage.
 		public float Total { get; private set; }
+		public float Combo { get; private set; }
 
 		public override bool InstancePerEntity => true;
 
@@ -38,46 +43,38 @@ namespace TerraIndex.Content.Combat
 				Add(-npc.lifeRegen / 120f);
 		}
 
+		uint SinceLastHit => Main.GameUpdateCount - lastHit;
+
+		public bool InFight => Total > 0f && SinceLastHit <= FightEnd;
+
+		public bool Visible => Total > 0f && SinceLastHit <= FightEnd + ShowFor;
+
+		// From the first hit to the last, at least one second.
+		public float Seconds => Math.Max(1f, (lastHit - fightStart) / 60f);
+
+		public float Dps => Total / Seconds;
+
 		void Add(float amount)
 		{
-			if (Main.dedServ)
+			if (Main.dedServ || amount <= 0f)
 				return;
-			if (Sum(Ticks) <= 0f)
+			if (!InFight) {
 				Total = 0f;
-			damage[lastTick % Ticks] += amount;
+				Combo = 0f;
+				fightStart = Main.GameUpdateCount;
+			}
+			else if (SinceLastHit > ComboGap)
+				Combo = 0f;
 			Total += amount;
-		}
-
-		public float Sum(int ticks)
-		{
-			Advance();
-			float total = 0f;
-			for (int i = 0; i < ticks; i++)
-				total += damage[(lastTick - (uint)i) % Ticks];
-			return total;
-		}
-
-		// Clears the ticks that went by since the last call, so they don't keep damage from 10 seconds ago.
-		void Advance()
-		{
-			uint now = Main.GameUpdateCount;
-			if (now == lastTick)
-				return;
-			if (now - lastTick >= Ticks)
-				Array.Clear(damage);
-			else
-				for (uint t = lastTick + 1; t != now + 1; t++)
-					damage[t % Ticks] = 0f;
-			lastTick = now;
+			Combo += amount;
+			lastHit = Main.GameUpdateCount;
 		}
 	}
 
-	// Draws the damage of the last 5 and 10 seconds with their DPS, and the total, over each Target Dummy. It is an interface layer
-	// instead of the NPC's PostDraw because the dummy NPC is invisible (the dummy you see is the tile).
+	// Draws the fight's total damage, DPS and last combo over each Target Dummy, greyed out once the fight is over. It is
+	// an interface layer instead of the NPC's PostDraw because the dummy NPC is invisible (the dummy you see is the tile).
 	public class DummyDamageMeterLayer : ModSystem
 	{
-		static readonly int[] WindowSeconds = { 5, 10 };
-
 		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
 		{
 			int index = layers.FindIndex(layer => layer.Name == "Vanilla: Mouse Text");
@@ -93,18 +90,20 @@ namespace TerraIndex.Content.Combat
 		static void Draw()
 		{
 			foreach (NPC npc in Main.ActiveNPCs) {
-				if (npc.type != NPCID.TargetDummy || !npc.TryGetGlobalNPC(out DummyDamageMeter meter) || meter.Sum(DummyDamageMeter.Ticks) <= 0f)
+				if (npc.type != NPCID.TargetDummy || !npc.TryGetGlobalNPC(out DummyDamageMeter meter) || !meter.Visible)
 					continue;
+				bool fighting = meter.InFight;
+				// Bottom line first.
+				var lines = new (string Text, Color Color)[] {
+					(UIHelpers.T("DummyCombo", (int)Math.Round(meter.Combo)), Color.White),
+					(UIHelpers.T("DummyDps", Math.Round(meter.Dps, 1), Math.Round(meter.Seconds, 1)), new Color(255, 220, 120)),
+					(UIHelpers.T("DummyTotal", (int)Math.Round(meter.Total)), new Color(255, 140, 90)),
+				};
 				var pos = npc.Top - Main.screenPosition - new Vector2(0f, 10f);
-				// Bottom line first, so the longest window ends up on top.
-				for (int i = 0; i < WindowSeconds.Length; i++) {
-					int seconds = WindowSeconds[i];
-					float total = meter.Sum(seconds * 60);
-					string text = UIHelpers.T("DummyDamage", seconds, (int)Math.Round(total), Math.Round(total / seconds, 1));
-					Utils.DrawBorderString(Main.spriteBatch, text, pos, i == 0 ? Color.White : new Color(255, 220, 120), 0.8f, 0.5f, 1f);
+				foreach (var (text, color) in lines) {
+					Utils.DrawBorderString(Main.spriteBatch, text, pos, fighting ? color : Color.Lerp(color, Color.Gray, 0.6f), 0.8f, 0.5f, 1f);
 					pos.Y -= 20f;
 				}
-				Utils.DrawBorderString(Main.spriteBatch, UIHelpers.T("DummyTotal", (int)Math.Round(meter.Total)), pos, new Color(255, 140, 90), 0.8f, 0.5f, 1f);
 			}
 		}
 	}

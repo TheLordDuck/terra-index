@@ -16,13 +16,38 @@ UI: {
 	CategoryConsumables: 药水和消耗品
 	CategoryMaterials: 材料
 	CategoryMisc: 杂项
-	CategoryUpgrades: 下一步升级（根据已击败的 Boss）
 	InChests: 你的箱子里：{0}
-	DummyDamage: 最近{0}秒：{1} 伤害（{2} DPS）
-	DummyTotal: 总计：{0} 伤害
+	DummyTotal: 总伤害：{0}
+	DummyDps: DPS：{0}（{1}秒内）
+	DummyCombo: 上一次连招：{0}
+	ClassAll: 所有职业
+	ClassMelee: 近战
+	ClassRanged: 远程
+	ClassMagic: 魔法
+	ClassSummon: 召唤
+	ClassThrowing: 投掷
+	ClassRogue: 盗贼（灾厄）
+	CategoryGuide: 灾厄指南（你的职业和阶段）
+	GuideButton: 灾厄指南：{0} · {1}
+	GuidePickClass: 选择你的职业
+	GuideRogue: 盗贼
+	GuideNoClass: 用职业按钮（搜索框旁）选择职业，查看灾厄维基推荐的装备。
+	GuideEmpty: 指南在这个阶段没有为该职业推荐的物品。
+	GuideBefore: "{0}之前"
+	GuideAfter: "{0}之后"
+	GuideMech0: 机械 Boss 之前
+	GuideMech1: 击败 1 个机械 Boss 后
+	GuideMech2: 击败 2 个机械 Boss 后
+	GuideExoMechs: 星流巨械
+	GuideEndgame: 终局
+	GuideSectionArmor: 盔甲
+	GuideSectionWeapons: 武器
+	GuideSectionAccessories: 饰品
+	GuideSectionPotions: 药水或增益
+	GuideTooltip: 灾厄指南：推荐给{1}的{0}
+	GuideNewStage: 灾厄指南：新阶段——{0}。为{2}推荐了 {1} 件新物品：{3}。在配方索引（灾厄指南）中查看。
+	GuideNewStageNoClass: 灾厄指南：新阶段——{0}。在配方索引（灾厄指南）中选择职业来查看你的装备。
 	NoResults: 没有符合搜索的物品。
-	UpgradesButton: 下一步升级（{0}）
-	UpgradesEmpty: 没有可推荐的：在已击败的 Boss 所解锁的范围内，没有比你现有装备更好的可制作装备。再击败一个 Boss，或把你使用的武器带在身上。
 	Hint:
 		'''
 		左键点击物品：查看如何制作。
@@ -193,6 +218,8 @@ UI: {
 	HelpIndex:
 		'''
 		左键点击物品：如何制作。右键：它的用途。
+		职业按钮（搜索框旁）：只显示一个职业的武器；左键下一个，右键上一个。
+		灾厄指南（金色按钮）：维基为你的职业在当前阶段推荐的装备；职业按钮选择职业。
 		在配方上滚动鼠标滚轮：下一个配方。返回：上一个物品。
 		材料颜色：绿色 = 在物品栏中，蓝色 = 在终端的箱子中，红色 = 缺少。
 		树：列出直到基础材料的所有所需物品；可以设为目标。
@@ -202,11 +229,17 @@ UI: {
 		'''
 	TipPlaced: 终端已放置！用红电线把它连接到你的箱子（铺设工具：{0}，出售者：{1}），然后右键点击它。
 	TipOpened: 提示：把鼠标移到 ? 按钮上可以查看终端的操作说明。“配方”按钮会在旁边打开配方索引。
-	TeleporterNotLinked: 这个传送机还没有连接。手持传送机连接器右键点击它，再点击另一个。
-	TeleporterPicked: 已选择传送机。右键点击另一个即可连接。
-	TeleporterCancelled: 已取消连接。
-	TeleporterLinked: 传送机已连接（相距 {0} 格）。
-	TeleporterPickedTooltip: 已选择一个传送机：右键点击另一个即可连接
+	TeleporterNotLinked: 这个传送机没有频道。手持传送机连接器右键点击它来选择频道。
+	TeleporterAlone: 频道 {0} 上没有其他传送机。用传送机连接器把另一个设为该频道。
+	TeleporterChannel: 频道 {0}
+	TeleporterNoChannel: 无频道
+	TeleporterMenuTitle: 传送机频道
+	TeleporterNewChannel: 新频道
+	TeleporterChannelCount: 频道 {0} — 传送机：{1}
+	TeleporterNoChannels: 还没有频道。
+	TeleporterClearChannel: 移出频道
+	TeleporterChannelSet: 传送机已设为频道 {0}。
+	TeleporterChannelCleared: 传送机已移出频道。
 }
 
 Items: {
@@ -214,8 +247,8 @@ Items: {
 		DisplayName: 无线传送机
 		Tooltip:
 			'''
-			不需要电线：用传送机连接器把它和另一个连接起来
-			右键点击即可传送到已连接的那个
+			无需电线：用传送机连接器为它设置频道
+			右键点击传送到同一频道的下一个传送机
 			可以站在上面
 			'''
 	}
@@ -224,8 +257,8 @@ Items: {
 		DisplayName: 传送机连接器
 		Tooltip:
 			'''
-			手持它右键点击一个无线传送机，再点击另一个，即可将它们连接
-			再次右键点击第一个可取消
+			手持它右键点击无线传送机来选择频道
+			新建频道或使用已有频道：同一频道的传送机可互相传送
 			'''
 	}
 
@@ -360,7 +393,7 @@ Configs: {
 
 		DummyDamageMeter: {
 			Label: 训练假人伤害统计
-			Tooltip: 最近5秒和10秒内受到的伤害，以及每秒伤害
+			Tooltip: 每场战斗的总伤害、DPS 和上一次连招，就像《英雄联盟》的训练假人
 		}
 	}
 

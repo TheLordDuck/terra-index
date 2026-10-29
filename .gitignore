@@ -7,3 +7,6 @@ obj/
 *.tmod
 launchSettings.json
 __pycache__/
+
+# Downloads of tools/calamity/build_guide.py
+tools/calamity/cache/

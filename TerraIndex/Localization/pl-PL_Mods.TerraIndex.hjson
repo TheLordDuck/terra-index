@@ -16,13 +16,38 @@ UI: {
 	CategoryConsumables: Mikstury i przedmioty jednorazowe
 	CategoryMaterials: Materiały
 	CategoryMisc: Różne
-	CategoryUpgrades: Następne ulepszenia (według pokonanych bossów)
 	InChests: W twoich skrzyniach: {0}
-	DummyDamage: Ostatnie {0}s: {1} obrażeń ({2} DPS)
-	DummyTotal: Łącznie: {0} obrażeń
+	DummyTotal: Łączne obrażenia: {0}
+	DummyDps: DPS: {0} (w {1}s)
+	DummyCombo: Ostatnie combo: {0}
+	ClassAll: Wszystkie klasy
+	ClassMelee: Walka wręcz
+	ClassRanged: Dystansowa
+	ClassMagic: Magia
+	ClassSummon: Przywoływacz
+	ClassThrowing: Rzucana
+	ClassRogue: Łotr (Calamity)
+	CategoryGuide: Poradnik Calamity (twoja klasa i etap)
+	GuideButton: Poradnik Calamity: {0} · {1}
+	GuidePickClass: Wybierz klasę
+	GuideRogue: Łotr
+	GuideNoClass: Wybierz klasę przyciskiem klasy (obok wyszukiwania), by zobaczyć ekwipunek polecany przez wiki Calamity.
+	GuideEmpty: Poradnik nie ma nic dla tej klasy na tym etapie.
+	GuideBefore: Przed: {0}
+	GuideAfter: Po: {0}
+	GuideMech0: Przed mechanicznymi bossami
+	GuideMech1: Po 1 mechanicznym bossie
+	GuideMech2: Po 2 mechanicznych bossach
+	GuideExoMechs: Egzo-Mechy
+	GuideEndgame: Koniec gry
+	GuideSectionArmor: pancerz
+	GuideSectionWeapons: broń
+	GuideSectionAccessories: akcesorium
+	GuideSectionPotions: mikstura lub wzmocnienie
+	GuideTooltip: Poradnik Calamity: polecane ({0}) dla klasy {1}
+	GuideNewStage: Poradnik Calamity: nowy etap, {0}. {1} nowych przedmiotów polecanych dla klasy {2}: {3}. Zobacz je w indeksie receptur (Poradnik Calamity).
+	GuideNewStageNoClass: Poradnik Calamity: nowy etap, {0}. Wybierz klasę w indeksie receptur (Poradnik Calamity), by zobaczyć swój ekwipunek.
 	NoResults: Żaden przedmiot nie pasuje do wyszukiwania.
-	UpgradesButton: Następne ulepszenia ({0})
-	UpgradesEmpty: Nic do zaproponowania: wśród tego, na co pozwalają pokonane bossy, nie ma lepszego ekwipunku do wytworzenia. Pokonaj kolejnego bossa albo noś przy sobie broń, której używasz.
 	Hint:
 		'''
 		LPM na przedmiocie: jak go wytworzyć.
@@ -193,6 +218,8 @@ UI: {
 	HelpIndex:
 		'''
 		LPM na przedmiocie: jak go wytworzyć. PPM: do czego służy.
+		Przycisk klasy (obok wyszukiwania): tylko bronie jednej klasy; lewy przycisk następna, prawy poprzednia.
+		Poradnik Calamity (złoty przycisk): ekwipunek polecany przez wiki dla twojej klasy na twoim etapie; przycisk klasy wybiera klasę.
 		Kółko myszy nad przepisem: następny. Wstecz: poprzedni przedmiot.
 		Składniki: zielony = w ekwipunku, niebieski = w skrzyniach terminala, czerwony = brakuje.
 		Drzewo: wszystko, co potrzebne, aż do materiałów podstawowych; można je ustawić jako cel.
@@ -202,11 +229,17 @@ UI: {
 		'''
 	TipPlaced: Terminal postawiony! Połącz go ze skrzyniami czerwonym kablem (kładzie się go: {0}, sprzedaje: {1}), a potem kliknij go PPM.
 	TipOpened: Wskazówka: najedź na przycisk ?, by zobaczyć sterowanie terminala. „Przepisy” otwiera obok indeks przepisów.
-	TeleporterNotLinked: Ten teleporter nie jest połączony. Trzymając Łącznik teleporterów, kliknij go prawym przyciskiem, a potem inny.
-	TeleporterPicked: Wybrano teleporter. Kliknij prawym przyciskiem inny, by je połączyć.
-	TeleporterCancelled: Anulowano łączenie.
-	TeleporterLinked: Połączono teleportery (odległość: {0} bloków).
-	TeleporterPickedTooltip: Wybrano teleporter: kliknij prawym przyciskiem inny, by je połączyć
+	TeleporterNotLinked: Ten teleporter nie ma kanału. Trzymając Łącznik teleporterów, kliknij go prawym przyciskiem, by wybrać kanał.
+	TeleporterAlone: Na kanale {0} nie ma innego teleportera. Ustaw na nim kolejny Łącznikiem teleporterów.
+	TeleporterChannel: Kanał {0}
+	TeleporterNoChannel: Brak kanału
+	TeleporterMenuTitle: Kanał teleportera
+	TeleporterNewChannel: Nowy kanał
+	TeleporterChannelCount: Kanał {0} — teleportery: {1}
+	TeleporterNoChannels: Nie ma jeszcze kanałów.
+	TeleporterClearChannel: Usuń kanał
+	TeleporterChannelSet: Teleporter na kanale {0}.
+	TeleporterChannelCleared: Usunięto kanał teleportera.
 }
 
 Items: {
@@ -214,8 +247,8 @@ Items: {
 		DisplayName: Bezprzewodowy teleporter
 		Tooltip:
 			'''
-			Nie potrzebuje kabli: połącz go z innym Łącznikiem teleporterów
-			Kliknij go prawym przyciskiem, by przenieść się do połączonego
+			Nie potrzebuje kabli: ustaw mu kanał Łącznikiem teleporterów
+			Kliknij prawym przyciskiem, by przenieść się do następnego na jego kanale
 			Można na nim stać
 			'''
 	}
@@ -224,8 +257,8 @@ Items: {
 		DisplayName: Łącznik teleporterów
 		Tooltip:
 			'''
-			Trzymając go, kliknij prawym przyciskiem bezprzewodowy teleporter, a potem inny, by je połączyć
-			Kliknij ponownie pierwszy, by anulować
+			Trzymając go, kliknij prawym przyciskiem bezprzewodowy teleporter, by wybrać jego kanał
+			Nowy kanał lub już istniejący: teleportery na tym samym kanale przenoszą między sobą
 			'''
 	}
 
@@ -360,7 +393,7 @@ Configs: {
 
 		DummyDamageMeter: {
 			Label: Licznik obrażeń na manekinie treningowym
-			Tooltip: Obrażenia z ostatnich 5 i 10 sekund oraz obrażenia na sekundę
+			Tooltip: Łączne obrażenia, DPS i ostatnie combo każdej walki, jak manekin treningowy z League of Legends
 		}
 	}
 

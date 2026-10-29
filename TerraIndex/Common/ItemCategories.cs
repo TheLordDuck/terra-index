@@ -8,7 +8,7 @@ using Terraria.ObjectData;
 
 namespace TerraIndex.Common
 {
-	// Tabs of the item grids. Upgrades isn't a kind of item: it is the recipe index's "Next upgrades" tab (Upgrades).
+	// Tabs of the item grids. Guide isn't a kind of item: it is the recipe index's Calamity class guide (CalamityGuide).
 	public enum ItemCategory
 	{
 		All,
@@ -20,16 +20,16 @@ namespace TerraIndex.Common
 		Consumables,
 		Materials,
 		Misc,
-		Upgrades,
+		Guide,
 	}
 
 	// Sorts every item into one tab, from its sample's stats. The first matching rule wins
 	// (wings are accessories, ores and bars are materials, wood is placeable rather than a material, ammo goes with the weapons).
 	public static class ItemCategories
 	{
-		// In the order they are shown. The recipe index also has Next upgrades, right after All.
-		public static readonly ItemCategory[] Tabs = Enum.GetValues<ItemCategory>().Where(category => category != ItemCategory.Upgrades).ToArray();
-		public static readonly ItemCategory[] IndexTabs = Tabs.Take(1).Append(ItemCategory.Upgrades).Concat(Tabs.Skip(1)).ToArray();
+		// In the order they are shown. With Calamity, the recipe index also has the Guide, right after All.
+		public static readonly ItemCategory[] Tabs = Enum.GetValues<ItemCategory>().Where(category => category != ItemCategory.Guide).ToArray();
+		public static ItemCategory[] IndexTabs => CalamityGuide.Enabled ? Tabs.Take(1).Append(ItemCategory.Guide).Concat(Tabs.Skip(1)).ToArray() : Tabs;
 
 		private static readonly Dictionary<int, ItemCategory> cache = new();
 
@@ -87,7 +87,7 @@ namespace TerraIndex.Common
 			ItemCategory.Consumables => ItemID.LesserHealingPotion,
 			ItemCategory.Materials => ItemID.IronBar,
 			ItemCategory.Misc => ItemID.FallenStar,
-			ItemCategory.Upgrades => ItemID.NightsEdge,
+			ItemCategory.Guide => ItemID.Book,
 			_ => ItemID.Chest,
 		};
 

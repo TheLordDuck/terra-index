@@ -2,61 +2,120 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using TerraIndex.Content.Storage;
+using TerraIndex.UI;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using Terraria.UI;
 
 namespace TerraIndex.Content.Tiles
 {
-	// Which wireless teleporter goes to which, in pairs (each one's top-left tile). Saved with the world. The server
-	// (or single player) owns the links and sends them to every client with the world data, so clients know where a
-	// teleporter goes even when its partner is too far away for them to have its tiles.
+	// Wireless teleporters' channels (each teleporter's top-left tile -> its channel, from 1). A teleporter takes you to
+	// the next one on its channel, so breaking one leaves the others on it as they were. A channel exists while some
+	// teleporter is on it. Saved with the world. The server (or single player) owns the channels and sends them to
+	// every client with the world data, so clients know where a teleporter goes even when the others are too far away
+	// for them to have their tiles. The Teleporter Linker opens the channel menu (TeleporterChannelState).
 	public class TeleporterSystem : ModSystem
 	{
-		private readonly Dictionary<Point, Point> links = new();
+		// Sent instead of a channel: a new one (the server picks its number) or none.
+		public const int NewChannel = -1;
+		public const int NoChannel = 0;
 
-		public bool TryGetPartner(Point teleporter, out Point partner) => links.TryGetValue(teleporter, out partner);
+		// The menu closes when the player gets this far from the teleporter.
+		private const float MenuReach = 12 * 16;
 
-		public override void OnWorldLoad() => links.Clear();
+		private readonly Dictionary<Point, int> channels = new();
 
-		public override void OnWorldUnload() => links.Clear();
+		private UserInterface ui;
+		private GameTime lastGameTime;
 
-		// From the Teleporter Linker: asks the server, or links them right away in single player.
-		public void RequestLink(Point a, Point b)
+		// The teleporter the channel menu is open for.
+		public Point MenuTeleporter { get; private set; }
+
+		public int ChannelOf(Point teleporter) => channels.TryGetValue(teleporter, out int channel) ? channel : NoChannel;
+
+		// The channels in use, with how many teleporters each has.
+		public List<(int Channel, int Count)> Channels() =>
+			channels.Values.GroupBy(channel => channel).Select(group => (group.Key, group.Count())).OrderBy(entry => entry.Key).ToList();
+
+		// The teleporter this one takes you to: the next one on its channel, in position order, so several on a
+		// channel go round in a loop. False if it has no channel or is alone on it.
+		public bool TryGetDestination(Point teleporter, out Point destination)
+		{
+			destination = default;
+			int channel = ChannelOf(teleporter);
+			if (channel == NoChannel)
+				return false;
+			List<Point> others = channels.Where(entry => entry.Value == channel && entry.Key != teleporter).Select(entry => entry.Key)
+				.OrderBy(point => point.X).ThenBy(point => point.Y).ToList();
+			if (others.Count == 0)
+				return false;
+			destination = others.FirstOrDefault(point => point.X > teleporter.X || (point.X == teleporter.X && point.Y > teleporter.Y), others[0]);
+			return true;
+		}
+
+		public override void Load()
+		{
+			if (!Main.dedServ)
+				ui = new UserInterface();
+		}
+
+		public override void OnWorldLoad() => channels.Clear();
+
+		public override void OnWorldUnload()
+		{
+			channels.Clear();
+			ui?.SetState(null);
+		}
+
+		public void OpenMenu(Point teleporter)
+		{
+			MenuTeleporter = teleporter;
+			ui.SetState(UIHelpers.Build(new TeleporterChannelState()));
+			SoundEngine.PlaySound(SoundID.MenuOpen);
+		}
+
+		public void CloseMenu()
+		{
+			if (ui?.CurrentState == null)
+				return;
+			ui.SetState(null);
+			SoundEngine.PlaySound(SoundID.MenuClose);
+		}
+
+		// From the channel menu: asks the server, or sets it right away in single player.
+		public void RequestChannel(Point teleporter, int channel)
 		{
 			if (Main.netMode == NetmodeID.MultiplayerClient)
-				TerminalNet.SendTeleporterLink(a, b);
+				TerminalNet.SendTeleporterChannel(teleporter, channel);
 			else
-				Link(a, b);
+				SetChannel(teleporter, channel);
 		}
 
-		// Single player or server. Their old partners are left unlinked.
-		public void Link(Point a, Point b)
+		// Single player or server. Returns the channel it ended up on.
+		public int SetChannel(Point teleporter, int channel)
 		{
-			if (a == b || !WirelessTeleporterTile.IsTeleporter(a) || !WirelessTeleporterTile.IsTeleporter(b))
-				return;
-			Remove(a);
-			Remove(b);
-			links[a] = b;
-			links[b] = a;
+			if (!WirelessTeleporterTile.IsTeleporter(teleporter))
+				return NoChannel;
+			if (channel == NewChannel)
+				channel = channels.Count == 0 ? 1 : channels.Values.Max() + 1;
+			if (channel <= NoChannel)
+				channels.Remove(teleporter);
+			else
+				channels[teleporter] = channel;
 			Sync();
+			return ChannelOf(teleporter);
 		}
 
-		// Single player or server, when a teleporter is broken.
-		public void Unlink(Point teleporter)
+		// Single player or server, when a teleporter is broken. The others keep their channel.
+		public void Remove(Point teleporter)
 		{
-			if (Remove(teleporter))
+			if (channels.Remove(teleporter))
 				Sync();
-		}
-
-		private bool Remove(Point teleporter)
-		{
-			if (!links.Remove(teleporter, out Point partner))
-				return false;
-			links.Remove(partner);
-			return true;
 		}
 
 		private static void Sync()
@@ -65,48 +124,71 @@ namespace TerraIndex.Content.Tiles
 				NetMessage.SendData(MessageID.WorldData);
 		}
 
-		// Each pair once.
-		private IEnumerable<(Point A, Point B)> Pairs => links.Where(link => link.Key.X < link.Value.X || (link.Key.X == link.Value.X && link.Key.Y < link.Value.Y))
-			.Select(link => (link.Key, link.Value));
+		public override void UpdateUI(GameTime gameTime)
+		{
+			lastGameTime = gameTime;
+			if (ui?.CurrentState == null)
+				return;
+			Player player = Main.LocalPlayer;
+			bool escape = Main.keyState.IsKeyDown(Keys.Escape) && !Main.oldKeyState.IsKeyDown(Keys.Escape);
+			if (escape || player.dead || !WirelessTeleporterTile.IsTeleporter(MenuTeleporter)
+				|| player.Distance(WirelessTeleporterTile.Center(MenuTeleporter)) > MenuReach) {
+				CloseMenu();
+				return;
+			}
+			ui.Update(gameTime);
+		}
+
+		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+		{
+			int index = layers.FindIndex(layer => layer.Name == "Vanilla: Mouse Text");
+			if (index == -1)
+				return;
+			layers.Insert(index, new LegacyGameInterfaceLayer("TerraIndex: Teleporter Channels", () => {
+				if (ui?.CurrentState != null && lastGameTime != null)
+					ui.Draw(Main.spriteBatch, lastGameTime);
+				return true;
+			}, InterfaceScaleType.UI));
+		}
 
 		public override void SaveWorldData(TagCompound tag)
 		{
-			if (links.Count > 0)
-				tag["teleporterLinks"] = Pairs.SelectMany(pair => new[] { pair.A.X, pair.A.Y, pair.B.X, pair.B.Y }).ToArray();
+			if (channels.Count > 0)
+				tag["teleporterChannels"] = channels.SelectMany(entry => new[] { entry.Key.X, entry.Key.Y, entry.Value }).ToArray();
 		}
 
 		public override void LoadWorldData(TagCompound tag)
 		{
-			links.Clear();
-			int[] values = tag.GetIntArray("teleporterLinks");
-			for (int k = 0; k + 3 < values.Length; k += 4) {
-				var a = new Point(values[k], values[k + 1]);
-				var b = new Point(values[k + 2], values[k + 3]);
-				links[a] = b;
-				links[b] = a;
+			channels.Clear();
+			int[] values = tag.GetIntArray("teleporterChannels");
+			for (int k = 0; k + 2 < values.Length; k += 3)
+				channels[new Point(values[k], values[k + 1])] = values[k + 2];
+
+			// Worlds from before channels kept linked pairs: each pair gets a channel of its own.
+			int[] pairs = tag.GetIntArray("teleporterLinks");
+			int next = channels.Count == 0 ? 1 : channels.Values.Max() + 1;
+			for (int k = 0; k + 3 < pairs.Length; k += 4, next++) {
+				channels[new Point(pairs[k], pairs[k + 1])] = next;
+				channels[new Point(pairs[k + 2], pairs[k + 3])] = next;
 			}
 		}
 
 		public override void NetSend(BinaryWriter writer)
 		{
-			List<(Point A, Point B)> pairs = Pairs.ToList();
-			writer.Write(pairs.Count);
-			foreach (var (a, b) in pairs) {
-				writer.Write(a.X);
-				writer.Write(a.Y);
-				writer.Write(b.X);
-				writer.Write(b.Y);
+			writer.Write(channels.Count);
+			foreach (var (point, channel) in channels) {
+				writer.Write(point.X);
+				writer.Write(point.Y);
+				writer.Write(channel);
 			}
 		}
 
 		public override void NetReceive(BinaryReader reader)
 		{
-			links.Clear();
+			channels.Clear();
 			for (int count = reader.ReadInt32(); count > 0; count--) {
-				var a = new Point(reader.ReadInt32(), reader.ReadInt32());
-				var b = new Point(reader.ReadInt32(), reader.ReadInt32());
-				links[a] = b;
-				links[b] = a;
+				var point = new Point(reader.ReadInt32(), reader.ReadInt32());
+				channels[point] = reader.ReadInt32();
 			}
 		}
 	}

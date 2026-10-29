@@ -137,6 +137,42 @@ Conversation of 2026-10-28 (after the 1.0 release):
     healing, mana and flasks are staged by progression: 37 items before Hardmode, 38 after. The sprite is built on the
     Guide's 26 vanilla frames by `tools/sprites/apothecary.js` (hood, robe, potion belt), so it matches the game's
     style (2 x 2 art pixels) and uses `AnimationType = Guide`; the frame counts are copied from the Guide.
+. **51, teleporter channels** (2026-10-29): pairs lost their link when one was broken, so the user asked for
+    **channels** instead. `TeleporterSystem` now maps each teleporter to a channel (1, 2...); right clicking one takes
+    you to the next one on its channel (in position order, so 3+ go round in a loop), and breaking one leaves the
+    others on their channel. Right clicking with the Teleporter Linker opens `UI/TeleporterChannelState.cs`: "New
+    channel", the channels in use with how many teleporters each has (the current one green), and "Take it off its
+    channel". Hovering a teleporter shows its channel. Saved as `teleporterChannels` (x, y, channel); old worlds'
+    `teleporterLinks` pairs become one channel each. Packet `TeleporterChannel` (-1 = new, the server picks the number).
+. **52, LoL-style dummy meter** (2026-10-29): the user asked for it to work like the League of Legends Practice Tool
+    dummy. Riot's exact timings couldn't be found online, so it is fight based: a fight starts with the first hit
+    and ends after 4 s without damage; it shows total damage, DPS (from the first hit to the last, so the wait at the
+    end doesn't lower it) and the last combo (hits under 1 s apart). The results stay 15 s greyed out after the
+    fight; the next hit starts a new one. Constants `ComboGap`, `FightEnd`, `ShowFor` in `DummyDamageMeter`.
+    **Not compiled yet** (written on the PC without tModLoader), like 51's channels.
+. **53, Apothecary skin** (2026-10-29): the user gave their character "The Terrarian" (a 500x500 render) as the
+    Apothecary's look. No Terraria on this PC, so `tools/sprites/terrarian.py` repaints the hooded sheet: hood -> brown
+    hair, gold band and blue/green/red plumes, red bangs; robe -> navy coat above the belt, white trousers below. The
+    potion belt stays. Wings and the slime pet were left out (they don't fit a town NPC's frames).
+. **Class filter in the recipe index** (2026-10-29, the user's request, with Calamity's new class): a button next to
+    the search cycles All / Melee / Ranged / Magic / Summoner / Throwing / modded classes (`Common/ItemClasses.cs`).
+    An item's class is its `DamageType`; whips, MeleeNoSpeed and MagicSummonHybrid map to their vanilla class, and
+    modded classes that `CountsAsClass` a vanilla one join it (Calamity's true melee). The rest are listed on their
+    own: Calamity's `RogueDamageClass` has a translated name, others use their DisplayName plus the mod's name. Only
+    items with damage have a class (armor and accessories don't). Not compiled yet.
+. **Calamity guide** (2026-10-29): the user asked for a guide like the Calamity wiki's
+    [Class setups](https://calamitymod.wiki.gg/wiki/Guide:Class_setups), only with Calamity enabled, in the recipe
+    index **instead of 49's Next upgrades** ("it wasn't that useful"; `Common/Upgrades.cs` was deleted).
+    `ItemCategory.Guide` (book tab) + the gold button showing class and stage. The class button picks the guide's class
+    while in the Guide (saved per character, `CalamityGuidePlayer`; first guess = held weapon's class). Stage = first
+    boss not beaten in the guide's order (`CalamityGuide.Stage`, Calamity's `Call("Downed", name)`, names checked in
+    its `ModSupport/ModCalls.cs`); post-Golem lasts until PBG, Ravager, Fishron or Empress. A higher stage than the
+    last check prints a chat message with the new items (first check in a world is silent). Data: the wiki's Cargo
+    table `ClassSetups` (2004 rows: item, class, progression, type), exported as JSON by
+    `tools/calamity/build_guide.py`, which matches the wiki's English names to internal names with Calamity's en-US
+    localization (GitHub `CalamityTeam/CalamityModPublic`, branch 1.4.4) and the Terraria wiki's `Items` table, and
+    expands "X armor" into its pieces (Calamity class heads only for their class). The wiki's own page blocks plain
+    downloads; `api.php` and `Special:CargoExport` work with a User-Agent. Not compiled yet.
 
 ---
 
@@ -177,9 +213,9 @@ The user refers to features by these numbers, so keep them stable.
 | 46 | Fix a house: say what a room lacks to be housing and place it | Proposed |
 | 47 | Useful blueprints: herb garden, fishing pond, arena with buffs | Done (1.1) |
 | 48 | NPC happiness (biomes and neighbours) in the blueprint catalog | Done (1.1) |
-| 49 | Next upgrades tab in the recipe index | Done (1.1) |
+| 49 | Next upgrades tab in the recipe index | Replaced by the Calamity guide (2026-10-29) |
 | 50 | "In your chests: N" in every item tooltip | Done (1.1) |
-| 51 | Wireless teleporters linked with a Teleporter Linker | Done (1.1) |
+| 51 | Wireless teleporters on channels picked with a Teleporter Linker | Done (1.1) |
 | 52 | Damage meter on the Target Dummy | Done (1.1) |
 | 53 | The Apothecary, a town NPC selling potions for 1 silver | Done (1.1) |
 
@@ -547,7 +583,8 @@ Decisions taken:
 | `Common/CraftingPlan.cs` | Crafting tree of a recipe minus what the player owns; base materials and stations |
 | `Common/Configs.cs` | `ClientConfig` (goal panel, default sort, highlight time, hotbar in Deposit all) and `ServerConfig` (terminal price, reach, max wire tiles, allow portable terminal) |
 | `Common/Happiness.cs` | Town NPCs' biome and neighbour preferences, for the blueprint catalog (48) |
-| `Common/Upgrades.cs` | Next upgrades tab: better craftable gear within the bosses' rarity cap (49) |
+| `Common/CalamityGuide.cs` | Calamity class guide tab (replaced 49's Next upgrades): stages, data, chat message, tooltip |
+| `Data/CalamityGuide.txt` | The guide's data, generated by `tools/calamity/build_guide.py` from the Calamity wiki |
 | `Content/Storage/ChestCountTooltip.cs` | "In your chests: N" in item tooltips (50) |
 | `Common/CraftingGoal.cs` | Crafting goal: `GoalPlayer` (saved per character) and the on-screen list (`GoalSystem`) |
 | `UI/UIHelpers.cs` | Localization, text measuring/truncating/wrapping, coin amounts, drawing item slots, counting inventory |

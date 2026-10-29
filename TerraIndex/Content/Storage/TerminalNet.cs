@@ -41,7 +41,7 @@ namespace TerraIndex.Content.Storage
 			Drone,
 			Build,
 			BuildResult,
-			TeleporterLink,
+			TeleporterChannel,
 		}
 
 		// A ModPacket can't exceed ~65 KB; large networks are sent in several chunks.
@@ -224,12 +224,12 @@ namespace TerraIndex.Content.Storage
 					ModContent.GetInstance<BuildSystem>().ShowBuildResult(ok, blueprint, ReadPoint(reader));
 					break;
 				}
-				case MessageType.TeleporterLink: {
-					Point a = ReadPoint(reader);
-					Point b = ReadPoint(reader);
-					// The second one was just clicked, so the player must be near it.
-					if (Main.netMode == NetmodeID.Server && Main.player[whoAmI].Distance(WirelessTeleporterTile.Center(b)) < 30 * 16)
-						ModContent.GetInstance<TeleporterSystem>().Link(a, b);
+				case MessageType.TeleporterChannel: {
+					Point teleporter = ReadPoint(reader);
+					int channel = reader.ReadInt32();
+					// Set from its channel menu, so the player must be near it.
+					if (Main.netMode == NetmodeID.Server && Main.player[whoAmI].Distance(WirelessTeleporterTile.Center(teleporter)) < 30 * 16)
+						ModContent.GetInstance<TeleporterSystem>().SetChannel(teleporter, channel);
 					break;
 				}
 			}
@@ -297,13 +297,13 @@ namespace TerraIndex.Content.Storage
 			packet.Send(toClient);
 		}
 
-		// Client -> server: links two wireless teleporters (see TeleporterSystem).
-		public static void SendTeleporterLink(Point a, Point b)
+		// Client -> server: puts a wireless teleporter on a channel (see TeleporterSystem).
+		public static void SendTeleporterChannel(Point teleporter, int channel)
 		{
 			ModPacket packet = Mod.GetPacket();
-			packet.Write((byte)MessageType.TeleporterLink);
-			WritePoint(packet, a);
-			WritePoint(packet, b);
+			packet.Write((byte)MessageType.TeleporterChannel);
+			WritePoint(packet, teleporter);
+			packet.Write(channel);
 			packet.Send();
 		}
 

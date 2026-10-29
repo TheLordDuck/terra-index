@@ -14,7 +14,7 @@ Press N to open a searchable list of every item in the game, including items fro
 - Set any item as your goal and a small on-screen list (movable and foldable) shows the materials you are still missing as you gather them, with a button that crafts the next step (first the bars, then the sword).
 - Craft straight from your chests near a storage terminal (or anywhere with the Portable Terminal). Crafting stations count if they are near you or connected to the terminal's red wire. Or take out just the ingredients your inventory is missing with one click.
 - Compare up to 3 weapons, tools, armor or accessories side by side, with the best stats highlighted.
-- Next upgrades (gold button): the weapons, armor, accessories and pickaxe you can craft that beat what you have, among what the bosses you have beaten let you reach.
+- Calamity guide (gold button, only with the Calamity Mod): the armor, weapons and accessories the Calamity wiki recommends for your class (rogue included) at your point of the game, from the bosses you have beaten. The chat tells you when a boss kill brings new gear.
 - Near a terminal, every item's tooltip says how many you have in your chests.
 
 STORAGE TERMINAL
@@ -38,7 +38,7 @@ Not good at building? Craft a Blueprint (10 wood at a work bench), pick a design
 The catalog's Town NPCs tab shows which biomes and neighbours each NPC loves and hates, so you know where to put its house.
 
 WIRELESS TELEPORTERS
-Teleporters without wire: craft a Wireless Teleporter (Teleporter + 10 Wire at the Tinkerer's Workshop), link two with the Teleporter Linker (Red Wrench + 3 Iron Bars), and right click one to go to the other.
+Teleporters without wire: craft a Wireless Teleporter (Teleporter + 10 Wire at the Tinkerer's Workshop), put them on the same channel with the Teleporter Linker (Red Wrench + 3 Iron Bars), and right click one to go to the next one on its channel. Breaking one leaves the others on their channel.
 
 MULTIPLAYER
 Fully supported. The server scans the chests and keeps the terminal updated, so you see changes made by other players.
