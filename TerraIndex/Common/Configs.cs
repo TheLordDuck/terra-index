@@ -67,5 +67,11 @@ namespace TerraIndex.Common
 
 		[DefaultValue(true)]
 		public bool AllowPortableTerminal;
+
+		// The Calamity guide and its book, for players who have Calamity enabled but don't want them. Configs load before
+		// the content, so CalamityGuide and GuideBookItem read it while loading; a reload adds or removes them.
+		[DefaultValue(true)]
+		[ReloadRequired]
+		public bool CalamityFeatures;
 	}
 }

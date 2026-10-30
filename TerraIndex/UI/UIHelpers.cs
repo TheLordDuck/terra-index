@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent;
+using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.UI;
@@ -35,6 +36,48 @@ namespace TerraIndex.UI
 			float left = Math.Max(0, (screenWidth - indexWidth - DockGap - TerminalWidth) / 2);
 			return (left, indexWidth, left + indexWidth + DockGap);
 		}
+
+		// Places one of our panels: at left (centered on the screen if null) and, with the inventory open, just below it,
+		// so its items can still be clicked, as tall as the room there lets it be. Centered on the screen otherwise. Only
+		// changes it if it isn't there already (the inventory opened or closed, the screen changed).
+		public static void Place(UIElement panel, float width, float height, float? left = null)
+		{
+			CalculatedStyle screen = panel.Parent.GetDimensions();
+			float x = left ?? Math.Max(0, (screen.Width - width) / 2);
+			float top, h;
+			if (Main.playerInventory) {
+				top = Main.instance.invBottom + 10;
+				h = Math.Min(height, screen.Height - top - 10);
+			}
+			else {
+				h = Math.Min(height, screen.Height);
+				top = (screen.Height - h) / 2;
+			}
+			if (panel.HAlign == 0f && panel.VAlign == 0f && panel.Left.Pixels == x && panel.Top.Pixels == top
+				&& panel.Width.Pixels == width && panel.Height.Pixels == h)
+				return;
+			panel.HAlign = panel.VAlign = 0f;
+			panel.Left.Set(x, 0);
+			panel.Top.Set(top, 0);
+			panel.Width.Set(width, 0);
+			panel.Height.Set(h, 0);
+			panel.Recalculate();
+		}
+
+		// The mouse is over one of our panels: the world and the vanilla UI under it don't get it (see MouseBlocker).
+		public static void BlockMouse()
+		{
+			Main.LocalPlayer.mouseInterface = true;
+			MouseBlocker.Request();
+		}
+
+		// An interface layer for one of our panels, drawn with the mouse MouseBlocker hid from the layers under it.
+		public static GameInterfaceLayer Layer(string name, GameInterfaceDrawMethod draw) =>
+			new LegacyGameInterfaceLayer(name, () => {
+				if (MouseBlocker.Restore())
+					PlayerInput.SetZoom_UI();
+				return draw();
+			}, InterfaceScaleType.UI);
 
 		public static Vector2 Measure(string text, float scale) => FontAssets.MouseText.Value.MeasureString(text) * scale;
 
@@ -69,8 +112,9 @@ namespace TerraIndex.UI
 			return string.Join(" ", parts);
 		}
 
-		// Draws an item slot and shows the item's tooltip on hover. Returns true if the mouse is over it.
-		public static bool DrawItem(SpriteBatch spriteBatch, Item item, Vector2 position, float scale)
+		// Draws an item slot and shows the item's tooltip on hover. Returns true if the mouse is over it. Not hoverable:
+		// the slot is scrolled out of its list's view.
+		public static bool DrawItem(SpriteBatch spriteBatch, Item item, Vector2 position, float scale, bool hoverable = true)
 		{
 			float oldScale = Main.inventoryScale;
 			Main.inventoryScale = scale;
@@ -78,7 +122,7 @@ namespace TerraIndex.UI
 			Main.inventoryScale = oldScale;
 
 			int size = (int)(52 * scale);
-			bool hovered = new Rectangle((int)position.X, (int)position.Y, size, size).Contains(Main.MouseScreen.ToPoint());
+			bool hovered = hoverable && new Rectangle((int)position.X, (int)position.Y, size, size).Contains(Main.MouseScreen.ToPoint());
 			if (hovered) {
 				Main.LocalPlayer.mouseInterface = true;
 				ItemSlot.MouseHover(ref item, ItemSlot.Context.InventoryItem);

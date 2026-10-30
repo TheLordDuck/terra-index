@@ -42,11 +42,64 @@ UI: {
 	GuideEndgame: Koniec gry
 	GuideSectionArmor: pancerz
 	GuideSectionWeapons: broń
-	GuideSectionAccessories: akcesorium
+	GuideSectionAccessoriesOffense: akcesorium ofensywne
+	GuideSectionAccessoriesDefense: akcesorium defensywne
+	GuideSectionAccessoriesMobility: akcesorium ruchu
+	GuideSectionAccessoriesGeneral: akcesorium ogólne
 	GuideSectionPotions: mikstura lub wzmocnienie
 	GuideTooltip: Poradnik Calamity: polecane ({0}) dla klasy {1}
 	GuideNewStage: Poradnik Calamity: nowy etap, {0}. {1} nowych przedmiotów polecanych dla klasy {2}: {3}. Zobacz je w indeksie receptur (Poradnik Calamity).
 	GuideNewStageNoClass: Poradnik Calamity: nowy etap, {0}. Wybierz klasę w indeksie receptur (Poradnik Calamity), by zobaczyć swój ekwipunek.
+	GuideSectionWeaponsStealth: broń skradania
+	GuideSectionWeaponsSpam: broń do spamu
+	GuideSectionAccessoriesStealth: akcesorium skradania
+	GuideSectionAccessoriesSpam: akcesorium do spamu
+	BookSectionWeaponsStealth: Bronie skradania
+	BookSectionWeaponsSpam: Bronie do spamu
+	BookSectionAccessoriesStealth: Akcesoria skradania
+	BookSectionAccessoriesSpam: Akcesoria do spamu
+	BookTitle: Poradnik Calamity
+	BookCurrentButton: Obecny etap
+	BookStage: Etap {0}/{1}: {2}
+	BookCurrentStage: (twój)
+	BookPickClass: Wybierz klasę powyżej, by zobaczyć build polecany przez wiki Calamity na każdym etapie.
+	BookHint: Lewy klik na przedmiot: jak go wytworzyć. Prawy klik: do czego służy. Zielona kropka: masz go.
+	BookSectionArmor: Zbroja
+	BookSectionWeapons: Bronie
+	BookSectionAccessoriesOffense: Akcesoria ofensywne
+	BookSectionAccessoriesDefense: Akcesoria defensywne
+	BookSectionAccessoriesMobility: Akcesoria ruchu
+	BookSectionAccessoriesGeneral: Akcesoria ogólne
+	BookSectionPotions: Mikstury i wzmocnienia
+	BookBossCount: Pokonani bossowie: {0}/{1}
+	BookNextBosses: Następni: {0}
+	BookAllBeaten: Wszyscy bossowie pokonani!
+	BookShowAll: Pokaż też pokonanych
+	BookHideDowned: Ukryj pokonanych
+	BookTier0: Przed trybem hardmode
+	BookTier1: Tryb hardmode
+	BookTier2: Po Księżycowym Władcy
+	BookDowned: Pokonany
+	BookNext: Następny
+	BookOptional: Opcjonalny
+	BookExoMechs: Egzo-Mechy
+	BookEventCount: Wydarzenia i minibossowie: {0}/{1}
+	BookCompleted: Ukończone
+	BookEvent: Wydarzenie
+	BookMiniboss: Miniboss
+	BookEventAcidRain1: Kwaśny deszcz (poziom 1)
+	BookEventAcidRain2: Kwaśny deszcz (poziom 2)
+	BookEventGoblins: Armia goblinów
+	BookEventOldOnesArmy1: Armia Starszego (poziom 1)
+	BookEventOldOnesArmy2: Armia Starszego (poziom 2)
+	BookEventOldOnesArmy3: Armia Starszego (poziom 3)
+	BookEventPirates: Inwazja piratów
+	BookEventFrostLegion: Mroźny Legion (Boże Narodzenie)
+	BookEventPumpkinMoon: Dyniowy Księżyc
+	BookEventFrostMoon: Mroźny Księżyc
+	BookEventMartians: Marsjańskie szaleństwo
+	BookEventPillars: Niebiańskie filary
+	BookEventBossRush: Boss Rush
 	NoResults: Żaden przedmiot nie pasuje do wyszukiwania.
 	Hint:
 		'''
@@ -99,6 +152,7 @@ UI: {
 	BlueprintHerbGarden: Ogród ziół
 	BlueprintFishingPond: Staw rybacki
 	BlueprintBuffArena: Arena ze wzmocnieniami
+	BlueprintEterniaArena: Koloseum Armii Starszego
 	BlueprintTabBuildings: Budowle
 	BlueprintTabNpcs: NPC
 	HappinessTitle: Kto tu zamieszka? Wybierz NPC, aby zobaczyć, gdzie jest najszczęśliwszy:
@@ -243,6 +297,15 @@ UI: {
 }
 
 Items: {
+	GuideBookItem: {
+		DisplayName: Poradnik Calamity
+		Tooltip:
+			'''
+			Użyj go, by zobaczyć build twojej klasy na każdym etapie gry
+			Oraz pokonanych, brakujących i następnych bossów
+			'''
+	}
+
 	WirelessTeleporterItem: {
 		DisplayName: Bezprzewodowy teleporter
 		Tooltip:
@@ -418,6 +481,11 @@ Configs: {
 		AllowPortableTerminal: {
 			Label: Zezwalaj na przenośny terminal
 			Tooltip: Gdy wyłączone, przenośne terminale nie mogą otwierać terminali z daleka
+		}
+
+		CalamityFeatures: {
+			Label: Funkcje Calamity
+			Tooltip: Poradnik Calamity i jego księga, gdy Calamity Mod jest włączony. Wyłącz, aby grać bez nich
 		}
 	}
 

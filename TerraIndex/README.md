@@ -215,8 +215,20 @@ In **Settings → Mod Configuration → Terra Index**:
 | Terminal reach before its panel closes | 10 blocks |
 | Maximum wire network size | 50,000 wire tiles |
 | Allow the Portable Terminal | On |
+| Calamity features (the guide and its book; turning it on or off reloads the mods) | On |
 
 ## Changelog
+
+**1.2**
+- **Calamity guide book** (10 wood at a work bench, only with Calamity): the wiki's build for each class at every
+  stage of the game (armor, weapons, offensive, defensive and mobility accessories, potions, and the rogue's stealth
+  and spam gear), plus the bosses, events and minibosses you have beaten, the missing ones and the next ones.
+- The Calamity guide in the recipe index splits accessories the same way.
+- New blueprint: Old One's Army colosseum.
+- The radio has 31 new clips and plays them in a shuffled order, each once before any repeats.
+- New mod icon.
+- A server setting turns the Calamity features (the guide and its book) off, for players who have Calamity enabled
+  but don't want them. Without Calamity they never appear.
 
 **1.1**
 - Wireless teleporters: put them on a channel with the Teleporter Linker and right click one to go to the next one
@@ -260,7 +272,7 @@ In **Settings → Mod Configuration → Terra Index**:
 - "?" buttons with the controls of the terminal and the index; tips the first time you place and open a terminal.
 
 **0.6**
-- Radio: crafted at an anvil, placed like a Piggy Bank; plays two clips at random moments, the same for every
+- Radio: crafted at an anvil, placed like a Piggy Bank; plays its clips at random moments, the same for every
   player in multiplayer, with music notes floating out while it plays. Right click: on/off.
 
 **0.5**

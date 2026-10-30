@@ -122,7 +122,7 @@ namespace TerraIndex.UI
 		{
 			base.Update(gameTime);
 			if (panel.ContainsPoint(Main.MouseScreen))
-				Main.LocalPlayer.mouseInterface = true;
+				UIHelpers.BlockMouse();
 		}
 	}
 }

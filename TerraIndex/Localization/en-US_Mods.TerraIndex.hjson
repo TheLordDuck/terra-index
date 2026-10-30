@@ -42,11 +42,64 @@ UI: {
 	GuideEndgame: Endgame
 	GuideSectionArmor: armor
 	GuideSectionWeapons: weapon
-	GuideSectionAccessories: accessory
+	GuideSectionAccessoriesOffense: offensive accessory
+	GuideSectionAccessoriesDefense: defensive accessory
+	GuideSectionAccessoriesMobility: mobility accessory
+	GuideSectionAccessoriesGeneral: general accessory
 	GuideSectionPotions: potion or buff
 	GuideTooltip: Calamity guide: recommended {0} for {1}
 	GuideNewStage: Calamity guide: new stage, {0}. {1} new items recommended for {2}: {3}. See them in the recipe index (Calamity guide).
 	GuideNewStageNoClass: Calamity guide: new stage, {0}. Pick your class in the recipe index (Calamity guide) to see your gear.
+	GuideSectionWeaponsStealth: stealth weapon
+	GuideSectionWeaponsSpam: spam weapon
+	GuideSectionAccessoriesStealth: stealth accessory
+	GuideSectionAccessoriesSpam: spam accessory
+	BookSectionWeaponsStealth: Stealth weapons
+	BookSectionWeaponsSpam: Spam weapons
+	BookSectionAccessoriesStealth: Stealth accessories
+	BookSectionAccessoriesSpam: Spam accessories
+	BookTitle: Calamity Guide
+	BookCurrentButton: Current stage
+	BookStage: Stage {0}/{1}: {2}
+	BookCurrentStage: (yours)
+	BookPickClass: Pick your class above to see the build the Calamity wiki recommends for it at each stage.
+	BookHint: Left click an item: how to craft it. Right click: what uses it. Green dot: you have it.
+	BookSectionArmor: Armor
+	BookSectionWeapons: Weapons
+	BookSectionAccessoriesOffense: Offensive accessories
+	BookSectionAccessoriesDefense: Defensive accessories
+	BookSectionAccessoriesMobility: Mobility accessories
+	BookSectionAccessoriesGeneral: General accessories
+	BookSectionPotions: Potions and buffs
+	BookBossCount: Bosses beaten: {0}/{1}
+	BookNextBosses: Next: {0}
+	BookAllBeaten: Every boss is beaten!
+	BookShowAll: Show beaten bosses too
+	BookHideDowned: Hide beaten bosses
+	BookTier0: Pre-Hardmode
+	BookTier1: Hardmode
+	BookTier2: After the Moon Lord
+	BookDowned: Beaten
+	BookNext: Next
+	BookOptional: Optional
+	BookExoMechs: Exo Mechs
+	BookEventCount: Events and minibosses: {0}/{1}
+	BookCompleted: Done
+	BookEvent: Event
+	BookMiniboss: Miniboss
+	BookEventAcidRain1: Acid Rain (tier 1)
+	BookEventAcidRain2: Acid Rain (tier 2)
+	BookEventGoblins: Goblin Army
+	BookEventOldOnesArmy1: Old One's Army (tier 1)
+	BookEventOldOnesArmy2: Old One's Army (tier 2)
+	BookEventOldOnesArmy3: Old One's Army (tier 3)
+	BookEventPirates: Pirate Invasion
+	BookEventFrostLegion: Frost Legion (Christmas)
+	BookEventPumpkinMoon: Pumpkin Moon
+	BookEventFrostMoon: Frost Moon
+	BookEventMartians: Martian Madness
+	BookEventPillars: Celestial Pillars
+	BookEventBossRush: Boss Rush
 	NoResults: No items match your search.
 	Hint:
 		'''
@@ -99,6 +152,7 @@ UI: {
 	BlueprintHerbGarden: Herb garden
 	BlueprintFishingPond: Fishing pond
 	BlueprintBuffArena: Arena with buffs
+	BlueprintEterniaArena: Old One's Army colosseum
 	BlueprintTabBuildings: Buildings
 	BlueprintTabNpcs: Town NPCs
 	HappinessTitle: Who will live here? Pick a town NPC to see where they are happiest:
@@ -243,6 +297,15 @@ UI: {
 }
 
 Items: {
+	GuideBookItem: {
+		DisplayName: Calamity Guide
+		Tooltip:
+			'''
+			Use it to see the build for your class at each stage of the game
+			And the bosses you have beaten, the missing ones and the next ones
+			'''
+	}
+
 	WirelessTeleporterItem: {
 		DisplayName: Wireless Teleporter
 		Tooltip:
@@ -418,6 +481,11 @@ Configs: {
 		AllowPortableTerminal: {
 			Label: Allow the Portable Terminal
 			Tooltip: When off, portable terminals can't open terminals from far away
+		}
+
+		CalamityFeatures: {
+			Label: Calamity features
+			Tooltip: The Calamity guide and its book, when the Calamity Mod is enabled. Turn off to play without them
 		}
 	}
 

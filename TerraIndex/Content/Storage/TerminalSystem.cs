@@ -1002,16 +1002,16 @@ namespace TerraIndex.Content.Storage
 			if (index == -1)
 				return;
 
-			layers.Insert(index, new LegacyGameInterfaceLayer("TerraIndex: Terminal", () => {
+			layers.Insert(index, UIHelpers.Layer("TerraIndex: Terminal", () => {
 				if (IsOpen && lastGameTime != null)
 					ui.Draw(Main.spriteBatch, lastGameTime);
 				return true;
-			}, InterfaceScaleType.UI));
+			}));
 
-			layers.Insert(index, new LegacyGameInterfaceLayer("TerraIndex: Chest Arrows", () => {
+			layers.Insert(index, UIHelpers.Layer("TerraIndex: Chest Arrows", () => {
 				DrawOffscreenArrows(Main.spriteBatch);
 				return true;
-			}, InterfaceScaleType.UI));
+			}));
 		}
 
 		// For each highlighted chest off screen, an arrow on the screen edge pointing at it, with the distance in blocks.

@@ -36,11 +36,10 @@ namespace TerraIndex.UI
 		private ItemGrid grid;
 		private UITextPanel<string> sort;
 		private UITextPanel<string> recipes;
+
+		private const float PanelHeight = 510;
 		private int refreshTimer;
 		private int seenVersion = -1;
-		// Layout applied last: next to the recipe index or centered, and for which screen width.
-		private bool docked;
-		private float layoutWidth;
 		private Point closedTerminal;
 		private uint closedAt;
 
@@ -59,7 +58,7 @@ namespace TerraIndex.UI
 		{
 			panel = new UIPanel();
 			panel.Width.Set(UIHelpers.TerminalWidth, 0);
-			panel.Height.Set(510, 0);
+			panel.Height.Set(PanelHeight, 0);
 			panel.HAlign = panel.VAlign = 0.5f;
 			Append(panel);
 
@@ -177,19 +176,12 @@ namespace TerraIndex.UI
 
 		private void PlaceRecipesButton() => recipes.Left.Set(-sort.MinWidth.Pixels - 6, 0);
 
-		// Next to the recipe index while it is open (see RecipeIndexSystem), so both can be used at once; centered otherwise.
+		// Next to the recipe index while it is open (see RecipeIndexSystem), so both can be used at once; centered
+		// otherwise. Below the inventory, which the terminal opens (UIHelpers.Place).
 		private void Layout()
 		{
-			bool dock = Index.IsOpen;
-			float screenWidth = GetDimensions().Width;
-			if (dock == docked && screenWidth == layoutWidth)
-				return;
-			docked = dock;
-			layoutWidth = screenWidth;
-
-			panel.HAlign = dock ? 0f : 0.5f;
-			panel.Left.Set(dock ? UIHelpers.DockLayout(screenWidth).TerminalLeft : 0, 0);
-			Recalculate();
+			float? left = Index.IsOpen ? UIHelpers.DockLayout(GetDimensions().Width).TerminalLeft : null;
+			UIHelpers.Place(panel, UIHelpers.TerminalWidth, PanelHeight, left);
 		}
 
 		public override void Update(GameTime gameTime)
@@ -223,7 +215,7 @@ namespace TerraIndex.UI
 			UpdateSelection();
 
 			if (panel.ContainsPoint(Main.MouseScreen))
-				Main.LocalPlayer.mouseInterface = true;
+				UIHelpers.BlockMouse();
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)

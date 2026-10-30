@@ -14,6 +14,9 @@ The extracted vanilla files are not kept in the repo.
    character): brown hair with red bangs, a gold band with blue, green and red plumes, a navy coat and white
    trousers. It overwrites both PNGs, so run it once, on step 3's output.
 
+The Calamity guide book (`TerraIndex/Content/Items/GuideBookItem.png`) is the vanilla Book (`Item_149.xnb`, extracted
+the same way) with its green cover turned red, so it is not mistaken for the vanilla one.
+
 ## Mod icon
 
 From the repo root, `python tools/sprites/icon.py` redraws `TerraIndex/icon.png` (not `icon_small.png`) from the mod's own

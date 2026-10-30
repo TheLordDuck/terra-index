@@ -42,11 +42,64 @@ UI: {
 	GuideEndgame: 终局
 	GuideSectionArmor: 盔甲
 	GuideSectionWeapons: 武器
-	GuideSectionAccessories: 饰品
+	GuideSectionAccessoriesOffense: 进攻饰品
+	GuideSectionAccessoriesDefense: 防御饰品
+	GuideSectionAccessoriesMobility: 机动饰品
+	GuideSectionAccessoriesGeneral: 通用饰品
 	GuideSectionPotions: 药水或增益
 	GuideTooltip: 灾厄指南：推荐给{1}的{0}
 	GuideNewStage: 灾厄指南：新阶段——{0}。为{2}推荐了 {1} 件新物品：{3}。在配方索引（灾厄指南）中查看。
 	GuideNewStageNoClass: 灾厄指南：新阶段——{0}。在配方索引（灾厄指南）中选择职业来查看你的装备。
+	GuideSectionWeaponsStealth: 潜伏武器
+	GuideSectionWeaponsSpam: 速投武器
+	GuideSectionAccessoriesStealth: 潜伏饰品
+	GuideSectionAccessoriesSpam: 速投饰品
+	BookSectionWeaponsStealth: 潜伏武器
+	BookSectionWeaponsSpam: 速投武器
+	BookSectionAccessoriesStealth: 潜伏饰品
+	BookSectionAccessoriesSpam: 速投饰品
+	BookTitle: 灾厄指南
+	BookCurrentButton: 当前阶段
+	BookStage: 阶段 {0}/{1}：{2}
+	BookCurrentStage: （你的）
+	BookPickClass: 在上方选择职业，查看灾厄维基在每个阶段推荐的配装。
+	BookHint: 左键点击物品：如何制作。右键：用途。绿点：你已拥有。
+	BookSectionArmor: 盔甲
+	BookSectionWeapons: 武器
+	BookSectionAccessoriesOffense: 进攻饰品
+	BookSectionAccessoriesDefense: 防御饰品
+	BookSectionAccessoriesMobility: 机动饰品
+	BookSectionAccessoriesGeneral: 通用饰品
+	BookSectionPotions: 药水和增益
+	BookBossCount: 已击败 Boss：{0}/{1}
+	BookNextBosses: 接下来：{0}
+	BookAllBeaten: 所有 Boss 均已击败！
+	BookShowAll: 也显示已击败的 Boss
+	BookHideDowned: 隐藏已击败的 Boss
+	BookTier0: 困难模式前
+	BookTier1: 困难模式
+	BookTier2: 月球领主后
+	BookDowned: 已击败
+	BookNext: 下一个
+	BookOptional: 可选
+	BookExoMechs: 星流巨械
+	BookEventCount: 事件和小 Boss：{0}/{1}
+	BookCompleted: 已完成
+	BookEvent: 事件
+	BookMiniboss: 小 Boss
+	BookEventAcidRain1: 酸雨（第一阶段）
+	BookEventAcidRain2: 酸雨（第二阶段）
+	BookEventGoblins: 哥布林军队
+	BookEventOldOnesArmy1: 旧日军团（第一层）
+	BookEventOldOnesArmy2: 旧日军团（第二层）
+	BookEventOldOnesArmy3: 旧日军团（第三层）
+	BookEventPirates: 海盗入侵
+	BookEventFrostLegion: 雪人军团（圣诞节）
+	BookEventPumpkinMoon: 南瓜月
+	BookEventFrostMoon: 霜月
+	BookEventMartians: 火星暴乱
+	BookEventPillars: 天界柱
+	BookEventBossRush: Boss Rush
 	NoResults: 没有符合搜索的物品。
 	Hint:
 		'''
@@ -99,6 +152,7 @@ UI: {
 	BlueprintHerbGarden: 草药园
 	BlueprintFishingPond: 钓鱼池
 	BlueprintBuffArena: 增益竞技场
+	BlueprintEterniaArena: 旧日军团斗兽场
 	BlueprintTabBuildings: 建筑
 	BlueprintTabNpcs: 城镇 NPC
 	HappinessTitle: 谁会住在这里？选择一个城镇 NPC，查看它在哪里最快乐：
@@ -243,6 +297,15 @@ UI: {
 }
 
 Items: {
+	GuideBookItem: {
+		DisplayName: 灾厄指南
+		Tooltip:
+			'''
+			使用后查看你的职业在每个游戏阶段的配装
+			以及已击败、尚未击败和接下来的 Boss
+			'''
+	}
+
 	WirelessTeleporterItem: {
 		DisplayName: 无线传送机
 		Tooltip:
@@ -418,6 +481,11 @@ Configs: {
 		AllowPortableTerminal: {
 			Label: 允许便携终端
 			Tooltip: 关闭后，便携终端无法远程打开终端
+		}
+
+		CalamityFeatures: {
+			Label: Calamity 功能
+			Tooltip: 启用 Calamity Mod 时的 Calamity 指南及其指南书。关闭后不使用它们
 		}
 	}
 

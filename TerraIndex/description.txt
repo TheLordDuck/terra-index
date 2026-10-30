@@ -15,6 +15,7 @@ Press N to open a searchable list of every item in the game, including items fro
 - Craft straight from your chests near a storage terminal (or anywhere with the Portable Terminal). Crafting stations count if they are near you or connected to the terminal's red wire. Or take out just the ingredients your inventory is missing with one click.
 - Compare up to 3 weapons, tools, armor or accessories side by side, with the best stats highlighted.
 - Calamity guide (gold button, only with the Calamity Mod): the armor, weapons and accessories the Calamity wiki recommends for your class (rogue included) at your point of the game, from the bosses you have beaten. The chat tells you when a boss kill brings new gear.
+- Calamity guide book (10 wood at a work bench, only with Calamity): the recommended build for each class at every stage of the game, and the bosses, events and minibosses you have beaten, the missing ones and the next ones.
 - Near a terminal, every item's tooltip says how many you have in your chests.
 
 STORAGE TERMINAL
@@ -34,7 +35,7 @@ PORTABLE TERMINAL
 Craft it after the Moon Lord (Terminal + 10 Luminite Bars at the Ancient Manipulator). Right click a terminal while holding it to link them, then use it anywhere to open that terminal: items you take out appear right next to you.
 
 BLUEPRINTS
-Not good at building? Craft a Blueprint (10 wood at a work bench), pick a design (small house, two-floor house, tower, medieval house, castle, pagoda, wizard tower, a craftsman's house with themed rooms and a place for every crafting station, a tree village lodge with 30 NPC rooms, big trees, a herb garden with planter boxes, a fishing pond full of water, a boss arena, or an arena with campfires and heart lanterns) and its wood (any wood, glass, and woods from other mods), see a preview where it goes and left click to build it, for free. Every room is valid NPC housing.
+Not good at building? Craft a Blueprint (10 wood at a work bench), pick a design (small house, two-floor house, tower, medieval house, castle, pagoda, wizard tower, a craftsman's house with themed rooms and a place for every crafting station, a tree village lodge with 30 NPC rooms, big trees, a herb garden with planter boxes, a fishing pond full of water, a boss arena, an arena with campfires and heart lanterns, or an Old One's Army colosseum) and its wood (any wood, glass, and woods from other mods), see a preview where it goes and left click to build it, for free. Every room is valid NPC housing.
 The catalog's Town NPCs tab shows which biomes and neighbours each NPC loves and hates, so you know where to put its house.
 
 WIRELESS TELEPORTERS
@@ -43,7 +44,7 @@ Teleporters without wire: craft a Wireless Teleporter (Teleporter + 10 Wire at t
 MULTIPLAYER
 Fully supported. The server scans the chests and keeps the terminal updated, so you see changes made by other players.
 
-Settings (Mod Configuration): goal panel, default sort, highlight time, terminal price and reach, and more.
+Settings (Mod Configuration): goal panel, default sort, highlight time, terminal price and reach, turning the Calamity features off, and more. The mod works with or without Calamity.
 All keys can be rebound in Settings > Controls. Available in English, Spanish, German, French, Brazilian Portuguese, Russian, Italian, Polish and Simplified Chinese.
 
 Source code and bug reports: https://github.com/TheLordDuck/terra-index

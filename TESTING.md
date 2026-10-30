@@ -223,6 +223,7 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 ## 49. Calamity guide (replaces Next upgrades)
 
 - [ ] **Without Calamity:** the index has no gold button and no book tab; nothing else changes
+- [ ] **With Calamity, "Calamity features" off** in the server settings: the mods reload, and then there is no gold button, no guide book (item or recipe) and no guide chat messages, as without Calamity; turning it back on brings them back
 - [ ] **With Calamity:** a gold "Calamity guide: Pick your class · Before Desert Scourge" button next to the title (it doesn't overlap the ? and X buttons, also next to the terminal); clicking it, or the book tab after All, opens the guide
 - [ ] No class picked: holding a rogue weapon picks Rogue by itself; with nothing held, the grid says to pick a class
 - [ ] In the guide the class button cycles Melee, Ranged, Magic, Summoner, Rogue (right click backwards); the list changes; leaving the guide gives the class button back its filter
@@ -267,7 +268,8 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 ## Radio
 
 - [ ] Craft it at an anvil (8 Wood, 3 Iron/Lead Bars, 2 Glass) and place it on the floor: same size as a Piggy Bank
-- [ ] A few seconds after placing it, one of the two clips plays; the next time, the other one
+- [ ] A few seconds after placing it, a clip plays; the next ones are different (all 35 play before any repeats)
+- [ ] The Rajoy clips start and end cleanly, without a word cut in half
 - [ ] While a clip plays, music notes float out by the antenna (and stop when it ends or is turned off)
 - [ ] The gaps between clips change (sometimes ~10 s, sometimes a minute or two)
 - [ ] Right click: the dial and the light go dark and it stops (also in the middle of a clip); right click again turns it on

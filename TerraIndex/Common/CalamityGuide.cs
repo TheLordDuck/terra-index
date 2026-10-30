@@ -15,7 +15,16 @@ namespace TerraIndex.Common
 	{
 		Armor,
 		Weapons,
-		Accessories,
+		// Rogue's two builds: stealth strikes, or throwing as fast as possible.
+		WeaponsStealth,
+		WeaponsSpam,
+		// Accessories by what they are for, as the wiki sorts them.
+		AccessoriesOffense,
+		AccessoriesStealth,
+		AccessoriesSpam,
+		AccessoriesDefense,
+		AccessoriesMobility,
+		AccessoriesGeneral,
 		Potions,
 	}
 
@@ -42,7 +51,7 @@ namespace TerraIndex.Common
 		public override void PostSetupContent()
 		{
 			entries.Clear();
-			if (!ModLoader.TryGetMod("CalamityMod", out calamity))
+			if (!ServerConfig.Instance.CalamityFeatures || !ModLoader.TryGetMod("CalamityMod", out calamity))
 				return;
 			using var reader = new StreamReader(new MemoryStream(Mod.GetFileBytes("Data/CalamityGuide.txt")));
 			for (string line = reader.ReadLine(); line != null; line = reader.ReadLine()) {
@@ -53,7 +62,7 @@ namespace TerraIndex.Common
 					entries[(parts[0], parts[1])] = list = new();
 				foreach (string reference in parts[3].Split(' ')) {
 					int type = Resolve(reference);
-					if (type > 0 && !list.Any(entry => entry.Type == type))
+					if (type > 0 && !list.Contains((type, section)))
 						list.Add((type, section));
 				}
 			}
@@ -62,6 +71,7 @@ namespace TerraIndex.Common
 		public override void Unload()
 		{
 			entries.Clear();
+			CalamityBosses.Clear();
 			calamity = null;
 		}
 
@@ -77,7 +87,7 @@ namespace TerraIndex.Common
 			return ModContent.TryFind(mod, name, out ModItem item) ? item.Type : 0;
 		}
 
-		private static bool Downed(string boss)
+		internal static bool Downed(string boss)
 		{
 			try {
 				return calamity.Call("Downed", boss) is true;
@@ -124,7 +134,9 @@ namespace TerraIndex.Common
 			return Downed("exomechs") && Downed("supremecalamitas") ? 18 : ScalExoStage;
 		}
 
-		// The guide's items for a class at a stage, armor first, then weapons, accessories and potions.
+		// The guide's items for a class at a stage, armor first, then weapons, accessories and potions. A rogue item can be
+		// in both the stealth and the spam sections. A rogue item can be in
+		// both the stealth and the spam sections.
 		public static List<(int Type, GuideSection Section)> Items(string guideClass, int stage)
 		{
 			var items = new List<(int Type, GuideSection Section)>();
@@ -140,13 +152,13 @@ namespace TerraIndex.Common
 			}
 			foreach (string id in stages) {
 				if (entries.TryGetValue((id, guideClass), out var list))
-					items.AddRange(list.Where(entry => !items.Any(added => added.Type == entry.Type)));
+					items.AddRange(list.Where(entry => !items.Contains(entry)));
 			}
 			return items.OrderBy(entry => entry.Section).ToList();
 		}
 
 		// The current items for the local player's class (none if they haven't picked one).
-		public static List<int> CurrentItems() => Items(Main.LocalPlayer.GetModPlayer<CalamityGuidePlayer>().GuideClass, Stage()).Select(entry => entry.Type).ToList();
+		public static List<int> CurrentItems() => Items(Main.LocalPlayer.GetModPlayer<CalamityGuidePlayer>().GuideClass, Stage()).Select(entry => entry.Type).Distinct().ToList();
 
 		public static string ClassName(string guideClass) => guideClass switch {
 			"melee" => UIHelpers.T("ClassMelee"),
@@ -168,7 +180,7 @@ namespace TerraIndex.Common
 				return "magic";
 			if (damageClass == DamageClass.Summon)
 				return "summon";
-			return damageClass is ModDamageClass modded && modded.Mod.Name == "CalamityMod" && modded.Name == "RogueDamageClass" ? "rogue" : null;
+			return damageClass.Mod?.Name == "CalamityMod" && damageClass.Name == "RogueDamageClass" ? "rogue" : null;
 		}
 
 		public static string StageName(int stage) => stage switch {
@@ -238,7 +250,8 @@ namespace TerraIndex.Common
 				return;
 			}
 			var before = CalamityGuide.Items(GuideClass, shownStage).Select(entry => entry.Type).ToHashSet();
-			var added = CalamityGuide.Items(GuideClass, stage).Where(entry => !before.Contains(entry.Type) && entry.Section != GuideSection.Potions).ToList();
+			var added = CalamityGuide.Items(GuideClass, stage).Where(entry => !before.Contains(entry.Type) && entry.Section != GuideSection.Potions)
+				.DistinctBy(entry => entry.Type).ToList();
 			string examples = string.Join(", ", added.Take(3).Select(entry => $"[i:{entry.Type}] {Lang.GetItemNameValue(entry.Type)}"));
 			Main.NewText(UIHelpers.T("GuideNewStage", name, added.Count, CalamityGuide.ClassName(GuideClass), examples), new Color(255, 200, 80));
 		}

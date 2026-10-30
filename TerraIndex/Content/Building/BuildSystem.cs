@@ -102,11 +102,11 @@ namespace TerraIndex.Content.Building
 			int index = layers.FindIndex(layer => layer.Name == "Vanilla: Mouse Text");
 			if (index == -1)
 				return;
-			layers.Insert(index, new LegacyGameInterfaceLayer("TerraIndex: Blueprints", () => {
+			layers.Insert(index, UIHelpers.Layer("TerraIndex: Blueprints", () => {
 				if (ui?.CurrentState != null && lastGameTime != null)
 					ui.Draw(Main.spriteBatch, lastGameTime);
 				return true;
-			}, InterfaceScaleType.UI));
+			}));
 		}
 
 		private Point MouseOrigin => Blueprints.Origin(Blueprint, Main.MouseWorld.ToTileCoordinates());

@@ -1,0 +1,52 @@
+[h1]Terra Index[/h1]
+An NEI-style recipe browser for Terraria, a storage terminal that finds items across all your chests, ready-made buildings, wireless teleporters and a Calamity guide. Works in multiplayer and with other mods.
+
+[h2]Recipe Index[/h2]
+Press [b]N[/b] to open a searchable list of every item in the game, including items from other mods.
+[list]
+[*]Left click an item to see how it is crafted, right click to see every recipe that uses it.
+[*]Hover any item (inventory, chests, shops) and press [b][[/b] for its recipes or [b]][/b] for its uses.
+[*]Items that can't be crafted show which NPC sells them, which enemies drop them and which bags or crates contain them.
+[*]Tabs by item type, filters by class, and [b]@modname[/b] in the search box to filter by mod.
+[*]Crafting tree down to the base materials, minus what you already have.
+[*]Set any item as your goal: an on-screen list shows what you are still missing, with a button that crafts the next step.
+[*]Craft straight from your chests near a storage terminal, or anywhere with the Portable Terminal.
+[*]Compare up to 3 weapons, tools, armor or accessories side by side.
+[/list]
+[img]https://raw.githubusercontent.com/TheLordDuck/terra-index/main/docs/screenshots/1%20-%20Recipe%20index.png[/img]
+
+[h2]Storage Terminal[/h2]
+Buy the Terminal from the Steampunker and hang it on a background wall. Connect it to your chests with red wire.
+[list]
+[*]Start typing and the items in all connected chests are filtered as you type.
+[*]Click to take a stack out, or hold right click to pick an exact amount.
+[*]Shift + click an item and the chests holding it glow, with arrows to the ones off screen.
+[*]Deposit items, or your whole inventory at once, into the connected chests.
+[*]Item tooltips say how many you have in your chests.
+[*]After the Moon Lord, the Portable Terminal opens your terminal from anywhere.
+[/list]
+[img]https://raw.githubusercontent.com/TheLordDuck/terra-index/main/docs/screenshots/2%20-%20Index%20and%20terminal.png[/img]
+
+[h2]Blueprints[/h2]
+Not good at building? Craft a Blueprint (10 wood), pick a design and its wood, see a preview and click to build it, for free. Every room is valid NPC housing.
+[img]https://raw.githubusercontent.com/TheLordDuck/terra-index/main/docs/screenshots/5%20-%20Placing%20a%20blueprint.png[/img]
+[img]https://raw.githubusercontent.com/TheLordDuck/terra-index/main/docs/blueprints/overview.png[/img]
+The catalog's Town NPCs tab shows which biomes and neighbours each NPC loves and hates.
+
+[h2]Calamity Guide[/h2]
+Only with the Calamity Mod: the armor, weapons, accessories and potions the Calamity wiki recommends for your class (rogue included) at your point of the game. Craft the [b]Calamity Guide[/b] book (10 wood) to browse the build for every stage and see the bosses, events and minibosses you have beaten, the missing ones and the next ones.
+Without Calamity none of this appears, and it can be turned off in the mod's settings (Calamity features).
+[img]https://raw.githubusercontent.com/TheLordDuck/terra-index/main/docs/screenshots/7%20-%20Calamity%20guide%20book.png[/img]
+
+[h2]And more[/h2]
+[list]
+[*][b]Wireless teleporters[/b]: put them on a channel with the Teleporter Linker and right click one to go to the next one.
+[*][b]Target Dummy damage meter[/b]: total damage, DPS and last combo of each fight.
+[*][b]Radio[/b]: a piece of furniture that plays clips at random moments, the same for every player.
+[/list]
+[img]https://raw.githubusercontent.com/TheLordDuck/terra-index/main/docs/screenshots/6%20-%20Teleporter%20channels.png[/img]
+
+[h2]Multiplayer and languages[/h2]
+Fully supported in multiplayer. Available in English, Spanish, German, French, Brazilian Portuguese, Russian, Italian, Polish and Simplified Chinese. Every key can be rebound in Settings > Controls.
+
+Source code and bug reports: [url=https://github.com/TheLordDuck/terra-index]github.com/TheLordDuck/terra-index[/url]

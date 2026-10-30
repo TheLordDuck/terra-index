@@ -52,9 +52,10 @@ namespace TerraIndex.UI
 
 		public override void Update(GameTime gameTime)
 		{
+			UIHelpers.Place(panel, 640, 660);
 			base.Update(gameTime);
 			if (panel.ContainsPoint(Main.MouseScreen))
-				Main.LocalPlayer.mouseInterface = true;
+				UIHelpers.BlockMouse();
 		}
 	}
 

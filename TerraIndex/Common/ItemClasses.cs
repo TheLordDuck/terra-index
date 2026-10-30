@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using TerraIndex.UI;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace TerraIndex.Common
@@ -67,7 +68,7 @@ namespace TerraIndex.Common
 				return UIHelpers.T("ClassSummon");
 			if (damageClass == DamageClass.Throwing)
 				return UIHelpers.T("ClassThrowing");
-			if (damageClass is ModDamageClass modded && modded.Mod.Name == "CalamityMod" && modded.Name == "RogueDamageClass")
+			if (damageClass.Mod?.Name == "CalamityMod" && damageClass.Name == "RogueDamageClass")
 				return UIHelpers.T("ClassRogue");
 
 			// Other mods: the class's own name ("bard damage" -> "Bard") and its mod.
@@ -76,8 +77,8 @@ namespace TerraIndex.Common
 				name = name[..^" damage".Length];
 			if (name.Length > 0)
 				name = char.ToUpper(name[0]) + name[1..];
-			if (damageClass is ModDamageClass other)
-				name += $" ({Regex.Replace(other.Mod.DisplayName, @"\[c/[0-9a-fA-F]+:([^\]]*)\]", "$1")})";
+			if (damageClass.Mod != null && damageClass.Mod.Name != "ModLoader")
+				name += $" ({Regex.Replace(damageClass.Mod.DisplayName, @"\[c/[0-9a-fA-F]+:([^\]]*)\]", "$1")})";
 			return name;
 		}
 	}

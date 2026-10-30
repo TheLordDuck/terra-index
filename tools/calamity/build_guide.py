@@ -27,14 +27,16 @@ CLASSES = ["melee", "ranged", "magic", "summon", "rogue"]
 STAGES = ["pre-boss", "pre-evil1", "pre-evil2", "pre-skeletron", "pre-wof", "pre-mech", "post-mech1", "post-mech2",
           "pre-plantera", "pre-golem", "post-golem", "pre-lunar", "pre-moonlord", "pre-provi", "pre-polter", "pre-dog",
           "pre-yharon", "pre-scal-exo", "pre-scal", "pre-exo", "endgame"]
-# Cargo type -> section of the guide tab, in the order they are shown.
+# Cargo type -> section of the guide tab, in the order they are shown. Rogue's spam and stealth builds keep their own,
+# and accessories are split by what they are for.
 SECTIONS = {
     "armor": "armor",
-    "weapon": "weapons", "weaponSpam": "weapons", "weaponStealth": "weapons", "minions": "weapons",
+    "weapon": "weapons", "weaponStealth": "weaponsStealth", "weaponSpam": "weaponsSpam", "minions": "weapons",
     "sentries": "weapons", "weaponSummon": "weapons", "support": "weapons",
-    "accessoryMobilityPrimary": "accessories", "accessory": "accessories", "accessoryGeneral": "accessories",
-    "accessorGeneral": "accessories", "accessoryMobility": "accessories", "accessoryOffense": "accessories",
-    "accessoryDefense": "accessories", "accessorySpam": "accessories", "accessoryStealth": "accessories",
+    "accessoryOffense": "accessoriesOffense", "accessoryStealth": "accessoriesStealth", "accessorySpam": "accessoriesSpam",
+    "accessoryDefense": "accessoriesDefense",
+    "accessoryMobilityPrimary": "accessoriesMobility", "accessoryMobility": "accessoriesMobility",
+    "accessory": "accessoriesGeneral", "accessoryGeneral": "accessoriesGeneral", "accessorGeneral": "accessoriesGeneral",
     "ammo": "potions", "buff": "potions", "buffOffense": "potions", "buffDefense": "potions",
     "buffMobility": "potions", "buffGeneral": "potions",
 }

@@ -42,11 +42,64 @@ UI: {
 	GuideEndgame: Эндгейм
 	GuideSectionArmor: броня
 	GuideSectionWeapons: оружие
-	GuideSectionAccessories: аксессуар
+	GuideSectionAccessoriesOffense: атакующий аксессуар
+	GuideSectionAccessoriesDefense: защитный аксессуар
+	GuideSectionAccessoriesMobility: аксессуар мобильности
+	GuideSectionAccessoriesGeneral: общий аксессуар
 	GuideSectionPotions: зелье или бафф
 	GuideTooltip: Гайд Calamity: рекомендовано ({0}) для класса «{1}»
 	GuideNewStage: Гайд Calamity: новый этап — {0}. Новых рекомендаций для класса «{2}»: {1}: {3}. Смотри их в индексе рецептов (Гайд Calamity).
 	GuideNewStageNoClass: Гайд Calamity: новый этап — {0}. Выбери класс в индексе рецептов (Гайд Calamity), чтобы увидеть своё снаряжение.
+	GuideSectionWeaponsStealth: оружие скрытности
+	GuideSectionWeaponsSpam: оружие для спама
+	GuideSectionAccessoriesStealth: аксессуар скрытности
+	GuideSectionAccessoriesSpam: аксессуар для спама
+	BookSectionWeaponsStealth: Оружие скрытности
+	BookSectionWeaponsSpam: Оружие для спама
+	BookSectionAccessoriesStealth: Аксессуары скрытности
+	BookSectionAccessoriesSpam: Аксессуары для спама
+	BookTitle: Гайд Calamity
+	BookCurrentButton: Текущий этап
+	BookStage: Этап {0}/{1}: {2}
+	BookCurrentStage: (твой)
+	BookPickClass: Выбери класс сверху, чтобы увидеть билд, который советует вики Calamity на каждом этапе.
+	BookHint: Левый клик по предмету: как его создать. Правый клик: где он нужен. Зелёная точка: он у тебя есть.
+	BookSectionArmor: Броня
+	BookSectionWeapons: Оружие
+	BookSectionAccessoriesOffense: Атакующие аксессуары
+	BookSectionAccessoriesDefense: Защитные аксессуары
+	BookSectionAccessoriesMobility: Аксессуары мобильности
+	BookSectionAccessoriesGeneral: Общие аксессуары
+	BookSectionPotions: Зелья и баффы
+	BookBossCount: Побеждено боссов: {0}/{1}
+	BookNextBosses: Дальше: {0}
+	BookAllBeaten: Все боссы побеждены!
+	BookShowAll: Показать и побеждённых
+	BookHideDowned: Скрыть побеждённых
+	BookTier0: До хардмода
+	BookTier1: Хардмод
+	BookTier2: После Лунного лорда
+	BookDowned: Побеждён
+	BookNext: Дальше
+	BookOptional: Необязательный
+	BookExoMechs: Экзо-мехи
+	BookEventCount: События и мини-боссы: {0}/{1}
+	BookCompleted: Пройдено
+	BookEvent: Событие
+	BookMiniboss: Мини-босс
+	BookEventAcidRain1: Кислотный дождь (уровень 1)
+	BookEventAcidRain2: Кислотный дождь (уровень 2)
+	BookEventGoblins: Армия гоблинов
+	BookEventOldOnesArmy1: Армия Древних (уровень 1)
+	BookEventOldOnesArmy2: Армия Древних (уровень 2)
+	BookEventOldOnesArmy3: Армия Древних (уровень 3)
+	BookEventPirates: Нашествие пиратов
+	BookEventFrostLegion: Морозный легион (Рождество)
+	BookEventPumpkinMoon: Тыквенная луна
+	BookEventFrostMoon: Морозная луна
+	BookEventMartians: Марсианское безумие
+	BookEventPillars: Небесные башни
+	BookEventBossRush: Боссраш
 	NoResults: Ни один предмет не подходит под поиск.
 	Hint:
 		'''
@@ -99,6 +152,7 @@ UI: {
 	BlueprintHerbGarden: Сад трав
 	BlueprintFishingPond: Пруд для рыбалки
 	BlueprintBuffArena: Арена с баффами
+	BlueprintEterniaArena: Колизей Армии Древних
 	BlueprintTabBuildings: Постройки
 	BlueprintTabNpcs: Жители
 	HappinessTitle: Кто будет здесь жить? Выберите NPC, чтобы узнать, где он счастливее всего:
@@ -243,6 +297,15 @@ UI: {
 }
 
 Items: {
+	GuideBookItem: {
+		DisplayName: Гайд Calamity
+		Tooltip:
+			'''
+			Используй, чтобы увидеть билд своего класса на каждом этапе игры
+			А также побеждённых, оставшихся и следующих боссов
+			'''
+	}
+
 	WirelessTeleporterItem: {
 		DisplayName: Беспроводной телепорт
 		Tooltip:
@@ -418,6 +481,11 @@ Configs: {
 		AllowPortableTerminal: {
 			Label: Разрешить переносной терминал
 			Tooltip: Если выключено, переносные терминалы не могут открывать терминалы издалека
+		}
+
+		CalamityFeatures: {
+			Label: Функции Calamity
+			Tooltip: Гайд Calamity и его книга, когда включён Calamity Mod. Выключите, чтобы играть без них
 		}
 	}
 

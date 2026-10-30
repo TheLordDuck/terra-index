@@ -12,7 +12,7 @@ namespace TerraIndex.Content.Items
 			Item.width = 24;
 			Item.height = 24;
 			Item.rare = ItemRarityID.Orange;
-			Item.value = Item.sellPrice(silver: 50);
+			Item.value = Terraria.Item.sellPrice(silver: 50);
 		}
 
 		public override void AddRecipes()

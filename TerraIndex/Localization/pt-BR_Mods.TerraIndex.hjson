@@ -42,11 +42,64 @@ UI: {
 	GuideEndgame: Fim de jogo
 	GuideSectionArmor: armadura
 	GuideSectionWeapons: arma
-	GuideSectionAccessories: acessório
+	GuideSectionAccessoriesOffense: acessório ofensivo
+	GuideSectionAccessoriesDefense: acessório defensivo
+	GuideSectionAccessoriesMobility: acessório de mobilidade
+	GuideSectionAccessoriesGeneral: acessório geral
 	GuideSectionPotions: poção ou bônus
 	GuideTooltip: Guia do Calamity: recomendado para {1} ({0})
 	GuideNewStage: Guia do Calamity: nova etapa, {0}. {1} itens novos recomendados para {2}: {3}. Veja-os no índice de receitas (Guia do Calamity).
 	GuideNewStageNoClass: Guia do Calamity: nova etapa, {0}. Escolha sua classe no índice de receitas (Guia do Calamity) para ver seu equipamento.
+	GuideSectionWeaponsStealth: arma furtiva
+	GuideSectionWeaponsSpam: arma de spam
+	GuideSectionAccessoriesStealth: acessório furtivo
+	GuideSectionAccessoriesSpam: acessório de spam
+	BookSectionWeaponsStealth: Armas furtivas
+	BookSectionWeaponsSpam: Armas de spam
+	BookSectionAccessoriesStealth: Acessórios furtivos
+	BookSectionAccessoriesSpam: Acessórios de spam
+	BookTitle: Guia do Calamity
+	BookCurrentButton: Etapa atual
+	BookStage: Etapa {0}/{1}: {2}
+	BookCurrentStage: (a sua)
+	BookPickClass: Escolha sua classe acima para ver a build que a wiki do Calamity recomenda em cada etapa.
+	BookHint: Clique esquerdo em um item: como fabricá-lo. Clique direito: onde é usado. Ponto verde: você o tem.
+	BookSectionArmor: Armadura
+	BookSectionWeapons: Armas
+	BookSectionAccessoriesOffense: Acessórios ofensivos
+	BookSectionAccessoriesDefense: Acessórios defensivos
+	BookSectionAccessoriesMobility: Acessórios de mobilidade
+	BookSectionAccessoriesGeneral: Acessórios gerais
+	BookSectionPotions: Poções e bônus
+	BookBossCount: Chefes derrotados: {0}/{1}
+	BookNextBosses: Próximos: {0}
+	BookAllBeaten: Todos os chefes foram derrotados!
+	BookShowAll: Mostrar também os derrotados
+	BookHideDowned: Ocultar os derrotados
+	BookTier0: Antes do modo difícil
+	BookTier1: Modo difícil
+	BookTier2: Depois do Senhor da Lua
+	BookDowned: Derrotado
+	BookNext: Próximo
+	BookOptional: Opcional
+	BookExoMechs: Exo Mechs
+	BookEventCount: Eventos e minichefes: {0}/{1}
+	BookCompleted: Concluído
+	BookEvent: Evento
+	BookMiniboss: Minichefe
+	BookEventAcidRain1: Chuva Ácida (nível 1)
+	BookEventAcidRain2: Chuva Ácida (nível 2)
+	BookEventGoblins: Exército Goblin
+	BookEventOldOnesArmy1: Exército do Ancião (nível 1)
+	BookEventOldOnesArmy2: Exército do Ancião (nível 2)
+	BookEventOldOnesArmy3: Exército do Ancião (nível 3)
+	BookEventPirates: Invasão Pirata
+	BookEventFrostLegion: Legião Gélida (Natal)
+	BookEventPumpkinMoon: Lua de Abóbora
+	BookEventFrostMoon: Lua Gélida
+	BookEventMartians: Loucura Marciana
+	BookEventPillars: Pilares Celestiais
+	BookEventBossRush: Boss Rush
 	NoResults: Nenhum item corresponde à pesquisa.
 	Hint:
 		'''
@@ -99,6 +152,7 @@ UI: {
 	BlueprintHerbGarden: Horta de ervas
 	BlueprintFishingPond: Lago de pesca
 	BlueprintBuffArena: Arena com bônus
+	BlueprintEterniaArena: Coliseu do Exército do Ancião
 	BlueprintTabBuildings: Construções
 	BlueprintTabNpcs: NPCs
 	HappinessTitle: Quem vai morar aqui? Escolha um NPC para ver onde ele fica mais feliz:
@@ -243,6 +297,15 @@ UI: {
 }
 
 Items: {
+	GuideBookItem: {
+		DisplayName: Guia do Calamity
+		Tooltip:
+			'''
+			Use-o para ver a build da sua classe em cada etapa do jogo
+			E os chefes derrotados, os que faltam e os próximos
+			'''
+	}
+
 	WirelessTeleporterItem: {
 		DisplayName: Teletransportador sem fio
 		Tooltip:
@@ -418,6 +481,11 @@ Configs: {
 		AllowPortableTerminal: {
 			Label: Permitir o terminal portátil
 			Tooltip: Desativado, os terminais portáteis não podem abrir terminais de longe
+		}
+
+		CalamityFeatures: {
+			Label: Recursos do Calamity
+			Tooltip: O guia do Calamity e o seu livro, quando o Calamity Mod está ativado. Desative para jogar sem eles
 		}
 	}
 

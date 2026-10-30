@@ -26,9 +26,9 @@ SOLID = set('#SRdYUEve') | set('/\\()[]<>') | set('12345678')
 PLATFORM = '-'
 PLANTER = '='
 WATER = '~'
-TILE_CHARS = SOLID | {' ', '.', '+', '-', '|', 'r', PLANTER, WATER} | set(FURNITURE)
+TILE_CHARS = SOLID | {' ', '.', '+', '-', '|', '!', 'r', PLANTER, WATER} | set(FURNITURE)
 WALL_CHARS = set(' wsgkqpxvaz')
-STANDING = set('CTWBKOFfZPGQVHt')
+STANDING = set('CTWBKOFfZPGQVHtX')
 HANGING = set('LlynAN')
 ON_TABLE = set('cbhou')
 LIGHTS = set('LlycifAN')
@@ -40,6 +40,7 @@ NAMES = {
     'Medieval': 'Medieval house', 'Castle': 'Castle', 'Pagoda': 'Pagoda', 'WizardTower': 'Wizard tower',
     'Workshop': "Craftsman's house", 'TreeVillage': 'Tree village', 'BigTree': 'Big tree',
     'ThickTree': 'Thick tree', 'HerbGarden': 'Herb garden', 'FishingPond': 'Fishing pond', 'BuffArena': 'Arena with buffs',
+    'EterniaArena': "Old One's Army colosseum",
 }
 
 
@@ -234,6 +235,8 @@ def draw(d, scale=1):
                 g.rectangle([x0, y0, x1, y0 + 3], fill=(190, 140, 85), outline=WOOD_DARK)
             elif c == '|':
                 g.rectangle([x0 + 3, y0, x1 - 3, y1], fill=(120, 80, 45))
+            elif c == '!':
+                g.rectangle([x0 + 2, y0, x1 - 2, y1], fill=(235, 232, 225), outline=(170, 165, 155))
             elif c == 'r':
                 g.line([x0 + C // 2, y0, x0 + C // 2, y1], fill=(60, 130, 50), width=2)
             elif c == PLANTER:
@@ -348,6 +351,11 @@ def draw_piece(g, c, x0, y0, x1, y1):
     elif c == 'i':
         g.rectangle([x0 + 5, y0 + 4, x1 - 5, y1 - 1], fill=(120, 80, 40))
         g.ellipse([x0 + 3, y0, x1 - 3, y0 + 5], fill=(255, 200, 60))
+    elif c == 'X':
+        # The stand's base, and the crystal floating over it.
+        g.rectangle([x0 + 2, y1 - h // 4, x1 - 2, y1], fill=(150, 110, 60), outline=(90, 60, 30))
+        g.polygon([(x0 + w // 2, y0 + h // 8), (x0 + w // 2 + 8, y0 + h // 2 - 4), (x0 + w // 2, y1 - h // 4 - 4),
+                   (x0 + w // 2 - 8, y0 + h // 2 - 4)], fill=(120, 220, 255), outline=(40, 120, 200))
 
 
 # ---------- C# ----------

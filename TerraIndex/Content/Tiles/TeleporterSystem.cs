@@ -144,11 +144,11 @@ namespace TerraIndex.Content.Tiles
 			int index = layers.FindIndex(layer => layer.Name == "Vanilla: Mouse Text");
 			if (index == -1)
 				return;
-			layers.Insert(index, new LegacyGameInterfaceLayer("TerraIndex: Teleporter Channels", () => {
+			layers.Insert(index, UIHelpers.Layer("TerraIndex: Teleporter Channels", () => {
 				if (ui?.CurrentState != null && lastGameTime != null)
 					ui.Draw(Main.spriteBatch, lastGameTime);
 				return true;
-			}, InterfaceScaleType.UI));
+			}));
 		}
 
 		public override void SaveWorldData(TagCompound tag)

@@ -11,7 +11,7 @@ using Terraria.ModLoader;
 
 namespace TerraIndex.Content.Tiles
 {
-	// Plays the radio clips, alternating them, at random moments: sometimes a few seconds apart, sometimes a couple of
+	// Plays the radio clips, in a shuffled order, at random moments: sometimes a few seconds apart, sometimes a couple of
 	// minutes of silence. The server (or the single player) decides when and which clip, and sends the radios to play
 	// at (each player's nearest one that is on), so everyone hears the same clip at the same time. Each client then
 	// plays it once, at the nearest of those radios, so several radios don't talk over each other.
@@ -24,18 +24,31 @@ namespace TerraIndex.Content.Tiles
 		// One note every ~20 ticks on average while a clip plays.
 		private const int NoteChance = 20;
 
-		private static readonly SoundStyle[] Clips = {
-			new("TerraIndex/Content/Sounds/RadioSiu") { Volume = 0.8f, MaxInstances = 1 },
-			new("TerraIndex/Content/Sounds/RadioLosDos") { Volume = 0.8f, MaxInstances = 1 },
-			new("TerraIndex/Content/Sounds/RadioSi") { Volume = 0.8f, MaxInstances = 1 },
-			new("TerraIndex/Content/Sounds/RadioNo") { Volume = 0.8f, MaxInstances = 1 },
+		// The clips and their lengths in seconds (the server can't load sounds to ask how long they are): the user's first
+		// four, then the 31 phrases of Verne's "Las mejores frases de Rajoy durante su mandato", cut where the video's
+		// background changes.
+		private static readonly (string Name, float Seconds)[] ClipList = {
+			("RadioSiu", 6.7f), ("RadioLosDos", 18.3f), ("RadioSi", 5.4f), ("RadioNo", 5f),
+			("RadioRajoyAlicante", 4.57f), ("RadioRajoyAplauden", 12.23f), ("RadioRajoyTomaDemocracia", 2.59f),
+			("RadioRajoyTalavera", 7.04f), ("RadioRajoyCuantoPeor", 8.73f), ("RadioRajoyVeryDifficult", 4.02f),
+			("RadioRajoyPiensanAntes", 4.23f), ("RadioRajoyMuyEspanoles", 6.98f), ("RadioRajoySentimientos", 2.57f),
+			("RadioRajoyImposible", 10.48f), ("RadioRajoyLaSegunda", 2.15f), ("RadioRajoyEnganar", 6.86f),
+			("RadioRajoyNoHeDormido", 3.80f), ("RadioRajoyAviones", 5.79f), ("RadioRajoyGalileo", 5.30f),
+			("RadioRajoySerio", 3.26f), ("RadioRajoyAlcalde", 7.11f), ("RadioRajoyEuropea", 1.65f),
+			("RadioRajoyPonencias", 5.31f), ("RadioRajoyPodemos", 5.72f), ("RadioRajoyGranNacion", 5.82f),
+			("RadioRajoy75Millones", 4.90f), ("RadioRajoyUnVaso", 2.90f), ("RadioRajoyMaquinas", 6.74f),
+			("RadioRajoyCosasBonitas", 6.48f), ("RadioRajoyHacenCosas", 2.00f), ("RadioRajoyViajes", 4.72f),
+			("RadioRajoyAguaDelCielo", 4.52f), ("RadioRajoySalvoAlgunaCosa", 8.62f), ("RadioRajoyLaEPA", 4.08f),
+			("RadioRajoyFinDeLaCita", 2.08f),
 		};
-		// The server can't load sounds to ask how long they are: 6.7 s, 18.3 s, 5.4 s and 5 s, rounded up.
-		private static readonly int[] ClipTicks = { 7 * 60, 19 * 60, 6 * 60, 5 * 60 };
+		private static readonly SoundStyle[] Clips = ClipList.Select(clip => new SoundStyle("TerraIndex/Content/Sounds/" + clip.Name) { Volume = 0.8f, MaxInstances = 1 }).ToArray();
+		private static readonly int[] ClipTicks = ClipList.Select(clip => (int)System.Math.Ceiling(clip.Seconds) * 60).ToArray();
 
 		// Server or single player: the schedule.
 		private readonly List<Point> radios = new();
-		private int next;
+		// The clips left to play, in a random order: every clip plays once before any repeats.
+		private readonly List<int> order = new();
+		private int last = -1;
 		private int timer;
 		private int scanTimer;
 
@@ -47,7 +60,7 @@ namespace TerraIndex.Content.Tiles
 		{
 			radios.Clear();
 			playing = SlotId.Invalid;
-			next = Main.rand.Next(Clips.Length);
+			order.Clear();
 		}
 
 		public override void PostUpdateEverything()
@@ -78,8 +91,7 @@ namespace TerraIndex.Content.Tiles
 			if (radios.Count == 0 || --timer > 0)
 				return;
 
-			int clip = next;
-			next = (next + 1) % Clips.Length;
+			int clip = NextClip();
 			// The clip's length plus the silence after it.
 			timer = ClipTicks[clip] + Gap();
 
@@ -87,6 +99,19 @@ namespace TerraIndex.Content.Tiles
 				TerminalNet.SendRadioPlay(clip, radios.Take(MaxRadios).ToList());
 			else
 				Play(clip, radios);
+		}
+
+		private int NextClip()
+		{
+			if (order.Count == 0) {
+				order.AddRange(Enumerable.Range(0, Clips.Length).OrderBy(_ => Main.rand.Next()));
+				// Shuffling doesn't make the last clip the first of the next round.
+				if (order.Count > 1 && order[0] == last)
+					(order[0], order[^1]) = (order[^1], order[0]);
+			}
+			last = order[0];
+			order.RemoveAt(0);
+			return last;
 		}
 
 		// Every client: plays the clip at the nearest of the radios, if any is close enough to hear.

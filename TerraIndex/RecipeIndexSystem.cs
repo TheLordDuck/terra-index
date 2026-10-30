@@ -159,11 +159,11 @@ namespace TerraIndex
 			if (index == -1)
 				return;
 
-			layers.Insert(index, new LegacyGameInterfaceLayer("TerraIndex: Browser", () => {
+			layers.Insert(index, UIHelpers.Layer("TerraIndex: Browser", () => {
 				if (ui?.CurrentState != null && lastGameTime != null)
 					ui.Draw(Main.spriteBatch, lastGameTime);
 				return true;
-			}, InterfaceScaleType.UI));
+			}));
 		}
 
 		public override void PostDrawInterface(SpriteBatch spriteBatch)

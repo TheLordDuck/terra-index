@@ -23,15 +23,14 @@ namespace TerraIndex.UI
 		private UITextPanel<string> classButton;
 		private string guideShown;
 		private string classShown;
-		// Layout applied last: docked next to the terminal panel or centered, and for which screen width.
-		private bool docked;
-		private float layoutWidth;
+
+		private const float PanelHeight = 600;
 
 		public override void OnInitialize()
 		{
 			panel = new UIPanel();
 			panel.Width.Set(UIHelpers.IndexWidth, 0);
-			panel.Height.Set(600, 0);
+			panel.Height.Set(PanelHeight, 0);
 			panel.HAlign = panel.VAlign = 0.5f;
 			Append(panel);
 
@@ -158,28 +157,17 @@ namespace TerraIndex.UI
 			}
 		}
 
-		// Next to the terminal panel while it is open (see RecipeIndexSystem), so both can be used at once; centered otherwise.
+		// Next to the terminal panel while it is open (see RecipeIndexSystem), so both can be used at once; centered
+		// otherwise. Below the inventory while it is open (UIHelpers.Place).
 		private void Layout()
 		{
-			bool dock = ModContent.GetInstance<TerminalSystem>().PanelOpen;
-			float screenWidth = GetDimensions().Width;
-			if (dock == docked && screenWidth == layoutWidth)
-				return;
-			docked = dock;
-			layoutWidth = screenWidth;
-
-			if (dock) {
-				var (left, width, _) = UIHelpers.DockLayout(screenWidth);
-				panel.HAlign = 0f;
-				panel.Left.Set(left, 0);
-				panel.Width.Set(width, 0);
+			if (ModContent.GetInstance<TerminalSystem>().PanelOpen) {
+				var (left, width, _) = UIHelpers.DockLayout(GetDimensions().Width);
+				UIHelpers.Place(panel, width, PanelHeight, left);
 			}
 			else {
-				panel.HAlign = 0.5f;
-				panel.Left.Set(0, 0);
-				panel.Width.Set(UIHelpers.IndexWidth, 0);
+				UIHelpers.Place(panel, UIHelpers.IndexWidth, PanelHeight);
 			}
-			Recalculate();
 		}
 
 		public override void Update(GameTime gameTime)
@@ -193,7 +181,7 @@ namespace TerraIndex.UI
 			}
 			classButton.BackgroundColor = (grid.ClassFilter != null || grid.Category == ItemCategory.Guide ? new Color(100, 120, 210) : classButton.IsMouseHovering ? new Color(80, 95, 170) : new Color(63, 82, 151)) * 0.8f;
 			if (panel.ContainsPoint(Main.MouseScreen))
-				Main.LocalPlayer.mouseInterface = true;
+				UIHelpers.BlockMouse();
 		}
 	}
 }

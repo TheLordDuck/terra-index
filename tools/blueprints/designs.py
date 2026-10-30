@@ -39,6 +39,7 @@ FURNITURE = {
     't': (1, 2),  # toilet (counts as a chair)
     'A': (1, 2),  # heart lantern (hangs)
     'N': (1, 2),  # star in a bottle (hangs)
+    'X': (5, 4),  # Eternia Crystal stand
 }
 
 
@@ -1053,5 +1054,71 @@ def buff_arena():
     return d
 
 
+def eternia_arena():
+    """A colosseum for the Old One's Army (its Dark Mage, Ogre and Betsy waves), with the Eternia Crystal stand in the
+    middle of its floor. Nothing in it stops the enemies walking in from their portals on both sides: the facade, three
+    levels of arches, is background wall; its marble columns are not solid; the stands are platforms. The stands rise
+    in a bowl on both sides, with a box for the emperor (a throne under red banners) over the crystal, and campfires,
+    heart lanterns and stars in a bottle on and under them for regeneration and mana."""
+    W, H = 151, 34
+    d = Design('EterniaArena', W, H)
+    G = H - 1                           # the floor
+    centers = range(5, W - 3, 10)       # the arches, 5 wide, with 5-wide piers between them
+    d.fill(0, G, W - 1, G, '#')
+
+    # The facade: background wall with the arches cut out of it, stone cornices between the levels, a crenellated top.
+    d.wall(0, 5, W - 1, G - 1, 'w')
+    for y in (5, G - 20, G - 18, G - 9):
+        d.wall(0, y, W - 1, y, 'x')
+    for x in range(0, W, 4):
+        d.wall(x, 4, min(x + 1, W - 1), 4, 'x')
+
+    def arch(cx, top, bottom):
+        """An opening in the wall with a rounded top: its top row is narrower."""
+        d.wall(cx - 1, top, cx + 1, top, ' ')
+        d.wall(cx - 2, top + 1, cx + 2, bottom, ' ')
+
+    levels = ((G - 8, G - 1), (G - 17, G - 11))
+    for cx in centers:
+        for top, bottom in levels:
+            arch(cx, top, bottom)
+        d.wall(cx - 1, G - 24, cx + 1, G - 22, ' ')     # the attic's small windows
+
+    # The stands, a bowl of platforms rising towards both sides, and the emperor's box over the crystal.
+    stands = ((G - 9, 34), (G - 13, 26), (G - 17, 18), (G - 21, 10))
+    for y, length in stands:
+        d.fill(0, y, length, y, '-')
+        d.fill(W - 1 - length, y, W - 1, y, '-')
+    box = G - 14
+    d.fill(63, box, W - 64, box, '-')
+    d.put('Q', W // 2 - 1, box - 4)
+    for x in (64, W - 65):
+        d.put('n', x, box + 1)
+    d.put('X', W // 2 - 2, G - 4)
+
+    # Campfires on the stands, heart lanterns and stars in a bottle under them, torches on the ground floor's piers.
+    for y, length in stands[1:]:
+        for x in (length - 6, W - 1 - length + 3):
+            d.put('f', x, y - 2)
+    for k, (y, length) in enumerate(stands[:-1]):
+        for x in (length - 2, W - 1 - length + 2):
+            d.put('A' if k % 2 == 0 else 'N', x, y + 1)
+    d.put('N', 66, box + 1)
+    d.put('A', W - 67, box + 1)
+    for x in (48, 68, W - 69, W - 49):
+        d.put('i', x, G - 1)
+
+    # Last, marble columns on the piers between the arches, up each level, wherever nothing else is.
+    for cx in centers:
+        x = cx + 5
+        if x >= W - 3:
+            continue
+        for top, bottom in levels:
+            for y in range(top, bottom + 1):
+                if d.tiles[y][x] == ' ':
+                    d.tile(x, y, '!')
+    return d
+
+
 DESIGNS = [small_house, two_floors, tower, medieval, castle, pagoda, wizard_tower, craftsman_house, tree_village,
-           big_tree, thick_tree, arena, herb_garden, fishing_pond, buff_arena]
+           big_tree, thick_tree, arena, herb_garden, fishing_pond, buff_arena, eternia_arena]

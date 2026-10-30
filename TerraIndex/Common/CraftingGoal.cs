@@ -283,7 +283,7 @@ namespace TerraIndex.Common
 					Goal.PanelPosition = (Main.MouseScreen - dragOffset).ToPoint();
 				else
 					dragging = false;
-				Main.LocalPlayer.mouseInterface = true;
+				UIHelpers.BlockMouse();
 				return;
 			}
 
@@ -291,7 +291,7 @@ namespace TerraIndex.Common
 			if (!panelArea.Contains(mouse))
 				return;
 			// Over the panel the mouse is ours: no swinging the held item.
-			Main.LocalPlayer.mouseInterface = true;
+			UIHelpers.BlockMouse();
 			if (!Main.mouseLeft || !Main.mouseLeftRelease)
 				return;
 			Main.mouseLeftRelease = false;
@@ -314,13 +314,13 @@ namespace TerraIndex.Common
 			int index = layers.FindIndex(layer => layer.Name == "Vanilla: Mouse Text");
 			if (index == -1)
 				return;
-			layers.Insert(index, new LegacyGameInterfaceLayer("TerraIndex: Goal", () => {
+			layers.Insert(index, UIHelpers.Layer("TerraIndex: Goal", () => {
 				if (Visible)
 					Draw(Main.spriteBatch);
 				else
 					panelArea = Rectangle.Empty;
 				return true;
-			}, InterfaceScaleType.UI));
+			}));
 		}
 
 		private void Draw(SpriteBatch spriteBatch)

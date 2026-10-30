@@ -157,6 +157,8 @@ namespace TerraIndex.Content.Building
 			['n'] = Brush.Fixed("RedBanner"),
 			['b'] = Brush.Fixed("Bottle"),
 			['|'] = Brush.Fixed("WoodenBeam"),
+			// Like beams, not solid.
+			['!'] = Brush.Fixed("MarbleColumn", "WoodenBeam"),
 			['S'] = Brush.Fixed("GrayBrick"),
 			['R'] = Brush.Fixed("RedBrick"),
 			['/'] = Brush.Sloped(BrushShape.SlopeDownRight, "RedBrick"),
@@ -201,6 +203,7 @@ namespace TerraIndex.Content.Building
 			['='] = Brush.Fixed("DayBloomPlanterBox", "BlinkrootPlanterBox", "MoonglowPlanterBox"),
 			['A'] = Brush.Fixed("HeartLantern"),
 			['N'] = Brush.Fixed("StarinaBottle"),
+			['X'] = Brush.Fixed("DD2ElderCrystalStand"),
 		};
 
 		public static readonly Dictionary<char, Brush> WallBrushes = new() {

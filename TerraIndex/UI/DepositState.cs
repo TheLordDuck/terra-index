@@ -65,7 +65,7 @@ namespace TerraIndex.UI
 
 			base.Update(gameTime);
 			if (panel.ContainsPoint(Main.MouseScreen))
-				Main.LocalPlayer.mouseInterface = true;
+				UIHelpers.BlockMouse();
 		}
 
 		// A vanilla item slot over one entry of TerminalSystem.DepositItems: same clicks, dragging and shift-click as a chest.
@@ -84,7 +84,7 @@ namespace TerraIndex.UI
 				float oldScale = Main.inventoryScale;
 				Main.inventoryScale = SlotScale;
 				if (ContainsPoint(Main.MouseScreen) && !PlayerInput.IgnoreMouseInterface) {
-					Main.LocalPlayer.mouseInterface = true;
+					UIHelpers.BlockMouse();
 					ItemSlot.Handle(items, ItemSlot.Context.BankItem, index);
 				}
 				ItemSlot.Draw(spriteBatch, items, ItemSlot.Context.BankItem, index, GetDimensions().Position());
