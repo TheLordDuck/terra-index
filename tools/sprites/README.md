@@ -13,3 +13,9 @@ The extracted vanilla files are not kept in the repo.
 4. From the repo root, `python tools/sprites/terrarian.py` repaints that hooded sheet as "The Terrarian" (the user's
    character): brown hair with red bangs, a gold band with blue, green and red plumes, a navy coat and white
    trousers. It overwrites both PNGs, so run it once, on step 3's output.
+
+## Mod icon
+
+From the repo root, `python tools/sprites/icon.py` redraws `TerraIndex/icon.png` and `icon_small.png` from the mod's own
+sprites (portable terminal, wireless teleporter) plus a drawn terminal and Calamity guide book. Rerun it after
+changing any of those sprites.
