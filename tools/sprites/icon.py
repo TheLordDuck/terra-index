@@ -1,4 +1,4 @@
-"""Draws the mod icon (icon.png 80x80, icon_small.png 30x30) from the mod's own sprites.
+"""Draws the mod icon (icon.png 80x80) from the mod's own sprites. icon_small.png is the original one, kept as is.
 
 Run from the repo root: python tools/sprites/icon.py
 The big icon is the storage terminal, with the portable terminal in front of its top right corner, a wireless
@@ -182,13 +182,5 @@ def big_icon():
 	return img
 
 
-def small_icon():
-	img = background(30, 4)
-	img.alpha_composite(terminal(20, 17, 3, False), (2, 2))
-	img.alpha_composite(calamity_book(13, 17), (16, 11))
-	return img
-
-
 if __name__ == "__main__":
 	big_icon().save(MOD + "icon.png")
-	small_icon().save(MOD + "icon_small.png")

@@ -16,6 +16,6 @@ The extracted vanilla files are not kept in the repo.
 
 ## Mod icon
 
-From the repo root, `python tools/sprites/icon.py` redraws `TerraIndex/icon.png` and `icon_small.png` from the mod's own
+From the repo root, `python tools/sprites/icon.py` redraws `TerraIndex/icon.png` (not `icon_small.png`) from the mod's own
 sprites (portable terminal, wireless teleporter) plus a drawn terminal and Calamity guide book. Rerun it after
 changing any of those sprites.

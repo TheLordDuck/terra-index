@@ -629,7 +629,7 @@ Decisions taken:
 | `Content/Storage/DeliveryDrone.png` | 20x28 | Delivery drone, two 14 px frames (rotors spinning); used by the portable terminal |
 | `Content/Building/BlueprintItem.png` | 28x28 | Blueprint: blue sheet with a grid and a white house (0.8) |
 | `icon.png` | 80x80 | Mod icon (mod list and Workshop): the terminal, with the portable terminal in front of its top right corner, a wireless teleporter bottom left and the gold Calamity guide book bottom right. Drawn by `tools/sprites/icon.py` |
-| `icon_small.png` | 30x30 | Small icon in the mod list: terminal and Calamity book (same script) |
+| `icon_small.png` | 30x30 | Small icon in the mod list: the terminal (the original one, not drawn by the script) |
 
 The user accepted these sprites as final (2026-10-22).
 
