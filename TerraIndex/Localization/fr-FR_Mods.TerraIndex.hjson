@@ -294,6 +294,18 @@ UI: {
 	TeleporterClearChannel: Retirer son canal
 	TeleporterChannelSet: Téléporteur sur le canal {0}.
 	TeleporterChannelCleared: Téléporteur retiré de son canal.
+	TeleporterUnnamed: Téléporteur sans nom
+	TeleporterEast: "{0} pieds à l'est"
+	TeleporterWest: "{0} pieds à l'ouest"
+	TeleporterAbove: "{0} pieds plus haut"
+	TeleporterBelow: "{0} pieds plus bas"
+	TeleporterPickTitle: Où aller ?
+	TeleporterFrom: Depuis : {0}
+	TeleporterPickHint: Nomme les téléporteurs avec le Lieur de téléporteurs.
+	TeleporterGone: Ce téléporteur n'existe plus.
+	TeleporterNameHint: Nom du téléporteur (Entrée pour enregistrer)
+	TeleporterNamed: Téléporteur nommé : {0}
+	TeleporterNameCleared: Nom du téléporteur retiré.
 }
 
 Items: {
@@ -311,7 +323,7 @@ Items: {
 		Tooltip:
 			'''
 			Pas besoin de câble : donne-lui un canal avec le Lieur de téléporteurs
-			Clic droit pour te téléporter vers le suivant de son canal
+			Clic droit pour te téléporter : s'il y en a plusieurs sur son canal, tu choisis où aller
 			On peut se tenir dessus
 			'''
 	}
@@ -322,6 +334,7 @@ Items: {
 			'''
 			Tiens-le et fais un clic droit sur un téléporteur sans fil pour choisir son canal
 			Un nouveau canal ou un canal existant : les téléporteurs du même canal mènent de l'un à l'autre
+			Écris un nom dans le menu pour distinguer tes téléporteurs
 			'''
 	}
 

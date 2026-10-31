@@ -42,6 +42,7 @@ namespace TerraIndex.Content.Storage
 			Build,
 			BuildResult,
 			TeleporterChannel,
+			TeleporterName,
 		}
 
 		// A ModPacket can't exceed ~65 KB; large networks are sent in several chunks.
@@ -232,6 +233,14 @@ namespace TerraIndex.Content.Storage
 						ModContent.GetInstance<TeleporterSystem>().SetChannel(teleporter, channel);
 					break;
 				}
+				case MessageType.TeleporterName: {
+					Point teleporter = ReadPoint(reader);
+					string name = reader.ReadString();
+					// Named from its channel menu, so the player must be near it.
+					if (Main.netMode == NetmodeID.Server && Main.player[whoAmI].Distance(WirelessTeleporterTile.Center(teleporter)) < 30 * 16)
+						ModContent.GetInstance<TeleporterSystem>().SetName(teleporter, name);
+					break;
+				}
 			}
 		}
 
@@ -304,6 +313,16 @@ namespace TerraIndex.Content.Storage
 			packet.Write((byte)MessageType.TeleporterChannel);
 			WritePoint(packet, teleporter);
 			packet.Write(channel);
+			packet.Send();
+		}
+
+		// Client -> server: names a wireless teleporter (empty removes the name).
+		public static void SendTeleporterName(Point teleporter, string name)
+		{
+			ModPacket packet = Mod.GetPacket();
+			packet.Write((byte)MessageType.TeleporterName);
+			WritePoint(packet, teleporter);
+			packet.Write(name);
 			packet.Send();
 		}
 

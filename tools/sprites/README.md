@@ -1,6 +1,8 @@
 # Sprite tools
 
-The Apothecary's sprite is built on the Guide's vanilla sheet, so it has his poses and 26-frame animation.
+The Apothecary's sprite is built on the Guide's vanilla sheet, so it has his poses and 26-frame animation: a wide
+grey witch hat with a bent tip, a white mask with a thin moustache and pink cheeks, dark hair, a long navy-black
+dress and grey gloves (the look the user picked).
 
 1. Extract the Guide's texture (`xnb` reads the game's compressed `.xnb` files with tModLoader's FNA.dll):
    `dotnet run --project xnb -- <Terraria>/Content/Images/NPC_22.xnb NPC_22.rgba`
@@ -9,10 +11,6 @@ The Apothecary's sprite is built on the Guide's vanilla sheet, so it has his pos
    `sheet.ps1` lays a sheet out scaled up, with frame numbers, to look at it.
 
 The extracted vanilla files are not kept in the repo.
-
-4. From the repo root, `python tools/sprites/terrarian.py` repaints that hooded sheet as "The Terrarian" (the user's
-   character): brown hair with red bangs, a gold band with blue, green and red plumes, a navy coat and white
-   trousers. It overwrites both PNGs, so run it once, on step 3's output.
 
 The Calamity guide book (`TerraIndex/Content/Items/GuideBookItem.png`) is the vanilla Book (`Item_149.xnb`, extracted
 the same way) with its green cover turned red, so it is not mistaken for the vanilla one.

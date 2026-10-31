@@ -294,6 +294,18 @@ UI: {
 	TeleporterClearChannel: Take it off its channel
 	TeleporterChannelSet: Teleporter on channel {0}.
 	TeleporterChannelCleared: Teleporter taken off its channel.
+	TeleporterUnnamed: Unnamed teleporter
+	TeleporterEast: "{0} ft east"
+	TeleporterWest: "{0} ft west"
+	TeleporterAbove: "{0} ft up"
+	TeleporterBelow: "{0} ft down"
+	TeleporterPickTitle: Where to?
+	TeleporterFrom: From: {0}
+	TeleporterPickHint: Name teleporters with the Teleporter Linker.
+	TeleporterGone: That teleporter is gone.
+	TeleporterNameHint: Name this teleporter (Enter to save)
+	TeleporterNamed: Teleporter named: {0}
+	TeleporterNameCleared: Teleporter name removed.
 }
 
 Items: {
@@ -311,7 +323,7 @@ Items: {
 		Tooltip:
 			'''
 			Needs no wire: put it on a channel with the Teleporter Linker
-			Right click it to teleport to the next one on its channel
+			Right click it to teleport: with several on its channel, pick where to go
 			You can stand on it
 			'''
 	}
@@ -322,6 +334,7 @@ Items: {
 			'''
 			Hold it and right click a wireless teleporter to pick its channel
 			A new channel or one already in use: teleporters on the same channel take you to each other
+			Type a name in the menu to tell your teleporters apart
 			'''
 	}
 

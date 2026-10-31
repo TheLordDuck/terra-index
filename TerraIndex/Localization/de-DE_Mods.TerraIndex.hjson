@@ -294,6 +294,18 @@ UI: {
 	TeleporterClearChannel: Vom Kanal nehmen
 	TeleporterChannelSet: Teleporter auf Kanal {0}.
 	TeleporterChannelCleared: Teleporter vom Kanal genommen.
+	TeleporterUnnamed: Unbenannter Teleporter
+	TeleporterEast: "{0} Fuß östlich"
+	TeleporterWest: "{0} Fuß westlich"
+	TeleporterAbove: "{0} Fuß höher"
+	TeleporterBelow: "{0} Fuß tiefer"
+	TeleporterPickTitle: Wohin?
+	TeleporterFrom: Von: {0}
+	TeleporterPickHint: Benenne Teleporter mit dem Teleporter-Verbinder.
+	TeleporterGone: Dieser Teleporter existiert nicht mehr.
+	TeleporterNameHint: Name des Teleporters (Enter zum Speichern)
+	TeleporterNamed: Teleporter benannt: {0}
+	TeleporterNameCleared: Name des Teleporters entfernt.
 }
 
 Items: {
@@ -311,7 +323,7 @@ Items: {
 		Tooltip:
 			'''
 			Braucht keinen Draht: gib ihm mit dem Teleporter-Verbinder einen Kanal
-			Rechtsklick teleportiert dich zum nächsten auf seinem Kanal
+			Rechtsklick teleportiert dich: sind mehrere auf seinem Kanal, wählst du das Ziel
 			Du kannst darauf stehen
 			'''
 	}
@@ -322,6 +334,7 @@ Items: {
 			'''
 			Halte ihn und klicke mit Rechts auf einen kabellosen Teleporter, um seinen Kanal zu wählen
 			Ein neuer oder ein bestehender Kanal: Teleporter auf demselben Kanal bringen dich zueinander
+			Gib im Menü einen Namen ein, um deine Teleporter zu unterscheiden
 			'''
 	}
 

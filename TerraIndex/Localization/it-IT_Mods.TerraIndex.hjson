@@ -294,6 +294,18 @@ UI: {
 	TeleporterClearChannel: Togli il canale
 	TeleporterChannelSet: Teletrasporto sul canale {0}.
 	TeleporterChannelCleared: Teletrasporto senza canale.
+	TeleporterUnnamed: Teletrasporto senza nome
+	TeleporterEast: "{0} piedi a est"
+	TeleporterWest: "{0} piedi a ovest"
+	TeleporterAbove: "{0} piedi più in alto"
+	TeleporterBelow: "{0} piedi più in basso"
+	TeleporterPickTitle: Dove vuoi andare?
+	TeleporterFrom: Da: {0}
+	TeleporterPickHint: Dai un nome ai teletrasporti con il Collegatore.
+	TeleporterGone: Quel teletrasporto non c'è più.
+	TeleporterNameHint: Nome del teletrasporto (Invio per salvare)
+	TeleporterNamed: Teletrasporto chiamato: {0}
+	TeleporterNameCleared: Nome del teletrasporto rimosso.
 }
 
 Items: {
@@ -311,7 +323,7 @@ Items: {
 		Tooltip:
 			'''
 			Non servono cavi: dagli un canale con il Collegatore di teletrasporti
-			Clic destro per teletrasportarti al successivo del suo canale
+			Clic destro per teletrasportarti: se ce ne sono diversi sul suo canale, scegli dove andare
 			Ci si può stare sopra
 			'''
 	}
@@ -322,6 +334,7 @@ Items: {
 			'''
 			Tienilo in mano e fai clic destro su un teletrasporto senza fili per sceglierne il canale
 			Un canale nuovo o uno già usato: i teletrasporti sullo stesso canale ti portano dall'uno all'altro
+			Scrivi un nome nel menu per distinguere i tuoi teletrasporti
 			'''
 	}
 

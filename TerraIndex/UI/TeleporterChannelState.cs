@@ -11,7 +11,8 @@ using Terraria.UI;
 
 namespace TerraIndex.UI
 {
-	// A wireless teleporter's channel menu, opened by right clicking it with the Teleporter Linker: the channels in
+	// A wireless teleporter's channel menu, opened by right clicking it with the Teleporter Linker: its name (Enter
+	// saves it, empty removes it), the channels in
 	// use (with how many teleporters each has), a new one, or none. Built each time it opens, for the channels then.
 	public class TeleporterChannelState : UIState
 	{
@@ -24,12 +25,16 @@ namespace TerraIndex.UI
 		private static readonly Color Current = new Color(60, 140, 90);
 
 		private UIPanel panel;
+		private SearchBox nameBox;
+		private Point teleporter;
+		// The name it has, or the one just sent (in multiplayer the server takes a moment to send it back).
+		private string savedName;
 
 		private static TeleporterSystem Links => ModContent.GetInstance<TeleporterSystem>();
 
 		public override void OnInitialize()
 		{
-			Point teleporter = Links.MenuTeleporter;
+			teleporter = Links.MenuTeleporter;
 			int current = Links.ChannelOf(teleporter);
 			var channels = Links.Channels();
 
@@ -49,6 +54,20 @@ namespace TerraIndex.UI
 			panel.Append(close);
 
 			float top = 36;
+			var name = nameBox = new SearchBox(UIHelpers.T("TeleporterNameHint"));
+			savedName = Links.NameOf(teleporter);
+			name.SetText(savedName);
+			name.Top.Set(top, 0);
+			name.Width.Set(0, 1f);
+			name.Height.Set(32, 0);
+			name.OnTextChanged += text => {
+				if (text.Length > TeleporterSystem.MaxNameLength)
+					name.SetText(text[..TeleporterSystem.MaxNameLength]);
+			};
+			name.OnSubmit += () => Rename(teleporter, name.Text);
+			panel.Append(name);
+			top += 32 + 10;
+
 			panel.Append(Button(UIHelpers.T("TeleporterNewChannel"), top, false, () => Pick(teleporter, TeleporterSystem.NewChannel, channels)));
 			top += RowHeight + 6;
 
@@ -115,6 +134,28 @@ namespace TerraIndex.UI
 				Main.NewText(UIHelpers.T("TeleporterChannelCleared"), Color.LightGray);
 			else
 				Main.NewText(UIHelpers.T("TeleporterChannelSet", shown), Color.LightGreen);
+			SoundEngine.PlaySound(SoundID.Unlock);
+		}
+
+		// A name typed without pressing Enter is kept too when the menu closes.
+		public override void OnDeactivate()
+		{
+			if (nameBox != null && !Main.gameMenu && WirelessTeleporterTile.IsTeleporter(teleporter))
+				Rename(teleporter, nameBox.Text);
+			nameBox?.Unfocus();
+		}
+
+		private void Rename(Point teleporter, string name)
+		{
+			name = name.Trim();
+			if (name == savedName)
+				return;
+			savedName = name;
+			Links.RequestName(teleporter, name);
+			if (name.Length == 0)
+				Main.NewText(UIHelpers.T("TeleporterNameCleared"), Color.LightGray);
+			else
+				Main.NewText(UIHelpers.T("TeleporterNamed", name), Color.LightGreen);
 			SoundEngine.PlaySound(SoundID.Unlock);
 		}
 

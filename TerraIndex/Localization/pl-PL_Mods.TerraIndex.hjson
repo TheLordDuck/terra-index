@@ -294,6 +294,18 @@ UI: {
 	TeleporterClearChannel: Usuń kanał
 	TeleporterChannelSet: Teleporter na kanale {0}.
 	TeleporterChannelCleared: Usunięto kanał teleportera.
+	TeleporterUnnamed: Teleporter bez nazwy
+	TeleporterEast: "{0} stóp na wschód"
+	TeleporterWest: "{0} stóp na zachód"
+	TeleporterAbove: "{0} stóp w górę"
+	TeleporterBelow: "{0} stóp w dół"
+	TeleporterPickTitle: Dokąd?
+	TeleporterFrom: Z: {0}
+	TeleporterPickHint: Nazwij teleportery Łącznikiem teleporterów.
+	TeleporterGone: Tego teleportera już nie ma.
+	TeleporterNameHint: Nazwa teleportera (Enter, by zapisać)
+	TeleporterNamed: Nazwano teleporter: {0}
+	TeleporterNameCleared: Usunięto nazwę teleportera.
 }
 
 Items: {
@@ -311,7 +323,7 @@ Items: {
 		Tooltip:
 			'''
 			Nie potrzebuje kabli: ustaw mu kanał Łącznikiem teleporterów
-			Kliknij prawym przyciskiem, by przenieść się do następnego na jego kanale
+			Kliknij prawym przyciskiem, by się teleportować: gdy na kanale jest ich kilka, wybierasz cel
 			Można na nim stać
 			'''
 	}
@@ -322,6 +334,7 @@ Items: {
 			'''
 			Trzymając go, kliknij prawym przyciskiem bezprzewodowy teleporter, by wybrać jego kanał
 			Nowy kanał lub już istniejący: teleportery na tym samym kanale przenoszą między sobą
+			Wpisz nazwę w menu, by odróżnić swoje teleportery
 			'''
 	}
 

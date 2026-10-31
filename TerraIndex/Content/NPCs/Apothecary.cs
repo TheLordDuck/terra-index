@@ -10,8 +10,8 @@ using Terraria.Utilities;
 namespace TerraIndex.Content.NPCs
 {
 	// A town NPC that moves in once the Eye of Cthulhu is beaten and sells the useful combat potions for 1 silver each.
-	// Its sprite is built on the Guide's 26 frames (tools/sprites/apothecary.js), so it animates like him. Throws toxic
-	// flasks at enemies.
+	// Its sprite (a masked witch) is built on the Guide's 26 frames (tools/sprites/apothecary.js), so it
+	// animates like him. Throws toxic flasks at enemies.
 	[AutoloadHead]
 	public class Apothecary : ModNPC
 	{

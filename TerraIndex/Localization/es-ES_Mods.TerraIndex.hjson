@@ -294,6 +294,18 @@ UI: {
 	TeleporterClearChannel: Quitarle el canal
 	TeleporterChannelSet: Teletransportador en el canal {0}.
 	TeleporterChannelCleared: Teletransportador sin canal.
+	TeleporterUnnamed: Teletransportador sin nombre
+	TeleporterEast: "{0} pies al este"
+	TeleporterWest: "{0} pies al oeste"
+	TeleporterAbove: "{0} pies arriba"
+	TeleporterBelow: "{0} pies abajo"
+	TeleporterPickTitle: ¿Adónde vas?
+	TeleporterFrom: Desde: {0}
+	TeleporterPickHint: Ponles nombre con el Vinculador de teletransportadores.
+	TeleporterGone: Ese teletransportador ya no existe.
+	TeleporterNameHint: Nombre del teletransportador (Enter para guardar)
+	TeleporterNamed: Teletransportador llamado: {0}
+	TeleporterNameCleared: Nombre del teletransportador quitado.
 }
 
 Items: {
@@ -311,7 +323,7 @@ Items: {
 		Tooltip:
 			'''
 			No necesita cables: ponle un canal con el Vinculador de teletransportadores
-			Clic derecho para teletransportarte al siguiente de su canal
+			Clic derecho para teletransportarte: si hay varios en su canal, eliges a cuál
 			Puedes ponerte de pie encima
 			'''
 	}
@@ -322,6 +334,7 @@ Items: {
 			'''
 			Con él en la mano, haz clic derecho en un teletransportador inalámbrico para elegir su canal
 			Un canal nuevo o uno ya creado: los teletransportadores del mismo canal te llevan de uno a otro
+			Escribe un nombre en el menú para distinguir tus teletransportadores
 			'''
 	}
 

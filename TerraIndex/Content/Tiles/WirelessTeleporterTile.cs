@@ -10,8 +10,9 @@ using Terraria.ObjectData;
 
 namespace TerraIndex.Content.Tiles
 {
-	// 3x1 teleporter that needs no wire: the Teleporter Linker puts it on a channel (see TeleporterSystem), and right
-	// clicking it takes you to the next one on that channel. You can stand on it, like on a platform.
+	// 3x1 teleporter that needs no wire: the Teleporter Linker puts it on a channel and names it (see TeleporterSystem).
+	// Right clicking it takes you to the other one on that channel or, with several, lets you pick where to go. You
+	// can stand on it, like on a platform.
 	public class WirelessTeleporterTile : ModTile
 	{
 		public const int Width = 3;
@@ -69,8 +70,11 @@ namespace TerraIndex.Content.Tiles
 			player.noThrow = 2;
 			player.cursorItemIconEnabled = true;
 			player.cursorItemIconID = player.HeldItem.ModItem is TeleporterLinkerItem ? ModContent.ItemType<TeleporterLinkerItem>() : ModContent.ItemType<WirelessTeleporterItem>();
-			int channel = Links.ChannelOf(TopLeft(i, j));
-			player.cursorItemIconText = channel == TeleporterSystem.NoChannel ? UIHelpers.T("TeleporterNoChannel") : UIHelpers.T("TeleporterChannel", channel);
+			Point here = TopLeft(i, j);
+			int channel = Links.ChannelOf(here);
+			string text = channel == TeleporterSystem.NoChannel ? UIHelpers.T("TeleporterNoChannel") : UIHelpers.T("TeleporterChannel", channel);
+			string name = Links.NameOf(here);
+			player.cursorItemIconText = name.Length > 0 ? $"{name} ({text})" : text;
 		}
 
 		public override bool RightClick(int i, int j)
@@ -82,19 +86,26 @@ namespace TerraIndex.Content.Tiles
 				return true;
 			}
 
-			// In multiplayer the destination may be too far away for this client to have its tiles; the server takes
-			// broken teleporters off their channel, so the channel alone is trusted there.
-			if (!Links.TryGetDestination(here, out Point destination) || (Main.netMode != NetmodeID.MultiplayerClient && !IsTeleporter(destination))) {
+			var destinations = Links.Destinations(here);
+			if (destinations.Count >= 2) {
+				Links.OpenDestinations(here);
+				return true;
+			}
+			if (destinations.Count == 0 || !CanReach(destinations[0])) {
 				int channel = Links.ChannelOf(here);
 				Main.NewText(channel == TeleporterSystem.NoChannel ? UIHelpers.T("TeleporterNotLinked") : UIHelpers.T("TeleporterAlone", channel), Color.Orange);
 				return true;
 			}
-			Teleport(player, destination);
+			Teleport(player, destinations[0]);
 			return true;
 		}
 
+		// In multiplayer the destination may be too far away for this client to have its tiles; the server takes
+		// broken teleporters off their channel, so the channel alone is trusted there.
+		public static bool CanReach(Point destination) => Main.netMode == NetmodeID.MultiplayerClient || IsTeleporter(destination);
+
 		// Stands the player on top of the other teleporter, with the vanilla teleporter's effect.
-		private static void Teleport(Player player, Point destination)
+		public static void Teleport(Player player, Point destination)
 		{
 			var position = new Vector2(destination.X * 16 + Width * 8 - player.width / 2f, destination.Y * 16 - player.height);
 			player.Teleport(position, TeleportationStyleID.TeleporterTile);

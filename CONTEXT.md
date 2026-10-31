@@ -154,6 +154,17 @@ Conversation of 2026-10-28 (after the 1.0 release):
     Apothecary's look. No Terraria on this PC, so `tools/sprites/terrarian.py` repaints the hooded sheet: hood -> brown
     hair, gold band and blue/green/red plumes, red bangs; robe -> navy coat above the belt, white trousers below. The
     potion belt stays. Wings and the slime pet were left out (they don't fit a town NPC's frames).
+    **Replaced on 2026-10-31**: the user didn't like it; after a mushroom alchemist they gave a reference image
+    (`Guy_Fawkes_Witch.png`, 28x54: grey witch hat, Guy Fawkes mask, navy-black dress, grey gloves). `apothecary.js`
+    now copies that head (its art pixels as the `HEAD` grid) onto the Guide's frames, paints the whole face over (so
+    talking/blinking frames don't show through), turns hands into gloves and the clothes into the long dress. No
+    belt or vials, like the reference. `terrarian.py` was deleted.
+. **Teleporter hub and names** (2026-10-31): the user wanted one teleporter at home connected to many, choosing where
+    to go. Teleporters can be named (box at the top of the Linker's channel menu; Enter saves, closing the menu saves
+    too, empty removes; max 24 chars; packet `TeleporterName`; saved as `teleporterNamePoints` + `teleporterNames`;
+    sent in `NetSend` after the channels). Right clicking a teleporter with exactly one other on its channel still
+    teleports straight away; with two or more it opens `UI/TeleporterDestinationState.cs` ("Where to?": each other
+    teleporter's name and offset in feet). So a hub is just one channel with home plus every outpost.
 . **Class filter in the recipe index** (2026-10-29, the user's request, with Calamity's new class): a button next to
     the search cycles All / Melee / Ranged / Magic / Summoner / Throwing / modded classes (`Common/ItemClasses.cs`).
     An item's class is its `DamageType`; whips, MeleeNoSpeed and MagicSummonHybrid map to their vanilla class, and

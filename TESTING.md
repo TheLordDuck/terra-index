@@ -250,13 +250,16 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 - [ ] Right click the second one with the linker: channel 1 is listed ("teleporters: 1"); pick it. Both glow, hovering shows "Channel 1"
 - [ ] Right click one of them: you appear standing on the other one, with the teleporter effect; and back
 - [ ] A teleporter alone on its channel: message "No other teleporter is on channel N"
-- [ ] Three on the same channel: right clicking goes round all three in a loop
+- [ ] Three or more on the same channel: right clicking one opens "Where to?" with the others (name and how far, e.g. "300 ft east, 40 ft down"); clicking one takes you there
+- [ ] With the linker, type a name in the box at the top of the menu and press Enter: "Teleporter named: ...". Hovering it shows the name and channel; the destination menu lists it by name. A name typed without Enter is kept when the menu closes; emptying the box removes the name
+- [ ] While typing a name, Escape only stops typing (the menu stays open), and movement keys don't move you
+- [ ] Hub: one at home plus several outposts on one channel: from home you pick any outpost, from an outpost you pick home or another one
 - [ ] Break one of a pair: the other keeps its channel; place a new one, put it on that channel: they work again
 - [ ] "Take it off its channel" in the menu; its current channel is green; the menu closes with Escape, X, or walking away
 - [ ] Many channels: the list scrolls
 - [ ] A world with teleporters linked by the old version: each pair is on a channel of its own and still works
-- [ ] Leave and rejoin the world: channels kept
-- [ ] **Multiplayer:** setting a channel works for a client and the other player sees it; teleporting to one far away (out of the loaded area) works; the other player sees you teleport
+- [ ] Leave and rejoin the world: channels and names kept; breaking a named one removes its name
+- [ ] **Multiplayer:** setting a channel and a name works for a client and the other player sees it; teleporting to one far away (out of the loaded area) works; the other player sees you teleport
 
 ## 40 and 41. Languages and help
 

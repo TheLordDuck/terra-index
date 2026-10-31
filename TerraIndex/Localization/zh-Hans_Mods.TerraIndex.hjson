@@ -294,6 +294,18 @@ UI: {
 	TeleporterClearChannel: 移出频道
 	TeleporterChannelSet: 传送机已设为频道 {0}。
 	TeleporterChannelCleared: 传送机已移出频道。
+	TeleporterUnnamed: 未命名传送机
+	TeleporterEast: 向东 {0} 英尺
+	TeleporterWest: 向西 {0} 英尺
+	TeleporterAbove: 向上 {0} 英尺
+	TeleporterBelow: 向下 {0} 英尺
+	TeleporterPickTitle: 去哪里？
+	TeleporterFrom: 出发地：{0}
+	TeleporterPickHint: 用传送机连接器为传送机命名。
+	TeleporterGone: 那台传送机已不存在。
+	TeleporterNameHint: 传送机名称（按 Enter 保存）
+	TeleporterNamed: 传送机已命名：{0}
+	TeleporterNameCleared: 已移除传送机名称。
 }
 
 Items: {
@@ -311,7 +323,7 @@ Items: {
 		Tooltip:
 			'''
 			无需电线：用传送机连接器为它设置频道
-			右键点击传送到同一频道的下一个传送机
+			右键点击传送：同一频道有多个时可选择目的地
 			可以站在上面
 			'''
 	}
@@ -322,6 +334,7 @@ Items: {
 			'''
 			手持它右键点击无线传送机来选择频道
 			新建频道或使用已有频道：同一频道的传送机可互相传送
+			在菜单中输入名称以区分你的传送机
 			'''
 	}
 

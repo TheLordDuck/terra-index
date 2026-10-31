@@ -40,7 +40,7 @@ Without Calamity none of this appears, and it can be turned off in the mod's set
 
 [h2]And more[/h2]
 [list]
-[*][b]Wireless teleporters[/b]: put them on a channel with the Teleporter Linker and right click one to go to the next one.
+[*][b]Wireless teleporters[/b]: put them on a channel with the Teleporter Linker, name them, and right click one to pick where to go. One teleporter at home can reach all your outposts.
 [*][b]Target Dummy damage meter[/b]: total damage, DPS and last combo of each fight.
 [*][b]Radio[/b]: a piece of furniture that plays clips at random moments, the same for every player.
 [/list]

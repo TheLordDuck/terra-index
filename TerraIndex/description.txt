@@ -39,7 +39,7 @@ Not good at building? Craft a Blueprint (10 wood at a work bench), pick a design
 The catalog's Town NPCs tab shows which biomes and neighbours each NPC loves and hates, so you know where to put its house.
 
 WIRELESS TELEPORTERS
-Teleporters without wire: craft a Wireless Teleporter (Teleporter + 10 Wire at the Tinkerer's Workshop), put them on the same channel with the Teleporter Linker (Red Wrench + 3 Iron Bars), and right click one to go to the next one on its channel. Breaking one leaves the others on their channel.
+Teleporters without wire: craft a Wireless Teleporter (Teleporter + 10 Wire at the Tinkerer's Workshop), put them on the same channel with the Teleporter Linker (Red Wrench + 3 Iron Bars), and right click one to go to the other one on its channel. With several on a channel (one at home and one at each outpost, for example), right clicking opens a menu to pick where to go. Name each teleporter in the Linker's menu so you know which is which. Breaking one leaves the others on their channel.
 
 MULTIPLAYER
 Fully supported. The server scans the chests and keeps the terminal updated, so you see changes made by other players.
