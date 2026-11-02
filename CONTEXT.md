@@ -672,7 +672,7 @@ Coming from the old name: remove the `ModSources\RecipeIndex` link, create `ModS
 - **1.0** is the first Workshop release (2026-10-27). Updates: bump `version` in `build.txt`, rebuild and publish again.
 - The Workshop page text is `description_workshop.txt` (Steam BBCode; images are raw GitHub links, so they must be pushed
   to `main`). `description.txt` is the plain text shown in the in-game mod list. Extra gallery screenshots are added by
-  hand on the Steam page ("Add/edit images & videos"), tModLoader does not upload them. **1.2** bumped on 2026-10-30.
+  hand on the Steam page ("Add/edit images & videos"), tModLoader does not upload them. **1.2** bumped on 2026-10-30, **1.3** on 2026-11-02.
 - Translations other than English and Spanish were written by Claude; a native speaker could polish them.
 - Known limits: clicking a crafting station shows that item's recipes, not everything crafted at that station;
   terminal items are grouped by type (prefixes not distinguished); crafting from the chests doesn't apply the

@@ -178,11 +178,13 @@ Teleporters that need no wire:
    the floor (3 wide, you can stand on them).
 2. Craft a **Teleporter Linker** (a Red Wrench and 3 Iron or Lead Bars at an anvil). Hold it and **right click** a
    teleporter: a menu lists the channels already in use (and how many teleporters each has). Pick one, or make a
-   **new channel**. Do the same on the other teleporter, picking the same channel.
-3. **Right click** a teleporter to go to the next one on its channel. No pressure plate or wire needed.
+   **new channel**. Do the same on the other teleporter, picking the same channel. The same menu lets you **name**
+   the teleporter, so you know which is which.
+3. **Right click** a teleporter to go to the other one on its channel. No pressure plate or wire needed.
 
 Breaking a teleporter doesn't touch the others: they stay on their channel, so a new one put on it works right away.
-With three or more on a channel, right clicking goes round them in a loop. Hovering a teleporter shows its channel.
+With three or more on a channel, right clicking opens a **Where to?** menu with the name and distance of each one, so
+a single teleporter at home can reach all your outposts. Hovering a teleporter shows its channel and name.
 Channels are saved with the world and work in multiplayer.
 
 ## Multiplayer
@@ -218,6 +220,12 @@ In **Settings → Mod Configuration → Terra Index**:
 | Calamity features (the guide and its book; turning it on or off reloads the mods) | On |
 
 ## Changelog
+
+**1.3**
+- Wireless teleporters can be named from the Teleporter Linker's channel menu.
+- With three or more teleporters on a channel, right clicking one opens a "Where to?" menu (name and distance of
+  each), so one teleporter at home reaches all your outposts.
+- The Apothecary has a new look: a masked witch with a grey hat, white mask and navy dress.
 
 **1.2**
 - **Calamity guide book** (10 wood at a work bench, only with Calamity): the wiki's build for each class at every
