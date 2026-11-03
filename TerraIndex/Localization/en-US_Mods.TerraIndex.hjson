@@ -314,22 +314,28 @@ Items: {
 		Tooltip:
 			'''
 			Calls the Bone Ronin
-			Only after the Moon Lord has fallen
+			Only after Supreme Calamitas has fallen
 			'''
 	}
 
 	RoninKatana: {
 		DisplayName: Ronin's Katana
-		Tooltip: Throws golden slash waves
+		Tooltip:
+			'''
+			Left click: a three-strike combo throwing golden crescents; the third spins the blade around you and looses a great crescent
+			A spectral ronin behind you repeats each strike a moment later
+			Right click: iaido. After a stance you dash towards the cursor through everything, untouchable, and as the blade is sheathed the cut lands on all you passed (3 s cooldown)
+			Every 8 hits, phantom katanas fall on the enemy
+			'''
 	}
 
 	RoninSpirit: {
 		DisplayName: Ronin's Spirit
 		Tooltip:
 			'''
-			8% increased melee damage
+			15% increased melee damage
 			10% increased melee critical strike chance
-			12% increased melee speed
+			15% increased melee speed
 			'''
 	}
 
@@ -409,6 +415,7 @@ Items: {
 
 NPCs: {
 	BoneRonin.DisplayName: The Bone Ronin
+	RoninEcho.DisplayName: Echo of the Ronin
 
 	Apothecary: {
 		DisplayName: Apothecary
@@ -450,8 +457,17 @@ Tiles: {
 
 Configs: {
 	RoninStyle: {
-		Ghost.Label: Ghost
-		Ember.Label: Ember
+		Ghost: {
+			Label: Ghost
+			Tooltip: ""
+		}
+
+		Ember: {
+			Label: Ember
+			Tooltip: ""
+		}
+
+		Tooltip: ""
 	}
 
 	ClientConfig: {
@@ -579,16 +595,16 @@ Projectiles: {
 	IaidoCut.DisplayName: Iaido Cut
 	PhantomBlade.DisplayName: Phantom Blade
 	KatanaSlash.DisplayName: Katana Slash
+	RoninKatanaSwing.DisplayName: Ronin Katana Swing
+	RoninKatanaSpecter.DisplayName: Ronin's Specter
+	RoninKatanaIaido.DisplayName: Ronin Katana Iaido
+	RoninKatanaBlade.DisplayName: Ronin Katana Blade
 }
 
 Messages: {
 	RoninAwakens: The Bone Ronin's spirit awakens!
+	RoninFrenzy: The Bone Ronin flies into a demonic frenzy!
 }
 
-Bestiary: {
-	BoneRonin: A swordsman who swore never to lose a duel. Even death did not end the oath: his bones still wander at night, looking for a worthy opponent.
-}
-
-BossChecklist: {
-	BoneRoninSpawn: Use a [i:TerraIndex/CursedHilt] Cursed Hilt after defeating the Moon Lord.
-}
+Bestiary.BoneRonin: A swordsman who swore never to lose a duel. Even death did not end the oath: his bones still wander at night, looking for a worthy opponent.
+BossChecklist.BoneRoninSpawn: Use a [i:TerraIndex/CursedHilt] Cursed Hilt after defeating Supreme Calamitas.

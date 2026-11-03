@@ -327,12 +327,31 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 
 - [ ] Without Calamity: no Cursed Hilt recipe, no boss, no "Bosses" effect anywhere (the look option is just unused)
 - [ ] With Calamity and "Calamity features" off (reload): same as without Calamity
-- [ ] With Calamity: the Cursed Hilt is craftable at the Ancient Manipulator and only works after the Moon Lord
+- [ ] With Calamity: the Cursed Hilt is crafted at Draedon's Forge (Ashes of Annihilation, Exo Prisms, Bones, Ectoplasm) and only works after Supreme Calamitas
+- [ ] About 1.5 M life in Normal, 2.4 M in Expert; hits feel like Calamity's endgame bosses; drops Omega Healing Potions
+- [ ] Entrance and both phase changes last 3 seconds: kneels while sparks gather (tremors, rising hum), rises with the katana raised and sparks swirling into its point, glint, roars (the phase changes and the chat message shows here), rings of sparks, then attacks; he can't be hurt meanwhile. Red sparks for devil mode
 - [ ] Entrance, dashes, slash waves, iaido (red line, then cut), phase 2 at half life, blade rain, death animation
-- [ ] The sword arm stays on the shoulder and the eye glow on the eye, facing both ways
+- [ ] Phase 2: a see-through blue Echo of the Ronin comes out of him, flanks you from the other side and repeats each
+      of his attacks about 1 second later (dashes, waves, iaido, blade rain), aimed at you
+- [ ] The echo can't be hit, has no health bar, map icon, bestiary entry or loot, and fades away when he dies or leaves
+- [ ] Below 5% life: the echo flies back into him and vanishes in a burst of blue wisps (it doesn't hurt on the way), and doesn't come back; roar, red sparks gather, chat "demonic frenzy" message, then devil mode: red tint, aura and eye,
+      red embers; much shorter pauses, 6 dashes, 6 volleys of 7 waves, 3 iaido cuts, a double blade rain
+- [ ] A single hit big enough to kill him before 5% sends him into devil mode instead of killing him
+- [ ] Fair in every phase, also with starter gear: every iaido line can be run or jumped out of; every fan of waves has a gap you fit through, also when he is close (he backs off first), and consecutive volleys alternate between aimed at you and passing beside you; he never dashes from right beside you without backing off first; the blade rain falls in lanes 100 px apart with room between them (devil mode: a second sweep back in the same lanes); the echo's rain uses the same lanes
+- [ ] The echo does one dash fewer, one volley fewer and a single iaido cut
+- [ ] The sword arm stays on the shoulder and the eye glow on the eye, facing both ways, in every animation
+- [ ] He is about a player's size, feet at the bottom of his hitbox; hits on him land where he is drawn
+- [ ] Animations: idle (scarf, headband, plume and hem moving), crouch before a dash, lean while dashing, crouched
+      with a hand on the scabbard for the iaido, arm raised for the entrance / blade rain / phase changes, cracks
+      and pieces falling off while dying; faster in devil mode. Both looks (Ghost and Ember)
 - [ ] "The Bone Ronin's look" in your settings switches between Ghost and Ember
 - [ ] With Terra Bosses also enabled: only one Bone Ronin exists (Terra Bosses' one)
-- [ ] Loot: katana (normal), treasure bag with katana and Ronin's Spirit (expert); Boss Checklist entry
+- [ ] Loot: katana (normal), treasure bag with katana and Ronin's Spirit (expert); Boss Checklist entry after Calamity's bosses
+- [ ] Katana, left click: rising cut, falling cut, then the spin finisher; each swing pulls back, cuts fast and eases out with a smear of light and a glint; the arm follows the blade; crescents fly out (a big one from the finisher); facing left looks right too; waiting a moment restarts the combo
+- [ ] Katana: a see-through blue Ronin appears behind and a bit above you and repeats each swing ~0.13 s later with its own katana (smear, crescents, the finisher's spin, raising its arm), fades out after; its hits do half damage and count for the phantom katanas; it faces the same way as you
+- [ ] Katana, right click: stance with a line to where you'll land and a glint, the dash (untouchable, stops at walls), then the click of the sheath and the cut along the line hits everything; 3 s cooldown with a chime when ready; can't swing during it
+- [ ] Katana: every 8 hits, 5 phantom katanas appear above the enemy and fall on it
+- [ ] Katana in multiplayer: the other player sees the swings, the iaido and the blades
 
 ## Also check
 

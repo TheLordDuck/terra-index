@@ -15,6 +15,13 @@ The extracted vanilla files are not kept in the repo.
 The Calamity guide book (`TerraIndex/Content/Items/GuideBookItem.png`) is the vanilla Book (`Item_149.xnb`, extracted
 the same way) with its green cover turned red, so it is not mistaken for the vanilla one.
 
+## Bone Ronin
+
+`node tools/sprites/ronin.js` (from the repo root) draws the Bone Ronin at a player's size, in both looks (ghost and
+ember): the body sheets (idle, dash, iaido, cast and dying animations), the sword arms, the map icon, and
+`RoninFrames.cs` with where the shoulder and the eye are in each frame. `tools/sprites/gen/ronin_preview.png` and
+`ronin_zoom.png` show the result enlarged. Change the script and run it again rather than editing the PNGs.
+
 ## Mod icon
 
 From the repo root, `python tools/sprites/icon.py` redraws `TerraIndex/icon.png` (not `icon_small.png`) from the mod's own

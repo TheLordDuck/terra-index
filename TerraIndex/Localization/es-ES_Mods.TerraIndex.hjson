@@ -314,22 +314,28 @@ Items: {
 		Tooltip:
 			'''
 			Invoca al Ronin de Hueso
-			Solo después de derrotar al Señor de la Luna
+			Solo después de derrotar a Supreme Calamitas
 			'''
 	}
 
 	RoninKatana: {
 		DisplayName: Katana del ronin
-		Tooltip: Lanza ondas de corte doradas
+		Tooltip:
+			'''
+			Clic izquierdo: combo de tres tajos que lanzan medias lunas doradas; el tercero gira la hoja a tu alrededor y lanza una gran media luna
+			Un ronin espectral detrás de ti repite cada tajo un instante después
+			Clic derecho: iaido. Tras una pausa te lanzas hacia el cursor atravesándolo todo sin recibir daño, y al envainar el corte cae sobre todo lo que cruzaste (3 s de recarga)
+			Cada 8 golpes, katanas fantasma caen sobre el enemigo
+			'''
 	}
 
 	RoninSpirit: {
 		DisplayName: Espíritu del ronin
 		Tooltip:
 			'''
-			Aumenta un 8 % el daño cuerpo a cuerpo
+			Aumenta un 15 % el daño cuerpo a cuerpo
 			Aumenta un 10 % la probabilidad de ataque crítico cuerpo a cuerpo
-			Aumenta un 12 % la velocidad cuerpo a cuerpo
+			Aumenta un 15 % la velocidad cuerpo a cuerpo
 			'''
 	}
 
@@ -409,6 +415,7 @@ Items: {
 
 NPCs: {
 	BoneRonin.DisplayName: El Ronin de Hueso
+	RoninEcho.DisplayName: Eco del Ronin
 
 	Apothecary: {
 		DisplayName: Boticario
@@ -450,8 +457,17 @@ Tiles: {
 
 Configs: {
 	RoninStyle: {
-		Ghost.Label: Fantasma
-		Ember.Label: Brasa
+		Ghost: {
+			Label: Fantasma
+			// Tooltip: ""
+		}
+
+		Ember: {
+			Label: Brasa
+			// Tooltip: ""
+		}
+
+		// Tooltip: ""
 	}
 
 	ClientConfig: {
@@ -579,16 +595,16 @@ Projectiles: {
 	IaidoCut.DisplayName: Corte iaido
 	PhantomBlade.DisplayName: Hoja fantasma
 	KatanaSlash.DisplayName: Corte de katana
+	RoninKatanaSwing.DisplayName: Katana del ronin
+	RoninKatanaSpecter.DisplayName: Espectro del ronin
+	RoninKatanaIaido.DisplayName: Iaido
+	RoninKatanaBlade.DisplayName: Katana fantasma
 }
 
 Messages: {
 	RoninAwakens: ¡El espíritu del Ronin de Hueso despierta!
+	RoninFrenzy: ¡El Ronin de Hueso entra en furia demoníaca!
 }
 
-Bestiary: {
-	BoneRonin: Un espadachín que juró no perder jamás un duelo. Ni la muerte rompió su juramento: sus huesos aún vagan de noche buscando un rival digno.
-}
-
-BossChecklist: {
-	BoneRoninSpawn: Usa una [i:TerraIndex/CursedHilt] Empuñadura maldita después de derrotar al Señor de la Luna.
-}
+Bestiary.BoneRonin: Un espadachín que juró no perder jamás un duelo. Ni la muerte rompió su juramento: sus huesos aún vagan de noche buscando un rival digno.
+BossChecklist.BoneRoninSpawn: Usa una [i:TerraIndex/CursedHilt] Empuñadura maldita después de derrotar a Supreme Calamitas.

@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace TerraIndex.Content.Bosses.BoneRonin
 {
-	// The Bone Ronin's Boss Checklist entry, if that mod is enabled (after the Moon Lord, whose weight is 18).
+	// The Bone Ronin's Boss Checklist entry, if that mod is enabled: the last boss, after all of Calamity's.
 	public class RoninBossChecklist : ModSystem
 	{
 		public override bool IsLoadingEnabled(Mod mod) => RoninContent.Enabled;
@@ -13,7 +13,7 @@ namespace TerraIndex.Content.Bosses.BoneRonin
 		{
 			if (!ModLoader.TryGetMod("BossChecklist", out Mod bossChecklist))
 				return;
-			bossChecklist.Call("LogBoss", Mod, nameof(BoneRonin), 19f, () => RoninDownedSystem.downedBoneRonin, ModContent.NPCType<BoneRonin>(),
+			bossChecklist.Call("LogBoss", Mod, nameof(BoneRonin), 30f, () => RoninDownedSystem.downedBoneRonin, ModContent.NPCType<BoneRonin>(),
 				new Dictionary<string, object> {
 					["spawnItems"] = ModContent.ItemType<CursedHilt>(),
 					["spawnInfo"] = Language.GetText("Mods.TerraIndex.BossChecklist.BoneRoninSpawn"),

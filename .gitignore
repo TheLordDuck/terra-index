@@ -10,3 +10,6 @@ __pycache__/
 
 # Downloads of tools/calamity/build_guide.py
 tools/calamity/cache/
+
+# Previews and intermediate files of tools/sprites
+tools/sprites/gen/

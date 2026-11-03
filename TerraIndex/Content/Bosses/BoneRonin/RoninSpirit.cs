@@ -21,9 +21,10 @@ namespace TerraIndex.Content.Bosses.BoneRonin
 
 		public override void UpdateAccessory(Player player, bool hideVisual)
 		{
-			player.GetDamage(DamageClass.Melee) += 0.08f;
+			// Endgame numbers: he is fought after Supreme Calamitas.
+			player.GetDamage(DamageClass.Melee) += 0.15f;
 			player.GetCritChance(DamageClass.Melee) += 10;
-			player.GetAttackSpeed(DamageClass.Melee) += 0.12f;
+			player.GetAttackSpeed(DamageClass.Melee) += 0.15f;
 		}
 	}
 }

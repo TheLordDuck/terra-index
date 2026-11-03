@@ -1,3 +1,4 @@
+using TerraIndex.Common;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -5,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace TerraIndex.Content.Bosses.BoneRonin
 {
-	// Summons the Bone Ronin. Only after the Moon Lord, and only if he isn't already here.
+	// Summons the Bone Ronin. Only after Supreme Calamitas, and only if he isn't already here.
 	public class CursedHilt : ModItem
 	{
 		public override bool IsLoadingEnabled(Mod mod) => RoninContent.Enabled;
@@ -29,7 +30,8 @@ namespace TerraIndex.Content.Bosses.BoneRonin
 			Item.consumable = true;
 		}
 
-		public override bool CanUseItem(Player player) => NPC.downedMoonlord && !NPC.AnyNPCs(ModContent.NPCType<BoneRonin>());
+		// The last boss: only once Supreme Calamitas has fallen.
+		public override bool CanUseItem(Player player) => CalamityGuide.Downed("supremecalamitas") &&!NPC.AnyNPCs(ModContent.NPCType<BoneRonin>());
 
 		public override bool? UseItem(Player player)
 		{
@@ -46,12 +48,17 @@ namespace TerraIndex.Content.Bosses.BoneRonin
 
 		public override void AddRecipes()
 		{
-			CreateRecipe()
-				.AddIngredient(ItemID.LunarBar, 8)
-				.AddIngredient(ItemID.Bone, 30)
-				.AddIngredient(ItemID.Ectoplasm, 10)
-				.AddTile(TileID.LunarCraftingStation)
-				.Register();
+			// Supreme Calamitas' ashes and the Exo Mechs' prisms, at Draedon's Forge (if a Calamity update renamed
+			// something, that ingredient or station is left out rather than breaking the recipe).
+			Recipe recipe = CreateRecipe()
+				.AddIngredient(ItemID.Bone, 50)
+				.AddIngredient(ItemID.Ectoplasm, 20);
+			if (ModContent.TryFind("CalamityMod", "AshesofAnnihilation", out ModItem ashes))
+				recipe.AddIngredient(ashes.Type, 5);
+			if (ModContent.TryFind("CalamityMod", "ExoPrism", out ModItem prism))
+				recipe.AddIngredient(prism.Type, 5);
+			recipe.AddTile(ModContent.TryFind("CalamityMod", "DraedonsForge", out ModTile forge) ? forge.Type : TileID.LunarCraftingStation);
+			recipe.Register();
 		}
 	}
 }
