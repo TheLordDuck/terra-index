@@ -16,6 +16,7 @@ Press N to open a searchable list of every item in the game, including items fro
 - Compare up to 3 weapons, tools, armor or accessories side by side, with the best stats highlighted.
 - Calamity guide (gold button, only with the Calamity Mod): the armor, weapons and accessories the Calamity wiki recommends for your class (rogue included) at your point of the game, from the bosses you have beaten. The chat tells you when a boss kill brings new gear.
 - Calamity guide book (10 wood at a work bench, only with Calamity): the recommended build for each class at every stage of the game, and the bosses, events and minibosses you have beaten, the missing ones and the next ones.
+- The Bone Ronin (only with Calamity): a final boss after Supreme Calamitas, summoned with the Cursed Hilt at Draedon's Forge. He drops the Ronin's Katana.
 - Near a terminal, every item's tooltip says how many you have in your chests.
 
 STORAGE TERMINAL

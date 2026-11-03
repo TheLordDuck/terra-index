@@ -239,6 +239,13 @@ In **Settings → Mod Configuration → Terra Index**:
 
 ## Changelog
 
+**1.4**
+- Uses row in the recipe index: everything an item makes shows as a paged row of icons above the recipe; click one
+  to see that recipe.
+- **The Bone Ronin** (only with Calamity): the last boss, summoned with the Cursed Hilt after Supreme Calamitas. Dashes,
+  slash waves, iaido cuts and a rain of phantom katanas; in phase 2 his blue echo repeats each attack, and below 5%
+  life he goes into devil mode. Drops the Ronin's Katana (combo, specter, iaido dash) and, in Expert, Ronin's Spirit.
+
 **1.3**
 - Wireless teleporters can be named from the Teleporter Linker's channel menu.
 - With three or more teleporters on a channel, right clicking one opens a "Where to?" menu (name and distance of
