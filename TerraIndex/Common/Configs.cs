@@ -43,7 +43,16 @@ namespace TerraIndex.Common
 
 		[DefaultValue(true)]
 		public bool DummyDamageMeter;
+
+		// Only matters with Calamity, when the Bone Ronin boss is part of the mod (see RoninContent).
+		[Header("Bosses")]
+		[DefaultValue(RoninStyle.Ghost)]
+		[DrawTicks]
+		public RoninStyle BoneRoninLook;
 	}
+
+	// The Bone Ronin's look: only the sprites and effect colours change, so each player can pick their own.
+	public enum RoninStyle { Ghost, Ember }
 
 	// Gameplay settings chosen by the host and synced to every player.
 	public class ServerConfig : ModConfig

@@ -317,6 +317,23 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 
 - [ ] The portable terminal sprite looks right in the inventory and when held
 
+## 29. Uses row
+
+- [ ] Uses tab of an item with many uses (e.g. Wood): one row of icons, `<` / `>` turn a whole row, "1 / N" under it
+- [ ] Clicking an icon shows that recipe below with a gold outline on it; right click opens that item's recipes
+- [ ] Mouse wheel moves the selection and the row follows; the row doesn't overlap the recipe or the craft rows
+
+## 30. The Bone Ronin (with Calamity)
+
+- [ ] Without Calamity: no Cursed Hilt recipe, no boss, no "Bosses" effect anywhere (the look option is just unused)
+- [ ] With Calamity and "Calamity features" off (reload): same as without Calamity
+- [ ] With Calamity: the Cursed Hilt is craftable at the Ancient Manipulator and only works after the Moon Lord
+- [ ] Entrance, dashes, slash waves, iaido (red line, then cut), phase 2 at half life, blade rain, death animation
+- [ ] The sword arm stays on the shoulder and the eye glow on the eye, facing both ways
+- [ ] "The Bone Ronin's look" in your settings switches between Ghost and Ember
+- [ ] With Terra Bosses also enabled: only one Bone Ronin exists (Terra Bosses' one)
+- [ ] Loot: katana (normal), treasure bag with katana and Ronin's Spirit (expert); Boss Checklist entry
+
 ## Also check
 
 - [ ] **Spanish texts:** nothing overlaps (especially the terminal's buttons and the craft row)

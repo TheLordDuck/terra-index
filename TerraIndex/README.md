@@ -27,6 +27,8 @@ list, and rebind the N / [ / ] keys if you had changed them.
 - Left click an item: recipes. Right click: uses.
 - Inside a recipe you can click ingredients and crafting stations to navigate; **Back** returns.
 - Mouse wheel over the right panel: switch recipe.
+- **Uses** tab: everything the item makes shows as a row of icons with pages (`<` / `>`). Click an icon to see that
+  recipe below it; right click opens that item's recipes.
 - Tabs above the items split them by type: all, weapons and ammo, tools, armor, accessories, blocks and furniture,
   potions and consumables, materials (ores and bars too), and miscellaneous (hover a tab for its name and count).
 - **Calamity guide** (only with the Calamity Mod enabled): the gold button next to the title (or the book tab,
@@ -186,6 +188,20 @@ Breaking a teleporter doesn't touch the others: they stay on their channel, so a
 With three or more on a channel, right clicking opens a **Where to?** menu with the name and distance of each one, so
 a single teleporter at home can reach all your outposts. Hovering a teleporter shows its channel and name.
 Channels are saved with the world and work in multiplayer.
+
+## The Bone Ronin (boss, only with Calamity)
+
+A post-Moon Lord boss, the ghost of a skeleton swordsman. It is only part of Terra Index when the **Calamity Mod**
+is enabled (and "Calamity features" is on); without Calamity it doesn't exist at all. It is also published on its
+own as the **Terra Bosses** mod: if both are enabled, Terra Bosses' copy is used.
+
+- **Summon:** Cursed Hilt (8 Luminite Bars, 30 Bones, 10 Ectoplasm at the Ancient Manipulator), after the Moon Lord.
+- **Attacks:** dashes, fans of slash waves, an iaido cut shown by a red line, and in phase 2 (below half life) a
+  rain of phantom katanas; everything faster. Entrance and death animations, screen shake.
+- **Loot:** Ronin's Katana (230 melee damage, throws golden slash waves); Expert: Ronin's Spirit accessory.
+- **Look** (your settings, "Bosses"): Ghost (skeleton in a white kimono, blue effects) or Ember (zombie samurai in
+  lacquered armour, fire effects).
+- Registered in Boss Checklist if installed.
 
 ## Multiplayer
 

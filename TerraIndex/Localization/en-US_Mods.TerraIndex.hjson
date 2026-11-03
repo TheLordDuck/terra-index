@@ -309,6 +309,35 @@ UI: {
 }
 
 Items: {
+	CursedHilt: {
+		DisplayName: Cursed Hilt
+		Tooltip:
+			'''
+			Calls the Bone Ronin
+			Only after the Moon Lord has fallen
+			'''
+	}
+
+	RoninKatana: {
+		DisplayName: Ronin's Katana
+		Tooltip: Throws golden slash waves
+	}
+
+	RoninSpirit: {
+		DisplayName: Ronin's Spirit
+		Tooltip:
+			'''
+			8% increased melee damage
+			10% increased melee critical strike chance
+			12% increased melee speed
+			'''
+	}
+
+	BoneRoninBag: {
+		DisplayName: Treasure Bag (The Bone Ronin)
+		Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+	}
+
 	GuideBookItem: {
 		DisplayName: Calamity Guide
 		Tooltip:
@@ -379,6 +408,8 @@ Items: {
 }
 
 NPCs: {
+	BoneRonin.DisplayName: The Bone Ronin
+
 	Apothecary: {
 		DisplayName: Apothecary
 		Bestiary: A wandering brewer who sells battle potions for next to nothing. Nobody knows how the prices stay so low.
@@ -418,10 +449,26 @@ Tiles: {
 }
 
 Configs: {
+	RoninStyle: {
+		Ghost.Label: Ghost
+		Ember.Label: Ember
+	}
+
 	ClientConfig: {
+		BoneRoninLook: {
+			Label: The Bone Ronin's look
+			Tooltip:
+				'''
+				Ghost: a skeleton in a torn white kimono, with cold blue effects.
+				Ember: a zombie samurai in lacquered armour, with fire effects.
+				Only the look changes: the fight is the same.
+				'''
+		}
+
 		DisplayName: Terra Index (your settings)
 
 		Headers: {
+			Bosses: Bosses (with Calamity)
 			Goal: Crafting goal
 			Terminal: Storage terminal
 			Effects: Effects
@@ -525,4 +572,23 @@ Configs: {
 
 		Tooltip: ""
 	}
+}
+
+Projectiles: {
+	RoninSlashWave.DisplayName: Slash Wave
+	IaidoCut.DisplayName: Iaido Cut
+	PhantomBlade.DisplayName: Phantom Blade
+	KatanaSlash.DisplayName: Katana Slash
+}
+
+Messages: {
+	RoninAwakens: The Bone Ronin's spirit awakens!
+}
+
+Bestiary: {
+	BoneRonin: A swordsman who swore never to lose a duel. Even death did not end the oath: his bones still wander at night, looking for a worthy opponent.
+}
+
+BossChecklist: {
+	BoneRoninSpawn: Use a [i:TerraIndex/CursedHilt] Cursed Hilt after defeating the Moon Lord.
 }

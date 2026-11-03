@@ -309,6 +309,35 @@ UI: {
 }
 
 Items: {
+	CursedHilt: {
+		DisplayName: Empuñadura maldita
+		Tooltip:
+			'''
+			Invoca al Ronin de Hueso
+			Solo después de derrotar al Señor de la Luna
+			'''
+	}
+
+	RoninKatana: {
+		DisplayName: Katana del ronin
+		Tooltip: Lanza ondas de corte doradas
+	}
+
+	RoninSpirit: {
+		DisplayName: Espíritu del ronin
+		Tooltip:
+			'''
+			Aumenta un 8 % el daño cuerpo a cuerpo
+			Aumenta un 10 % la probabilidad de ataque crítico cuerpo a cuerpo
+			Aumenta un 12 % la velocidad cuerpo a cuerpo
+			'''
+	}
+
+	BoneRoninBag: {
+		DisplayName: Bolsa del tesoro (El Ronin de Hueso)
+		Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+	}
+
 	GuideBookItem: {
 		DisplayName: Guía de Calamity
 		Tooltip:
@@ -379,6 +408,8 @@ Items: {
 }
 
 NPCs: {
+	BoneRonin.DisplayName: El Ronin de Hueso
+
 	Apothecary: {
 		DisplayName: Boticario
 		Bestiary: Un alquimista ambulante que vende pociones de combate casi regaladas. Nadie sabe cómo mantiene esos precios.
@@ -418,10 +449,26 @@ Tiles: {
 }
 
 Configs: {
+	RoninStyle: {
+		Ghost.Label: Fantasma
+		Ember.Label: Brasa
+	}
+
 	ClientConfig: {
+		BoneRoninLook: {
+			Label: Aspecto del Ronin de Hueso
+			Tooltip:
+				'''
+				Fantasma: un esqueleto con kimono blanco roto y efectos azules.
+				Brasa: un samurái zombi con armadura lacada y efectos de fuego.
+				Solo cambia el aspecto: el combate es el mismo.
+				'''
+		}
+
 		DisplayName: Terra Index (tus ajustes)
 
 		Headers: {
+			Bosses: Jefes (con Calamity)
 			Goal: Objetivo de crafteo
 			Terminal: Terminal de almacenamiento
 			Effects: Efectos
@@ -525,4 +572,23 @@ Configs: {
 
 		// Tooltip: ""
 	}
+}
+
+Projectiles: {
+	RoninSlashWave.DisplayName: Onda de corte
+	IaidoCut.DisplayName: Corte iaido
+	PhantomBlade.DisplayName: Hoja fantasma
+	KatanaSlash.DisplayName: Corte de katana
+}
+
+Messages: {
+	RoninAwakens: ¡El espíritu del Ronin de Hueso despierta!
+}
+
+Bestiary: {
+	BoneRonin: Un espadachín que juró no perder jamás un duelo. Ni la muerte rompió su juramento: sus huesos aún vagan de noche buscando un rival digno.
+}
+
+BossChecklist: {
+	BoneRoninSpawn: Usa una [i:TerraIndex/CursedHilt] Empuñadura maldita después de derrotar al Señor de la Luna.
 }

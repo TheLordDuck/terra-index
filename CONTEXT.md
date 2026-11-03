@@ -273,6 +273,8 @@ Decisions taken:
   most 16 per frame, and lowercase names are cached for the search. Footer: first/previous/page bar/next/last;
   wheel turns pages (Shift: 10), dragging the bar jumps on release.
 - Esc closes the index (when not typing in the search box).
+- **Uses row** (`RecipeView.DrawUsesStrip`, 2026-11-03): in the Uses tab, every result shows as a paged row of icons
+  above the recipe (the user found one-by-one too many clicks); click selects that recipe, right click opens its recipes.
 - **Tree** tab (`RecipeView.DrawTree`): crafting tree of the recipe on the current page, computed by
   `Common/CraftingPlan.cs`. Owned items come from a shared pool (inventory only), so branches don't count the same
   stack twice; recipe groups accept any member. Intermediates use their first recipe with no ingredient that loops
@@ -679,3 +681,19 @@ Coming from the old name: remove the `ModSources\RecipeIndex` link, create `ModS
   Alchemy Table's ingredient savings or mods' `OnCraft` hooks; the crafting tree always uses each intermediate's
   first valid recipe.
 - A "recently added" terminal sort was left out: the server would have to track when each item entered the network.
+
+## The Bone Ronin boss (2026-11-03)
+
+- The boss was made first as a separate mod, **Terra Bosses** (`../terra-bosses`, its own repo, with the sprite
+  script `tools/sprites/make_sprites.py` and its own CONTEXT.md). The user then asked for it to be in Terra Index
+  too, **only when Calamity is used**.
+- Copied into `TerraIndex/Content/Bosses/BoneRonin/` (namespace `TerraIndex.Content.Bosses.BoneRonin`; items, the
+  downed flag `RoninDownedSystem`, `ScreenShake` and `RoninBossChecklist` live there too). Every ModNPC / ModItem /
+  ModProjectile / ModPlayer / ModSystem of it returns `RoninContent.Enabled` from `IsLoadingEnabled`:
+  Calamity enabled, `ServerConfig.CalamityFeatures` on, and Terra Bosses **not** enabled (so there's never two).
+- The look option is `ClientConfig.BoneRoninLook` (`RoninStyle` Ghost / Ember, header "Bosses"); it shows even
+  without Calamity, with "(with Calamity)" in the header.
+- Changes to the boss should be made in Terra Bosses and copied here (rename `TerraBosses` -> `TerraIndex`,
+  `DownedBossSystem` -> `RoninDownedSystem`, `BossConfig` -> `ClientConfig`), keeping the `IsLoadingEnabled` lines.
+- Localization: en-US and es-ES; the other languages fall back to English.
+- Not compiled or tested yet.

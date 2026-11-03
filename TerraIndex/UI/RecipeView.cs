@@ -18,7 +18,7 @@ using Terraria.UI;
 
 namespace TerraIndex.UI
 {
-	// Right-hand panel: shows the recipes (or uses) of an item, one per page, or the full crafting tree of the
+	// Right-hand panel: shows the recipes (or uses, with a row of all their results on top) of an item, one per page, or the full crafting tree of the
 	// recipe on the current page (Tree tab), from where it can be set as the crafting goal (see GoalSystem).
 	// Clickable areas are registered while drawing, because the layout depends on the recipe.
 	public class RecipeView : UIPanel
@@ -300,8 +300,61 @@ namespace TerraIndex.UI
 				Button(spriteBatch, "<", right, y, () => TurnPage(-1));
 			}
 
-			DrawRecipe(spriteBatch, list[page], inner.X, y + ButtonHeight + 10, inner.Width);
+			float recipeY = y + ButtonHeight + 10;
+			if (uses) {
+				DrawUsesStrip(spriteBatch, list, inner.X, recipeY, inner.Width);
+				recipeY += UseCell + 10;
+			}
+			DrawRecipe(spriteBatch, list[page], inner.X, recipeY, inner.Width);
 			DrawCraftRow(spriteBatch, list[page], inner);
+		}
+
+		// Uses tab: everything the item makes, as one row of icons split into pages (< and > turn a whole row), so the
+		// player can see what it is for at a glance. Clicking an icon shows that recipe below; right click opens the
+		// item's own recipes. The row shown is always the one holding the selected recipe.
+		private const float UseCell = 44;
+		private const float UseScale = 0.8f;
+
+		private void DrawUsesStrip(SpriteBatch spriteBatch, List<Recipe> list, float left, float y, float width)
+		{
+			float arrows = ButtonWidth("<") + ButtonWidth(">") + 12;
+			bool paged = list.Count * UseCell > width;
+			int columns = Math.Max(1, (int)((paged ? width - arrows : width) / UseCell));
+			int start = page / columns * columns;
+			int pages = (list.Count + columns - 1) / columns;
+
+			float x = left;
+			if (paged) {
+				float arrowY = y + (UseCell - ButtonHeight) / 2 - 2;
+				x += Button(spriteBatch, "<", x, arrowY, () => page = start - columns >= 0 ? start - columns : (pages - 1) * columns) + 6;
+				Button(spriteBatch, ">", left + width - ButtonWidth(">"), arrowY, () => page = start + columns < list.Count ? start + columns : 0);
+			}
+
+			for (int i = start; i < Math.Min(start + columns, list.Count); i++) {
+				int index = i;
+				int type = list[i].createItem.type;
+				var slot = new Vector2(x + (i - start) * UseCell, y);
+				UIHelpers.DrawItem(spriteBatch, ContentSamples.ItemsByType[type], slot, UseScale);
+				int size = (int)(52 * UseScale);
+				var area = new Rectangle((int)slot.X, (int)slot.Y, size, size);
+				if (i == page)
+					Outline(spriteBatch, area, new Color(255, 220, 120));
+				hotspots.Add(new Hotspot(area, () => { page = index; SoundEngine.PlaySound(SoundID.MenuTick); }, () => Show(type, false)));
+			}
+
+			if (paged) {
+				string label = $"{start / columns + 1} / {pages}";
+				Utils.DrawBorderString(spriteBatch, label, new Vector2(left + width - ButtonWidth(">") - 6 - UIHelpers.Measure(label, 0.7f).X, y + UseCell - 6), Color.LightGray, 0.7f);
+			}
+		}
+
+		private static void Outline(SpriteBatch spriteBatch, Rectangle area, Color color)
+		{
+			Texture2D pixel = TextureAssets.MagicPixel.Value;
+			spriteBatch.Draw(pixel, new Rectangle(area.X, area.Y, area.Width, 2), color);
+			spriteBatch.Draw(pixel, new Rectangle(area.X, area.Bottom - 2, area.Width, 2), color);
+			spriteBatch.Draw(pixel, new Rectangle(area.X, area.Y, 2, area.Height), color);
+			spriteBatch.Draw(pixel, new Rectangle(area.Right - 2, area.Y, 2, area.Height), color);
 		}
 
 		// Bottom row, only near a storage terminal (or with its linked portable terminal): what the chests allow,
