@@ -36,7 +36,7 @@ The catalog's Town NPCs tab shows which biomes and neighbours each NPC loves and
 [h2]Calamity Guide[/h2]
 Only with the Calamity Mod: the armor, weapons, accessories and potions the Calamity wiki recommends for your class (rogue included) at your point of the game. Craft the [b]Calamity Guide[/b] book (10 wood) to browse the build for every stage and see the bosses, events and minibosses you have beaten, the missing ones and the next ones.
 Without Calamity none of this appears, and it can be turned off in the mod's settings (Calamity features).
-Also with Calamity: [b]the Bone Ronin[/b], a final boss fought after Supreme Calamitas (Cursed Hilt at Draedon's Forge). Dashes, slash waves, iaido cuts, a phase-2 echo that repeats his attacks and a devil mode below 5% life. He drops the Ronin's Katana.
+Also with Calamity: [b]the Bone Ronin[/b], a final boss fought after Supreme Calamitas (Cursed Hilt at Draedon's Forge). Cross cuts, slash waves, iaido cuts, a phase-2 echo that repeats his attacks and a furious devil mode below 5% life, with a cinematic and a banner at each phase. He drops the Ronin's Katana.
 [img]https://raw.githubusercontent.com/TheLordDuck/terra-index/main/docs/screenshots/7%20-%20Calamity%20guide%20book.png[/img]
 
 [h2]And more[/h2]

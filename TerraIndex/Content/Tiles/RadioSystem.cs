@@ -24,22 +24,10 @@ namespace TerraIndex.Content.Tiles
 		// One note every ~20 ticks on average while a clip plays.
 		private const int NoteChance = 20;
 
-		// The clips and their lengths in seconds (the server can't load sounds to ask how long they are): the user's first
-		// four, then the 31 phrases of Verne's "Las mejores frases de Rajoy durante su mandato", cut where the video's
-		// background changes.
+		// The clips and their lengths in seconds (the server can't load sounds to ask how long they are): the four the
+		// user supplied (the Rajoy clips were removed for copyright).
 		private static readonly (string Name, float Seconds)[] ClipList = {
 			("RadioSiu", 6.7f), ("RadioLosDos", 18.3f), ("RadioSi", 5.4f), ("RadioNo", 5f),
-			("RadioRajoyAlicante", 4.57f), ("RadioRajoyAplauden", 12.23f), ("RadioRajoyTomaDemocracia", 2.59f),
-			("RadioRajoyTalavera", 7.04f), ("RadioRajoyCuantoPeor", 8.73f), ("RadioRajoyVeryDifficult", 4.02f),
-			("RadioRajoyPiensanAntes", 4.23f), ("RadioRajoyMuyEspanoles", 6.98f), ("RadioRajoySentimientos", 2.57f),
-			("RadioRajoyImposible", 10.48f), ("RadioRajoyLaSegunda", 2.15f), ("RadioRajoyEnganar", 6.86f),
-			("RadioRajoyNoHeDormido", 3.80f), ("RadioRajoyAviones", 5.79f), ("RadioRajoyGalileo", 5.30f),
-			("RadioRajoySerio", 3.26f), ("RadioRajoyAlcalde", 7.11f), ("RadioRajoyEuropea", 1.65f),
-			("RadioRajoyPonencias", 5.31f), ("RadioRajoyPodemos", 5.72f), ("RadioRajoyGranNacion", 5.82f),
-			("RadioRajoy75Millones", 4.90f), ("RadioRajoyUnVaso", 2.90f), ("RadioRajoyMaquinas", 6.74f),
-			("RadioRajoyCosasBonitas", 6.48f), ("RadioRajoyHacenCosas", 2.00f), ("RadioRajoyViajes", 4.72f),
-			("RadioRajoyAguaDelCielo", 4.52f), ("RadioRajoySalvoAlgunaCosa", 8.62f), ("RadioRajoyLaEPA", 4.08f),
-			("RadioRajoyFinDeLaCita", 2.08f),
 		};
 		private static readonly SoundStyle[] Clips = ClipList.Select(clip => new SoundStyle("TerraIndex/Content/Sounds/" + clip.Name) { Volume = 0.8f, MaxInstances = 1 }).ToArray();
 		private static readonly int[] ClipTicks = ClipList.Select(clip => (int)System.Math.Ceiling(clip.Seconds) * 60).ToArray();

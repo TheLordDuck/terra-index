@@ -38,14 +38,28 @@ namespace TerraIndex.Content.Bosses.BoneRonin
 				Projectile.velocity *= 1.02f;
 			if (Projectile.timeLeft < 20)
 				Projectile.alpha = (int)(255 * (1 - Projectile.timeLeft / 20f));
-			Lighting.AddLight(Projectile.Center, RoninLook.LightVector * 1.2f);
-			if (Main.rand.NextBool(4))
-				Dust.NewDustPerfect(Projectile.Center, RoninLook.Dust, Projectile.velocity * 0.2f, 0, default, 1.1f).noGravity = true;
+			RoninVoid.Light(Projectile.Center, 1.1f * Projectile.Opacity, Tint);
+			if (Main.rand.NextBool(3))
+				RoninVoid.Spark(Projectile.Center + Main.rand.NextVector2Circular(16f, 16f), Projectile.velocity * 0.2f, 1.2f, Tint);
 		}
 
+		// ai[2]: from an echo (see BoneRonin.EchoTint): its colour, and it only hurts that echo's player.
+		private Color? Tint => BoneRonin.EchoTint(Projectile);
+
+		public override bool CanHitPlayer(Player target) => BoneRonin.EchoCanHit(Projectile, target);
+
+		// The boss's waves: dark crescents with a white aura (the player's katana uses DrawCrescent).
 		public override bool PreDraw(ref Color lightColor)
 		{
-			DrawCrescent(Projectile, RoninLook.Additive(RoninLook.Bright));
+			Texture2D texture = TextureAssets.Projectile[Type].Value;
+			Vector2 origin = texture.Size() / 2f;
+			float opacity = Projectile.Opacity;
+			for (int i = Projectile.oldPos.Length - 1; i > 0; i--) {
+				float fade = (Projectile.oldPos.Length - i) / (float)Projectile.oldPos.Length;
+				Vector2 old = Projectile.oldPos[i] + Projectile.Size / 2f - Main.screenPosition;
+				Main.EntitySpriteDraw(texture, old, null, RoninVoid.AuraOf(Tint) * fade * 0.3f * opacity, Projectile.oldRot[i], origin, Projectile.scale * 0.8f, SpriteEffects.None, 0);
+			}
+			RoninVoid.DrawSprite(texture, Projectile.Center - Main.screenPosition, null, Projectile.rotation, origin, new Vector2(Projectile.scale * 0.8f), SpriteEffects.None, opacity, 2.5f, 0.45f, Tint);
 			return false;
 		}
 

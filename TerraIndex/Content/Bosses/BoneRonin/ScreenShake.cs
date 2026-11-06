@@ -22,6 +22,8 @@ namespace TerraIndex.Content.Bosses.BoneRonin
 
 		public override void ModifyScreenPosition()
 		{
+			// The cinematic's camera first, so the shake still applies on top of it.
+			RoninCinematic.MoveCamera();
 			if (intensity < 0.2f) {
 				intensity = 0f;
 				return;

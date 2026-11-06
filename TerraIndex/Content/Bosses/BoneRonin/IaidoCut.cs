@@ -43,11 +43,17 @@ namespace TerraIndex.Content.Bosses.BoneRonin
 				if (!Main.dedServ) {
 					for (float t = 0f; t <= 1f; t += 0.02f) {
 						Vector2 spot = Vector2.Lerp(Projectile.Center, End, t);
-						Dust.NewDustPerfect(spot, RoninLook.Dust, Main.rand.NextVector2Circular(3f, 3f), 0, default, 1.6f).noGravity = true;
+						RoninVoid.Spark(spot, Main.rand.NextVector2Circular(3f, 3f), 1.5f, Tint);
 					}
 				}
 			}
+			RoninVoid.Light(Vector2.Lerp(Projectile.Center, End, 0.5f), 1.5f * Projectile.timeLeft / (float)Life, Tint);
 		}
+
+		// ai[2]: from an echo (see BoneRonin.EchoTint): its colour, and it only hurts that echo's player.
+		private Color? Tint => BoneRonin.EchoTint(Projectile);
+
+		public override bool CanHitPlayer(Player target) => BoneRonin.EchoCanHit(Projectile, target);
 
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
@@ -62,8 +68,7 @@ namespace TerraIndex.Content.Bosses.BoneRonin
 			float left = Projectile.timeLeft / (float)Life;
 			Vector2 start = Projectile.Center - Main.screenPosition;
 			Vector2 end = End - Main.screenPosition;
-			BoneRonin.DrawLine(Main.spriteBatch, start, end, RoninLook.Additive(RoninLook.Soft, left), 40f * left);
-			BoneRonin.DrawLine(Main.spriteBatch, start, end, new Color(255, 255, 255, 0) * left, 14f * left);
+			RoninVoid.DrawLine(start, end, 6f + 20f * left, left, Tint);
 			return false;
 		}
 	}

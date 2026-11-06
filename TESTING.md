@@ -271,8 +271,7 @@ Tick each box as you go. Multiplayer checks need a second player (Host & Play).
 ## Radio
 
 - [ ] Craft it at an anvil (8 Wood, 3 Iron/Lead Bars, 2 Glass) and place it on the floor: same size as a Piggy Bank
-- [ ] A few seconds after placing it, a clip plays; the next ones are different (all 35 play before any repeats)
-- [ ] The Rajoy clips start and end cleanly, without a word cut in half
+- [ ] A few seconds after placing it, a clip plays; the next ones are different (all 4 play before any repeats)
 - [ ] While a clip plays, music notes float out by the antenna (and stop when it ends or is turned off)
 - [ ] The gaps between clips change (sometimes ~10 s, sometimes a minute or two)
 - [ ] Right click: the dial and the light go dark and it stops (also in the middle of a clip); right click again turns it on

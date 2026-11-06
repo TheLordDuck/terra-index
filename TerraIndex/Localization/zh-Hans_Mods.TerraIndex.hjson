@@ -324,7 +324,8 @@ Items: {
 			'''
 			Left click: a three-strike combo throwing golden crescents; the third spins the blade around you and looses a great crescent
 			A spectral ronin behind you repeats each strike a moment later
-			Right click: iaido. After a stance you dash towards the cursor through everything, untouchable, and as the blade is sheathed the cut lands on all you passed (3 s cooldown)
+			Hold right click: iaido. After a stance you dash towards the cursor through everything, untouchable, and as the blade is sheathed the cut lands on all you passed (3 s cooldown)
+			Tap right click: three cross cuts, one after another, on the nearest enemies (or where you click)
 			Every 8 hits, phantom katanas fall on the enemy
 			''' */
 	}
@@ -563,6 +564,7 @@ Configs: {
 			Label: Calamity 功能
 			Tooltip: 启用 Calamity Mod 时的 Calamity 指南及其指南书。关闭后不使用它们
 		}
+
 	}
 
 	TerminalSort: {
@@ -594,16 +596,22 @@ Projectiles: {
 	// RoninSlashWave.DisplayName: Slash Wave
 	// IaidoCut.DisplayName: Iaido Cut
 	// PhantomBlade.DisplayName: Phantom Blade
+	// RoninCrossCut.DisplayName: Cross Cut
 	// KatanaSlash.DisplayName: Katana Slash
 	// RoninKatanaSwing.DisplayName: Ronin Katana Swing
 	// RoninKatanaSpecter.DisplayName: Ronin's Specter
 	// RoninKatanaIaido.DisplayName: Ronin Katana Iaido
 	// RoninKatanaBlade.DisplayName: Ronin Katana Blade
+	// RoninKatanaHold.DisplayName: Ronin Katana Stance
+	// RoninKatanaCross.DisplayName: Ronin Katana Cross Cut
 }
 
 Messages: {
 	// RoninAwakens: The Bone Ronin's spirit awakens!
 	// RoninFrenzy: The Bone Ronin flies into a demonic frenzy!
+	// RoninPhase0: Phase I · The Oathbound Blade
+	// RoninPhase1: Phase II · Echoes of the Fallen
+	// RoninPhase2: Final Phase · Fury Unleashed
 }
 
 // Bestiary.BoneRonin: A swordsman who swore never to lose a duel. Even death did not end the oath: his bones still wander at night, looking for a worthy opponent.

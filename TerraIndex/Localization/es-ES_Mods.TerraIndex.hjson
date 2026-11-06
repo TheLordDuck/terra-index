@@ -315,6 +315,7 @@ Items: {
 			'''
 			Invoca al Ronin de Hueso
 			Solo después de derrotar a Supreme Calamitas
+			No se gasta
 			'''
 	}
 
@@ -324,7 +325,8 @@ Items: {
 			'''
 			Clic izquierdo: combo de tres tajos que lanzan medias lunas doradas; el tercero gira la hoja a tu alrededor y lanza una gran media luna
 			Un ronin espectral detrás de ti repite cada tajo un instante después
-			Clic derecho: iaido. Tras una pausa te lanzas hacia el cursor atravesándolo todo sin recibir daño, y al envainar el corte cae sobre todo lo que cruzaste (3 s de recarga)
+			Mantén clic derecho: iaido. Tras una pausa te lanzas hacia el cursor atravesándolo todo sin recibir daño, y al envainar el corte cae sobre todo lo que cruzaste (3 s de recarga)
+			Pulsa clic derecho: tres cortes en cruz seguidos sobre los enemigos más cercanos (o donde hagas clic)
 			Cada 8 golpes, katanas fantasma caen sobre el enemigo
 			'''
 	}
@@ -563,6 +565,7 @@ Configs: {
 			Label: Funciones de Calamity
 			Tooltip: La guía de Calamity y su libro, cuando el mod Calamity está activado. Desactívalo para jugar sin ellos
 		}
+
 	}
 
 	TerminalSort: {
@@ -594,16 +597,22 @@ Projectiles: {
 	RoninSlashWave.DisplayName: Onda de corte
 	IaidoCut.DisplayName: Corte iaido
 	PhantomBlade.DisplayName: Hoja fantasma
+	RoninCrossCut.DisplayName: Corte en cruz
 	KatanaSlash.DisplayName: Corte de katana
 	RoninKatanaSwing.DisplayName: Katana del ronin
 	RoninKatanaSpecter.DisplayName: Espectro del ronin
 	RoninKatanaIaido.DisplayName: Iaido
 	RoninKatanaBlade.DisplayName: Katana fantasma
+	RoninKatanaHold.DisplayName: Postura del ronin
+	RoninKatanaCross.DisplayName: Corte en cruz del ronin
 }
 
 Messages: {
 	RoninAwakens: ¡El espíritu del Ronin de Hueso despierta!
 	RoninFrenzy: ¡El Ronin de Hueso entra en furia demoníaca!
+	RoninPhase0: Fase I · La hoja del juramento
+	RoninPhase1: Fase II · Ecos del caído
+	RoninPhase2: Fase final · Modo furia
 }
 
 Bestiary.BoneRonin: Un espadachín que juró no perder jamás un duelo. Ni la muerte rompió su juramento: sus huesos aún vagan de noche buscando un rival digno.

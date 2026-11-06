@@ -195,12 +195,15 @@ The last boss, fought after Supreme Calamitas: the ghost of a skeleton swordsman
 is enabled (and "Calamity features" is on); without Calamity it doesn't exist at all. It is also published on its
 own as the **Terra Bosses** mod: if both are enabled, Terra Bosses' copy is used.
 
-- **Summon:** Cursed Hilt (5 Ashes of Annihilation, 5 Exo Prisms, 50 Bones, 20 Ectoplasm at Draedon's Forge), after Supreme Calamitas.
-- **Attacks:** dashes, fans of slash waves, an iaido cut shown by a red line, and in phase 2 (below half life) a
-  rain of phantom katanas; everything faster, and his see-through blue echo repeats each of his attacks a moment
-  later from the other side. Below 5% life, devil mode: the echo flies back into him, he turns red and everything is much faster: a duel.
-  Entrance and death animations, screen shake.
-- **Loot:** Ronin's Katana (1400 melee damage): a three-strike combo with drawn swings and golden crescents (the third spins round you and looses a great one) that a see-through blue specter of the Ronin, floating behind and above you, repeats a moment later for half damage, a right-click iaido dash whose cut lands as the blade is sheathed, and phantom katanas falling on the enemy every 8 hits. Expert: Ronin's Spirit accessory (+15% melee damage and speed, +10% crit).
+- **Summon:** Cursed Hilt (5 Ashes of Annihilation, 5 Exo Prisms, 50 Bones, 20 Ectoplasm at Draedon's Forge), after Supreme Calamitas. It isn't used up.
+- **Attacks:** cross cuts, fans of slash waves, an iaido cut shown by a red line, and in phase 2 (below half life) a
+  rain of phantom katanas; everything faster, the iaido and the cross cut come as a pair with no pause, and his
+  see-through echo (one per player) repeats each of his attacks a moment later from the other side. Below 5% life,
+  devil mode (fury): the echoes fly back into him, he turns red and everything is much faster, with no rest between
+  attacks. In multiplayer he takes the players on in turn, glowing in the colour of the one he is attacking.
+- **Cinematics:** his entrance and both phase changes move the camera to him and show a banner with his name and
+  the phase's; the players nearby are held still and can't be hurt meanwhile. Death animation, screen shake.
+- **Loot:** Ronin's Katana (1400 melee damage): a three-strike combo with drawn swings and golden crescents (the third spins round you and looses a great one) that a see-through blue specter of the Ronin, floating behind and above you, repeats a moment later for half damage; tap right click for three golden cross cuts on the nearest enemies; hold it for an iaido dash whose cut lands as the blade is sheathed (3 s cooldown); and phantom katanas falling on the enemy every 8 hits. Expert: Ronin's Spirit accessory (+15% melee damage and speed, +10% crit).
 - **Look** (your settings, "Bosses"): Ghost (skeleton in a white kimono, blue effects) or Ember (zombie samurai in
   lacquered armour, fire effects).
 - Registered in Boss Checklist if installed.
@@ -238,6 +241,14 @@ In **Settings → Mod Configuration → Terra Index**:
 | Calamity features (the guide and its book; turning it on or off reloads the mods) | On |
 
 ## Changelog
+
+**1.5**
+- The Bone Ronin: a cinematic (camera, banner with his name and the phase's) on his entrance and at each phase
+  change; the final phase has no rest between attacks, is much faster, and in multiplayer attacks each player in
+  turn in their colour; from phase 2 the iaido and the cross cut are chained.
+- Ronin's Katana: tap right click for three cross cuts on the nearest enemies, hold it for the iaido dash.
+- The Cursed Hilt isn't used up.
+- The radio keeps only its four original clips.
 
 **1.4**
 - Uses row in the recipe index: everything an item makes shows as a paged row of icons above the recipe; click one

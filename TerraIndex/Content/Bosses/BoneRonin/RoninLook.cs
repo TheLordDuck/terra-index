@@ -20,6 +20,10 @@ namespace TerraIndex.Content.Bosses.BoneRonin
 		public static Vector3 LightVector => Ember ? new Vector3(0.8f, 0.4f, 0.12f) : new Vector3(0.25f, 0.45f, 0.8f);
 		public static int Dust => Ember ? DustID.Torch : DustID.IceTorch;
 
+		// The dark core of his attacks (see RoninVoid): deep indigo for the ghost, dried-blood red for the ember.
+		public static Color Void => Ember ? new Color(34, 6, 8) : new Color(14, 8, 32);
+		public static int VoidDust => Ember ? DustID.Wraith : DustID.Shadowflame;
+
 		// The colour drawn as light (added to what's behind).
 		public static Color Additive(Color color, float strength = 1f) => new Color(color.R, color.G, color.B, 0) * strength;
 	}

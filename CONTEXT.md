@@ -574,10 +574,9 @@ Decisions taken:
   so everyone hears the same clip at the same time: it collects each player's nearest radio that is on (within
   60x40 tiles) and sends them in a `RadioPlay` packet; each client plays the clip once, at the nearest of those.
   Clip lengths are hard-coded (`ClipList`) because a dedicated server doesn't load sounds.
-- On 2026-10-29 the user asked for the clips of Verne's "Las mejores frases de Rajoy durante su mandato"
-  (youtube.com/watch?v=gpWHUUqbEPI): 31 `RadioRajoy*.mp3`, cut where the video's background changes (found with
-  ffmpeg's scene detection and checked on a contact sheet), each cut moved to the quietest 10 ms nearby, with
-  short fades. The clips now play in a shuffled order (each once before any repeats) instead of alternating.
+- The clips play in a shuffled order (each once before any repeats). The 31 Rajoy clips added on 2026-10-29 (from
+  Verne's "Las mejores frases de Rajoy durante su mandato") were removed on 2026-11-06 at the user's request, for
+  copyright.
 - Right click toggles on/off: `TileFrameX` +36 (frames 2-3 are the dark dial), sent to the server with the
   `RadioToggle` packet in `TerminalNet` and synced with a tile square. Turning it off stops a clip that is playing.
   `GetItemDrops` is overridden because the off frames would otherwise count as a style with no item.
@@ -674,7 +673,7 @@ Coming from the old name: remove the `ModSources\RecipeIndex` link, create `ModS
 - **1.0** is the first Workshop release (2026-10-27). Updates: bump `version` in `build.txt`, rebuild and publish again.
 - The Workshop page text is `description_workshop.txt` (Steam BBCode; images are raw GitHub links, so they must be pushed
   to `main`). `description.txt` is the plain text shown in the in-game mod list. Extra gallery screenshots are added by
-  hand on the Steam page ("Add/edit images & videos"), tModLoader does not upload them. **1.2** bumped on 2026-10-30, **1.3** on 2026-11-02, **1.4** on 2026-11-03.
+  hand on the Steam page ("Add/edit images & videos"), tModLoader does not upload them. **1.2** bumped on 2026-10-30, **1.3** on 2026-11-02, **1.4** on 2026-11-03, **1.5** on 2026-11-06.
 - Translations other than English and Spanish were written by Claude; a native speaker could polish them.
 - Known limits: clicking a crafting station shows that item's recipes, not everything crafted at that station;
   terminal items are grouped by type (prefixes not distinguished); crafting from the chests doesn't apply the
@@ -696,4 +695,9 @@ Coming from the old name: remove the `ModSources\RecipeIndex` link, create `ModS
 - Changes to the boss should be made in Terra Bosses and copied here (rename `TerraBosses` -> `TerraIndex`,
   `DownedBossSystem` -> `RoninDownedSystem`, `BossConfig` -> `ClientConfig`), keeping the `IsLoadingEnabled` lines.
 - Localization: en-US and es-ES; the other languages fall back to English.
-- Not compiled or tested yet.
+- 2026-11-06 (1.5), made here, not in Terra Bosses (which is now behind): `RoninCinematic` (camera, zoom, black bars,
+  banner, players held still and immune during the 3 s power-up of the entrance and each phase change; boss
+  projectiles cleared at its start), devil mode with no rest, much faster, and in multiplayer one attack per player in
+  turn (`Rotating` / `NextFighter`, the attacks tagged in ai[2] like the echoes'), the iaido / cross cut pair from
+  phase 2 (`chainNext` / `EndAttack`), the katana's right click split by `RoninKatanaHold` (tap: three
+  `RoninKatanaCross` on the nearest enemies; hold: iaido), the Cursed Hilt not consumable, and the test mode removed.

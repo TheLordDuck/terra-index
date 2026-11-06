@@ -16,9 +16,11 @@ namespace TerraIndex.Content.Bosses.BoneRonin
 	// - Left click: a three-strike combo. A rising cut and a falling cut, each throwing a golden crescent, then a
 	//   finisher: the blade is drawn back and spun all the way round the player, and a great crescent flies out.
 	//   Each swing eases in (a short pull back), cuts fast and slows at the end, leaving a smear of light.
-	// - Right click: iaido, like the boss's. A stance with a glint and a line to where you will land, a dash through
+	// - Right click, held: iaido, like the boss's. A stance with a glint and a line to where you will land, a dash through
 	//   everything on that line (you can't be hurt while dashing), and a moment later, as the blade clicks back into
 	//   the scabbard, the cut lands on everything along the line. 3 second cooldown, with a chime when it is ready.
+	// - Right click, a quick click: a cross cut, like the boss's, where you clicked (RoninKatanaCross). Half a second
+	//   cooldown.
 	// - Every 8 hits, phantom katanas appear above the enemy hit and fall on it, like the boss's blade rain.
 	public class RoninKatana : ModItem
 	{
@@ -48,9 +50,11 @@ namespace TerraIndex.Content.Bosses.BoneRonin
 
 		public override bool CanUseItem(Player player)
 		{
-			if (player.ownedProjectileCounts[ModContent.ProjectileType<RoninKatanaSwing>()] > 0 || player.ownedProjectileCounts[ModContent.ProjectileType<RoninKatanaIaido>()] > 0)
-				return false;
-			return player.altFunctionUse != 2 || player.GetModPlayer<RoninKatanaPlayer>().iaidoCooldown <= 0;
+			foreach (int busy in new[] { ModContent.ProjectileType<RoninKatanaSwing>(), ModContent.ProjectileType<RoninKatanaIaido>(), ModContent.ProjectileType<RoninKatanaHold>() })
+				if (player.ownedProjectileCounts[busy] > 0)
+					return false;
+			var modPlayer = player.GetModPlayer<RoninKatanaPlayer>();
+			return player.altFunctionUse != 2 || modPlayer.crossCooldown <= 0 || modPlayer.iaidoCooldown <= 0;
 		}
 
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
@@ -58,12 +62,9 @@ namespace TerraIndex.Content.Bosses.BoneRonin
 			var modPlayer = player.GetModPlayer<RoninKatanaPlayer>();
 			Vector2 toMouse = Main.MouseWorld - player.MountedCenter;
 			if (player.altFunctionUse == 2) {
-				// Iaido: up to 30 tiles towards the cursor.
-				Vector2 dash = toMouse.Length() > RoninKatanaIaido.MaxDash ? toMouse.SafeNormalize(Vector2.UnitX) * RoninKatanaIaido.MaxDash : toMouse;
-				if (dash.Length() < 80f)
-					dash = toMouse.SafeNormalize(Vector2.UnitX * player.direction) * 80f;
-				Projectile.NewProjectile(source, player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<RoninKatanaIaido>(), (int)(damage * 3.5f), knockback, player.whoAmI, 0f, dash.X, dash.Y);
-				modPlayer.iaidoCooldown = RoninKatanaPlayer.IaidoCooldown;
+				// Right click: a quick click is a cross cut where you clicked, holding it is the iaido (RoninKatanaHold
+				// tells which).
+				Projectile.NewProjectile(source, player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<RoninKatanaHold>(), damage, knockback, player.whoAmI);
 				return false;
 			}
 			// The combo goes on if the next swing comes soon enough.
@@ -91,14 +92,16 @@ namespace TerraIndex.Content.Bosses.BoneRonin
 	{
 		public override bool IsLoadingEnabled(Mod mod) => RoninContent.Enabled;
 
-		public const int IaidoCooldown = 180;
+		public const int IaidoCooldown = 180, CrossCooldown = 30;
 		public int combo;
 		public uint lastSwing;
-		public int iaidoCooldown;
+		public int iaidoCooldown, crossCooldown;
 		private int rainCharge;
 
 		public override void PostUpdate()
 		{
+			if (crossCooldown > 0)
+				crossCooldown--;
 			if (iaidoCooldown > 0 && --iaidoCooldown == 0 && Player.whoAmI == Main.myPlayer) {
 				// Ready again: a chime and a glint at the hip.
 				SoundEngine.PlaySound(SoundID.MaxMana, Player.Center);
@@ -111,7 +114,7 @@ namespace TerraIndex.Content.Bosses.BoneRonin
 		{
 			if (Player.whoAmI != Main.myPlayer)
 				return;
-			if (proj.type != ModContent.ProjectileType<RoninKatanaSwing>() && proj.type != ModContent.ProjectileType<RoninKatanaSpecter>() && proj.type != ModContent.ProjectileType<KatanaSlash>() && proj.type != ModContent.ProjectileType<RoninKatanaIaido>())
+			if (proj.type != ModContent.ProjectileType<RoninKatanaSwing>() && proj.type != ModContent.ProjectileType<RoninKatanaSpecter>() && proj.type != ModContent.ProjectileType<KatanaSlash>() && proj.type != ModContent.ProjectileType<RoninKatanaIaido>() && proj.type != ModContent.ProjectileType<RoninKatanaCross>())
 				return;
 			if (++rainCharge < 8)
 				return;

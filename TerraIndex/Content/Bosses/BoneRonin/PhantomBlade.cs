@@ -49,27 +49,30 @@ namespace TerraIndex.Content.Bosses.BoneRonin
 			}
 			else
 				Projectile.velocity.Y = System.Math.Min(Projectile.velocity.Y + 1.2f, 26f);
-			Lighting.AddLight(Projectile.Center, RoninLook.LightVector * 0.8f);
+			RoninVoid.Light(Projectile.Center, 0.8f * Projectile.Opacity, Tint);
+			if (Timer > Appear && Main.rand.NextBool(3))
+				RoninVoid.Spark(Projectile.Center + Main.rand.NextVector2Circular(6f, 22f), new Vector2(0, -1f), 1f, Tint);
 		}
 
-		public override bool CanHitPlayer(Player target) => Timer >= Appear;
+		// ai[2]: from an echo (see BoneRonin.EchoTint): its colour, and it only hurts that echo's player.
+		private Color? Tint => BoneRonin.EchoTint(Projectile);
+
+		public override bool CanHitPlayer(Player target) => Timer >= Appear && BoneRonin.EchoCanHit(Projectile, target);
 
 		public override bool PreDraw(ref Color lightColor)
 		{
 			Vector2 center = Projectile.Center - Main.screenPosition;
 			if (Timer < Appear) {
-				// Where it will fall: a faint red band that sharpens as it is about to drop.
-				float progress = Timer / Appear;
+				// Where it will fall: a faint white band that sharpens as it is about to drop.
 				Vector2 top = Projectile.Bottom - Main.screenPosition;
-				BoneRonin.DrawLine(Main.spriteBatch, top, top + new Vector2(0, 900), new Color(255, 70, 70, 0) * (0.1f + 0.15f * progress), 14f - 8f * progress);
-				BoneRonin.DrawLine(Main.spriteBatch, top, top + new Vector2(0, 900), new Color(255, 120, 120, 0) * (0.2f + 0.4f * progress), 1.5f);
+				RoninVoid.DrawWarning(top, top + new Vector2(0, 900), 12f, Timer / Appear, Tint);
 			}
-			// Falling: a stretched glow behind it, longer the faster it goes.
+			// Falling: a stretched white glow behind it, longer the faster it goes.
 			Texture2D bloom = BoneRonin.Bloom;
 			float stretch = 1f + Projectile.velocity.Y / 12f;
-			Main.EntitySpriteDraw(bloom, center - new Vector2(0, 10 * (stretch - 1)), null, RoninLook.Additive(RoninLook.Main, 0.6f * Projectile.Opacity), 0f, bloom.Size() / 2f, new Vector2(0.5f, 1.2f * stretch), SpriteEffects.None, 0);
+			Main.EntitySpriteDraw(bloom, center - new Vector2(0, 10 * (stretch - 1)), null, RoninVoid.AuraOf(Tint) * 0.45f * Projectile.Opacity, 0f, bloom.Size() / 2f, new Vector2(0.5f, 1.2f * stretch), SpriteEffects.None, 0);
 			Texture2D texture = TextureAssets.Projectile[Type].Value;
-			Main.EntitySpriteDraw(texture, center, null, RoninLook.Tint * Projectile.Opacity, 0f, texture.Size() / 2f, 1f, SpriteEffects.None, 0);
+			RoninVoid.DrawSprite(texture, center, null, 0f, texture.Size() / 2f, Vector2.One, SpriteEffects.None, Projectile.Opacity, 2f, 0f, Tint);
 			return false;
 		}
 	}

@@ -7,13 +7,14 @@ using Terraria.ModLoader;
 namespace TerraIndex.Content.Bosses.BoneRonin
 {
 	// Summons the Bone Ronin. Only after Supreme Calamitas, and only if he isn't already here.
+	// It is not used up: once crafted it can call him again and again.
 	public class CursedHilt : ModItem
 	{
 		public override bool IsLoadingEnabled(Mod mod) => RoninContent.Enabled;
 
 		public override void SetStaticDefaults()
 		{
-			Item.ResearchUnlockCount = 3;
+			Item.ResearchUnlockCount = 1;
 			ItemID.Sets.SortingPriorityBossSpawns[Type] = 12;
 		}
 
@@ -21,17 +22,17 @@ namespace TerraIndex.Content.Bosses.BoneRonin
 		{
 			Item.width = 32;
 			Item.height = 32;
-			Item.maxStack = Item.CommonMaxStack;
+			Item.maxStack = 1;
 			Item.rare = ItemRarityID.Red;
 			Item.value = Item.buyPrice(gold: 5);
 			Item.useAnimation = 45;
 			Item.useTime = 45;
 			Item.useStyle = ItemUseStyleID.HoldUp;
-			Item.consumable = true;
+			Item.consumable = false;
 		}
 
 		// The last boss: only once Supreme Calamitas has fallen.
-		public override bool CanUseItem(Player player) => CalamityGuide.Downed("supremecalamitas") &&!NPC.AnyNPCs(ModContent.NPCType<BoneRonin>());
+		public override bool CanUseItem(Player player) => CalamityGuide.Downed("supremecalamitas") && !NPC.AnyNPCs(ModContent.NPCType<BoneRonin>());
 
 		public override bool? UseItem(Player player)
 		{
