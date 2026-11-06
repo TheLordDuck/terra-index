@@ -565,7 +565,6 @@ Configs: {
 			Label: Calamity features
 			Tooltip: The Calamity guide and its book, when the Calamity Mod is enabled. Turn off to play without them
 		}
-
 	}
 
 	TerminalSort: {

@@ -565,7 +565,6 @@ Configs: {
 			Label: Funciones de Calamity
 			Tooltip: La guía de Calamity y su libro, cuando el mod Calamity está activado. Desactívalo para jugar sin ellos
 		}
-
 	}
 
 	TerminalSort: {

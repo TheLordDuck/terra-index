@@ -315,6 +315,7 @@ Items: {
 			'''
 			Calls the Bone Ronin
 			Only after Supreme Calamitas has fallen
+			Not consumable
 			''' */
 	}
 
@@ -564,7 +565,6 @@ Configs: {
 			Label: Funkcje Calamity
 			Tooltip: Poradnik Calamity i jego księga, gdy Calamity Mod jest włączony. Wyłącz, aby grać bez nich
 		}
-
 	}
 
 	TerminalSort: {
